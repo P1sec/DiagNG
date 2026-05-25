@@ -1,0 +1,27 @@
+
+[build-system]
+requires = ["uv_build>=0.10.3,<0.11.0"]
+build-backend = "uv_build"
+
+[project]
+name = "qcdm-lock-manager"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+qcdm-lock-manager-test = "qcdm_lock_manager.main:main"
+
+[project.urls]
+Homepage = "https://github.com/P1sec/qcdm-lock-manager"
+Repository = "https://github.com/P1sec/qcdm-lock-manager"
+Issues = "https://github.com/P1sec/qcdm-lock-manager/issues"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "single"
+
