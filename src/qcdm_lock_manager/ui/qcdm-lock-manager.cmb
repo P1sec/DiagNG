@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<!-- Created with Cambalache 1.0.2 -->
+<cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
+  <ui filename="qcdm-lock-manager.blp" sha256="ae09da1f7a336c99ab3b8af979061799c90260d30cd8482bf18280b43df5b8ab"/>
+</cambalache-project>
