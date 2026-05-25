@@ -1,6 +1,6 @@
 WIP: Create a Python module allowing to control and manage interferences with the serial Diag port system-wide.
 
-NEXT STEP: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fds` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*`? (Maybe QCSuper already does this?)
+NEXT STEP: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fd` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*` (QCSuper already does this: https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/inputs/usb_modem_pyserial.py#L106) - Maybe using a regular timeout/background task + root escalation of a forker subprocess? (use PIPE for communication?)
 
 Then, try to see how we can interace with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
 
