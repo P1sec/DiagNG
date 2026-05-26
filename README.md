@@ -15,3 +15,36 @@ Cf. **https://modemmanager.org/docs/modemmanager/port-and-device-detection/**
 Cf. https://manpages.debian.org/unstable/modemmanager/mmcli.1.en.html
 
 Use the subprocess spawning process to do privileged stuff? etc.
+
+## Current setup for running the prototype
+
+Dependencies on Ubuntu 26.04 LTS:
+
+```bash
+sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
+    gir1.2-adw-1 gir1.2-gtk-4.0 python3-dev blueprint-compiler
+```
+
+Dependencies on Archlinux:
+
+```bash
+sudo pacman -S uv blueprint-compiler python-gobject libadwaita
+```
+
+Then:
+
+```bash
+sudo snap install --classic astral-uv
+sudo apt install git
+git clone git@github.com:P1sec/qcdm-lock-manager.git
+
+cd qcdm-lock-manager
+# Download Python modules and initialize virtualenv (creates ".venv",
+# call "source .venv/bin/activate" to set up)
+uv sync
+# Add direct commands to $PATH, so that the commands are callable
+# system-wide (creates a symlink to the source in "~/.local/bin")
+uv tool install -e .
+
+qcdm-lock-manager-test
+```
