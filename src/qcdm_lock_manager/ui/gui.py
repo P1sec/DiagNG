@@ -5,6 +5,9 @@ from typing import Optional
 from subprocess import run
 from shutil import which
 
+from qcdm_lock_manager.gobject.serial_device import SerialDevice
+from qcdm_lock_manager.gobject.process import Process
+
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
 
 import sys
@@ -12,7 +15,7 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, GObject, Gio
+from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
 SCRIPT_DIR = dirname(realpath(__file__))
 ASSETS_DIR = realpath(join(SCRIPT_DIR, 'assets'))
@@ -30,6 +33,29 @@ class MyApp(Adw.Application):
     def on_startup(self, app, *args):
         self.window = MyWindow()
         self.window.set_application(self)
+
+        # TEST (WIP MMR 2026-05-26)
+
+        """
+        process = Process()
+        process.process_name = 'ModemManager --TEST'
+        process.pid = 12349
+
+        serial_device = SerialDevice()
+        serial_device.serial_device_path = '/dev/abcdTEST'
+        serial_device.process = process
+        """
+
+        # TODO: Create qcdm_lock_manager.system.serial.device_scanner
+        # background task (leveraging UDEV or just use a
+        # glob over /dev/tty* with an interval)?
+
+        # TODO: Create qcdm_lock_manager.system.psutil.process_scanner
+        # background task (leveraging UDEV or just use a
+        # glob over /proc/*/fd/{device_fd} with an interval)?
+
+        ## GLib.idle_add(XX)
+        ## GLib.timeout_add(XX)
 
         # Application will close once it no longer has active windows attached to it
 

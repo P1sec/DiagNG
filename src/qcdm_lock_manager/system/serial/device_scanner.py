@@ -2,10 +2,13 @@
 
 
 class DeviceScanner:
-
-    def __init__():
+    def device_scan_thread():
 
         pass  # WIP
+
+    def trigger_device_scan():
+
+        pass  # env
 
 
 if __name__ == '__main__':
