@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<!-- Created with Cambalache 1.0.2 -->
+<cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
+  <gresources filename="qcdm-lock-manager.gresource.xml" sha256="8caa784250c5e83864ac891fb06e129dc8a1f7fa638413a61b89b6d5593843f1"/>
+  <ui template-class="MainWindow" filename="qcdm-lock-manager.blp" sha256="aaa9af5cb6b17eeec1fb88ef6e5de903b64ca898f27dc1d3986ce50532015a50"/>
+</cambalache-project>

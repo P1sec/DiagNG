@@ -9,10 +9,12 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pygobject>=3.56.3",
+]
 
 [project.scripts]
-qcdm-lock-manager-test = "qcdm_lock_manager.main:main"
+qcdm-lock-manager-test = "qcdm_lock_manager.ui.gui:main"
 
 [project.urls]
 Homepage = "https://github.com/P1sec/qcdm-lock-manager"

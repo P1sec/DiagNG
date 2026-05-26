@@ -1,0 +1,24 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $MainWindow: Adw.ApplicationWindow {
+  content: Adw.ToolbarView {
+    content: Adw.ToastOverlay {
+      child: Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+          title: "Detected Diag devices";
+        }
+
+        Adw.PreferencesGroup {
+          title: "Detected processes";
+        }
+      };
+    };
+
+    [top]
+    Adw.HeaderBar {}
+  };
+
+  name: "QCDM Lock manager";
+  title: "QCDM Lock manager";
+}
