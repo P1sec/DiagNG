@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from gi.repository import GObject
 
-from qcdm_lock_manager.gobject.process import Process
+from qcsuperd.gobject.process import Process
 
 
 class SerialDevice(GObject.Object):

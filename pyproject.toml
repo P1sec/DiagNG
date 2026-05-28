@@ -4,7 +4,7 @@ requires = ["uv_build>=0.10.3,<0.11.0"]
 build-backend = "uv_build"
 
 [project]
-name = "qcdm-lock-manager"
+name = "qcsuperd"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -14,12 +14,12 @@ dependencies = [
 ]
 
 [project.scripts]
-qcdm-lock-manager-test = "qcdm_lock_manager.ui.gui:main"
+qcsuperd-test = "qcsuperd.ui.gui:main"
 
 [project.urls]
-Homepage = "https://github.com/P1sec/qcdm-lock-manager"
-Repository = "https://github.com/P1sec/qcdm-lock-manager"
-Issues = "https://github.com/P1sec/qcdm-lock-manager/issues"
+Homepage = "https://github.com/P1sec/qcsuperd"
+Repository = "https://github.com/P1sec/qcsuperd"
+Issues = "https://github.com/P1sec/qcsuperd/issues"
 
 [tool.ruff]
 line-length = 79
