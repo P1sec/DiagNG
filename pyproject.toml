@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-qcsuperd-test = "qcsuperd.ui.gui:main"
+qcsuperd-test = "qcsuperd.common.app:main"
 
 [project.urls]
 Homepage = "https://github.com/P1sec/qcsuperd"
