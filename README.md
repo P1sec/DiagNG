@@ -1,4 +1,6 @@
-WIP: Create a Python module allowing to control and manage interferences with the serial Diag port system-wide.
+WIP: Create a monolithic GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too?) allowing to control and manage interferences with the serial Diag port system wide.
+
+NEXT STEP: Configure logging on the base of what is done with `citsued` (https://github.com/P1sec/cits-ue-modem-intf/blob/main/citsued/logging.py).
 
 NEXT STEP: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fd` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*` (QCSuper already does this: https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/inputs/usb_modem_pyserial.py#L106) - Maybe using a regular timeout/background task + root escalation of a forked subprocess? (use PIPE for communication?)
 
