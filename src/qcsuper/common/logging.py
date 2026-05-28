@@ -143,14 +143,18 @@ class LoggingCentral:
             stderr_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(stderr_handler)
 
+        """
         file_handler = GoodPermissionsRotatingFileHandler(
             filename=LOG_FILE_NAME, maxBytes=LOG_FILE_SIZE, backupCount=5
         )
         file_handler.setLevel(DEBUG if debug_mode else INFO)
         file_handler.setFormatter(NoColorFormatter())
-        # self.logger.addHandler(file_handler)
+        self.logger.addHandler(file_handler)
+        """
 
+        """
         self.scrollback_handler = ScrollbackHandler(self)
         self.scrollback_handler.setLevel(INFO)
         self.scrollback_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(self.scrollback_handler)
+        """
