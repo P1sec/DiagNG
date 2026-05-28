@@ -42,7 +42,7 @@ BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 
 class NoColorFormatter(Formatter):
     def format(self, record):
-        record.pathname_last = record.pathname.split('qcsuperd/')[-1]
+        record.pathname_last = record.pathname.split('qcsuper/')[-1]
         return BASE_FORMATTER.format(record)
 
 
@@ -67,7 +67,7 @@ class ColorFormatter(Formatter):
 
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
-        record.pathname_last = record.pathname.split('qcsuperd/')[-1]
+        record.pathname_last = record.pathname.split('qcsuper/')[-1]
         formatter = Formatter(log_fmt, style='{')
         return formatter.format(record)
 

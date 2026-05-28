@@ -4,9 +4,9 @@ requires = ["uv_build>=0.10.3,<0.11.0"]
 build-backend = "uv_build"
 
 [project]
-name = "qcsuperd"
-version = "0.1.0"
-description = "Add your description here"
+name = "qcsuper"
+version = "3.0.0"
+description = "Draft for QCSuper v3"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -14,12 +14,12 @@ dependencies = [
 ]
 
 [project.scripts]
-qcsuperd = "qcsuperd.common.main_entry:main"
+qcsuper = "qcsuper.common.main_entry:main"
 
 [project.urls]
-Homepage = "https://github.com/P1sec/qcsuperd"
-Repository = "https://github.com/P1sec/qcsuperd"
-Issues = "https://github.com/P1sec/qcsuperd/issues"
+Homepage = "https://github.com/P1sec/qcsuper-v3"
+Repository = "https://github.com/P1sec/qcsuper-v3"
+Issues = "https://github.com/P1sec/qcsuper-v3/issues"
 
 [tool.ruff]
 line-length = 79

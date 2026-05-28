@@ -38,9 +38,9 @@ Then:
 ```bash
 sudo snap install --classic astral-uv
 sudo apt install git
-git clone git@github.com:P1sec/qcsuperd.git
+git clone git@github.com:P1sec/qcsuper.git
 
-cd qcsuperd
+cd qcsuper
 # Download Python modules and initialize virtualenv (creates ".venv",
 # call "source .venv/bin/activate" to set up)
 uv sync
@@ -48,5 +48,5 @@ uv sync
 # system-wide (creates a symlink to the source in "~/.local/bin")
 uv tool install -e .
 
-qcsuperd-test
+qcsuper-test
 ```

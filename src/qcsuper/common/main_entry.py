@@ -3,20 +3,26 @@
 from traceback import format_exception
 from argparse import ArgumentParser
 from logging import debug, error
+from os import getpid
 import sys
 import gi
 
-from qcsuperd.common.service_entry import main as service_main
-from qcsuperd.gobject.serial_device import SerialDevice
-from qcsuperd.common.logging import LoggingCentral
-from qcsuperd.gobject.process import Process
-from qcsuperd.ui.window import MyWindow
+from qcsuper.common.service_entry import main as service_main
+from qcsuper.gobject.serial_device import SerialDevice
+from qcsuper.common.logging import LoggingCentral
+from qcsuper.gobject.process import Process
+from qcsuper.ui.window import MyWindow
 
 gi.require_version('Adw', '1')
 from gi.repository import Adw, GLib
 
+MAINPROC_SOCKET_LINUX = '/run/qcsuper-%d.sock' % getpid()
+SERVICEPROC_SOCKET_LINUX = '/run/qcsuperd.sock'
+# TODO eventually implement compatibility
+# with other OSes
+
 """
-    Primary entry point of qcsuperd, called
+    Primary entry point of qcsuper, called
     before spawning a provilege-elevated
     subprocess in service_entry.py
 """
@@ -39,11 +45,15 @@ def main():
     args = args.parse_args()
 
     if args.service:
-        # TODO use a fork + pipe operation
+        # TODO use a subprocess spawn + pipe operation
         # (see https://lazka.github.io/pgi-docs/Jsonrpc-1.0/index.html +
         # https://docs.gtk.org/glib/spawn.html +
         # https://lazka.github.io/pgi-docs/GLib-2.0/functions.html#GLib.spawn_async_with_pipes)
-        # here ?
+        # here ? or TCP to allow multi connection?
+        # (the subprocess should return an IP:PORT through stdout perhaps?)
+        #
+        # => USE A FIXED-PATH UNIX SOCKET ADDRESS IN /RUN ?
+        # (SOMETHING ELSE ON WINDOWS/NON-LINUX?)
         service_main()
 
     else:
@@ -107,11 +117,11 @@ class MyApp(Adw.Application):
         serial_device.process = process
         """
 
-        # TODO: Create qcsuperd.system.serial.device_scanner
+        # TODO: Create qcsuper.system.serial.device_scanner
         # background task (leveraging UDEV or just use a
         # glob over /dev/tty* with an interval)?
 
-        # TODO: Create qcsuperd.system.psutil.process_scanner
+        # TODO: Create qcsuper.system.psutil.process_scanner
         # background task (leveraging UDEV or just use a
         # glob over /proc/*/fd/{device_fd} with an interval)?
 

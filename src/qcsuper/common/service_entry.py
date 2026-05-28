@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Secondary entry point of qcsuperd, called
+Secondary entry point of qcsuper, called
 after spawning a provilege-elevated
 subprocess from main_entry.py
 """
