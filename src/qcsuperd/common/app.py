@@ -1,21 +1,58 @@
 #!/usr/bin/env python3
-from qcsuperd.gobject.serial_device import SerialDevice
-from qcsuperd.gobject.process import Process
-from qcsuperd.ui.window import MyWindow
 
-# Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
-
+from signal import SIGHUP, SIGINT, SIGTERM
+from logging import debug, error, critical
+from traceback import format_exception
 import sys
 import gi
 
+from qcsuperd.gobject.serial_device import SerialDevice
+from qcsuperd.common.logging import LoggingCentral
+from qcsuperd.gobject.process import Process
+from qcsuperd.ui.window import MyWindow
+
 gi.require_version('Adw', '1')
-from gi.repository import Adw
+from gi.repository import Adw, GLib
 
 class MyApp(Adw.Application):
     def __init__(self, **kwargs):
+        LoggingCentral(debug_mode = True)
+
+        # self.setup_signal_handling()
+        self.setup_error_handling()
+
+        debug('Initializing app...')
+
         super().__init__(**kwargs)
+
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)
+
+    """
+    def setup_signal_handling(self):
+
+        def signal_handler(signal_id):
+            critical("Caught %s, sunsetting" % signal_id)
+            self.release()
+
+        GLib.unix_signal_add(GLib.PRIORITY_HIGH, SIGHUP, signal_handler, "SIGHUP")
+        GLib.unix_signal_add(GLib.PRIORITY_HIGH, SIGINT, signal_handler, "SIGINT")
+        GLib.unix_signal_add(GLib.PRIORITY_HIGH, SIGTERM, signal_handler, "SIGTERM")
+    """
+
+    def setup_error_handling(self):
+
+        # Generic error handler for non-bubbled exceptions raised in GLib callbacks
+        # "This works because exception hooks are called in PyErr_Print."
+        # Cf. https://gitlab.gnome.org/GNOME/pygobject/-/blob/3.48.2/tests/test_generictreemodel.py#L335
+
+        def error_handler(exctype, value, traceback):
+            error(
+                "Caught Python exception: \n"
+                + "".join(format_exception(exctype, value, traceback)).rstrip()
+            )
+
+        sys.excepthook = error_handler
 
     def on_startup(self, app, *args):
         self.window = MyWindow()
