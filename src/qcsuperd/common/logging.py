@@ -32,32 +32,28 @@ MODULE_DIR = dirname(realpath(SCRIPT_DIR))
 SRC_DIR = dirname(realpath(MODULE_DIR))
 ROOT_DIR = dirname(realpath(SRC_DIR))
 
-LOG_FILE_NAME = ROOT_DIR + "/_test_log.log"
+LOG_FILE_NAME = ROOT_DIR + '/_test_log.log'
 LOG_FILE_SIZE = 10 * 1024 * 1024
 MEMORY_LOG_LINES = 400
-LOG_FORMAT = (
-    "[{asctime}] [pid {process}] - {levelname} - {message} ({pathname_last}:{lineno})"
-)
+LOG_FORMAT = '[{asctime}] [pid {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
 
-BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style="{")
+BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 
 
 class NoColorFormatter(Formatter):
-
     def format(self, record):
-        record.pathname_last = record.pathname.split("qcsuperd/")[-1]
+        record.pathname_last = record.pathname.split('qcsuperd/')[-1]
         return BASE_FORMATTER.format(record)
 
 
 class ColorFormatter(Formatter):
-
-    CSI = "\x1b["
-    grey = CSI + "38m"
-    yellow = CSI + "33m"
-    red = CSI + "31m"
-    magenta = CSI + "35m"
-    bold_red = CSI + "31;1m"
-    reset = CSI + "0m"
+    CSI = '\x1b['
+    grey = CSI + '38m'
+    yellow = CSI + '33m'
+    red = CSI + '31m'
+    magenta = CSI + '35m'
+    bold_red = CSI + '31;1m'
+    reset = CSI + '0m'
     # format = "%(asctime)s - [pid %(process)s] - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
     format = LOG_FORMAT
 
@@ -71,13 +67,13 @@ class ColorFormatter(Formatter):
 
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
-        record.pathname_last = record.pathname.split("qcsuperd/")[-1]
-        formatter = Formatter(log_fmt, style="{")
+        record.pathname_last = record.pathname.split('qcsuperd/')[-1]
+        formatter = Formatter(log_fmt, style='{')
         return formatter.format(record)
 
 
 class ScrollbackHandler(Handler):
-    def __init__(self, logging_central: "LoggingCentral"):
+    def __init__(self, logging_central: 'LoggingCentral'):
         Handler.__init__(self)
         self.logging_central = logging_central
         self.logs: Sequence[Dict[str, str]] = deque(maxlen=MEMORY_LOG_LINES)
@@ -87,8 +83,8 @@ class ScrollbackHandler(Handler):
         # self.logs.append(string)
 
         log_entry: dict = {
-            "log_class": record.levelname.lower(),
-            "log_raw": self.format(record),
+            'log_class': record.levelname.lower(),
+            'log_raw': self.format(record),
         }
 
         self.logs.append(log_entry)
@@ -97,7 +93,7 @@ class ScrollbackHandler(Handler):
 
         if self.logging_central.signal_handler:
             self.logging_central.signal_handler.broadcast_message(
-                {"type": "APPEND_EVENT_LOG", "log": log_entry}
+                {'type': 'APPEND_EVENT_LOG', 'log': log_entry}
             )
 
         # XX : Store metadata?
@@ -119,9 +115,8 @@ class GoodPermissionsRotatingFileHandler(RotatingFileHandler):
 
 
 class LoggingCentral:
-
     logs: deque[LogRecord]
-    scrollback_handler: "ScrollbackHandler"
+    scrollback_handler: 'ScrollbackHandler'
     signal_handler: object = None
     logger: Logger
 

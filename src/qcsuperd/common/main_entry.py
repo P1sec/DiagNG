@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from signal import SIGHUP, SIGINT, SIGTERM
-from logging import debug, error, critical
 from traceback import format_exception
+from argparse import ArgumentParser
+from logging import debug, error
 import sys
 import gi
 
+from qcsuperd.common.service_entry import main as service_main
 from qcsuperd.gobject.serial_device import SerialDevice
 from qcsuperd.common.logging import LoggingCentral
 from qcsuperd.gobject.process import Process
@@ -14,9 +15,45 @@ from qcsuperd.ui.window import MyWindow
 gi.require_version('Adw', '1')
 from gi.repository import Adw, GLib
 
+"""
+    Primary entry point of qcsuperd, called
+    before spawning a provilege-elevated
+    subprocess in service_entry.py
+"""
+
+
+def main():
+    args = ArgumentParser(description='Prototype for QCSuper v3')
+
+    args.add_argument(
+        '--service',
+        help=(
+            'This flag is present when the main instance of the app '
+            + 'is instancying a privileged subprocess for performing '
+            + 'privileged operations, such as acquiring data from '
+            + 'serial ports'
+        ),
+        action='store_true',
+    )
+
+    args = args.parse_args()
+
+    if args.service:
+        # TODO use a fork + pipe operation
+        # (see https://lazka.github.io/pgi-docs/Jsonrpc-1.0/index.html +
+        # https://docs.gtk.org/glib/spawn.html +
+        # https://lazka.github.io/pgi-docs/GLib-2.0/functions.html#GLib.spawn_async_with_pipes)
+        # here ?
+        service_main()
+
+    else:
+        app = MyApp(application_id='com.p1security.qcsuper')
+        app.run()
+
+
 class MyApp(Adw.Application):
     def __init__(self, **kwargs):
-        LoggingCentral(debug_mode = True)
+        LoggingCentral(debug_mode=True)
 
         # self.setup_signal_handling()
         self.setup_error_handling()
@@ -48,8 +85,8 @@ class MyApp(Adw.Application):
 
         def error_handler(exctype, value, traceback):
             error(
-                "Caught Python exception: \n"
-                + "".join(format_exception(exctype, value, traceback)).rstrip()
+                'Caught Python exception: \n'
+                + ''.join(format_exception(exctype, value, traceback)).rstrip()
             )
 
         sys.excepthook = error_handler
@@ -95,11 +132,6 @@ class MyApp(Adw.Application):
         # Cf. https://github.com/timlau/yumex-ng/blob/09f15091a2f0f3a8c189bbd4dc59016a80e2debf/data/ui/transaction_result.blp
         # Cf. too
         # https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#using-gridview
-
-
-def main():
-    app = MyApp(application_id='com.p1security.qcsuperd')
-    app.run(sys.argv)
 
 
 if __name__ == '__main__':
