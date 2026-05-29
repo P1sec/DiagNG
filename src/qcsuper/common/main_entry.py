@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 
+from logging import debug, error, info, critical
 from traceback import format_exception
 from argparse import ArgumentParser
-from logging import debug, error
-from os import getpid
+from shlex import join
 import sys
 import gi
 
-from qcsuper.common.service_entry import main as service_main
+from qcsuper.common.main_rpc_server import MainRPCServer
 from qcsuper.gobject.serial_device import SerialDevice
+from qcsuper.common.service_entry import service_main
 from qcsuper.common.logging import LoggingCentral
 from qcsuper.gobject.process import Process
 from qcsuper.ui.window import MyWindow
 
 gi.require_version('Adw', '1')
-from gi.repository import Adw, GLib
-
-MAINPROC_SOCKET_LINUX = '/run/qcsuper-%d.sock' % getpid()
-SERVICEPROC_SOCKET_LINUX = '/run/qcsuperd.sock'
-# TODO eventually implement compatibility
-# with other OSes
+from gi.repository import Adw, GLib, Gio
 
 """
     Primary entry point of qcsuper, called
@@ -42,26 +38,34 @@ def main():
         action='store_true',
     )
 
+    args.add_argument(
+        '--client-port',
+        help=(
+            'The JsonRPC TCP port for reaching of the parent, '
+            + 'unprivileged process when spawing a privileged child'
+        ),
+    )
+
     args = args.parse_args()
 
     if args.service:
-        # TODO use a subprocess spawn + pipe operation
+        # We have been using a subprocess spawn + Jsonrpc listen operation
         # (see https://lazka.github.io/pgi-docs/Jsonrpc-1.0/index.html +
         # https://docs.gtk.org/glib/spawn.html +
         # https://lazka.github.io/pgi-docs/GLib-2.0/functions.html#GLib.spawn_async_with_pipes)
-        # here ? or TCP to allow multi connection?
-        # (the subprocess should return an IP:PORT through stdout perhaps?)
-        #
-        # => USE A FIXED-PATH UNIX SOCKET ADDRESS IN /RUN ?
-        # (SOMETHING ELSE ON WINDOWS/NON-LINUX?)
+        # here
+
+        # We have been passed:
+        # argv[0] --service --client-port=${OCAL_TCP_PORT}
+        assert args.client_port
         service_main()
 
     else:
-        app = MyApp(application_id='com.p1security.qcsuper')
+        app = MainApplication(application_id='com.p1security.qcsuper')
         app.run()
 
 
-class MyApp(Adw.Application):
+class MainApplication(Adw.Application):
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)
 
@@ -105,30 +109,109 @@ class MyApp(Adw.Application):
         self.window = MyWindow()
         self.window.set_application(self)
 
-        # TEST (WIP MMR 2026-05-26)
+        # Spawn or connect to privileged --service
+        # subprocess here
 
-        """
-        process = Process()
-        process.process_name = 'ModemManager --TEST'
-        process.pid = 12349
+        # => Spawn our JsonRpc listener on a local socket?
 
-        serial_device = SerialDevice()
-        serial_device.serial_device_path = '/dev/abcdTEST'
-        serial_device.process = process
-        """
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.new
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_address
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_any_inet_port
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetAddress.html#Gio.InetAddress.new_loopback
+        # => https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetSocketAddress.html#Gio.InetSocketAddress.new
+        #    with port 0 + https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetSocketAddress.html#Gio.InetSocketAddress.get_port
+        # should return an available port?
+        #     Cf. https://github.com/GNOME/glib/blob/2.89.0/gio/gsocketlistener.c#L1172
+        #     Cf.
+        #  ⚠️ ^ "Listens for TCP connections on any available port number for both IPv6 and IPv4 (if each is available).
+        #    This is useful if you need to have a socket for incoming connections but don’t care about the specific port number."
+        #   => https://github.com/GNOME/glib/blob/2.89.0/gio/gsocketlistener.c#L1133
+        #
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_inet_port
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/UnixSocketAddress.html#Gio.UnixSocketAddress.new
 
-        # TODO: Create qcsuper.system.serial.device_scanner
-        # background task (leveraging UDEV or just use a
-        # glob over /dev/tty* with an interval)?
+        socket_service = Gio.SocketService.new()
+        success, bound_address = socket_service.add_address(
+            Gio.InetSocketAddress.new(
+                Gio.InetAddress.new_loopback(Gio.SocketFamily.IPV4), 0
+            ),
+            Gio.SocketType.STREAM,
+            Gio.SocketProtocol.TCP,
+            None,
+        )
+        if not success or not bound_address:
+            critical("Coun't bind to local address")
+            exit(1)
+        effective_addr: str = bound_address.get_address().to_string()
+        effective_port: int = bound_address.get_port()
+        info(
+            'Binding to local address: %s:%d'
+            % (effective_addr, effective_port)
+        )
 
-        # TODO: Create qcsuper.system.psutil.process_scanner
-        # background task (leveraging UDEV or just use a
-        # glob over /proc/*/fd/{device_fd} with an interval)?
+        # Use https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.accept_async
+        # in order to obtain an Gio.SocketConnection inheriting Gio.IOStream,
+        # to be passed to https://lazka.github.io/pgi-docs/Jsonrpc-1.0/classes/Server.html#Jsonrpc.Server.accept_io_stream
+        # (and eventually connect back to a socket through getting RPC called with a TCP endpoint
+        # that we will pass to https://lazka.github.io/pgi-docs/Jsonrpc-1.0/classes/Client.html#Jsonrpc.Client.new
 
-        ## GLib.idle_add(XX)
-        ## GLib.timeout_add(XX)
+        rpc_server = MainRPCServer()
 
-        # Application will close once it no longer has active windows attached to it
+        def accept_socket(
+            socket_service: Gio.SocketService,
+            remote_socket: Gio.SocketConnection,
+            source_object,
+        ):
+            connector: Gio.InetSocketAddress = (
+                remote_socket.get_remote_address()
+            )
+            connector_addr: str = connector.get_address().to_string()
+            connector_port: int = connector.get_port()
+            info(
+                f'Received RPC connection from {connector_addr}:{connector_port}'
+            )
+            rpc_server.accept_io_stream(remote_socket)
+
+        socket_service.connect('incoming', accept_socket)
+
+        #  => Use https://api.pygobject.gnome.org/Gio-2.0/class-Subprocess.html
+        #   to integrate with event loop?
+        #   => Use --service --client-port=${OUR_PORT} to hopefully
+        #      trigger a call first to our JSONRPC socket endpoint
+        #      and wait?
+
+        #  => https://api.pygobject.gnome.org/Gio-2.0/class-Subprocess.html
+        #     / https://docs.gtk.org/gio/class.Subprocess.html
+        #       / https://lazka.github.io/pgi-docs/Gio-2.0/classes/Subprocess.html
+
+        child_cmd_line = [
+            sys.argv[0],
+            '--service',
+            '--client-port=' + str(effective_port),
+        ]
+
+        info(f'Spawning "{join(child_cmd_line)}"...')
+
+        # Maybe TODO: Use GLib.spawn_async instead so that
+        # we can merge the process group of the
+        # subprocess if any useful?
+
+        child = Gio.Subprocess.new(
+            child_cmd_line,
+            Gio.SubprocessFlags.NONE,  # SEARCH_PATH_FROM_ENVP ?
+        )
+
+        def child_exited(child: Gio.Subprocess, result: Gio.AsyncResult, data):
+            info(
+                'Child process exited with status '
+                + str(child.get_exit_status())
+            )
+            child.wait_check_finish(result)
+
+        child.wait_check_async(None, child_exited, None)
+
+        # Application will close once it has no longer has active
+        # windows attached to it
 
         self.window.present()
 
