@@ -96,7 +96,7 @@ class ServiceApplication(Gio.Application):
             % (self.effective_addr, self.effective_port)
         )
 
-        # Spawn a RPC server
+        # Spawn a RPC server in on_command_line
 
         self.port_to_client = {}
 
