@@ -170,7 +170,7 @@ class ServiceApplication(Gio.Application):
             None,
         )
 
-        info(f'Sent "test_ctos" notification to client {client_port}')
+        info(f'Sent "test_ctos" call to parent {client_port}')
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
