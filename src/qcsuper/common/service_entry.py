@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from qcsuper.common.service_rpc_server import ServiceRPCServer
+from qcsuper.common.service_rpc_client import ServiceRPCClient
 from qcsuper.common.logging import LoggingCentral
 from logging import debug, info, error, critical
 from traceback import format_exception
@@ -35,7 +35,6 @@ class ServiceApplication(Gio.Application):
     effective_addr: str
     effective_port: int
     port_to_client: dict[int, Jsonrpc.Client]
-    rpc_server: ServiceRPCServer
 
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)
@@ -101,30 +100,11 @@ class ServiceApplication(Gio.Application):
 
         self.port_to_client = {}
 
-        self.rpc_server = ServiceRPCServer()
-
-        socket_service.connect('incoming', self.accept_socket)
-
-        self.rpc_server.connect('client-accepted', self.incr_connection_count)
-        self.rpc_server.connect('client-closed', self.decr_connection_count)
-
-    def accept_socket(
-        self,
-        socket_service: Gio.SocketService,
-        remote_socket: Gio.SocketConnection,
-        source_object,
-    ):
-        connector: Gio.InetSocketAddress = remote_socket.get_remote_address()
-        connector_addr: str = connector.get_address().to_string()
-        connector_port: int = connector.get_port()
-        info(f'Received RPC connection from {connector_addr}:{connector_port}')
-        self.rpc_server.accept_io_stream(remote_socket)
-
-    def incr_connection_count(self, *args):
+    def incr_connection_count(self):
         self.number_clients += 1
         info(f'We now have {self.number_clients} connections open')
 
-    def decr_connection_count(self, *args):
+    def decr_connection_count(self):
         self.number_clients -= 1
         info(f'We now have {self.number_clients} connections open')
 
@@ -179,18 +159,18 @@ class ServiceApplication(Gio.Application):
             self.decr_connection_count()
             return
 
-        parent_rpc = Jsonrpc.Client.new(client)
+        parent_rpc = ServiceRPCClient(client)
         self.port_to_client[client_port] = parent_rpc
         parent_rpc.connect('failed', self.client_closed, client_port)
 
         parent_rpc.call_async(
-            'connect_back',
-            GLib.Variant.new_int64(self.effective_port),
+            'test_ctos',
+            GLib.Variant.new_int64(42),
             None,
             None,
         )
 
-        info(f'Sent "connect_back" notification to client {client_port}')
+        info(f'Sent "test_ctos" notification to client {client_port}')
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
