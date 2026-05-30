@@ -6,11 +6,15 @@ template $MainWindow: Adw.ApplicationWindow {
     content: Adw.ToastOverlay {
       child: Adw.PreferencesPage {
         Adw.PreferencesGroup {
-          title: "Detected Diag devices";
+          title: "Detected ModemManager instances";
         }
 
         Adw.PreferencesGroup {
-          title: "Detected processes";
+          title: "Detected Diag serial devices";
+        }
+
+        Adw.PreferencesGroup {
+          title: "Detected processes holding serial Diag devices";
         }
       };
     };

@@ -15,12 +15,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
               <object class="AdwPreferencesPage">
                 <child>
                   <object class="AdwPreferencesGroup">
-                    <property name="title">Detected Diag devices</property>
+                    <property name="title">Detected ModemManager instances</property>
                   </object>
                 </child>
                 <child>
                   <object class="AdwPreferencesGroup">
-                    <property name="title">Detected processes</property>
+                    <property name="title">Detected Diag serial devices</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup">
+                    <property name="title">Detected processes holding serial Diag devices</property>
                   </object>
                 </child>
               </object>

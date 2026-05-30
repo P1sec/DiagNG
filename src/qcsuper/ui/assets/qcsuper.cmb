@@ -2,6 +2,6 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.2 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="qcsuper.gresource.xml" sha256="63b6fff4131a8896ec0f069b50bf02750286717f60471c8f9123389a7652e735"/>
-  <ui template-class="MainWindow" filename="qcsuper.blp" sha256="aaa9af5cb6b17eeec1fb88ef6e5de903b64ca898f27dc1d3986ce50532015a50"/>
+  <gresources filename="qcsuper.gresource.xml" sha256="c61e85d794f72eecb54c6ee1e54c8a09c73b707ab9184d4ade55e8cd6fe6b7fb"/>
+  <ui template-class="MainWindow" filename="qcsuper.blp" sha256="706532403155d83bb670279492854d49012aa7c9c91883a6abd2e90607264921"/>
 </cambalache-project>
