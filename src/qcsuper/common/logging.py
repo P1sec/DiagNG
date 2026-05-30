@@ -18,6 +18,7 @@ from os import umask, chmod, chown, stat
 from typing import List, Dict, Sequence
 from os.path import dirname, realpath
 from collections import deque
+from shlex import join
 import sys
 
 
@@ -35,7 +36,10 @@ ROOT_DIR = dirname(realpath(SRC_DIR))
 LOG_FILE_NAME = ROOT_DIR + '/_test_log.log'
 LOG_FILE_SIZE = 10 * 1024 * 1024
 MEMORY_LOG_LINES = 400
-LOG_FORMAT = '[{asctime}] [pid {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
+LOG_FORMAT = '[{asctime}] [main {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
+
+if '--service' in join(sys.argv).lower():
+    LOG_FORMAT = LOG_FORMAT.replace('main ', 'service ')
 
 BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 
