@@ -40,7 +40,7 @@ Then:
 ```bash
 sudo snap install --classic astral-uv
 sudo apt install git
-git clone git@github.com:P1sec/qcsuper.git
+git clone git@github.com:P1sec/qcsuper-gui.git
 
 cd qcsuper
 # Download Python modules and initialize virtualenv (creates ".venv",

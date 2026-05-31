@@ -17,9 +17,9 @@ dependencies = [
 qcsuper = "qcsuper.common.main_entry:main"
 
 [project.urls]
-Homepage = "https://github.com/P1sec/qcsuper-v3"
-Repository = "https://github.com/P1sec/qcsuper-v3"
-Issues = "https://github.com/P1sec/qcsuper-v3/issues"
+Homepage = "https://github.com/P1sec/qcsuper-gui"
+Repository = "https://github.com/P1sec/qcsuper-gui"
+Issues = "https://github.com/P1sec/qcsuper-gui/issues"
 
 [tool.ruff]
 line-length = 79
