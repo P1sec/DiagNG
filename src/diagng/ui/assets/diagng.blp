@@ -4,25 +4,67 @@ using Adw 1;
 template $MainWindow: Adw.ApplicationWindow {
   content: Adw.ToolbarView {
     content: Adw.ToastOverlay {
-      child: Adw.PreferencesPage {
-        Adw.PreferencesGroup {
-          title: "Detected ModemManager instances";
+      child: Adw.ViewStack global_stack {
+        Adw.ViewStackPage mm_tab {
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              title: "Detected ModemManager instances";
+            }
+          };
+
+          icon-name: "modem-symbolic";
+          name: "mm_tab";
+          title: "ModemManager";
         }
 
-        Adw.PreferencesGroup {
-          title: "Detected Diag serial devices";
+        Adw.ViewStackPage spi_tab {
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              title: "Detected Diag serial devices";
+            }
+
+            Adw.PreferencesGroup {
+              title: "Detected processes holding serial Diag devices";
+            }
+          };
+
+          icon-name: "network-offline-symbolic";
+          name: "spi_tab";
+          title: "SPI";
         }
 
-        Adw.PreferencesGroup {
-          title: "Detected processes holding serial Diag devices";
+        Adw.ViewStackPage adb_tab {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "network-cellular-connected-symbolic";
+          name: "adb_tab";
+          title: "ADB";
+        }
+
+        Adw.ViewStackPage usb_tab {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "drive-harddisk-usb-symbolic";
+          name: "usb_tab";
+          title: "USB";
         }
       };
     };
 
     [top]
-    Adw.HeaderBar {}
+    Adw.HeaderBar {
+      title-widget: Adw.ViewSwitcher view_switcher {
+        stack: global_stack;
+      };
+    }
   };
 
+  default-height: 600;
+  default-width: 800;
   name: "QCDM Lock manager";
   title: "QCDM Lock manager";
 }
