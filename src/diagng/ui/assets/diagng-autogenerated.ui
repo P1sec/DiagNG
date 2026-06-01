@@ -53,6 +53,16 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                               <object class="AdwExpanderRow">
                                 <property name="expanded">true</property>
                                 <property name="title">&lt;b&gt;ZTE MF667&lt;/b&gt;</property>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyUSB0 (type: AT)</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyUSB0 (type: QCDM)</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
