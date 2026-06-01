@@ -27,7 +27,7 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-        info(f'Sent "test_stoc" call to child')
+        info('Sent "test_stoc" call to child')
 
         peer.call_async(
             'test_stoc',

@@ -12,8 +12,8 @@
 # Also convert some synchronous method calls into asynchronous ones?
 
 # We should use refs to ServiceRPCClient for replying to RPC calls
-# from main process with rpc.reply_async(id, gvariant, ...) or send
-# calls to main process with rpc.call_async(method, gvariant, ...)
+# from main process with rpc_client.reply_async(id, gvariant, ...) or send
+# calls to main process with rpc_client.call_async(method, gvariant, ...)
 # for every relevant client in ServiceApplication.port_to_client
 # (use pubsub patterns/a broadcast method?)
 
@@ -46,7 +46,7 @@ from gi.repository import Gio, GLib, GObject, ModemManager
 class PinUnlockWaiter:
     WAIT_TIME = 2 * 60  # seconds, avg 30 seconds are needed
 
-    rpc: 'ServiceRPCClient'
+    rpc_wrapper: 'ServiceApplication'
     timer: GLib.Source
     timer_soon: GLib.Source
     waiter: Gio.Cancellable
@@ -65,7 +65,7 @@ class PinUnlockWaiter:
     def __init__(
         self,
         intf: 'ModemManagerIntf',
-        rpc: 'ServiceRPCClient',
+        rpc_wrapper: 'ServiceApplication',
         modem_imei: str,
         pin: str,
         optional_puk: str = None,
@@ -73,7 +73,7 @@ class PinUnlockWaiter:
 
         self.modem_imei = modem_imei
         self.intf = intf
-        self.rpc = rpc
+        self.rpc_wrapper = rpc_wrapper
 
         self.has_puk = bool(optional_puk)
 
@@ -96,7 +96,7 @@ class PinUnlockWaiter:
 
         if not self.has_puk:
             # TO BE IMPLEMENTED
-            self.cmd_waiter = self.rpc._modem_generic_op(
+            self.cmd_waiter = self.rpc_wrapper._modem_generic_op(
                 self.modem_imei,
                 ModemManager.Sim.send_pin,
                 self.initial_command_done_cb,
@@ -107,7 +107,7 @@ class PinUnlockWaiter:
 
         else:
             # TO BE IMPLEMENTED
-            self.cmd_waiter = self.rpc._modem_generic_op(
+            self.cmd_waiter = self.rpc_wrapper._modem_generic_op(
                 self.modem_imei,
                 ModemManager.Sim.send_puk,
                 self.initial_command_done_cb,
@@ -236,10 +236,10 @@ class PinUnlockWaiter:
 
         # TO BE IMPLEMENTED
         if self.modem_is_unlocked:
-            self.rpc._send_text('OK\n')
+            self.rpc_wrapper._send_text('OK\n')
         else:
-            self.rpc.set_status(500)
-            self.rpc.set_response('text/plain', b'NOK\n')
+            self.rpc_wrapper.set_status(500)
+            self.rpc_wrapper.set_response('text/plain', b'NOK\n')
 
         return GLib.SOURCE_REMOVE
 
@@ -254,7 +254,7 @@ class ModemManagerIntf(GObject.Object):
     is_debug_mode: Optional[bool] = None
     needs_relaunch_mm: bool = False
     daemon_connected: bool = False
-    rpc: 'ServiceRPCClient' = None
+    rpc_wrapper: 'ServiceApplication' = None
     json_state: Optional[List[dict]] = None
     system_bus: Gio.DBusConnection
     manager: ModemManager.Manager
@@ -385,8 +385,8 @@ class ModemManagerIntf(GObject.Object):
             if modem_imei == match_imei:
                 return modem
 
-    def register_rpc(self, rpc: 'ServiceRPCClient'):
-        self.rpc = rpc
+    def register_rpc_wrapper(self, rpc_wrapper: 'ServiceApplication'):
+        self.rpc_wrapper = rpc_wrapper
 
     @GObject.Signal
     def modem_state_change(self):
@@ -440,9 +440,9 @@ class ModemManagerIntf(GObject.Object):
 
         debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
-        if self.rpc:
+        if self.rpc_wrapper:
             # TO BE IMPLEMENTED
-            self.rpc.broadcast_message(
+            self.rpc_wrapper.broadcast_message(
                 {'type': 'SYNC_MODEM_STATUS', **self.json_state}
             )
 
