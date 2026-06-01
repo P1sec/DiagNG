@@ -27,8 +27,6 @@ from os.path import realpath
 from signal import SIGINT
 from json import dumps
 
-from citsued.database.apnlist import ApnList
-
 import gi
 
 gi.require_version('ModemManager', '1.0')
@@ -251,8 +249,6 @@ class ModemManagerIntf(GObject.Object):
         int, object
     ]  # This maps a GLib signal ID to an originating object
     mm_pid: Optional[int] = None
-    is_debug_mode: Optional[bool] = None
-    needs_relaunch_mm: bool = False
     daemon_connected: bool = False
     rpc_wrapper: 'ServiceApplication' = None
     json_state: Optional[List[dict]] = None
@@ -278,20 +274,16 @@ class ModemManagerIntf(GObject.Object):
 
         self.manager.connect('notify::name-owner', self.on_daemon_state_change)
 
-        if not self.check_daemon_running():
-            self.kill_daemon_and_relaunch()
-
         self.modem_signal_ids = {}
 
-        self.on_daemon_state_change()
+        if self.check_daemon_running():
+            self.on_daemon_state_change()
 
     def check_daemon_running(self):
         """
-        Check if a daemon running in --debug mode is
-        running on the system.
+        Check if ModemManager is running on the system.
 
-            returns: (bool) True if an appropriate
-            daemon is running
+            returns: (bool) True or False
         """
 
         dbus_proxy = Gio.DBusProxy.new_sync(
@@ -313,55 +305,12 @@ class ModemManagerIntf(GObject.Object):
         except gi.repository.GLib.GError:
             info('No ModemManager service on the system at the moment')
             self.mm_pid = None
-            self.is_debug_mode = None
             return False
         else:
-            binary_path = realpath('/proc/%s/exe' % pid)
-            with open('/proc/%s/cmdline' % pid) as fd:
-                args = fd.read().rstrip('\0').split('\0')
-            self.is_debug_mode = '--debug' in args
             if self.mm_pid != pid:
-                info(
-                    '"%s" (pid %s) running on the system'
-                    % (' '.join(args), pid)
-                )
+                info(f'"ModemManager" (pid {pid}) running on the system')
                 self.mm_pid = pid
-            return self.is_debug_mode
-
-    def kill_daemon_and_relaunch(self):
-        if self.mm_pid is not None:
-            warning(
-                (
-                    'Killing existing daemon (pid %s), it '
-                    + 'should be relaunched in debug mode'
-                )
-                % self.mm_pid
-            )
-
-            run(
-                ['systemctl', 'stop', 'ModemManager'],
-                stdin=DEVNULL,
-                stdout=DEVNULL,
-                stderr=DEVNULL,
-            )
-            try:
-                kill(self.mm_pid, SIGINT)
-            except Exception:
-                pass
-        self.needs_relaunch_mm = True
-
-    def launch_daemon(self):
-        process = Popen(
-            ['ModemManager', '--debug'],
-            preexec_fn=setpgrp,
-            stdin=DEVNULL,
-            stdout=DEVNULL,
-            stderr=DEVNULL,
-        )
-        info(
-            'Launched the ModemManager daemon in the background in debug mode as pid %s...'
-            % (process.pid)
-        )
+            return True
 
     def find_bearer_by_id(
         self, bearer_id: str
@@ -413,7 +362,7 @@ class ModemManagerIntf(GObject.Object):
                     modem.connect('state-changed', self.on_modem_state_updated)
                 ] = modem
         else:
-            error('ModemManager daemon disconnected.')
+            warning('ModemManager daemon disconnected.')
             self.daemon_connected = False
             # Disconnect/discard from the Python set structure all
             # signals from self.modem_signal_ids
@@ -422,10 +371,6 @@ class ModemManagerIntf(GObject.Object):
                     signal_id
                 )  # See https://lazka.github.io/pgi-docs/GObject-2.0/classes/Object.html#GObject.Object.disconnect
             self.modem_signal_ids = {}
-
-            if self.needs_relaunch_mm:
-                self.launch_daemon()
-                self.needs_relaunch_mm = False
 
         self.queue_state_update()
 
@@ -442,9 +387,10 @@ class ModemManagerIntf(GObject.Object):
 
         if self.rpc_wrapper:
             # TO BE IMPLEMENTED
-            self.rpc_wrapper.broadcast_message(
-                {'type': 'SYNC_MODEM_STATUS', **self.json_state}
-            )
+            pass
+            # self.rpc_wrapper.broadcast_message(
+            #     {'type': 'SYNC_MODEM_STATUS', **self.json_state}
+            # )
 
         self.emit('modem_state_change')
 
@@ -497,11 +443,6 @@ class ModemManagerIntf(GObject.Object):
 
         mcc_mnc: Optional[str] = sim.get_operator_identifier()
         suggested_apns = None
-        if mcc_mnc:
-            mcc = mcc_mnc[:3]
-            mnc = mcc_mnc[3:]  # May contain a leading 0
-
-            suggested_apns = ApnList.get_suggested_apns(mcc, mnc)
 
         return (
             {
@@ -841,7 +782,6 @@ class ModemManagerIntf(GObject.Object):
             'is_running': self.mm_pid is not None,
             'pid': self.mm_pid,
             'version': self.manager.get_version(),
-            'has_debug_flag': self.is_debug_mode,
             'modems': output,
         }
 
