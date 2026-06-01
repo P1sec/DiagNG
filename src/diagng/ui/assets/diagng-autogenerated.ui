@@ -19,7 +19,42 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detected ModemManager instances</property>
+                            <property name="title">ModemManager system daemon</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="activatable">true</property>
+                                <property name="subtitle">PID XXX</property>
+                                <property name="subtitle-selectable">true</property>
+                                <property name="title">Daemon status</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="attributes">0 -1 weight bold</property>
+                                    <property name="label">Stopped</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">Service version</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">1.2.24</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Detected modems</property>
+                            <child>
+                              <object class="AdwExpanderRow">
+                                <property name="expanded">true</property>
+                                <property name="title">&lt;b&gt;ZTE MF667&lt;/b&gt;</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

@@ -8,7 +8,36 @@ template $MainWindow: Adw.ApplicationWindow {
         Adw.ViewStackPage mm_tab {
           child: Adw.PreferencesPage {
             Adw.PreferencesGroup {
-              title: "Detected ModemManager instances";
+              title: "ModemManager system daemon";
+
+              Adw.ActionRow {
+                activatable: true;
+                subtitle: "PID XXX";
+                subtitle-selectable: true;
+                title: "Daemon status";
+
+                Label {
+                  attributes: "0 -1 weight bold";
+                  label: "Stopped";
+                }
+              }
+
+              Adw.ActionRow {
+                title: "Service version";
+
+                Label {
+                  label: "1.2.24";
+                }
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: "Detected modems";
+
+              Adw.ExpanderRow {
+                expanded: true;
+                title: "<b>ZTE MF667</b>";
+              }
             }
           };
 
