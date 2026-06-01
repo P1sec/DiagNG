@@ -4,9 +4,9 @@ requires = ["uv_build>=0.10.3,<0.11.0"]
 build-backend = "uv_build"
 
 [project]
-name = "qcsuper"
-version = "3.0.0"
-description = "Draft for QCSuper v3"
+name = "diagng"
+version = "0.1.0"
+description = "Draft for DiagNG"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -14,12 +14,12 @@ dependencies = [
 ]
 
 [project.scripts]
-qcsuper = "qcsuper.common.main_entry:main"
+diagng = "diagng.common.main_entry:main"
 
 [project.urls]
-Homepage = "https://github.com/P1sec/qcsuper-gui"
-Repository = "https://github.com/P1sec/qcsuper-gui"
-Issues = "https://github.com/P1sec/qcsuper-gui/issues"
+Homepage = "https://github.com/P1sec/diagng"
+Repository = "https://github.com/P1sec/diagng"
+Issues = "https://github.com/P1sec/diagng/issues"
 
 [tool.ruff]
 line-length = 79

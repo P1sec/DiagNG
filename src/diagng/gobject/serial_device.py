@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from gi.repository import GObject
 
-from qcsuper.gobject.process import Process
+from diagng.gobject.process import Process
 
 
 class SerialDevice(GObject.Object):

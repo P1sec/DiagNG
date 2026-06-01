@@ -17,6 +17,7 @@ from logging.handlers import RotatingFileHandler
 from os import umask, chmod, chown, stat
 from typing import List, Dict, Sequence
 from os.path import dirname, realpath
+from re import split, IGNORECASE
 from collections import deque
 from shlex import join
 import sys
@@ -46,7 +47,9 @@ BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 
 class NoColorFormatter(Formatter):
     def format(self, record):
-        record.pathname_last = record.pathname.split('qcsuper/')[-1]
+        record.pathname_last = split(
+            r'diagng/', record.pathname, flags=IGNORECASE
+        ).pop()
         return BASE_FORMATTER.format(record)
 
 
@@ -71,7 +74,9 @@ class ColorFormatter(Formatter):
 
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
-        record.pathname_last = record.pathname.split('qcsuper/')[-1]
+        record.pathname_last = split(
+            r'diagng/', record.pathname, flags=IGNORECASE
+        ).pop()
         formatter = Formatter(log_fmt, style='{')
         return formatter.format(record)
 

@@ -7,25 +7,25 @@ from shlex import join
 import sys
 import gi
 
-from qcsuper.common.main_rpc_server import MainRPCServer
-from qcsuper.gobject.serial_device import SerialDevice
-from qcsuper.common.service_entry import service_main
-from qcsuper.common.logging import LoggingCentral
-from qcsuper.gobject.process import Process
-from qcsuper.ui.window import MyWindow
+from diagng.common.main_rpc_server import MainRPCServer
+from diagng.gobject.serial_device import SerialDevice
+from diagng.common.service_entry import service_main
+from diagng.common.logging import LoggingCentral
+from diagng.gobject.process import Process
+from diagng.ui.window import MyWindow
 
 gi.require_version('Adw', '1')
 from gi.repository import Adw, GLib, Gio
 
 """
-    Primary entry point of qcsuper, called
+    Primary entry point of diagng, called
     before spawning a provilege-elevated
     subprocess in service_entry.py
 """
 
 
 def main():
-    args = ArgumentParser(description='Prototype for QCSuper v3')
+    args = ArgumentParser(description='Prototype for DiagNG 🍕 🎧')
 
     args.add_argument(
         '--service',
@@ -61,7 +61,7 @@ def main():
         service_main()
 
     else:
-        app = MainApplication(application_id='com.p1security.qcsuper')
+        app = MainApplication(application_id='com.p1security.diagng')
         app.run()
 
 

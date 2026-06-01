@@ -4,9 +4,11 @@ from traceback import format_exception
 from shlex import join
 import sys
 
-from qcsuper.system.modemmanager.modem_manager_dbus import ModemManagerIntf # WIP
-from qcsuper.common.service_rpc_client import ServiceRPCClient
-from qcsuper.common.logging import LoggingCentral
+from diagng.system.modemmanager.modem_manager_dbus import (
+    ModemManagerIntf,
+)  # WIP
+from diagng.common.service_rpc_client import ServiceRPCClient
+from diagng.common.logging import LoggingCentral
 
 import gi
 
@@ -14,7 +16,7 @@ gi.require_version('Jsonrpc', '1.0')
 from gi.repository import GLib, Gio, Jsonrpc
 
 """
-Secondary entry point of qcsuper, called
+Secondary entry point of diagng, called
 after spawning a provilege-elevated
 subprocess from main_entry.py
 """
@@ -193,7 +195,7 @@ class ServiceApplication(Gio.Application):
 def service_main():
 
     app = ServiceApplication(
-        application_id='com.p1security.qcsuperd',
+        application_id='com.p1security.diagngd',
         flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
     )
     app.add_main_option(
@@ -222,7 +224,7 @@ def service_main():
     # TODO build app with a different DBus service name
     # than the primary process
     # self.app = Gio.Application.new(
-    #     'com.p1security.qcsuperd', Gio.ApplicationFlags.IS_SERVICE
+    #     'com.p1security.diagngd', Gio.ApplicationFlags.IS_SERVICE
     # )
 
     """
@@ -237,11 +239,11 @@ def service_main():
     serial_device.process = process
     """
 
-    # TODO: Create qcsuper.system.serial.device_scanner
+    # TODO: Create diagng.system.serial.device_scanner
     # background task (leveraging UDEV or just use a
     # glob over /dev/tty* with an interval)?
 
-    # TODO: Create qcsuper.system.psutil.process_scanner
+    # TODO: Create diagng.system.psutil.process_scanner
     # background task (leveraging UDEV or just use a
     # glob over /proc/*/fd/{device_fd} with an interval)?
 

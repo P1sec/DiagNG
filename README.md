@@ -1,4 +1,6 @@
-WIP: Create a monolithic GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too?) allowing to control and manage interferences with the serial Diag port system wide.
+# DiagNG 🍕 🎧 The next-generation baseband Diag-collecting software (2G/3G/4G)
+
+WIP: This draft repository (previously called `qcsuper-gui`/QCSuper v3) intends to produce a monolithic GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too?) allowing to control and manage interferences with the serial Diag port system wide.
 
 NEXT STEP: Configure logging on the base of what is done with `citsued` (https://github.com/P1sec/cits-ue-modem-intf/blob/main/citsued/logging.py).
 
@@ -41,9 +43,9 @@ Then:
 ```bash
 sudo snap install --classic astral-uv
 sudo apt install git
-git clone git@github.com:P1sec/qcsuper-gui.git
+git clone git@github.com:P1sec/DiagNG.git diagng
 
-cd qcsuper
+cd diagng
 # Download Python modules and initialize virtualenv (creates ".venv",
 # call "source .venv/bin/activate" to set up)
 uv sync
@@ -51,5 +53,5 @@ uv sync
 # system-wide (creates a symlink to the source in "~/.local/bin")
 uv tool install -e .
 
-qcsuper-test
+diagng
 ```
