@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-from qcsuper.common.service_rpc_client import ServiceRPCClient
-from qcsuper.common.logging import LoggingCentral
 from logging import debug, info, error, critical
 from traceback import format_exception
 from shlex import join
 import sys
+
+from qcsuper.system.modemmanager.modem_manager_dbus import ModemManagerIntf # WIP
+from qcsuper.common.service_rpc_client import ServiceRPCClient
+from qcsuper.common.logging import LoggingCentral
 
 import gi
 
@@ -31,6 +33,7 @@ QUIT_WHEN_ZERO_CONNECTIONS = True
 
 
 class ServiceApplication(Gio.Application):
+    modem_manager: ModemManagerIntf
     number_clients: int = 0
     effective_addr: str
     effective_port: int
@@ -99,6 +102,10 @@ class ServiceApplication(Gio.Application):
         # Spawn a RPC server in on_command_line
 
         self.port_to_client = {}
+
+        # WIP 2026-06-01 spawn ModemManager seeking background task
+
+        self.modem_manager = ModemManagerIntf()
 
     def incr_connection_count(self):
         self.number_clients += 1
