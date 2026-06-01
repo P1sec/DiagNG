@@ -19,4 +19,4 @@ wheels/
 *.log.4
 *.log.5
 
-sample-citsued-*.txt
+sample-citsued-*.json
