@@ -24,6 +24,7 @@ from traceback import format_exc
 from json import dumps
 
 from diagng.gobject.mm_instance import ModemManagerInstance
+from diagng.gobject.mm_modem import ModemManagerModem
 
 import gi
 
@@ -145,7 +146,7 @@ class PinUnlockWaiter:
 
         try:
             return_value = finish_method(sim, result)
-        except gi.repository.GLib.GError as err:
+        except gi.repository.GLib.GError:
             error(finish_method_name + ' error: ' + format_exc())
         else:
             info(
@@ -370,7 +371,14 @@ class ModemManagerIntf(GObject.Object):
                 'ModemManager daemon %s connected.'
                 % self.manager.get_version()
             )
+
             self.mm_instance.version = self.manager.get_version()
+
+            self.mm_instance.modems = Gio.ListStore.new(ModemManagerModem)
+            test_modem = ModemManagerModem()  # TEST WIP 2026-06-02
+            test_modem.modem_name = 'ZTE MF667 (test)'
+            self.mm_instance.modems.append(test_modem)
+
             self.daemon_connected = True
             self.modem_signal_ids[
                 self.manager.connect('object-added', self.on_modem_added)

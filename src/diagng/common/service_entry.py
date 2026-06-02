@@ -4,9 +4,7 @@ from traceback import format_exception
 from shlex import join
 import sys
 
-from diagng.system.modemmanager.modem_manager_dbus import (
-    ModemManagerIntf,
-)  # WIP
+from diagng.system.modemmanager.modem_manager_dbus import ModemManagerIntf
 from diagng.common.service_rpc_client import ServiceRPCClient
 from diagng.common.logging import LoggingCentral
 
