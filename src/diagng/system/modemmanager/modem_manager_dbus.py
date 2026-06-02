@@ -25,6 +25,7 @@ from json import dumps
 
 from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.gobject.mm_port import ModemManagerPort
 
 import gi
 
@@ -168,7 +169,7 @@ class PinUnlockWaiter:
 
     def check_modem_unlock_state(self, refresh=True):
         if refresh:
-            self.intf.update_json_state()
+            self.intf.update_state()
 
         modems = self.intf.json_state['modems']
         for modem in modems:
@@ -287,21 +288,6 @@ class ModemManagerIntf(GObject.Object):
         else:
             self.update_remote_state()
 
-    def update_remote_state(self):
-
-        if self.mm_instance.pid:
-            self.rpc_wrapper.broadcast_message(
-                'sync_modem_status', self.mm_instance.to_gvariant()
-            )
-
-        if self.json_state:
-            self.rpc_wrapper.broadcast_message(
-                'sync_modem_status_detailed',
-                Json.gvariant_deserialize(
-                    Json.from_string(dumps(self.json_state)), None
-                ),
-            )
-
     def check_daemon_running(self):
         """
         Check if ModemManager is running on the system.
@@ -376,11 +362,6 @@ class ModemManagerIntf(GObject.Object):
 
             self.mm_instance.version = self.manager.get_version()
 
-            test_modem = ModemManagerModem()  # TEST WIP 2026-06-02
-            test_modem.modem_name = 'ZTE MF667 (test)'
-            test_modem.modem_device_id = 'xx xx xx'
-            self.mm_instance.modems.append(test_modem)
-
             self.daemon_connected = True
             self.modem_signal_ids[
                 self.manager.connect('object-added', self.on_modem_added)
@@ -410,18 +391,16 @@ class ModemManagerIntf(GObject.Object):
     def queue_state_update(self):
         if not self.state_update_pending:
             self.state_update_pending = True
-            GLib.idle_add(self.update_json_state)
+            GLib.idle_add(self.update_state)
 
-    def update_json_state(self, *args):
+    def update_state(self, *args):
 
-        self.json_state = self.dbus_metadata_to_json(self.manager)
-
+        self.json_state = self.dbus_metadata_to_json()
         debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
         self.update_remote_state()
 
         self.emit('modem_state_change')
-
         self.state_update_pending = False
 
     def on_modem_added(self, manager, obj):
@@ -701,12 +680,64 @@ class ModemManagerIntf(GObject.Object):
             'suspended': bearer.get_suspended(),  # bool
         }
 
-    def dbus_metadata_to_json(self, manager: ModemManager.Manager) -> dict:
+    def update_remote_state(self):
+
+        if self.mm_instance.pid:
+            # Remove all self.mm_instance.modems
+            # which don't have a "inhibited=True",
+            # and add back actually alive/non-saved
+            # modems after that
+
+            store: Gio.ListStore = self.mm_instance.modems
+
+            while True:
+                for pos in range(store.get_n_items()):
+                    if not store.get_item(pos).inhibited:
+                        break
+                else:
+                    break
+                store.remove(pos)
+
+            for obj in self.manager.get_objects():
+                mm_modem = obj.get_modem()
+
+                modem = ModemManagerModem()
+                modem.modem_name = (
+                    f'{mm_modem.get_manufacturer()} {mm_modem.get_model()}'
+                )
+                modem.modem_imei = mm_modem.get_equipment_identifier()
+                modem.modem_firmware = mm_modem.get_revision()
+                modem.modem_device_id = mm_modem.get_device()
+                modem.inhibited = False
+                primary_port = mm_modem.get_primary_port()
+                success, ports = mm_modem.get_ports()
+                if ports:
+                    for mm_port in ports:
+                        port = ModemManagerPort()
+                        port.device_path = '/dev/' + mm_port.name
+                        port.port_type = mm_port.type.value_nick.upper()
+                        port.is_primary = mm_port.name == primary_port
+                        modem.ports.append(port)
+                store.append(modem)
+
+            self.rpc_wrapper.broadcast_message(
+                'sync_modem_status', self.mm_instance.to_gvariant()
+            )
+
+        if self.json_state:
+            self.rpc_wrapper.broadcast_message(
+                'sync_modem_status_detailed',
+                Json.gvariant_deserialize(
+                    Json.from_string(dumps(self.json_state)), None
+                ),
+            )
+
+    def dbus_metadata_to_json(self) -> dict:
         # Avoid memory leaks?
 
         output = []
 
-        for obj in manager.get_objects():
+        for obj in self.manager.get_objects():
             modem = obj.get_modem()
             unlock_retries = []
             modem.peek_unlock_retries().foreach(

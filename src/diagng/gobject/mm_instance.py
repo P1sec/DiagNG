@@ -52,9 +52,7 @@ class ModemManagerInstance(GObject.Object):
             self.is_running = data.lookup_value('is_running').get_boolean()
             self.pid = data.lookup_value('pid').get_int64()
             self.version = data.lookup_value('version').get_string()
-            modems = data.lookup_value(
-                'modems',
-            )
+            modems = data.lookup_value('modems')
             self.modems.remove_all()
             for pos in range(modems.n_children()):
                 self.modems.append(
