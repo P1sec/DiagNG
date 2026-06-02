@@ -186,12 +186,12 @@ class ServiceApplication(Gio.Application):
         # a key) until it disconnects, so that we
         # can sent Diag traffic to it, etc
 
-    def broadcast_message(self, method: str, value: Json.Node):
+    def broadcast_message(self, method: str, value: GLib.Variant):
 
         for port, client in sorted(self.port_to_client.items()):
             client.call_async(
                 method,
-                Json.gvariant_deserialize(value),
+                value,
                 None,
                 None,
             )

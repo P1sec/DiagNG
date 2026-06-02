@@ -291,13 +291,15 @@ class ModemManagerIntf(GObject.Object):
 
         if self.mm_instance.pid:
             self.rpc_wrapper.broadcast_message(
-                'sync_modem_status', Json.gobject_serialize(self.mm_instance)
+                'sync_modem_status', self.mm_instance.to_gvariant()
             )
 
         if self.json_state:
             self.rpc_wrapper.broadcast_message(
                 'sync_modem_status_detailed',
-                Json.from_string(dumps(self.json_state)),
+                Json.gvariant_deserialize(
+                    Json.from_string(dumps(self.json_state)), None
+                ),
             )
 
     def check_daemon_running(self):
@@ -374,9 +376,9 @@ class ModemManagerIntf(GObject.Object):
 
             self.mm_instance.version = self.manager.get_version()
 
-            self.mm_instance.modems = Gio.ListStore.new(ModemManagerModem)
             test_modem = ModemManagerModem()  # TEST WIP 2026-06-02
             test_modem.modem_name = 'ZTE MF667 (test)'
+            test_modem.modem_device_id = 'xx xx xx'
             self.mm_instance.modems.append(test_modem)
 
             self.daemon_connected = True

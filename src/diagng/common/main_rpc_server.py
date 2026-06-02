@@ -42,19 +42,7 @@ class MainRPCServer(Jsonrpc.Server):
     ):
         info(f'Got call "{id}" for "{method}" with params "{params}"')
 
-        obj = Json.gobject_deserialize(
-            ModemManagerInstance, Json.gvariant_serialize(params)
-        )
-
-        with obj.freeze_notify():
-            for prop in ModemManagerInstance.list_properties():
-                prop = prop.get_name()
-
-                old_val = self.app.mm_instance.get_property(prop)
-                new_val = obj.get_property(prop)
-
-                if old_val != new_val:
-                    self.app.mm_instance.set_property(prop, new_val)
+        self.app.mm_instance.update(params)
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
