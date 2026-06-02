@@ -28,6 +28,8 @@ Dependencies on Ubuntu 26.04 LTS:
 sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
     gir1.2-jsonrpc-1.0 gir1.2-json-1.0 libjsonrpc-glib-1.0-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
+    gir1.2-gtksource-5 libgtksourceview-5-dev \
+    gir1.2-pango-1.0 libpango1.0-dev \
     python3-dev blueprint-compiler
 ```
 
@@ -35,7 +37,7 @@ Dependencies on Archlinux:
 
 ```bash
 sudo pacman -S uv blueprint-compiler python-gobject jsonrpc-glib \
-    libadwaita libmm-glib
+    gtksourceview5 libadwaita pango libmm-glib
 ```
 
 Then:

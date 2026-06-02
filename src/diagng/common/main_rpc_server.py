@@ -21,8 +21,7 @@ class MainRPCServer(Jsonrpc.Server):
 
         self.add_handler('sync_modem_status', self.sync_modem_status_handler)
         self.add_handler(
-            'sync_modem_status_detailed',
-            self.sync_modem_status_detailed_handler,
+            'sync_modem_debug_info', self.sync_modem_debug_info_handler
         )
         self.add_handler('test_ctos', self.test_ctos_handler)
 
@@ -46,7 +45,7 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-    def sync_modem_status_detailed_handler(
+    def sync_modem_debug_info_handler(
         self,
         this: Jsonrpc.Server,
         peer: Jsonrpc.Client,
@@ -55,9 +54,11 @@ class MainRPCServer(Jsonrpc.Server):
         params: GLib.Variant,
         *user_data,
     ):
-        params = loads(Json.gvariant_serialize_data(params)[0])
+        raw_json = Json.to_string(Json.gvariant_serialize(params), True)
 
-        info(f'Got call "{id}" for "{method}" with params "{params}"')
+        info(f'Got call "{id}" for "{method}"')
+
+        self.app.mm_debug_data = raw_json
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 

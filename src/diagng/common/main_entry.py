@@ -16,7 +16,7 @@ from diagng.gobject.process import Process
 from diagng.ui.window import MyWindow
 
 gi.require_version('Adw', '1')
-from gi.repository import Adw, GLib, Gio
+from gi.repository import Adw, GLib, Gio, GObject
 
 """
     Primary entry point of diagng, called
@@ -67,7 +67,9 @@ def main():
 
 
 class MainApplication(Adw.Application):
-    mm_instance: ModemManagerInstance
+    mm_instance = GObject.Property(type=ModemManagerInstance)
+
+    mm_debug_data = GObject.Property(type=str)
 
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)

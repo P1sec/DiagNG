@@ -729,7 +729,7 @@ class ModemManagerIntf(GObject.Object):
 
         if self.json_state:
             self.rpc_wrapper.broadcast_message(
-                'sync_modem_status_detailed',
+                'sync_modem_debug_info',
                 Json.gvariant_deserialize(
                     Json.from_string(dumps(self.json_state)), None
                 ),

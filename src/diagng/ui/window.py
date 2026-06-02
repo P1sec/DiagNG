@@ -12,7 +12,9 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, GLib, Gio
+gi.require_version('Pango', '1.0')
+gi.require_version('GtkSource', '5')
+from gi.repository import Gtk, Adw, GLib, Gio, GtkSource, Pango
 
 SCRIPT_DIR = dirname(realpath(__file__))
 ASSETS_DIR = realpath(join(SCRIPT_DIR, 'assets'))
@@ -50,6 +52,11 @@ class MyWindow(Adw.ApplicationWindow):
 
     app: 'MainApplication'
 
+    mm_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    mm_debug_view: GtkSource
+    sourceview_css_provider: Gtk.CssProvider
+    sourceview_style_manager: Adw.StyleManager
+
     mm_status_row: Adw.ActionRow = Gtk.Template.Child()
     mm_status_label: Gtk.Label = Gtk.Template.Child()
     mm_version_row: Adw.ActionRow = Gtk.Template.Child()
@@ -63,6 +70,31 @@ class MyWindow(Adw.ApplicationWindow):
         self.app = app
         self.set_application(app)
 
+        lang_manager = GtkSource.LanguageManager.new()
+
+        self.sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
+        )
+        self.sourceview_style_manager = Adw.StyleManager.get_default()
+
+        self.mm_debug_view = GtkSource.View.new_with_buffer(
+            self.sourceview_buffer
+        )
+        self.mm_debug_view.set_size_request(-1, 200)
+        self.mm_debug_group.add(self.mm_debug_view)
+
+        self.sourceview_css_provider = Gtk.CssProvider()
+        style_context = self.mm_debug_view.get_style_context()
+        style_context.add_provider(
+            self.sourceview_css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+        )
+
+        self.sync_sourceview_theme()
+        self.sourceview_style_manager.connect(
+            'notify', self.sync_sourceview_theme
+        )
+
         self.mm_status_row.set_subtitle('Fetching information...')
         self.mm_status_label.set_label('')
         self.mm_version_label.set_label('')
@@ -72,6 +104,37 @@ class MyWindow(Adw.ApplicationWindow):
         )
 
         self.app.mm_instance.connect('notify', self.update_mm_instance)
+        self.app.connect('notify', self.update_mm_debug_data)
+
+        self.update_mm_instance()
+        self.update_mm_debug_data()
+
+    def sync_sourceview_theme(self, *args):
+        is_dark_mode: bool = self.sourceview_style_manager.get_dark()
+
+        color_scheme_manager = GtkSource.StyleSchemeManager.new()
+        for scheme in color_scheme_manager.get_scheme_ids():
+            is_dark_theme: bool = (
+                'dark' in scheme or 'oblivion' in scheme or 'cobalt' in scheme
+            )
+            if is_dark_mode == is_dark_theme:
+                self.sourceview_buffer.set_style_scheme(
+                    color_scheme_manager.get_scheme(scheme)
+                )
+                break
+
+        monospace_font = Pango.FontDescription.from_string(
+            self.sourceview_style_manager.get_monospace_font_name()
+        )
+
+        self.sourceview_css_provider.load_from_string(
+            'textview { font-family: "%s"; font-size: %g%s; }'
+            % (
+                monospace_font.get_family(),
+                monospace_font.get_size() / Pango.SCALE,
+                'px' if monospace_font.get_size_is_absolute() else 'pt',
+            )
+        )
 
     def update_mm_instance(self, *args):
         if self.app.mm_instance.initialized:
@@ -93,6 +156,10 @@ class MyWindow(Adw.ApplicationWindow):
             self.detected_modems_group.set_visible(
                 bool(self.app.mm_instance.modems.get_n_items())
             )
+
+    def update_mm_debug_data(self, *args):
+        if self.app.mm_debug_data:
+            self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
 
     def create_mm_modem(self, item: ModemManagerModem) -> Adw.ExpanderRow:
         main_row = Adw.ExpanderRow.new()

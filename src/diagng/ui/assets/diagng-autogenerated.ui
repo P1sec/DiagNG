@@ -77,6 +77,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="mm_debug_group">
+                            <property name="title">DBus information</property>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">modem-symbolic</property>
