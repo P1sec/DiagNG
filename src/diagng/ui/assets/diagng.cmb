@@ -3,5 +3,5 @@
 <!-- Created with Cambalache 1.0.2 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="08b6e27a1695defbb3a9fffe63315d0a7f675101f1c4588ea7add7fa840dcd94"/>
-  <ui template-class="MainWindow" filename="diagng.blp" sha256="84d0cd59221b4ac2a266c1f1ad1c0a43a37232ef087ebd3b06a389723fdf9f6e"/>
+  <ui template-class="MainWindow" filename="diagng.blp" sha256="dd696bcd281eed44c4d4fd7f0c1be60742fde1c348157a8995ba93924a363564"/>
 </cambalache-project>

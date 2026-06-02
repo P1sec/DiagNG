@@ -16,18 +16,18 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="mm_tab">
                     <property name="child">
-                      <object class="AdwPreferencesPage">
+                      <object class="AdwPreferencesPage" id="mm_tab_page">
                         <child>
                           <object class="AdwPreferencesGroup">
                             <property name="title">ModemManager system daemon</property>
                             <child>
-                              <object class="AdwActionRow">
+                              <object class="AdwActionRow" id="mm_status_row">
                                 <property name="activatable">true</property>
                                 <property name="subtitle">PID XXX</property>
                                 <property name="subtitle-selectable">true</property>
                                 <property name="title">Daemon status</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="mm_status_label">
                                     <property name="attributes">0 -1 weight bold</property>
                                     <property name="label">Stopped</property>
                                   </object>
@@ -35,10 +35,10 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                               </object>
                             </child>
                             <child>
-                              <object class="AdwActionRow">
+                              <object class="AdwActionRow" id="mm_version_row">
                                 <property name="title">Service version</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="mm_version_label">
                                     <property name="label">1.2.24</property>
                                   </object>
                                 </child>

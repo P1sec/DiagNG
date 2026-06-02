@@ -7,6 +7,7 @@ from shlex import join
 import sys
 import gi
 
+from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.common.main_rpc_server import MainRPCServer
 from diagng.gobject.serial_device import SerialDevice
 from diagng.common.service_entry import service_main
@@ -66,6 +67,8 @@ def main():
 
 
 class MainApplication(Adw.Application):
+    mm_instance: ModemManagerInstance
+
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)
 
@@ -75,6 +78,7 @@ class MainApplication(Adw.Application):
         debug('Initializing app...')
 
         super().__init__(**kwargs)
+        self.mm_instance = ModemManagerInstance()
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)
@@ -106,8 +110,7 @@ class MainApplication(Adw.Application):
         sys.excepthook = error_handler
 
     def on_startup(self, app, *args):
-        self.window = MyWindow()
-        self.window.set_application(self)
+        self.window = MyWindow(self)
 
         # Spawn or connect to privileged --service
         # subprocess here
@@ -155,7 +158,7 @@ class MainApplication(Adw.Application):
         # (and eventually connect back to a socket through getting RPC called with a TCP endpoint
         # that we will pass to https://lazka.github.io/pgi-docs/Jsonrpc-1.0/classes/Client.html#Jsonrpc.Client.new
 
-        rpc_server = MainRPCServer()
+        rpc_server = MainRPCServer(self)
 
         def accept_socket(
             socket_service: Gio.SocketService,

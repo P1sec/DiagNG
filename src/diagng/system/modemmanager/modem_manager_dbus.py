@@ -326,6 +326,7 @@ class ModemManagerIntf(GObject.Object):
             info('No ModemManager service on the system at the moment')
             self.mm_pid = None
             self.mm_instance.is_running = False
+            self.mm_instance.initialized = True
             return False
         else:
             if self.mm_pid != pid:
@@ -333,6 +334,7 @@ class ModemManagerIntf(GObject.Object):
                 self.mm_pid = pid
                 self.mm_instance.pid = pid
             self.mm_instance.is_running = True
+            self.mm_instance.initialized = True
             return True
 
     def find_bearer_by_id(

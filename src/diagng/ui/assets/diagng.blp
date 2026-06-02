@@ -6,26 +6,26 @@ template $MainWindow: Adw.ApplicationWindow {
     content: Adw.ToastOverlay {
       child: Adw.ViewStack global_stack {
         Adw.ViewStackPage mm_tab {
-          child: Adw.PreferencesPage {
+          child: Adw.PreferencesPage mm_tab_page {
             Adw.PreferencesGroup {
               title: "ModemManager system daemon";
 
-              Adw.ActionRow {
+              Adw.ActionRow mm_status_row {
                 activatable: true;
                 subtitle: "PID XXX";
                 subtitle-selectable: true;
                 title: "Daemon status";
 
-                Label {
+                Label mm_status_label {
                   attributes: "0 -1 weight bold";
                   label: "Stopped";
                 }
               }
 
-              Adw.ActionRow {
+              Adw.ActionRow mm_version_row {
                 title: "Service version";
 
-                Label {
+                Label mm_version_label {
                   label: "1.2.24";
                 }
               }

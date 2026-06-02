@@ -5,6 +5,7 @@ from gi.repository import GObject
 
 
 class ModemManagerInstance(GObject.Object):
+    initialized = GObject.Property(type=bool, default=False)
     is_running = GObject.Property(type=bool, default=False)
     pid = GObject.Property(type=int)
     version = GObject.Property(type=str)
