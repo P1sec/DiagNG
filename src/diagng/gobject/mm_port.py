@@ -5,8 +5,9 @@ from typing import Self
 # XX WIP 2026-06-01 Define a structure and add tests
 
 
-class ModemManagerDevice(GObject.Object):
+class ModemManagerPort(GObject.Object):
     device_path = GObject.Property(type=str)
+    is_primary = GObject.Property(type=bool, default=False)
 
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)

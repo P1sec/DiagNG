@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from diagng.gobject.mm_device import ModemManagerDevice
+from diagng.gobject.mm_port import ModemManagerPort
 from gi.repository import GObject, GLib, Gio
 from typing import Self
 
@@ -7,19 +7,27 @@ from typing import Self
 
 
 class ModemManagerModem(GObject.Object):
-    modem_name = GObject.Property(type=str)
-    modem_device_id = GObject.Property(type=str)
+    modem_name = GObject.Property(
+        type=str
+    )  # get_manufacturer() + " " + get_model()
+    modem_imei = GObject.Property(type=str)  # get_equipment_identifier()
+    modem_firmware = GObject.Property(type=str)  # get_revision()
+    modem_device_id = GObject.Property(type=str)  # get_device()
     inhibited = GObject.Property(type=bool, default=False)
-    devices = GObject.Property(type=Gio.ListStore)
+    ports = GObject.Property(type=Gio.ListStore)
 
     def __init__(self):
         super().__init__()
-        self.devices = Gio.ListStore.new(ModemManagerDevice)
+        self.ports = Gio.ListStore.new(ModemManagerPort)
 
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
             'modem_name', GLib.Variant.new_string(self.modem_name)
+        )
+        variant.insert_value(
+            'modem_imei',
+            GLib.Variant.new_string(self.modem_imei),
         )
         variant.insert_value(
             'modem_device_id',
@@ -29,12 +37,12 @@ class ModemManagerModem(GObject.Object):
             'inhibited', GLib.Variant.new_boolean(self.inhibited)
         )
         variant.insert_value(
-            'devices',
+            'ports',
             GLib.Variant.new_array(
                 GLib.VariantType.new('a{sv}'),
                 [
-                    self.devices.get_item(position).to_gvariant()
-                    for position in range(self.devices.get_n_items())
+                    self.ports.get_item(position).to_gvariant()
+                    for position in range(self.ports.get_n_items())
                 ],
             ),
         )
@@ -50,16 +58,17 @@ class ModemManagerModem(GObject.Object):
     def update(self, data: GLib.Variant):
         with self.freeze_notify():
             self.modem_name = data.lookup_value('modem_name').get_string()
+            self.modem_imei = data.lookup_value('modem_imei').get_string()
             self.modem_device_id = data.lookup_value(
                 'modem_device_id'
             ).get_string()
             self.inhibited = data.lookup_value('inhibited').get_boolean()
-            devices = data.lookup_value('devices')
-            self.devices.remove_all()
-            for pos in range(devices.n_children()):
-                self.devices.append(
-                    ModemManagerDevice.from_gvariant(
-                        devices.get_child_value(pos).get_variant()
+            ports = data.lookup_value('ports')
+            self.ports.remove_all()
+            for pos in range(ports.n_children()):
+                self.ports.append(
+                    ModemManagerPort.from_gvariant(
+                        ports.get_child_value(pos).get_variant()
                     )
                 )
 
