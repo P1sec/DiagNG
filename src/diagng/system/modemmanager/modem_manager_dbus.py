@@ -20,17 +20,16 @@
 
 from typing import List, Optional, Dict, Union
 from logging import debug, info, warning, error
-from subprocess import Popen, DEVNULL, run
 from traceback import format_exc
-from os import kill, setpgrp
-from os.path import realpath
-from signal import SIGINT
 from json import dumps
+
+from diagng.gobject.mm_instance import ModemManagerInstance
 
 import gi
 
 gi.require_version('ModemManager', '1.0')
-from gi.repository import Gio, GLib, GObject, ModemManager
+gi.require_version('Json', '1.0')
+from gi.repository import Gio, GLib, GObject, ModemManager, Json
 
 
 """
@@ -245,6 +244,8 @@ class PinUnlockWaiter:
 class ModemManagerIntf(GObject.Object):
     state_update_pending: bool = False
 
+    mm_instance: ModemManagerInstance
+
     modem_signal_ids: Dict[
         int, object
     ]  # This maps a GLib signal ID to an originating object
@@ -255,10 +256,14 @@ class ModemManagerIntf(GObject.Object):
     system_bus: Gio.DBusConnection
     manager: ModemManager.Manager
 
-    def __init__(self):
+    def __init__(self, rpc_wrapper):
         super().__init__()
 
         self.state_update_pending = False
+
+        self.rpc_wrapper = rpc_wrapper
+
+        self.mm_instance = ModemManagerInstance()
 
         # Maybe we should use more asynchronicity later?
 
@@ -278,6 +283,21 @@ class ModemManagerIntf(GObject.Object):
 
         if self.check_daemon_running():
             self.on_daemon_state_change()
+        else:
+            self.update_remote_state()
+
+    def update_remote_state(self):
+
+        if self.mm_instance.pid:
+            self.rpc_wrapper.broadcast_message(
+                'sync_modem_status', Json.gobject_serialize(self.mm_instance)
+            )
+
+        if self.json_state:
+            self.rpc_wrapper.broadcast_message(
+                'sync_modem_status_detailed',
+                Json.from_string(dumps(self.json_state)),
+            )
 
     def check_daemon_running(self):
         """
@@ -305,11 +325,14 @@ class ModemManagerIntf(GObject.Object):
         except gi.repository.GLib.GError:
             info('No ModemManager service on the system at the moment')
             self.mm_pid = None
+            self.mm_instance.is_running = False
             return False
         else:
             if self.mm_pid != pid:
                 info(f'"ModemManager" (pid {pid}) running on the system')
                 self.mm_pid = pid
+                self.mm_instance.pid = pid
+            self.mm_instance.is_running = True
             return True
 
     def find_bearer_by_id(
@@ -334,9 +357,6 @@ class ModemManagerIntf(GObject.Object):
             if modem_imei == match_imei:
                 return modem
 
-    def register_rpc_wrapper(self, rpc_wrapper: 'ServiceApplication'):
-        self.rpc_wrapper = rpc_wrapper
-
     @GObject.Signal
     def modem_state_change(self):
         pass
@@ -348,6 +368,7 @@ class ModemManagerIntf(GObject.Object):
                 'ModemManager daemon %s connected.'
                 % self.manager.get_version()
             )
+            self.mm_instance.version = self.manager.get_version()
             self.daemon_connected = True
             self.modem_signal_ids[
                 self.manager.connect('object-added', self.on_modem_added)
@@ -385,12 +406,7 @@ class ModemManagerIntf(GObject.Object):
 
         debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
-        if self.rpc_wrapper:
-            # TO BE IMPLEMENTED
-            pass
-            # self.rpc_wrapper.broadcast_message(
-            #     {'type': 'SYNC_MODEM_STATUS', **self.json_state}
-            # )
+        self.update_remote_state()
 
         self.emit('modem_state_change')
 

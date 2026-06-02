@@ -12,7 +12,38 @@ class MainRPCServer(Jsonrpc.Server):
 
     def __init__(self):
         super().__init__()
+        self.add_handler('sync_modem_status', self.sync_modem_status_handler)
+        self.add_handler(
+            'sync_modem_status_detailed',
+            self.sync_modem_status_detailed_handler,
+        )
         self.add_handler('test_ctos', self.test_ctos_handler)
+
+    def sync_modem_status_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        info(f'Got call "{id}" for "{method}" with params "{params}"')
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
+
+    def sync_modem_status_detailed_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        info(f'Got call "{id}" for "{method}" with params "{params}"')
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
     def test_ctos_handler(
         self,
@@ -27,11 +58,11 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-        info('Sent "test_stoc" call to child')
-
         peer.call_async(
             'test_stoc',
             GLib.Variant.new_int64(42),
             None,
             None,
         )
+
+        info('Sent "test_stoc" call to child')

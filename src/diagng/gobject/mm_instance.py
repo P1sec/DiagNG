@@ -5,9 +5,10 @@ from gi.repository import GObject
 
 
 class ModemManagerInstance(GObject.Object):
-    is_running = GObject.Property(type=bool)
+    is_running = GObject.Property(type=bool, default=False)
     pid = GObject.Property(type=int)
     version = GObject.Property(type=str)
+
 
 # TODO: Do property bindings in the window implementation source?
 

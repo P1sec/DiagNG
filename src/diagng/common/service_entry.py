@@ -12,8 +12,9 @@ from diagng.common.logging import LoggingCentral
 
 import gi
 
+gi.require_version('Json', '1.0')
 gi.require_version('Jsonrpc', '1.0')
-from gi.repository import GLib, Gio, Jsonrpc
+from gi.repository import GLib, Gio, Json, Jsonrpc
 
 """
 Secondary entry point of diagng, called
@@ -107,7 +108,7 @@ class ServiceApplication(Gio.Application):
 
         # WIP 2026-06-01 spawn ModemManager seeking background task
 
-        self.modem_manager = ModemManagerIntf()
+        self.modem_manager = ModemManagerIntf(self)
 
     def incr_connection_count(self):
         self.number_clients += 1
@@ -181,9 +182,21 @@ class ServiceApplication(Gio.Application):
 
         info(f'Sent "test_ctos" call to parent {client_port}')
 
+        self.modem_manager.update_remote_state()
+
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
         # can sent Diag traffic to it, etc
+
+    def broadcast_message(self, method: str, value: Json.Node):
+
+        for port, client in sorted(self.port_to_client.items()):
+            client.call_async(
+                method,
+                Json.gvariant_deserialize(value),
+                None,
+                None,
+            )
 
     def client_closed(self, client: Jsonrpc.Client, client_port: int):
         if client_port in self.port_to_client:
