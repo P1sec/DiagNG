@@ -180,7 +180,7 @@ class ServiceApplication(Gio.Application):
 
         info(f'Sent "test_ctos" call to parent {client_port}')
 
-        self.modem_manager.update_remote_state()
+        self.modem_manager.queue_state_update()
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
