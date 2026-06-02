@@ -714,7 +714,10 @@ class ModemManagerIntf(GObject.Object):
                 if ports:
                     for mm_port in ports:
                         port = ModemManagerPort()
-                        port.device_path = '/dev/' + mm_port.name
+                        if mm_port.type.value_nick.upper() == 'NET':
+                            port.device_path = '/sys/class/net/' + mm_port.name
+                        else:
+                            port.device_path = '/dev/' + mm_port.name
                         port.port_type = mm_port.type.value_nick.upper()
                         port.is_primary = mm_port.name == primary_port
                         modem.ports.append(port)

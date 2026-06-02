@@ -30,6 +30,10 @@ class ModemManagerModem(GObject.Object):
             GLib.Variant.new_string(self.modem_imei),
         )
         variant.insert_value(
+            'modem_firmware',
+            GLib.Variant.new_string(self.modem_firmware),
+        )
+        variant.insert_value(
             'modem_device_id',
             GLib.Variant.new_string(self.modem_device_id),
         )
@@ -59,6 +63,9 @@ class ModemManagerModem(GObject.Object):
         with self.freeze_notify():
             self.modem_name = data.lookup_value('modem_name').get_string()
             self.modem_imei = data.lookup_value('modem_imei').get_string()
+            self.modem_firmware = data.lookup_value(
+                'modem_firmware'
+            ).get_string()
             self.modem_device_id = data.lookup_value(
                 'modem_device_id'
             ).get_string()

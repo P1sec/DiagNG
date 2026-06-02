@@ -33,5 +33,5 @@ class ModemManagerPort(GObject.Object):
     def update(self, data: GLib.Variant):
         with self.freeze_notify():
             self.device_path = data.lookup_value('device_path').get_string()
-            self.device_path = data.lookup_value('port_type').get_string()
-            self.device_path = data.lookup_value('is_primary').get_boolean()
+            self.port_type = data.lookup_value('port_type').get_string()
+            self.is_primary = data.lookup_value('is_primary').get_boolean()

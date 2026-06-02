@@ -4,13 +4,15 @@ from os import stat, scandir, access, W_OK
 from subprocess import run
 from shutil import which
 
+from diagng.gobject.mm_modem import ModemManagerModem
+
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
 
 import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, Gio
+from gi.repository import Gtk, Adw, GLib, Gio
 
 SCRIPT_DIR = dirname(realpath(__file__))
 ASSETS_DIR = realpath(join(SCRIPT_DIR, 'assets'))
@@ -50,7 +52,10 @@ class MyWindow(Adw.ApplicationWindow):
 
     mm_status_row: Adw.ActionRow = Gtk.Template.Child()
     mm_status_label: Gtk.Label = Gtk.Template.Child()
+    mm_version_row: Adw.ActionRow = Gtk.Template.Child()
     mm_version_label: Gtk.Label = Gtk.Template.Child()
+
+    detected_modems_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__()
@@ -61,6 +66,10 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_status_row.set_subtitle('Fetching information...')
         self.mm_status_label.set_label('')
         self.mm_version_label.set_label('')
+
+        self.detected_modems_group.bind_model(
+            self.app.mm_instance.modems, self.create_mm_modem
+        )
 
         self.app.mm_instance.connect('notify', self.update_mm_instance)
 
@@ -74,8 +83,43 @@ class MyWindow(Adw.ApplicationWindow):
             self.mm_status_label.set_label(
                 'Started' if self.app.mm_instance.is_running else 'Stopped'
             )
+            self.mm_version_row.set_visible(self.app.mm_instance.is_running)
             self.mm_version_label.set_label(
                 self.app.mm_instance.version
                 if self.app.mm_instance.version
                 else ''
             )
+
+            self.detected_modems_group.set_visible(
+                bool(self.app.mm_instance.modems.get_n_items())
+            )
+
+    def create_mm_modem(self, item: ModemManagerModem) -> Adw.ExpanderRow:
+        main_row = Adw.ExpanderRow.new()
+        main_row.set_expanded(True)
+        main_row.set_title_selectable(True)
+        main_row.set_title(
+            '<b>%s</b>' % GLib.markup_escape_text(item.modem_name, -1)
+        )
+        main_row.set_subtitle(
+            'IMEI: %s | Firmware: %s'
+            % (
+                GLib.markup_escape_text(item.modem_imei, -1),
+                GLib.markup_escape_text(item.modem_firmware, -1),
+            )
+        )
+        for pos in range(item.ports.get_n_items()):
+            port = item.ports.get_item(pos)
+
+            port_title = port.device_path
+            port_title += ' (type: %s)' % port.port_type
+            if port.is_primary:
+                port_title += ' - Primary'
+
+            port_row = Adw.ActionRow.new()
+            port_row.set_title_selectable(True)
+            port_row.set_title(GLib.markup_escape_text(port_title, -1))
+
+            main_row.add_row(port_row)
+
+        return main_row

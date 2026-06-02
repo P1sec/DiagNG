@@ -15,35 +15,45 @@ template $MainWindow: Adw.ApplicationWindow {
                 subtitle: "PID XXX";
                 subtitle-selectable: true;
                 title: "Daemon status";
+                title-selectable: true;
 
                 Label mm_status_label {
                   attributes: "0 -1 weight bold";
                   label: "Stopped";
+                  selectable: true;
                 }
               }
 
               Adw.ActionRow mm_version_row {
                 title: "Service version";
+                title-selectable: true;
 
                 Label mm_version_label {
                   label: "1.2.24";
+                  selectable: true;
                 }
               }
             }
 
-            Adw.PreferencesGroup {
+            Adw.PreferencesGroup detected_modems_group {
               title: "Detected modems";
+              visible: false;
 
               Adw.ExpanderRow {
                 expanded: true;
+                subtitle: "IMEI: 123456 | Firmware: REL_0.645.56";
                 title: "<b>ZTE MF667</b>";
+                title-selectable: true;
+                visible: false;
 
                 Adw.ActionRow {
-                  title: "/dev/ttyUSB0 (type: AT)";
+                  title: "/dev/ttyUSB0 (type: AT) - Primary";
+                  title-selectable: true;
                 }
 
                 Adw.ActionRow {
                   title: "/dev/ttyUSB0 (type: QCDM)";
+                  title-selectable: true;
                 }
               }
             }
