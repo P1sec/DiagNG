@@ -12,7 +12,7 @@ apps:
   diagng:
     command: bin/diagng
     desktop: usr/share/applications/com.p1security.diagng.desktop
-    extensions: [gnome, kde-neon-6]
+    extensions: [gnome] # kde-neon-6
     plugs:
       - home
       - unity7

@@ -20,3 +20,5 @@ wheels/
 *.log.5
 
 sample-citsued-*.json
+
+*.snap
