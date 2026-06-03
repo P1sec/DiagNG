@@ -16,15 +16,14 @@ apps:
     plugs:
       - home
       - unity7
-    environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/android:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-    plugs:
       - network
       - network-status
       - hardware-observe
       - diagng-usb-plug
       - diagng-serial-port
       - raw-usb
+    environment:
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/android:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 plugs:
   diagng-usb-plug:
