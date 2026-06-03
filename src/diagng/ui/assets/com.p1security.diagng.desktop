@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=Utility;GTK;Network;
+Exec=%f
+Icon=com.p1security.diagng
+# See https://github.com/lemenkov/shared-mime-info/blob/master/freedesktop.org.xml.in
+# regarding the applicable mime types
+# MimeType=something;
+StartupNotify=true
+StartupWMClass=diagng
+Terminal=false
+Type=Application
+Version=1.5
+
+Name=diagng
+Comment=The next generation diag frame analysis software, based on QCSuper
+Keywords=QCSuper;Network;Qualcomm;Baseband;Capture;Analysis;Wireshark;2G;3G;4G;5G;Security;
+
+# See https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+# regarding the general layout of the current file

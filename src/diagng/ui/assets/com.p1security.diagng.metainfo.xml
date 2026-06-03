@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.p1security.diagng</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0+</project_license>
+    <name>diagng</name>
+    <branding>
+        <color type="primary" scheme_preference="light">#DCB3E7</color>
+        <color type="primary" scheme_preference="dark">#664D96</color>
+    </branding>
+    <summary>Acquire and capture baseband traces, based on QCSuper</summary>
+    <description>
+        <p>DiagNG is a tool allowing to acquire 2G/3G/4G/5G network traces, based on QCSuper.</p>
+    </description>
+    <screenshots>
+        <!-- TODO -->
+    </screenshots>
+    <!--translation type="gettext">diagng</translation-->
+    <supports>
+        <control>keyboard</control>
+        <control>pointing</control>
+        <control>touch</control>
+    </supports>
+    <recommends>
+        <display_length compare="ge">360</display_length>
+    </recommends>
+    <url type="bugtracker">https://github.com/P1sec/DiagNG/issues/new/choose</url>
+    <url type="homepage">https://github.com/P1sec/DiagNG</url>
+    <url type="contact">https://matrix.to/#/#diagng:matrix.org</url>
+    <url type="faq">https://github.com/P1sec/DiagNG#readme</url>
+    <!--url type="translate">https://github.com/P1sec/DiagNG/tree/main/translations#readme</url-->
+    <url type="vcs-browser">https://github.com/P1sec/DiagNG</url>
+    <!--
+    Open Age Rating Service
+    https://hughsie.github.io/oars/index.html
+    -->
+    <content_rating type="oars-1.1" />
+    <releases>
+        <release version="0.1.0" date="2026-06-03">
+            <description>
+                <p>Development tree</p>
+            </description>
+        </release>
+    </releases>
+    <developer id="com.p1security">
+        <name>P1 Security</name>
+    </developer>
+    <update_contact>p1-mmr@users.noreply.github.com</update_contact>
+
+    <launchable type="desktop-id">com.p1security.diagng.desktop</launchable>
+    <provides>
+        <dbus type="user">com.p1security.diagngd</dbus>
+        <dbus type="user">com.p1security.diagng</dbus>
+        <binary>diagng</binary>
+        <!--mediatype>something</mediatype-->
+    </provides>
+</component>
