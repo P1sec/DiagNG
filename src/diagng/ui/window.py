@@ -12,9 +12,8 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-gi.require_version('Pango', '1.0')
 gi.require_version('GtkSource', '5')
-from gi.repository import Gtk, Adw, GLib, Gio, GtkSource, Pango
+from gi.repository import Gtk, Adw, GLib, Gio, GtkSource
 
 SCRIPT_DIR = dirname(realpath(__file__))
 ASSETS_DIR = realpath(join(SCRIPT_DIR, 'assets'))
@@ -54,8 +53,8 @@ class MyWindow(Adw.ApplicationWindow):
 
     mm_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
     mm_debug_view: GtkSource
-    sourceview_css_provider: Gtk.CssProvider
     sourceview_style_manager: Adw.StyleManager
+    sourceview_buffer: GtkSource.Buffer
 
     mm_status_row: Adw.ActionRow = Gtk.Template.Child()
     mm_status_label: Gtk.Label = Gtk.Template.Child()
@@ -83,10 +82,13 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_debug_view.set_size_request(-1, 200)
         self.mm_debug_group.add(self.mm_debug_view)
 
-        self.sourceview_css_provider = Gtk.CssProvider()
+        sourceview_css_provider = Gtk.CssProvider()
+        sourceview_css_provider.load_from_string(
+            'textview { font-family: "Ubuntu Sans Mono", "Monospace"; font-size: 11pt; }'
+        )
         style_context = self.mm_debug_view.get_style_context()
         style_context.add_provider(
-            self.sourceview_css_provider,
+            sourceview_css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
@@ -122,19 +124,6 @@ class MyWindow(Adw.ApplicationWindow):
                     color_scheme_manager.get_scheme(scheme)
                 )
                 break
-
-        monospace_font = Pango.FontDescription.from_string(
-            self.sourceview_style_manager.get_monospace_font_name()
-        )
-
-        self.sourceview_css_provider.load_from_string(
-            'textview { font-family: "%s"; font-size: %g%s; }'
-            % (
-                monospace_font.get_family(),
-                monospace_font.get_size() / Pango.SCALE,
-                'px' if monospace_font.get_size_is_absolute() else 'pt',
-            )
-        )
 
     def update_mm_instance(self, *args):
         if self.app.mm_instance.initialized:
