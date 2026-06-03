@@ -48,6 +48,7 @@ parts:
     stage-packages:
       - libdrm-common
       - libproxy1v5
+      - gir1.2-jsonrpc-1.0
       - adb
       - wireshark
 
