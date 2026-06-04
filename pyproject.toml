@@ -15,6 +15,18 @@ version = "0.1.0"
 description = "Draft for DiagNG"
 readme = "README.md"
 requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Telecommunications Industry",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Networking",
+    "Topic :: Communications :: Telephony",
+    "Topic :: Security",
+    "Environment :: X11 Applications :: GTK",
+    "Environment :: X11 Applications :: Gnome"
+]
 dependencies = [
     "pygobject>=3.56.2",
 ]
