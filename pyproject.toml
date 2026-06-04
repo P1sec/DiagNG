@@ -3,17 +3,23 @@
 requires = [
     # Build dependencies for own project (we
     # don't use uv_build as it is hard to
-    # bundle into Flatpak)
-    "setuptools>=69",
-    "wheel"
+    # bundle into Flatpak, and we prefer
+    # Poetry to setuptools as the "sdist"
+    # commands allows easily to generate
+    # a setup.py file from the current
+    # pyproject.toml that can be
+    # processed by "stdeb", see packaging/ppa)
+    "poetry-core>=2.0.0,<3.0.0"
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "diagng"
 version = "0.1.0"
 description = "Draft for DiagNG"
 readme = "README.md"
+authors = [{ name = "P1 Security - Marin Moulinier" }]
+maintainers = [{ name = "P1 Security - Marin Moulinier" }]
 requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 1 - Planning",
@@ -41,6 +47,23 @@ Issues = "https://github.com/P1sec/DiagNG/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[tool.poetry]
+name = "diagng"
+packages = [
+    {include = "diagng", from = "src"}
+]
+include = [
+    "diagng/ui/assets/diagng.gresource",
+    "diagng/ui/assets/com.p1security.diagng.metainfo.xml",
+    "diagng/ui/assets/com.p1security.diagng.desktop",
+    "diagng/ui/assets/com.p1security.diagng.svg"
+]
+
+[tool.poetry.build]
+generate-setup-file = true
+
+[tool.setuptools_scm]
 
 [tool.setuptools.packages.find]
 where = ["src"]

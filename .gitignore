@@ -19,6 +19,9 @@ wheels/
 *.log.4
 *.log.5
 
+repo/
+deb_dist/
+
 sample-citsued-*.json
 
 *.snap
