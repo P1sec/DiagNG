@@ -12,7 +12,10 @@ apps:
   diagng:
     command: bin/diagng
     desktop: usr/share/applications/com.p1security.diagng.desktop
-    extensions: [kde-neon-6] # gnome
+    # We need to use the kde-neon-6 extension
+    # rather than the gnome one in order to
+    # have Wireshark to be spawnable
+    extensions: [kde-neon-6]
     plugs:
       - home
       - unity7
@@ -26,6 +29,10 @@ apps:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/android:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 plugs:
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
   diagng-usb-plug:
     interface: custom-device
     custom-device: diagng-usb-device
@@ -60,17 +67,11 @@ parts:
       - libgirepository-2.0-dev
       - librsvg2-common
       - librsvg2-2
-      - adwaita-icon-theme
       - gir1.2-jsonrpc-1.0
       - gir1.2-json-1.0
       - gir1.2-modemmanager-1.0
       - gir1.2-adw-1
       - gir1.2-gtksource-5
-
-    override-prime: |
-      snapcraftctl prime
-      export GDK_PIXBUF_MODULEDIR=$(realpath usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/*/loaders)
-      usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders --update-cache
 
   share:
     plugin: dump
@@ -92,9 +93,12 @@ parts:
 layout:
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:
     bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0:
+  # The kde-neon-6 Snap extension includes a build of GDK Pixbuf but
+  # doesn't include the librsvg2-common package that provides the
+  # SVG loader for GDK Pixbuf, hence if we don't include this
+  # loader ourverselves and regenerate the GDK Pixbuf loaders
+  # cache after that the icons won't show up in our GTK-4 app.
+  $SNAP/kf6/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0:
     bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0
-  /usr/share/icons:
-    bind: $SNAP/usr/share/icons
   /usr/share/libdrm:
     bind: $SNAP/usr/share/libdrm
