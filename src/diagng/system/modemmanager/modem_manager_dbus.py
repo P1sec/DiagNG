@@ -69,7 +69,6 @@ class PinUnlockWaiter:
         pin: str,
         optional_puk: str = None,
     ):
-
         self.modem_imei = modem_imei
         self.intf = intf
         self.rpc_wrapper = rpc_wrapper
@@ -137,7 +136,6 @@ class PinUnlockWaiter:
     def initial_command_done_cb(
         self, sim: ModemManager.Sim, result: Gio.AsyncResult
     ):
-
         if not self.has_puk:
             finish_method = ModemManager.Sim.send_pin_finish
             finish_method_name = 'ModemManager.Sim.send_pin_finish'
@@ -215,7 +213,6 @@ class PinUnlockWaiter:
             self.end()
 
     def end(self):
-
         if self.timer:
             self.timer.destroy()
         if self.timer_soon:
@@ -353,7 +350,6 @@ class ModemManagerIntf(GObject.Object):
         pass
 
     def on_daemon_state_change(self, *args):
-
         if self.manager.get_name_owner():  # Is the daemon currently alive?
             info(
                 'ModemManager daemon %s connected.'
@@ -394,7 +390,6 @@ class ModemManagerIntf(GObject.Object):
             GLib.idle_add(self.update_state)
 
     def update_state(self, *args):
-
         self.json_state = self.dbus_metadata_to_json()
         debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
@@ -444,7 +439,6 @@ class ModemManagerIntf(GObject.Object):
         self.queue_state_update()
 
     def sim_to_dict(self, sim: ModemManager.Sim) -> dict:
-
         gid1 = sim.get_gid1()
         gid2 = sim.get_gid2()
 
@@ -477,7 +471,6 @@ class ModemManagerIntf(GObject.Object):
         return number
 
     def cell_to_dict(self, cell: ModemManager.CellInfo) -> dict:
-
         data = {
             'cell_type': cell.get_cell_type(),
             'is_serving': cell.get_serving(),
@@ -596,7 +589,6 @@ class ModemManagerIntf(GObject.Object):
         return data
 
     def bearer_ipconfig_to_dict(self, cfg: ModemManager.BearerIpConfig):
-
         return (
             {
                 'address': cfg.get_address(),  # str or None
@@ -611,7 +603,6 @@ class ModemManagerIntf(GObject.Object):
         )
 
     def bearer_properties_to_dict(self, props: ModemManager.BearerProperties):
-
         return (
             {
                 'access_type_preference': props.get_access_type_preference(),  # GEnum - ModemManager.BearerAccessTypePreference
@@ -634,7 +625,6 @@ class ModemManagerIntf(GObject.Object):
         )
 
     def bearer_stats_to_dict(self, stats: ModemManager.BearerStats):
-
         return {
             'attempts': stats.get_attempts(),  # int
             'failed_attempts': stats.get_failed_attempts(),  # int
@@ -650,7 +640,6 @@ class ModemManagerIntf(GObject.Object):
         }
 
     def bearer_to_dict(self, bearer: ModemManager.Bearer) -> dict:
-
         connection_error = bearer.get_connection_error()
         if connection_error:
             connection_error = repr(connection_error)
@@ -681,7 +670,6 @@ class ModemManagerIntf(GObject.Object):
         }
 
     def update_remote_state(self):
-
         if self.mm_instance.pid:
             # Remove all self.mm_instance.modems
             # which don't have a "inhibited=True",

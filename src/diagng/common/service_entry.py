@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 from logging import debug, info, error, critical
 from traceback import format_exception
-from shlex import join
 import sys
 
 from diagng.system.modemmanager.modem_manager_dbus import ModemManagerIntf
 from diagng.common.service_rpc_client import ServiceRPCClient
+from diagng.system.udev.device_scanner import DeviceScanner
 from diagng.common.logging import LoggingCentral
 
 import gi
@@ -35,6 +35,7 @@ QUIT_WHEN_ZERO_CONNECTIONS = True
 
 class ServiceApplication(Gio.Application):
     modem_manager: ModemManagerIntf
+    device_scanner: DeviceScanner
     number_clients: int = 0
     effective_addr: str
     effective_port: int
@@ -56,7 +57,6 @@ class ServiceApplication(Gio.Application):
         # self.connect('handle-local-options', self.connect_parent_rpc)
 
     def setup_error_handling(self):
-
         # Generic error handler for non-bubbled exceptions raised in GLib callbacks
         # "This works because exception hooks are called in PyErr_Print."
         # Cf. https://gitlab.gnome.org/GNOME/pygobject/-/blob/3.48.2/tests/test_generictreemodel.py#L335
@@ -107,6 +107,7 @@ class ServiceApplication(Gio.Application):
         # WIP 2026-06-01 spawn ModemManager seeking background task
 
         self.modem_manager = ModemManagerIntf(self)
+        self.device_scanner = DeviceScanner(self)
 
     def incr_connection_count(self):
         self.number_clients += 1
@@ -187,7 +188,6 @@ class ServiceApplication(Gio.Application):
         # can sent Diag traffic to it, etc
 
     def broadcast_message(self, method: str, value: GLib.Variant):
-
         for port, client in sorted(self.port_to_client.items()):
             client.call_async(
                 method,
@@ -204,7 +204,6 @@ class ServiceApplication(Gio.Application):
 
 
 def service_main():
-
     app = ServiceApplication(
         application_id='com.p1security.diagngd',
         flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,

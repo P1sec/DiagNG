@@ -136,7 +136,6 @@ class LoggingCentral:
         self.signal_handler = signal_handler
 
     def __init__(self, debug_mode: bool):
-
         self.logs = MEMORY_LOG_LINES
 
         # Register all logging handlers here...

@@ -23,6 +23,7 @@ class MainRPCServer(Jsonrpc.Server):
         self.add_handler(
             'sync_modem_debug_info', self.sync_modem_debug_info_handler
         )
+        self.add_handler('sync_udev_info', self.sync_udev_info_handler)
         self.add_handler('test_ctos', self.test_ctos_handler)
 
         self.connect('client-accepted', self.daemon_connected)
@@ -59,6 +60,23 @@ class MainRPCServer(Jsonrpc.Server):
         info(f'Got call "{id}" for "{method}"')
 
         self.app.mm_debug_data = raw_json
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
+
+    def sync_udev_info_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        # raw_json = Json.to_string(Json.gvariant_serialize(params), True)
+
+        info(f'Got call "{id}" for "{method}"')
+
+        # self.app.udev_debug_data = raw_json
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 

@@ -7,7 +7,6 @@ class ProcessScanner:
     # Scan stuff other than ModemManager every 2 minutes only?
 
     def __init__():
-
         pass  # WIP
 
 

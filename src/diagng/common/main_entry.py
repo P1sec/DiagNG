@@ -98,7 +98,6 @@ class MainApplication(Adw.Application):
     """
 
     def setup_error_handling(self):
-
         # Generic error handler for non-bubbled exceptions raised in GLib callbacks
         # "This works because exception hooks are called in PyErr_Print."
         # Cf. https://gitlab.gnome.org/GNOME/pygobject/-/blob/3.48.2/tests/test_generictreemodel.py#L335
