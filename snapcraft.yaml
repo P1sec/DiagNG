@@ -12,7 +12,7 @@ apps:
   diagng:
     command: bin/diagng
     desktop: usr/share/applications/com.p1security.diagng.desktop
-    extensions: [gnome] # kde-neon-6
+    extensions: [kde-neon-6] # gnome
     plugs:
       - home
       - unity7
@@ -58,12 +58,19 @@ parts:
     stage-packages:
       - python-gi-dev
       - libgirepository-2.0-dev
+      - librsvg2-common
+      - librsvg2-2
+      - adwaita-icon-theme
       - gir1.2-jsonrpc-1.0
       - gir1.2-json-1.0
       - gir1.2-modemmanager-1.0
       - gir1.2-adw-1
-      - gir1.2-gtk-4.0
       - gir1.2-gtksource-5
+
+    override-prime: |
+      snapcraftctl prime
+      export GDK_PIXBUF_MODULEDIR=$(realpath usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/*/loaders)
+      usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders --update-cache
 
   share:
     plugin: dump
@@ -85,5 +92,9 @@ parts:
 layout:
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:
     bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gdk-pixbuf-2.0
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
   /usr/share/libdrm:
     bind: $SNAP/usr/share/libdrm
