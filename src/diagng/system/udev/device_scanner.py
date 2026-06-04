@@ -2,6 +2,7 @@
 from typing import List, Optional, Dict
 from collections import defaultdict
 from logging import info, debug
+from threading import Thread
 from json import dumps
 
 from pyudev import Context, Monitor, Device
@@ -44,7 +45,10 @@ class DeviceScanner:
     def queue_state_update(self):
         if not self.state_update_pending:
             self.state_update_pending = True
-            GLib.idle_add(self.update_json_state)
+
+            self.thread = Thread(target=self.update_json_state)
+            self.thread.daemon = True
+            self.thread.start()
 
     def update_json_state(self, *args):
         self.json_state = self.get_udev_device_tree()
