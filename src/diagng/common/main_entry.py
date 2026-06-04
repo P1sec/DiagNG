@@ -70,6 +70,7 @@ class MainApplication(Adw.Application):
     mm_instance = GObject.Property(type=ModemManagerInstance)
 
     mm_debug_data = GObject.Property(type=str)
+    udev_debug_data = GObject.Property(type=str)
 
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)

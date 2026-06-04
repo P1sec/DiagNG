@@ -50,11 +50,15 @@ class MyWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'MainWindow'
 
     app: 'MainApplication'
+    adw_style_manager: Adw.StyleManager
 
     mm_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
     mm_debug_view: GtkSource
-    sourceview_style_manager: Adw.StyleManager
-    sourceview_buffer: GtkSource.Buffer
+    mm_sourceview_buffer: GtkSource.Buffer
+
+    udev_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    udev_debug_view: GtkSource
+    udev_sourceview_buffer: GtkSource.Buffer
 
     mm_status_row: Adw.ActionRow = Gtk.Template.Child()
     mm_status_label: Gtk.Label = Gtk.Template.Child()
@@ -71,38 +75,61 @@ class MyWindow(Adw.ApplicationWindow):
 
         lang_manager = GtkSource.LanguageManager.new()
 
-        self.sourceview_buffer = GtkSource.Buffer.new_with_language(
+        # Build ModemManager debug SourceView
+
+        self.mm_sourceview_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language('json')
         )
-        self.sourceview_style_manager = Adw.StyleManager.get_default()
+        self.adw_style_manager = Adw.StyleManager.get_default()
 
         self.mm_debug_view = GtkSource.View.new_with_buffer(
-            self.sourceview_buffer
+            self.mm_sourceview_buffer
         )
+        self.mm_debug_view.set_editable(False)
         self.mm_debug_view.set_size_request(-1, 200)
         self.mm_debug_group.add(self.mm_debug_view)
 
-        self.sync_sourceview_theme()
-        self.sourceview_style_manager.connect(
-            'notify', self.sync_sourceview_theme
-        )
+        # Build udev ModemManager debug SourceView
 
-        self.mm_status_row.set_subtitle('Fetching information...')
-        self.mm_status_label.set_label('')
-        self.mm_version_label.set_label('')
+        self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
+        )
+        self.adw_style_manager = Adw.StyleManager.get_default()
+
+        self.udev_debug_view = GtkSource.View.new_with_buffer(
+            self.udev_sourceview_buffer
+        )
+        self.udev_debug_view.set_editable(False)
+        self.udev_debug_view.set_size_request(-1, 200)
+        self.udev_debug_group.add(self.udev_debug_view)
+
+        # Monitor for dark mode changes
+
+        self.sync_sourceview_theme()
+        self.adw_style_manager.connect('notify', self.sync_sourceview_theme)
+
+        # Connect signals
 
         self.app.mm_instance.modems.connect(
             'items-changed', self.update_mm_modems
         )
         self.app.mm_instance.connect('notify', self.update_mm_instance)
         self.app.connect('notify', self.update_mm_debug_data)
+        self.app.connect('notify', self.update_udev_debug_data)
+
+        # Reset the default UI state
+
+        self.mm_status_row.set_subtitle('Fetching information...')
+        self.mm_status_label.set_label('')
+        self.mm_version_label.set_label('')
 
         self.update_mm_modems()
         self.update_mm_instance()
         self.update_mm_debug_data()
+        self.update_udev_debug_data()
 
     def sync_sourceview_theme(self, *args):
-        is_dark_mode: bool = self.sourceview_style_manager.get_dark()
+        is_dark_mode: bool = self.adw_style_manager.get_dark()
 
         color_scheme_manager = GtkSource.StyleSchemeManager.new()
         for scheme in color_scheme_manager.get_scheme_ids():
@@ -110,7 +137,10 @@ class MyWindow(Adw.ApplicationWindow):
                 'dark' in scheme or 'oblivion' in scheme or 'cobalt' in scheme
             )
             if is_dark_mode == is_dark_theme:
-                self.sourceview_buffer.set_style_scheme(
+                self.mm_sourceview_buffer.set_style_scheme(
+                    color_scheme_manager.get_scheme(scheme)
+                )
+                self.udev_sourceview_buffer.set_style_scheme(
                     color_scheme_manager.get_scheme(scheme)
                 )
                 break
@@ -139,6 +169,12 @@ class MyWindow(Adw.ApplicationWindow):
     def update_mm_debug_data(self, *args):
         if self.app.mm_debug_data:
             self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
+
+    def update_udev_debug_data(self, *args):
+        if self.app.udev_debug_data:
+            self.udev_debug_view.get_buffer().set_text(
+                self.app.udev_debug_data
+            )
 
     def update_mm_modems(self, *args):
         def visit(container: Gtk.Widget):

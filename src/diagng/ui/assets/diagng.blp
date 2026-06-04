@@ -77,21 +77,15 @@ template $MainWindow: Adw.ApplicationWindow {
             Adw.PreferencesGroup {
               title: "Detected processes holding serial Diag devices";
             }
+
+            Adw.PreferencesGroup udev_debug_group {
+              title: "UDev information";
+            }
           };
 
           icon-name: "network-offline-symbolic";
           name: "spi_tab";
           title: "SPI";
-        }
-
-        Adw.ViewStackPage adb_tab {
-          child: Label {
-            label: "Empty Page";
-          };
-
-          icon-name: "network-cellular-connected-symbolic";
-          name: "adb_tab";
-          title: "ADB";
         }
 
         Adw.ViewStackPage usb_tab {
@@ -102,6 +96,16 @@ template $MainWindow: Adw.ApplicationWindow {
           icon-name: "drive-harddisk-usb-symbolic";
           name: "usb_tab";
           title: "USB";
+        }
+
+        Adw.ViewStackPage adb_tab {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "network-cellular-connected-symbolic";
+          name: "adb_tab";
+          title: "ADB";
         }
       };
     };

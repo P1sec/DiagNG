@@ -72,11 +72,11 @@ class MainRPCServer(Jsonrpc.Server):
         params: GLib.Variant,
         *user_data,
     ):
-        # raw_json = Json.to_string(Json.gvariant_serialize(params), True)
+        raw_json = Json.to_string(Json.gvariant_serialize(params), True)
 
         info(f'Got call "{id}" for "{method}"')
 
-        # self.app.udev_debug_data = raw_json
+        self.app.udev_debug_data = raw_json
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
