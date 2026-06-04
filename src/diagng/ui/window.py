@@ -91,13 +91,13 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_status_label.set_label('')
         self.mm_version_label.set_label('')
 
-        self.detected_modems_group.bind_model(
-            self.app.mm_instance.modems, self.create_mm_modem
+        self.app.mm_instance.modems.connect(
+            'items-changed', self.update_mm_modems
         )
-
         self.app.mm_instance.connect('notify', self.update_mm_instance)
         self.app.connect('notify', self.update_mm_debug_data)
 
+        self.update_mm_modems()
         self.update_mm_instance()
         self.update_mm_debug_data()
 
@@ -140,32 +140,47 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.mm_debug_data:
             self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
 
-    def create_mm_modem(self, item: ModemManagerModem) -> Adw.ExpanderRow:
-        main_row = Adw.ExpanderRow.new()
-        main_row.set_expanded(True)
-        main_row.set_title_selectable(True)
-        main_row.set_title(
-            '<b>%s</b>' % GLib.markup_escape_text(item.modem_name, -1)
-        )
-        main_row.set_subtitle(
-            'IMEI: %s | Firmware: %s'
-            % (
-                GLib.markup_escape_text(item.modem_imei, -1),
-                GLib.markup_escape_text(item.modem_firmware, -1),
+    def update_mm_modems(self, *args):
+        def visit(container: Gtk.Widget):
+            item = container.get_first_child()
+            while item:
+                next_item = item.get_next_sibling()
+                if isinstance(item, Adw.ExpanderRow):
+                    self.detected_modems_group.remove(item)
+                else:
+                    visit(item)
+                item = next_item
+
+        visit(self.detected_modems_group)
+
+        for pos in range(self.app.mm_instance.modems.get_n_items()):
+            item = self.app.mm_instance.modems.get_item(pos)
+
+            main_row = Adw.ExpanderRow.new()
+            main_row.set_expanded(True)
+            main_row.set_title_selectable(True)
+            main_row.set_title(
+                '<b>%s</b>' % GLib.markup_escape_text(item.modem_name, -1)
             )
-        )
-        for pos in range(item.ports.get_n_items()):
-            port = item.ports.get_item(pos)
+            main_row.set_subtitle(
+                'IMEI: %s | Firmware: %s'
+                % (
+                    GLib.markup_escape_text(item.modem_imei, -1),
+                    GLib.markup_escape_text(item.modem_firmware, -1),
+                )
+            )
+            for pos in range(item.ports.get_n_items()):
+                port = item.ports.get_item(pos)
 
-            port_title = port.device_path
-            port_title += ' (type: %s)' % port.port_type
-            if port.is_primary:
-                port_title += ' - Primary'
+                port_title = port.device_path
+                port_title += ' (type: %s)' % port.port_type
+                if port.is_primary:
+                    port_title += ' - Primary'
 
-            port_row = Adw.ActionRow.new()
-            port_row.set_title_selectable(True)
-            port_row.set_title(GLib.markup_escape_text(port_title, -1))
+                port_row = Adw.ActionRow.new()
+                port_row.set_title_selectable(True)
+                port_row.set_title(GLib.markup_escape_text(port_title, -1))
 
-            main_row.add_row(port_row)
+                main_row.add_row(port_row)
 
-        return main_row
+            self.detected_modems_group.add(main_row)
