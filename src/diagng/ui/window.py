@@ -82,16 +82,6 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_debug_view.set_size_request(-1, 200)
         self.mm_debug_group.add(self.mm_debug_view)
 
-        sourceview_css_provider = Gtk.CssProvider()
-        sourceview_css_provider.load_from_string(
-            'textview { font-family: "Ubuntu Sans Mono", "Monospace"; font-size: 11pt; }'
-        )
-        style_context = self.mm_debug_view.get_style_context()
-        style_context.add_provider(
-            sourceview_css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
-        )
-
         self.sync_sourceview_theme()
         self.sourceview_style_manager.connect(
             'notify', self.sync_sourceview_theme

@@ -2,6 +2,9 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.2 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="08b6e27a1695defbb3a9fffe63315d0a7f675101f1c4588ea7add7fa840dcd94"/>
-  <ui template-class="MainWindow" filename="diagng.blp" sha256="6e93947c9461878aa5b64634aa0e0078ba221dd8db1b0fa6e8804cfd6b6af9a0"/>
+  <gresources filename="diagng.gresource.xml" sha256="e01f529ee073f75fac7a1fb9c354beb842a6c0ad32174b460f92c61c1cca9438"/>
+  <css priority="600" is_global="1" filename="style.css" sha256="4973fcb9089f64b71e665a2f8e2bf53be60b0a02e6d2e5832dd1a3810a43d4a4"/>
+  <ui template-class="MainWindow" filename="diagng.blp" sha256="6e93947c9461878aa5b64634aa0e0078ba221dd8db1b0fa6e8804cfd6b6af9a0">
+    <css-provider>style.css</css-provider>
+  </ui>
 </cambalache-project>

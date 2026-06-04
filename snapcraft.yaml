@@ -67,6 +67,8 @@ parts:
       - gir1.2-gtk-4.0
       - gir1.2-gtksource-5
       - libgtksourceview-5-dev
+      - gir1.2-pango-1.0
+      - libpango1.0-dev
 
   share:
     plugin: dump
