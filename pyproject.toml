@@ -1,7 +1,13 @@
 
 [build-system]
-requires = ["uv_build>=0.10.3,<0.11.0"]
-build-backend = "uv_build"
+requires = [
+    # Build dependencies for own project (we
+    # don't use uv_build as it is hard to
+    # bundle into Flatpak)
+    "setuptools>=69",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "diagng"
@@ -10,16 +16,30 @@ description = "Draft for DiagNG"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "pygobject>=3.56.3",
+    "pygobject>=3.56.2",
 ]
 
 [project.scripts]
 diagng = "diagng.common.main_entry:main"
 
 [project.urls]
-Homepage = "https://github.com/P1sec/diagng"
-Repository = "https://github.com/P1sec/diagng"
-Issues = "https://github.com/P1sec/diagng/issues"
+Homepage = "https://github.com/P1sec/DiagNG"
+Repository = "https://github.com/P1sec/DiagNG"
+Issues = "https://github.com/P1sec/DiagNG/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"diagng.ui.assets" = [
+    "diagng.gresource",
+    "com.p1security.diagng.metainfo.xml",
+    "com.p1security.diagng.desktop",
+    "com.p1security.diagng.svg"
+]
 
 [tool.ruff]
 line-length = 79

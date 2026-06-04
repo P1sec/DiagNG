@@ -1,0 +1,88 @@
+{
+    "app-id": "com.p1security.diagng",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "50",
+    "sdk": "org.gnome.Sdk",
+    "command": "diagng",
+    "finish-args": [
+        "--share=ipc",
+        "--share=network",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--own-name=com.p1security.diagngd",
+        "--own-name=com.p1security.diagng",
+        "--system-talk-name=org.freedesktop.ModemManager1"
+    ],
+    "modules": [
+        {
+            "name": "jsonrpc-glib",
+            "config-opts": [
+                "--libdir=/app/lib",
+                "--buildtype=release"
+            ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/jsonrpc-glib/3.44/jsonrpc-glib-3.44.2.tar.xz",
+                    "sha256": "965496b6e1314f3468b482a5d80340dc3b0340a5402d7783cad24154aee77396",
+                    "x-checker-data": {
+                        "type": "gnome",
+                        "version-scheme": "odd-minor-is-unstable",
+                        "name": "jsonrpc-glib"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "libmm-glib",
+            "config-opts": [
+                "--libdir=/app/lib",
+                "--buildtype=release"
+            ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": [
+                "-Dudev=false",
+                "-Dmbim=false",
+                "-Dqmi=false",
+                "-Dudevdir=/app/",
+                "-Dbash_completion=false",
+                "-Dman=false",
+                "-Dsystemd_suspend_resume=false",
+                "-Dpowerd_suspend_resume=false",
+                "-Dsystemd_journal=false",
+                "-Dsystemdsystemunitdir=no",
+                "-Dpolkit=no",
+                "-Dqrtr=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/archive/1.24.2/ModemManager-1.24.2.tar.gz",
+                    "sha256": "fbc75adcc0d7b0565f256e7ff4e8872b0a37c4413ff576665f7470932d9c1b68"
+                }
+            ]
+        },
+        {
+            "name": "diagng",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/bin/",
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \".\" --no-build-isolation",
+                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.svg -t /app/share/icons/hicolor/scalable/apps/",
+                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.metainfo.xml -t /app/share/metainfo/",
+                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.desktop -t /app/share/applications/",
+                "rm -rf ./diagng/ *.g* packaging pics *.lock *.md *.yaml *.toml LICENSE"
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": "../../"
+                }
+            ]
+        }
+    ]
+}
