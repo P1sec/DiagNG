@@ -7,7 +7,7 @@ template $MainWindow: Adw.ApplicationWindow {
       child: Adw.ViewStack global_stack {
         Adw.ViewStackPage mm_tab {
           child: Adw.PreferencesPage mm_tab_page {
-            Adw.PreferencesGroup {
+            Adw.PreferencesGroup mm_status_group {
               title: "ModemManager system daemon";
 
               Adw.ActionRow mm_status_row {
@@ -60,6 +60,12 @@ template $MainWindow: Adw.ApplicationWindow {
 
             Adw.PreferencesGroup mm_debug_group {
               title: "DBus information";
+
+              ScrolledWindow mm_debug_viewport {
+                hscrollbar-policy: never;
+                max-content-height: 200;
+                min-content-height: 200;
+              }
             }
           };
 
@@ -80,6 +86,12 @@ template $MainWindow: Adw.ApplicationWindow {
 
             Adw.PreferencesGroup udev_debug_group {
               title: "UDev information";
+
+              ScrolledWindow udev_debug_viewport {
+                hscrollbar-policy: never;
+                max-content-height: 200;
+                min-content-height: 200;
+              }
             }
           };
 

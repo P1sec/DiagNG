@@ -18,7 +18,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                     <property name="child">
                       <object class="AdwPreferencesPage" id="mm_tab_page">
                         <child>
-                          <object class="AdwPreferencesGroup">
+                          <object class="AdwPreferencesGroup" id="mm_status_group">
                             <property name="title">ModemManager system daemon</property>
                             <child>
                               <object class="AdwActionRow" id="mm_status_row">
@@ -80,6 +80,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <child>
                           <object class="AdwPreferencesGroup" id="mm_debug_group">
                             <property name="title">DBus information</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="mm_debug_viewport">
+                                <property name="hscrollbar-policy">2</property>
+                                <property name="max-content-height">200</property>
+                                <property name="min-content-height">200</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -106,6 +113,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <child>
                           <object class="AdwPreferencesGroup" id="udev_debug_group">
                             <property name="title">UDev information</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="udev_debug_viewport">
+                                <property name="hscrollbar-policy">2</property>
+                                <property name="max-content-height">200</property>
+                                <property name="min-content-height">200</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

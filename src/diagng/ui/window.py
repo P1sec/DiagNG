@@ -52,11 +52,11 @@ class MyWindow(Adw.ApplicationWindow):
     app: 'MainApplication'
     adw_style_manager: Adw.StyleManager
 
-    mm_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    mm_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     mm_debug_view: GtkSource
     mm_sourceview_buffer: GtkSource.Buffer
 
-    udev_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    udev_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     udev_debug_view: GtkSource
     udev_sourceview_buffer: GtkSource.Buffer
 
@@ -86,8 +86,7 @@ class MyWindow(Adw.ApplicationWindow):
             self.mm_sourceview_buffer
         )
         self.mm_debug_view.set_editable(False)
-        self.mm_debug_view.set_size_request(-1, 200)
-        self.mm_debug_group.add(self.mm_debug_view)
+        self.mm_debug_viewport.set_child(self.mm_debug_view)
 
         # Build udev ModemManager debug SourceView
 
@@ -100,8 +99,7 @@ class MyWindow(Adw.ApplicationWindow):
             self.udev_sourceview_buffer
         )
         self.udev_debug_view.set_editable(False)
-        self.udev_debug_view.set_size_request(-1, 200)
-        self.udev_debug_group.add(self.udev_debug_view)
+        self.udev_debug_viewport.set_child(self.udev_debug_view)
 
         # Monitor for dark mode changes
 
