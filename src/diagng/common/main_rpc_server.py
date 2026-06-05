@@ -12,7 +12,7 @@ from gi.repository import GLib, Gio, Jsonrpc, Json
 
 
 class MainRPCServer(Jsonrpc.Server):
-    service_rpc: Jsonrpc.Client
+    service_rpc: Jsonrpc.Client = None
     app: 'MainApplication'
 
     def __init__(self, app):
@@ -27,9 +27,19 @@ class MainRPCServer(Jsonrpc.Server):
         self.add_handler('test_ctos', self.test_ctos_handler)
 
         self.connect('client-accepted', self.daemon_connected)
+        self.connect('client-closed', self.daemon_exited)
 
     def daemon_connected(self, this: Jsonrpc.Server, peer: Jsonrpc.Client):
-        self.service_rpc = peer
+        if self.service_rpc:
+            error(
+                'Received RPC connection on UI but aemon already connected to UI'
+            )
+        else:
+            self.service_rpc = peer
+
+    def daemon_exited(self, this: Jsonrpc.Server, peer: Jsonrpc.Client):
+        critical('Daemon exited, quitting')
+        self.app.quit()
 
     def sync_modem_status_handler(
         self,

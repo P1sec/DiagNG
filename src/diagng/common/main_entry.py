@@ -216,7 +216,11 @@ class MainApplication(Adw.Application):
 
         def child_exited(pid: int, wait_status: int, *args):
             info('Child process exited with status ' + str(wait_status))
-            GLib.spawn_check_wait_status(wait_status)
+            try:
+                GLib.spawn_check_wait_status(wait_status)
+            except Exception as err:
+                self.quit()
+                raise err
 
         GLib.child_watch_add(
             GLib.PRIORITY_DEFAULT_IDLE, child_pid, child_exited
