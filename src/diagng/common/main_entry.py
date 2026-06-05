@@ -15,6 +15,14 @@ from diagng.common.logging import LoggingCentral
 from diagng.gobject.process import Process
 from diagng.ui.window import MyWindow
 
+try:
+    from os import setpgrp
+except ImportError:  # UNIX-specific
+
+    def setpgrp():
+        pass
+
+
 gi.require_version('Adw', '1')
 from gi.repository import Adw, GLib, Gio, GObject
 
@@ -195,25 +203,24 @@ class MainApplication(Adw.Application):
             '--client-port=' + str(effective_port),
         ]
 
-        info(f'Spawning "{join(child_cmd_line)}"...')
-
         # Maybe TODO: Use GLib.spawn_async instead so that
         # we can merge the process group of the
         # subprocess if any useful?
 
-        child = Gio.Subprocess.new(
+        child_pid, _, _, _ = GLib.spawn_async(
             child_cmd_line,
-            Gio.SubprocessFlags.NONE,  # SEARCH_PATH_FROM_ENVP ?
+            child_setup=setpgrp,  # Do not inherit signals such as SIGINT
         )
 
-        def child_exited(child: Gio.Subprocess, result: Gio.AsyncResult, data):
-            info(
-                'Child process exited with status '
-                + str(child.get_exit_status())
-            )
-            child.wait_check_finish(result)
+        info(f'Spawning "{join(child_cmd_line)}" as pid {child_pid}...')
 
-        child.wait_check_async(None, child_exited, None)
+        def child_exited(pid: int, wait_status: int, *args):
+            info('Child process exited with status ' + str(wait_status))
+            GLib.spawn_check_wait_status(wait_status)
+
+        GLib.child_watch_add(
+            GLib.PRIORITY_DEFAULT_IDLE, child_pid, child_exited
+        )
 
         # Application will close once it has no longer has active
         # windows attached to it
