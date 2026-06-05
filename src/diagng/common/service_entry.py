@@ -34,8 +34,8 @@ QUIT_WHEN_ZERO_CONNECTIONS = True
 
 
 class ServiceApplication(Gio.Application):
-    modem_manager: ModemManagerIntf
-    device_scanner: DeviceScanner
+    modem_manager: ModemManagerIntf = None
+    device_scanner: DeviceScanner = None
     number_clients: int = 0
     effective_addr: str
     effective_port: int
@@ -103,11 +103,6 @@ class ServiceApplication(Gio.Application):
         # Spawn a RPC server in on_command_line
 
         self.port_to_client = {}
-
-        # WIP 2026-06-01 spawn ModemManager seeking background task
-
-        self.modem_manager = ModemManagerIntf(self)
-        self.device_scanner = DeviceScanner(self)
 
     def incr_connection_count(self):
         self.number_clients += 1
@@ -181,7 +176,16 @@ class ServiceApplication(Gio.Application):
 
         info(f'Sent "test_ctos" call to parent {client_port}')
 
-        self.modem_manager.queue_state_update()
+        # Spawn background tasks
+
+        if not self.modem_manager:
+            self.modem_manager = ModemManagerIntf(self)
+        else:
+            self.modem_manager.queue_state_update()
+        if not self.device_scanner:
+            self.device_scanner = DeviceScanner(self)
+        else:
+            self.device_scanner.queue_state_update()
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
