@@ -84,6 +84,10 @@ class DeviceScanner:
                     "path": "{{ device.sys_path }}",
                     "vendor": "{{ ID_VENDOR_FROM_DATABASE }}" or null,
                     "model": "{{ ID_MODEL_FROM_DATABASE }}" or null,
+                    "usb_interface": "{{ INTERFACE }}" or null,
+                    "usb_product": "{{ PRODUCT }}" or null,
+                    "driver": "{{ DRIVER }}" or null,
+                    "is_usb_related": true or false, // SUBSYSTEM=usb anywhere in ancestors or descents
                     "is_mm_related": true or false, // ID_MM_CANDIDATE anywhere in ancestors or descents
                     "is_mm_usable": true or false, // ID_MM_CANDIDATE set
                     "is_mm_blacklisted": false or true, // ID_MM_DEVICE_IGNORE or ID_MM_PORT_IGNORE set
@@ -149,6 +153,9 @@ class DeviceScanner:
                     'vendor': device.properties.get('ID_VENDOR_FROM_DATABASE')
                     or device.properties.get('ID_VENDOR'),
                     'model': model,
+                    'usb_interface': device.properties.get('INTERFACE'),
+                    'usb_product': device.properties.get('PRODUCT'),
+                    'driver': device.properties.get('DRIVER'),
                     'is_mm_blacklisted': bool(
                         int(device.properties.get('ID_MM_PORT_IGNORE') or '0')
                     )
@@ -181,10 +188,35 @@ class DeviceScanner:
                     'is_mm_related', False
                 )
 
+            if device.subsystem.startswith('usb'):
+                self.set_contaminating_flag(
+                    'is_usb_related', path_to_device, device
+                )
+
+            else:
+                path_to_device[device.sys_path].setdefault(
+                    'is_usb_related', False
+                )
+
             if not device.parent:
                 root_devices.append(path_to_device[device.sys_path])
 
-        return root_devices
+        # Ditch the non USB-related part of the device
+        # tree, we don't need it as of today
+
+        def visit(items: list[dict]) -> list[dict]:
+            filtered_items: list[dict] = []
+            for item in items:
+                if not item['is_usb_related']:
+                    continue
+                filtered_items.append(item)
+                if item['children']:
+                    item['children'] = visit(item['children'])
+            return filtered_items
+
+        usb_devices = visit(root_devices)
+
+        return usb_devices
 
     def set_contaminating_flag(
         self, flag_name: str, path_to_device: Dict[str, dict], device: Device
