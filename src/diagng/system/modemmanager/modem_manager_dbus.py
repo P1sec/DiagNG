@@ -392,7 +392,7 @@ class ModemManagerIntf(GObject.Object):
     def update_state(self, *args):
         try:
             self.json_state = self.dbus_metadata_to_json()
-            debug('ModemManager info: ' + dumps(self.json_state, indent=4))
+            # debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
             self.update_remote_state()
 

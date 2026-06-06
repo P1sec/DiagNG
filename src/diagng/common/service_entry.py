@@ -6,6 +6,7 @@ import sys
 from diagng.system.modemmanager.modem_manager_dbus import ModemManagerIntf
 from diagng.common.service_rpc_client import ServiceRPCClient
 from diagng.system.udev.device_scanner import DeviceScanner
+from diagng.system.usb.usb_scanner import UsbScanner
 from diagng.common.logging import LoggingCentral
 
 import gi
@@ -36,6 +37,8 @@ QUIT_WHEN_ZERO_CONNECTIONS = True
 class ServiceApplication(Gio.Application):
     modem_manager: ModemManagerIntf = None
     device_scanner: DeviceScanner = None
+    usb_scanner: UsbScanner = None
+
     number_clients: int = 0
     effective_addr: str
     effective_port: int
@@ -186,6 +189,10 @@ class ServiceApplication(Gio.Application):
             self.device_scanner = DeviceScanner(self)
         else:
             self.device_scanner.queue_state_update()
+        if not self.usb_scanner:
+            self.usb_scanner = UsbScanner(self)
+        else:
+            self.usb_scanner.queue_state_update()
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we
