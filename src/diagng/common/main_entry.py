@@ -11,6 +11,7 @@ from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.common.main_rpc_server import MainRPCServer
 from diagng.gobject.serial_device import SerialDevice
 from diagng.common.service_entry import service_main
+from diagng.gobject.udev_device import UDevDevice
 from diagng.common.logging import LoggingCentral
 from diagng.gobject.process import Process
 from diagng.ui.window import MyWindow
@@ -75,9 +76,12 @@ def main():
 
 
 class MainApplication(Adw.Application):
-    mm_instance = GObject.Property(type=ModemManagerInstance)
+    window: MyWindow
 
+    mm_instance = GObject.Property(type=ModemManagerInstance)
     mm_debug_data = GObject.Property(type=str)
+
+    udev_devices = GObject.Property(type=Gio.ListStore)
     udev_debug_data = GObject.Property(type=str)
 
     def __init__(self, **kwargs):
@@ -90,6 +94,7 @@ class MainApplication(Adw.Application):
 
         super().__init__(**kwargs)
         self.mm_instance = ModemManagerInstance()
+        self.udev_devices = Gio.ListStore.new(UDevDevice)
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)
@@ -125,7 +130,7 @@ class MainApplication(Adw.Application):
         # Spawn or connect to privileged --service
         # subprocess here
 
-        # => Spawn our JsonRpc listener on a local socket?
+        # => Spawn our JsonRpc listener on a local socket
 
         # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.new
         # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_address
@@ -187,15 +192,9 @@ class MainApplication(Adw.Application):
 
         socket_service.connect('incoming', accept_socket)
 
-        #  => Use https://api.pygobject.gnome.org/Gio-2.0/class-Subprocess.html
-        #   to integrate with event loop?
         #   => Use --service --client-port=${OUR_PORT} to hopefully
         #      trigger a call first to our JSONRPC socket endpoint
-        #      and wait?
-
-        #  => https://api.pygobject.gnome.org/Gio-2.0/class-Subprocess.html
-        #     / https://docs.gtk.org/gio/class.Subprocess.html
-        #       / https://lazka.github.io/pgi-docs/Gio-2.0/classes/Subprocess.html
+        #      and wait
 
         child_cmd_line = [
             sys.argv[0],
@@ -203,9 +202,9 @@ class MainApplication(Adw.Application):
             '--client-port=' + str(effective_port),
         ]
 
-        # Maybe TODO: Use GLib.spawn_async instead so that
-        # we can merge the process group of the
-        # subprocess if any useful?
+        # Use GLib.spawn_async so that we
+        # can merge the process group of the
+        # subprocess if any useful
 
         child_pid, _, _, _ = GLib.spawn_async(
             child_cmd_line,
@@ -233,14 +232,6 @@ class MainApplication(Adw.Application):
 
     def on_activate(self, app):
         self.window.present()
-
-        # NEXT TODO ==>
-        # FILL IN THE TREE VIEW WITH SAMPLE INFORMATION
-
-        # Cf. https://github.com/timlau/yumex-ng/blob/09f15091a2f0f3a8c189bbd4dc59016a80e2debf/yumex/ui/transaction_result.py
-        # Cf. https://github.com/timlau/yumex-ng/blob/09f15091a2f0f3a8c189bbd4dc59016a80e2debf/data/ui/transaction_result.blp
-        # Cf. too
-        # https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#using-gridview
 
 
 if __name__ == '__main__':

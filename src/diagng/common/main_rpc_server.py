@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 from logging import debug, error, info, critical
-from json import loads
 
-from diagng.gobject.mm_instance import ModemManagerInstance
+from diagng.gobject.udev_device import UDevDevice
 
 import gi
 
@@ -23,7 +22,10 @@ class MainRPCServer(Jsonrpc.Server):
         self.add_handler(
             'sync_modem_debug_info', self.sync_modem_debug_info_handler
         )
-        self.add_handler('sync_udev_info', self.sync_udev_info_handler)
+        self.add_handler('sync_udev_devices', self.sync_udev_devices_handler)
+        self.add_handler(
+            'sync_udev_debug_info', self.sync_udev_debug_info_handler
+        )
         self.add_handler('test_ctos', self.test_ctos_handler)
 
         self.connect('client-accepted', self.daemon_connected)
@@ -32,7 +34,7 @@ class MainRPCServer(Jsonrpc.Server):
     def daemon_connected(self, this: Jsonrpc.Server, peer: Jsonrpc.Client):
         if self.service_rpc:
             error(
-                'Received RPC connection on UI but aemon already connected to UI'
+                'Received RPC connection on UI but daemon already connected to UI'
             )
         else:
             self.service_rpc = peer
@@ -73,7 +75,28 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-    def sync_udev_info_handler(
+    def sync_udev_devices_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        info(f'Got call "{id}" for "{method}" with params "{params}"')
+
+        self.app.udev_devices.remove_all()
+        for pos in range(params.n_children()):
+            self.app.udev_devices.append(
+                UDevDevice.from_gvariant(
+                    params.get_child_value(pos).get_variant()
+                )
+            )
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
+
+    def sync_udev_debug_info_handler(
         self,
         this: Jsonrpc.Server,
         peer: Jsonrpc.Client,

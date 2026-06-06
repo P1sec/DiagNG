@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-from typing import List, Optional, Dict
+from typing import List, Optional, Tuple, Dict
+from pyudev import Context, Monitor, Device
+from pyudev.glib import MonitorObserver
 from collections import defaultdict
 from logging import info, debug
 from threading import Thread
 from json import dumps
 
-from pyudev import Context, Monitor, Device
-from pyudev.glib import MonitorObserver
+from diagng.gobject.udev_device import UDevDevice
 
 import gi
 
 gi.require_version('Json', '1.0')
-from gi.repository import GLib, Json
+from gi.repository import GLib, Gio, Json
 
 
 class DeviceScanner:
@@ -51,7 +52,7 @@ class DeviceScanner:
             self.thread.start()
 
     def update_json_state(self, *args):
-        self.json_state = self.get_udev_device_tree()
+        self.json_state, gobj_state = self.get_udev_device_tree()
 
         if self.rpc_wrapper:
             debug(
@@ -59,7 +60,17 @@ class DeviceScanner:
                 + dumps(self.json_state, indent=4)
             )
             self.rpc_wrapper.broadcast_message(
-                'sync_udev_info',
+                'sync_udev_devices',
+                GLib.Variant.new_array(
+                    GLib.VariantType.new('a{sv}'),
+                    [
+                        gobj_state.get_item(position).to_gvariant()
+                        for position in range(gobj_state.get_n_items())
+                    ],
+                ),
+            )
+            self.rpc_wrapper.broadcast_message(
+                'sync_udev_debug_info',
                 Json.gvariant_deserialize(
                     Json.from_string(dumps(self.json_state)), None
                 ),
@@ -72,7 +83,7 @@ class DeviceScanner:
 
         self.state_update_pending = False
 
-    def get_udev_device_tree(self) -> List[dict]:
+    def get_udev_device_tree(self) -> Tuple[List[dict], Gio.ListStore]:
         """
         Output syntax:
         {
@@ -204,19 +215,44 @@ class DeviceScanner:
         # Ditch the non USB-related part of the device
         # tree, we don't need it as of today
 
-        def visit(items: list[dict]) -> list[dict]:
-            filtered_items: list[dict] = []
-            for item in items:
-                if not item['is_usb_related']:
+        def visit(items_in: list[dict], gobjs_out: Gio.ListStore):
+            items_out = []
+            for item_in in items_in:
+                if not item_in['is_usb_related']:
                     continue
-                filtered_items.append(item)
-                if item['children']:
-                    item['children'] = visit(item['children'])
-            return filtered_items
+                gobj_out = UDevDevice()
+                name_parts: list[str] = [
+                    item_in['subsystem'],
+                    item_in['name'],
+                    item_in['vendor'],
+                    item_in['model'],
+                ]
+                for key in ('driver', 'path', 'usb_interface', 'usb_product'):
+                    value = item_in.get(key)
+                    if value:
+                        name_parts.append('%s=%s' % (key, value))
+                full_name = GLib.markup_escape_text(
+                    ' - '.join(filter(None, name_parts))
+                )
+                if item_in['name'].startswith('/dev/ttyHS') or item_in[
+                    'name'
+                ].startswith('/dev/ttyUSB'):
+                    full_name = '<b>%s</b>' % full_name
+                gobj_out.text_summary = full_name
+                if item_in['children']:
+                    item_in['children'] = visit(
+                        item_in['children'], gobj_out.children
+                    )
+                if gobj_out.children.get_n_items():
+                    gobj_out.is_empty = False
+                items_out.append(item_in)
+                gobjs_out.append(gobj_out)
+            return items_out
 
-        usb_devices = visit(root_devices)
+        usb_gobjs = Gio.ListStore.new(UDevDevice)
+        usb_devices = visit(root_devices, usb_gobjs)
 
-        return usb_devices
+        return (usb_devices, usb_gobjs)
 
     def set_contaminating_flag(
         self, flag_name: str, path_to_device: Dict[str, dict], device: Device
