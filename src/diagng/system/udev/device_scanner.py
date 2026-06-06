@@ -17,6 +17,7 @@ from gi.repository import GLib, Gio, Json
 
 class DeviceScanner:
     state_update_pending: bool = False
+    timer_source: int = None
 
     rpc_wrapper: 'ServiceApplication'
     json_state: Optional[List[dict]] = None
@@ -42,77 +43,82 @@ class DeviceScanner:
                 % (device.action, device)
             )
         self.queue_state_update()
+        self.timer_source = GLib.timeout_add_seconds(
+            2, self.queue_state_update, True
+        )
 
-    def queue_state_update(self):
+    def queue_state_update(self, late_retry: bool = False):
+        if late_retry and self.timer_source:
+            GLib.source_remove(self.timer_source)
+            self.timer_source = None
         if not self.state_update_pending:
             self.state_update_pending = True
 
             self.thread = Thread(target=self.update_json_state)
             self.thread.daemon = True
             self.thread.start()
+        elif not self.timer_source:
+            self.timer_source = GLib.timeout_add_seconds(
+                2, self.queue_state_update, True
+            )
+        return GLib.SOURCE_REMOVE
 
     def update_json_state(self, *args):
-        self.json_state, gobj_state = self.get_udev_device_tree()
+        try:
+            self.json_state, gobj_state = self.get_udev_device_tree()
 
-        if self.rpc_wrapper:
-            debug(
-                'DEBUG: Got udev status data: '
-                + dumps(self.json_state, indent=4)
-            )
-            self.rpc_wrapper.broadcast_message(
-                'sync_udev_devices',
-                GLib.Variant.new_array(
-                    GLib.VariantType.new('a{sv}'),
-                    [
-                        gobj_state.get_item(position).to_gvariant()
-                        for position in range(gobj_state.get_n_items())
-                    ],
-                ),
-            )
-            self.rpc_wrapper.broadcast_message(
-                'sync_udev_debug_info',
-                Json.gvariant_deserialize(
-                    Json.from_string(dumps(self.json_state)), None
-                ),
-            )
-            """
-            self.ws_server.broadcast_message(
-                {"type": "SYNC_UDEV_STATUS", "devices": self.json_state}
-            )
-            """
+            if self.rpc_wrapper:
+                debug(
+                    'DEBUG: Got udev status data: '
+                    + dumps(self.json_state, indent=4)
+                )
+                self.rpc_wrapper.broadcast_message(
+                    'sync_udev_devices',
+                    GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            gobj_state.get_item(position).to_gvariant()
+                            for position in range(gobj_state.get_n_items())
+                        ],
+                    ),
+                )
+                self.rpc_wrapper.broadcast_message(
+                    'sync_udev_debug_info',
+                    Json.gvariant_deserialize(
+                        Json.from_string(dumps(self.json_state)), None
+                    ),
+                )
 
-        self.state_update_pending = False
+        finally:
+            self.state_update_pending = False
 
     def get_udev_device_tree(self) -> Tuple[List[dict], Gio.ListStore]:
         """
         Output syntax:
-        {
-            'type': 'SYNC_UDEV_STATUS',
-            'devices': [ // Root (parentless) devices only at this level <-- Only this list is returned by the function
-                {
-                    "subsystem": "{{ device.subsystem }}" e.g "usb",
-                    "name": "{{ device.sys_name }}",
-                    "path": "{{ device.sys_path }}",
-                    "vendor": "{{ ID_VENDOR_FROM_DATABASE }}" or null,
-                    "model": "{{ ID_MODEL_FROM_DATABASE }}" or null,
-                    "usb_interface": "{{ INTERFACE }}" or null,
-                    "usb_product": "{{ PRODUCT }}" or null,
-                    "driver": "{{ DRIVER }}" or null,
-                    "is_usb_related": true or false, // SUBSYSTEM=usb anywhere in ancestors or descents
-                    "is_mm_related": true or false, // ID_MM_CANDIDATE anywhere in ancestors or descents
-                    "is_mm_usable": true or false, // ID_MM_CANDIDATE set
-                    "is_mm_blacklisted": false or true, // ID_MM_DEVICE_IGNORE or ID_MM_PORT_IGNORE set
-                    "mac": "{{ ':'.join(ID_NET_NAME_MAC[-12 + i * 2:-12 + (i+1) * 2] for i in range(6)).lower() }}"
-                        or null,
-                    "raw_props": {
-                        "X": "Y",
-                    }
-                    children: [
-                        ...
-                    ]
+        [ // Root (parentless) devices only at this level <-- This is returned by the function
+            {
+                "subsystem": "{{ device.subsystem }}" e.g "usb",
+                "name": "{{ device.sys_name }}",
+                "path": "{{ device.sys_path }}",
+                "vendor": "{{ ID_VENDOR_FROM_DATABASE }}" or null,
+                "model": "{{ ID_MODEL_FROM_DATABASE }}" or null,
+                "usb_interface": "{{ INTERFACE }}" or null,
+                "usb_product": "{{ PRODUCT }}" or null,
+                "driver": "{{ DRIVER }}" or null,
+                "is_usb_related": true or false, // SUBSYSTEM=usb anywhere in ancestors or descents
+                "is_mm_related": true or false, // ID_MM_CANDIDATE anywhere in ancestors or descents
+                "is_mm_usable": true or false, // ID_MM_CANDIDATE set
+                "is_mm_blacklisted": false or true, // ID_MM_DEVICE_IGNORE or ID_MM_PORT_IGNORE set
+                "mac": "{{ ':'.join(ID_NET_NAME_MAC[-12 + i * 2:-12 + (i+1) * 2] for i in range(6)).lower() }}"
+                    or null,
+                "raw_props": {
+                    "X": "Y",
                 }
-            ]
-        }
+                children: [
+                    ...
+                ]
+            }
+        ]
         """
 
         # Sample commands:
@@ -222,10 +228,10 @@ class DeviceScanner:
                     continue
                 gobj_out = UDevDevice()
                 name_parts: list[str] = [
-                    item_in['subsystem'],
-                    item_in['name'],
-                    item_in['vendor'],
-                    item_in['model'],
+                    item_in.get('subsystem') or '??',
+                    item_in.get('name') or '??',
+                    item_in.get('vendor') or '??',
+                    item_in.get('model') or '??',
                 ]
                 for key in ('driver', 'path', 'usb_interface', 'usb_product'):
                     value = item_in.get(key)
@@ -234,12 +240,12 @@ class DeviceScanner:
                 full_name = GLib.markup_escape_text(
                     ' - '.join(filter(None, name_parts))
                 )
-                if item_in['name'].startswith('/dev/ttyHS') or item_in[
-                    'name'
-                ].startswith('/dev/ttyUSB'):
+                if item_in.get('name', '').startswith(
+                    '/dev/ttyHS'
+                ) or item_in.get('name', '').startswith('/dev/ttyUSB'):
                     full_name = '<b>%s</b>' % full_name
                 gobj_out.text_summary = full_name
-                if item_in['children']:
+                if item_in.get('children'):
                     item_in['children'] = visit(
                         item_in['children'], gobj_out.children
                     )

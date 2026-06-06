@@ -390,13 +390,16 @@ class ModemManagerIntf(GObject.Object):
             GLib.idle_add(self.update_state)
 
     def update_state(self, *args):
-        self.json_state = self.dbus_metadata_to_json()
-        debug('ModemManager info: ' + dumps(self.json_state, indent=4))
+        try:
+            self.json_state = self.dbus_metadata_to_json()
+            debug('ModemManager info: ' + dumps(self.json_state, indent=4))
 
-        self.update_remote_state()
+            self.update_remote_state()
 
-        self.emit('modem_state_change')
-        self.state_update_pending = False
+            self.emit('modem_state_change')
+
+        finally:
+            self.state_update_pending = False
 
     def on_modem_added(self, manager, obj):
         modem = obj.get_modem()
