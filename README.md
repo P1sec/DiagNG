@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://raw.githubusercontent.com/P1sec/DiagNG/main/pics/project_banner.png" alt="Landing illustration">
+</p>
+
 # DiagNG 🍕 🎧 The next-generation baseband Diag-collecting software (2G/3G/4G)
 
 WIP: This draft repository (previously called `qcsuper-gui`/QCSuper v3) intends to produce a monolithic GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too?) allowing to control and manage interferences with the serial Diag port system wide.
