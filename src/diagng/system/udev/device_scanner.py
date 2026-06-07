@@ -249,20 +249,33 @@ class DeviceScanner:
                     ' - '.join(filter(None, name_parts))
                 )
                 gobj_out.text_summary = full_name
+                if (
+                    gobjs_out_spi_only is not None
+                    and item_in['is_spi_related']
+                ):
+                    gobj_out_spi = UDevDevice()  # Won't have the same children, only the SPI-related ones
+                    gobj_out_spi.text_summary = gobj_out.text_summary
+                else:
+                    gobj_out_spi = None
                 if item_in.get('children'):
                     item_in['children'] = visit(
                         item_in['children'],
                         gobj_out.children,
-                        gobjs_out_spi_only.children
-                        if gobjs_out_spi_only and item_in['is_spi_related']
+                        gobj_out_spi.children
+                        if gobj_out_spi is not None
                         else None,
                     )
                 if gobj_out.children.get_n_items():
                     gobj_out.is_empty = False
+                if (
+                    gobj_out_spi is not None
+                    and gobj_out_spi.children.get_n_items()
+                ):
+                    gobj_out_spi.is_empty = False
                 items_out.append(item_in)
                 gobjs_out.append(gobj_out)
-                if gobjs_out_spi_only and item_in['is_spi_related']:
-                    gobjs_out_spi_only.append(gobj_out)
+                if gobj_out_spi is not None:
+                    gobjs_out_spi_only.append(gobj_out_spi)
             return items_out
 
         usb_gobjs = Gio.ListStore.new(UDevDevice)
@@ -277,20 +290,22 @@ class DeviceScanner:
         path_to_device[device.sys_path][flag_name] = True
 
         # All parents are also ModemManager related if this child is
-        next_parent = device.parent
-        while next_parent:
-            if path_to_device[next_parent.sys_path].get(flag_name):
+        parent_obj = device.parent
+        while parent_obj:
+            parent = path_to_device[parent_obj.sys_path]
+            if parent.get(flag_name):
                 break  # Avoid circular graph traversing
-            path_to_device[next_parent.sys_path][flag_name] = True
-            next_parent = next_parent.parent
+            parent[flag_name] = True
+            parent_obj = parent_obj.parent
 
         # As well as its children
-        def visit_child(child):
-            if path_to_device[child.sys_path].get(flag_name):
+        def visit_child(child_obj):
+            child = path_to_device[child_obj.sys_path]
+            if child.get(flag_name):
                 return  # Avoid circular graph traversing
-            path_to_device[child.sys_path][flag_name] = True
-            for next_child in child.children:
-                visit_child(child)
+            child[flag_name] = True
+            for next_child in child_obj.children:
+                visit_child(next_child)
 
         for child in device.children:
             visit_child(child)
