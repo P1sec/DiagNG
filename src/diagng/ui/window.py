@@ -75,13 +75,17 @@ class MyWindow(Adw.ApplicationWindow):
     mm_debug_view: GtkSource
     mm_sourceview_buffer: GtkSource.Buffer
 
-    # UI panel: SPI
+    # UI panel: USB
 
-    udev_serial_selection: Gio.ListStore = Gtk.Template.Child()
+    usb_selection: Gio.ListStore = Gtk.Template.Child()
 
     udev_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     udev_debug_view: GtkSource
     udev_sourceview_buffer: GtkSource.Buffer
+
+    # UI panel: SPI
+
+    spi_selection: Gio.ListStore = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__()
@@ -104,11 +108,22 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_debug_view.set_editable(False)
         self.mm_debug_viewport.set_child(self.mm_debug_view)
 
-        # Build udev device tree view
+        # Build USB device tree view
 
-        self.udev_serial_selection.set_model(
+        self.usb_selection.set_model(
             Gtk.TreeListModel.new(
-                root=self.app.udev_devices,
+                root=self.app.usb_devices,
+                passthrough=False,
+                autoexpand=True,
+                create_func=lambda item: item.children,
+            )
+        )
+
+        # Build SPI device tree view
+
+        self.spi_selection.set_model(
+            Gtk.TreeListModel.new(
+                root=self.app.spi_devices,
                 passthrough=False,
                 autoexpand=True,
                 create_func=lambda item: item.children,

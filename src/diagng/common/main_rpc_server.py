@@ -22,10 +22,11 @@ class MainRPCServer(Jsonrpc.Server):
         self.add_handler(
             'sync_modem_debug_info', self.sync_modem_debug_info_handler
         )
-        self.add_handler('sync_udev_devices', self.sync_udev_devices_handler)
+        self.add_handler('sync_usb_devices', self.sync_usb_devices_handler)
         self.add_handler(
             'sync_udev_debug_info', self.sync_udev_debug_info_handler
         )
+        self.add_handler('sync_spi_devices', self.sync_spi_devices_handler)
         self.add_handler('test_ctos', self.test_ctos_handler)
 
         self.connect('client-accepted', self.daemon_connected)
@@ -75,7 +76,7 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-    def sync_udev_devices_handler(
+    def sync_usb_devices_handler(
         self,
         this: Jsonrpc.Server,
         peer: Jsonrpc.Client,
@@ -86,9 +87,30 @@ class MainRPCServer(Jsonrpc.Server):
     ):
         info(f'Got call "{id}" for "{method}" with params "{params}"')
 
-        self.app.udev_devices.remove_all()
+        self.app.usb_devices.remove_all()
         for pos in range(params.n_children()):
-            self.app.udev_devices.append(
+            self.app.usb_devices.append(
+                UDevDevice.from_gvariant(
+                    params.get_child_value(pos).get_variant()
+                )
+            )
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
+
+    def sync_spi_devices_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        info(f'Got call "{id}" for "{method}" with params "{params}"')
+
+        self.app.spi_devices.remove_all()
+        for pos in range(params.n_children()):
+            self.app.spi_devices.append(
                 UDevDevice.from_gvariant(
                     params.get_child_value(pos).get_variant()
                 )

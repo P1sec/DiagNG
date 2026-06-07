@@ -65,7 +65,7 @@ class DeviceScanner:
 
     def update_json_state(self, *args):
         try:
-            self.json_state, gobj_state = self.get_udev_device_tree()
+            self.json_state, usb_gobjs, spi_gobjs = self.get_udev_device_tree()
 
             if self.rpc_wrapper:
                 debug(
@@ -73,12 +73,22 @@ class DeviceScanner:
                     + dumps(self.json_state, indent=4)
                 )
                 self.rpc_wrapper.broadcast_message(
-                    'sync_udev_devices',
+                    'sync_usb_devices',
                     GLib.Variant.new_array(
                         GLib.VariantType.new('a{sv}'),
                         [
-                            gobj_state.get_item(position).to_gvariant()
-                            for position in range(gobj_state.get_n_items())
+                            usb_gobjs.get_item(position).to_gvariant()
+                            for position in range(usb_gobjs.get_n_items())
+                        ],
+                    ),
+                )
+                self.rpc_wrapper.broadcast_message(
+                    'sync_spi_devices',
+                    GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            spi_gobjs.get_item(position).to_gvariant()
+                            for position in range(spi_gobjs.get_n_items())
                         ],
                     ),
                 )
@@ -92,7 +102,9 @@ class DeviceScanner:
         finally:
             self.state_update_pending = False
 
-    def get_udev_device_tree(self) -> Tuple[List[dict], Gio.ListStore]:
+    def get_udev_device_tree(
+        self,
+    ) -> Tuple[List[dict], Gio.ListStore, Gio.ListStore]:
         """
         Output syntax:
         [ // Root (parentless) devices only at this level <-- This is returned by the function
@@ -105,10 +117,8 @@ class DeviceScanner:
                 "usb_interface": "{{ INTERFACE }}" or null,
                 "usb_product": "{{ PRODUCT }}" or null,
                 "driver": "{{ DRIVER }}" or null,
-                "is_usb_related": true or false, // SUBSYSTEM=usb anywhere in ancestors or descents
-                "is_mm_related": true or false, // ID_MM_CANDIDATE anywhere in ancestors or descents
-                "is_mm_usable": true or false, // ID_MM_CANDIDATE set
-                "is_mm_blacklisted": false or true, // ID_MM_DEVICE_IGNORE or ID_MM_PORT_IGNORE set
+                "is_usb_related": true or false, // SUBSYSTEM=usb* anywhere in ancestors or descents
+                "is_spi_related": true or false, // name=/dev/tty{USB,HS}* anywhere in ancestors or descents
                 "mac": "{{ ':'.join(ID_NET_NAME_MAC[-12 + i * 2:-12 + (i+1) * 2] for i in range(6)).lower() }}"
                     or null,
                 "raw_props": {
@@ -173,17 +183,6 @@ class DeviceScanner:
                     'usb_interface': device.properties.get('INTERFACE'),
                     'usb_product': device.properties.get('PRODUCT'),
                     'driver': device.properties.get('DRIVER'),
-                    'is_mm_blacklisted': bool(
-                        int(device.properties.get('ID_MM_PORT_IGNORE') or '0')
-                    )
-                    or bool(
-                        int(
-                            device.properties.get('ID_MM_DEVICE_IGNORE') or '0'
-                        )
-                    ),
-                    'is_mm_usable': bool(
-                        int(device.properties.get('ID_MM_CANDIDATE') or '0')
-                    ),
                     'mac': possible_mac_addr,
                     'raw_props': dict(device.properties),
                     'children': [
@@ -195,14 +194,17 @@ class DeviceScanner:
                 }
             )
 
-            if device.properties.get('ID_MM_CANDIDATE'):
+            if device_name and (
+                device_name.startswith('/dev/ttyHS')
+                or device_name.startswith('/dev/ttyUSB')
+            ):
                 self.set_contaminating_flag(
-                    'is_mm_related', path_to_device, device
+                    'is_spi_related', path_to_device, device
                 )
 
             else:
                 path_to_device[device.sys_path].setdefault(
-                    'is_mm_related', False
+                    'is_spi_related', False
                 )
 
             if device.subsystem.startswith('usb'):
@@ -221,7 +223,13 @@ class DeviceScanner:
         # Ditch the non USB-related part of the device
         # tree, we don't need it as of today
 
-        def visit(items_in: list[dict], gobjs_out: Gio.ListStore):
+        # WIP OUTPUT TWO USB TREES: SPI AND USB-RELATED
+
+        def visit(
+            items_in: list[dict],
+            gobjs_out: Gio.ListStore,
+            gobjs_out_spi_only: Optional[Gio.ListStore],
+        ):
             items_out = []
             for item_in in items_in:
                 if not item_in['is_usb_related']:
@@ -240,25 +248,28 @@ class DeviceScanner:
                 full_name = GLib.markup_escape_text(
                     ' - '.join(filter(None, name_parts))
                 )
-                if item_in.get('name', '').startswith(
-                    '/dev/ttyHS'
-                ) or item_in.get('name', '').startswith('/dev/ttyUSB'):
-                    full_name = '<b>%s</b>' % full_name
                 gobj_out.text_summary = full_name
                 if item_in.get('children'):
                     item_in['children'] = visit(
-                        item_in['children'], gobj_out.children
+                        item_in['children'],
+                        gobj_out.children,
+                        gobjs_out_spi_only.children
+                        if gobjs_out_spi_only and item_in['is_spi_related']
+                        else None,
                     )
                 if gobj_out.children.get_n_items():
                     gobj_out.is_empty = False
                 items_out.append(item_in)
                 gobjs_out.append(gobj_out)
+                if gobjs_out_spi_only and item_in['is_spi_related']:
+                    gobjs_out_spi_only.append(gobj_out)
             return items_out
 
         usb_gobjs = Gio.ListStore.new(UDevDevice)
-        usb_devices = visit(root_devices, usb_gobjs)
+        spi_gobjs = Gio.ListStore.new(UDevDevice)
+        usb_devices = visit(root_devices, usb_gobjs, spi_gobjs)
 
-        return (usb_devices, usb_gobjs)
+        return (usb_devices, usb_gobjs, spi_gobjs)
 
     def set_contaminating_flag(
         self, flag_name: str, path_to_device: Dict[str, dict], device: Device
