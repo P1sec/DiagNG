@@ -102,12 +102,15 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detected USB devices (TODO, use dropdowns)</property>
+                            <property name="title">Detected USB devices (TODO, use dropdowns aka ExpanderRow)</property>
+                            <child>
+                              <object class="AdwExpanderRow"></object>
+                            </child>
                           </object>
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detected USB devices with a priori non-Diag signature (TODO, use dropdowns)</property>
+                            <property name="title">Detected USB devices with a priori non-Diag signature (TODO, use dropdowns aka ExpanderRow)</property>
                           </object>
                         </child>
                         <child>
@@ -158,7 +161,62 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detected SPI devices (TODO, use dropdowns)</property>
+                            <property name="title">Detected SPI devices (TODO, use dropdowns aka ExpanderRow)</property>
+                            <child>
+                              <object class="AdwExpanderRow">
+                                <property name="expanded">true</property>
+                                <property name="title">ZTE MF667</property>
+                                <property name="visible">false</property>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyHS0</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="has-tooltip">true</property>
+                                        <property name="label">Lock port</property>
+                                        <property name="tooltip-text">Block ModemManager from interfering with this device </property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Connect</property>
+                                        <style>
+                                          <class name="pill"/>
+                                          <class name="suggested-action"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyHS1</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="has-tooltip">true</property>
+                                        <property name="label">Lock port</property>
+                                        <property name="tooltip-text">Block ModemManager from interfering with this device </property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Connect</property>
+                                        <style>
+                                          <class name="pill"/>
+                                          <class name="suggested-action"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
