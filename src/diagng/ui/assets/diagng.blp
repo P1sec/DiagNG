@@ -8,24 +8,24 @@ template $MainWindow: Adw.ApplicationWindow {
         Adw.ViewStackPage mm_tab {
           child: Adw.PreferencesPage mm_tab_page {
             Adw.PreferencesGroup mm_status_group {
-              title: "ModemManager system daemon";
+              title: _("ModemManager system daemon");
 
               Adw.ActionRow mm_status_row {
                 activatable: true;
-                subtitle: "PID XXX";
+                subtitle: _("PID %d");
                 subtitle-selectable: true;
-                title: "Daemon status";
+                title: _("Daemon status");
                 title-selectable: true;
 
                 Label mm_status_label {
                   attributes: "0 -1 weight bold";
-                  label: "Stopped";
+                  label: _("Stopped");
                   selectable: true;
                 }
               }
 
               Adw.ActionRow mm_version_row {
-                title: "Service version";
+                title: _("Service version");
                 title-selectable: true;
 
                 Label mm_version_label {
@@ -36,7 +36,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup detected_modems_group {
-              title: "Detected modems";
+              title: _("Detected modems");
               visible: false;
 
               Adw.ExpanderRow {
@@ -59,7 +59,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup mm_debug_group {
-              title: "DBus information";
+              title: _("DBus information");
 
               ScrolledWindow mm_debug_viewport {
                 hscrollbar-policy: never;
@@ -87,7 +87,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup {
-              title: "Detailed UDev device tree";
+              title: _("Detailed UDev device tree");
 
               ScrolledWindow {
                 child: ListView usb_tree {
@@ -103,7 +103,7 @@ template $MainWindow: Adw.ApplicationWindow {
               }
 
               Adw.PreferencesGroup udev_debug_group {
-                title: "UDev debug information";
+                title: _("UDev debug information");
 
                 ScrolledWindow udev_debug_viewport {
                   hscrollbar-policy: never;
@@ -134,8 +134,8 @@ template $MainWindow: Adw.ApplicationWindow {
 
                   Button {
                     has-tooltip: true;
-                    label: "Lock port";
-                    tooltip-text: "Block ModemManager from interfering with this device ";
+                    label: _("Lock port");
+                    tooltip-text: _("Block ModemManager from interfering with this device");
 
                     styles [
                       "pill",
@@ -157,8 +157,8 @@ template $MainWindow: Adw.ApplicationWindow {
 
                   Button {
                     has-tooltip: true;
-                    label: "Lock port";
-                    tooltip-text: "Block ModemManager from interfering with this device ";
+                    label: _("Lock port");
+                    tooltip-text: _("Block ModemManager from interfering with this device");
 
                     styles [
                       "pill",
@@ -166,7 +166,7 @@ template $MainWindow: Adw.ApplicationWindow {
                   }
 
                   Button {
-                    label: "Connect";
+                    label: _("Connect");
 
                     styles [
                       "pill",
@@ -178,7 +178,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup {
-              title: "Detailed UDev device tree";
+              title: _("Detailed UDev device tree");
 
               ScrolledWindow {
                 child: ListView spi_tree {
@@ -222,6 +222,6 @@ template $MainWindow: Adw.ApplicationWindow {
 
   default-height: 600;
   default-width: 800;
-  name: "QCDM Lock manager";
-  title: "QCDM Lock manager";
+  name: "DiagNG";
+  title: "DiagNG";
 }

@@ -19,18 +19,18 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage" id="mm_tab_page">
                         <child>
                           <object class="AdwPreferencesGroup" id="mm_status_group">
-                            <property name="title">ModemManager system daemon</property>
+                            <property name="title" translatable="yes">ModemManager system daemon</property>
                             <child>
                               <object class="AdwActionRow" id="mm_status_row">
                                 <property name="activatable">true</property>
-                                <property name="subtitle">PID XXX</property>
+                                <property name="subtitle" translatable="yes">PID %d</property>
                                 <property name="subtitle-selectable">true</property>
-                                <property name="title">Daemon status</property>
+                                <property name="title" translatable="yes">Daemon status</property>
                                 <property name="title-selectable">true</property>
                                 <child>
                                   <object class="GtkLabel" id="mm_status_label">
                                     <property name="attributes">0 -1 weight bold</property>
-                                    <property name="label">Stopped</property>
+                                    <property name="label" translatable="yes">Stopped</property>
                                     <property name="selectable">true</property>
                                   </object>
                                 </child>
@@ -38,7 +38,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                             <child>
                               <object class="AdwActionRow" id="mm_version_row">
-                                <property name="title">Service version</property>
+                                <property name="title" translatable="yes">Service version</property>
                                 <property name="title-selectable">true</property>
                                 <child>
                                   <object class="GtkLabel" id="mm_version_label">
@@ -52,7 +52,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="detected_modems_group">
-                            <property name="title">Detected modems</property>
+                            <property name="title" translatable="yes">Detected modems</property>
                             <property name="visible">false</property>
                             <child>
                               <object class="AdwExpanderRow">
@@ -79,7 +79,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="mm_debug_group">
-                            <property name="title">DBus information</property>
+                            <property name="title" translatable="yes">DBus information</property>
                             <child>
                               <object class="GtkScrolledWindow" id="mm_debug_viewport">
                                 <property name="hscrollbar-policy">2</property>
@@ -115,7 +115,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detailed UDev device tree</property>
+                            <property name="title" translatable="yes">Detailed UDev device tree</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -136,7 +136,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                             <child>
                               <object class="AdwPreferencesGroup" id="udev_debug_group">
-                                <property name="title">UDev debug information</property>
+                                <property name="title" translatable="yes">UDev debug information</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="udev_debug_viewport">
                                     <property name="hscrollbar-policy">2</property>
@@ -173,8 +173,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                     <child>
                                       <object class="GtkButton">
                                         <property name="has-tooltip">true</property>
-                                        <property name="label">Lock port</property>
-                                        <property name="tooltip-text">Block ModemManager from interfering with this device </property>
+                                        <property name="label" translatable="yes">Lock port</property>
+                                        <property name="tooltip-text" translatable="yes">Block ModemManager from interfering with this device</property>
                                         <style>
                                           <class name="pill"/>
                                         </style>
@@ -197,8 +197,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                     <child>
                                       <object class="GtkButton">
                                         <property name="has-tooltip">true</property>
-                                        <property name="label">Lock port</property>
-                                        <property name="tooltip-text">Block ModemManager from interfering with this device </property>
+                                        <property name="label" translatable="yes">Lock port</property>
+                                        <property name="tooltip-text" translatable="yes">Block ModemManager from interfering with this device</property>
                                         <style>
                                           <class name="pill"/>
                                         </style>
@@ -206,7 +206,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                     </child>
                                     <child>
                                       <object class="GtkButton">
-                                        <property name="label">Connect</property>
+                                        <property name="label" translatable="yes">Connect</property>
                                         <style>
                                           <class name="pill"/>
                                           <class name="suggested-action"/>
@@ -221,7 +221,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detailed UDev device tree</property>
+                            <property name="title" translatable="yes">Detailed UDev device tree</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -278,7 +278,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     </property>
     <property name="default-height">600</property>
     <property name="default-width">800</property>
-    <property name="name">QCDM Lock manager</property>
-    <property name="title">QCDM Lock manager</property>
+    <property name="name">DiagNG</property>
+    <property name="title">DiagNG</property>
   </template>
 </interface>
