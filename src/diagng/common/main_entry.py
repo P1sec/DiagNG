@@ -12,7 +12,6 @@ from diagng.common.main_rpc_server import MainRPCServer
 from diagng.common.service_entry import service_main
 from diagng.gobject.udev_device import UDevDevice
 from diagng.common.logging import LoggingCentral
-from diagng.gobject.process import Process
 from diagng.ui.window import MyWindow
 
 try:
