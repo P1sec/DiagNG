@@ -11,6 +11,7 @@ from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.common.main_rpc_server import MainRPCServer
 from diagng.common.service_entry import service_main
 from diagng.gobject.udev_device import UDevDevice
+from diagng.gobject.serial_port import SerialPort
 from diagng.common.logging import LoggingCentral
 from diagng.ui.window import MyWindow
 
@@ -79,7 +80,8 @@ class MainApplication(Adw.Application):
     mm_instance = GObject.Property(type=ModemManagerInstance)
     mm_debug_data = GObject.Property(type=str)
 
-    usb_devices = GObject.Property(type=Gio.ListStore)
+    usb_device_tree = GObject.Property(type=Gio.ListStore)
+    spi_device_tree = GObject.Property(type=Gio.ListStore)
     spi_devices = GObject.Property(type=Gio.ListStore)
     udev_debug_data = GObject.Property(type=str)
 
@@ -93,8 +95,9 @@ class MainApplication(Adw.Application):
 
         super().__init__(**kwargs)
         self.mm_instance = ModemManagerInstance()
-        self.usb_devices = Gio.ListStore.new(UDevDevice)
-        self.spi_devices = Gio.ListStore.new(UDevDevice)
+        self.usb_device_tree = Gio.ListStore.new(UDevDevice)
+        self.spi_device_tree = Gio.ListStore.new(UDevDevice)
+        self.spi_devices = Gio.ListStore.new(SerialPort)
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)

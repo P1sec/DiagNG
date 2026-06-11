@@ -112,7 +112,7 @@ class MyWindow(Adw.ApplicationWindow):
 
         self.usb_selection.set_model(
             Gtk.TreeListModel.new(
-                root=self.app.usb_devices,
+                root=self.app.usb_device_tree,
                 passthrough=False,
                 autoexpand=True,
                 create_func=lambda item: item.children,
@@ -123,14 +123,14 @@ class MyWindow(Adw.ApplicationWindow):
 
         self.spi_selection.set_model(
             Gtk.TreeListModel.new(
-                root=self.app.spi_devices,
+                root=self.app.spi_device_tree,
                 passthrough=False,
                 autoexpand=True,
                 create_func=lambda item: item.children,
             )
         )
 
-        # Build udev debug SourceView
+        # Build UDev debug SourceView
 
         self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language('json')

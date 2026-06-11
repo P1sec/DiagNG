@@ -8,6 +8,7 @@ from threading import Thread
 from json import dumps
 
 from diagng.gobject.udev_device import UDevDevice
+from diagng.gobject.serial_port import SerialPort
 
 import gi
 
@@ -65,7 +66,9 @@ class DeviceScanner:
 
     def update_json_state(self, *args):
         try:
-            self.json_state, usb_gobjs, spi_gobjs = self.get_udev_device_tree()
+            self.json_state, usb_tree_gobjs, spi_tree_gobjs, spi_gobjs = (
+                self.get_udev_device_tree()
+            )
 
             if self.rpc_wrapper:
                 debug(
@@ -73,12 +76,22 @@ class DeviceScanner:
                     + dumps(self.json_state, indent=4)
                 )
                 self.rpc_wrapper.broadcast_message(
-                    'sync_usb_devices',
+                    'sync_usb_device_tree',
                     GLib.Variant.new_array(
                         GLib.VariantType.new('a{sv}'),
                         [
-                            usb_gobjs.get_item(position).to_gvariant()
-                            for position in range(usb_gobjs.get_n_items())
+                            usb_tree_gobjs.get_item(position).to_gvariant()
+                            for position in range(usb_tree_gobjs.get_n_items())
+                        ],
+                    ),
+                )
+                self.rpc_wrapper.broadcast_message(
+                    'sync_spi_device_tree',
+                    GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            spi_tree_gobjs.get_item(position).to_gvariant()
+                            for position in range(spi_tree_gobjs.get_n_items())
                         ],
                     ),
                 )
@@ -104,7 +117,7 @@ class DeviceScanner:
 
     def get_udev_device_tree(
         self,
-    ) -> Tuple[List[dict], Gio.ListStore, Gio.ListStore]:
+    ) -> Tuple[List[dict], Gio.ListStore, Gio.ListStore, Gio.ListStore]:
         """
         Output syntax:
         [ // Root (parentless) devices only at this level <-- This is returned by the function
@@ -240,8 +253,9 @@ class DeviceScanner:
         def visit(
             items_in: List[dict],
             parent_item_in: Optional[dict],
-            gobjs_out: Gio.ListStore,
-            gobjs_out_spi_only: Optional[Gio.ListStore],
+            udev_gobjs_out: Gio.ListStore,
+            udev_gobjs_out_spi_only: Optional[Gio.ListStore],
+            spi_gobjs_out: Gio.ListStore,
         ):
             items_out = []
             for item_in in items_in:
@@ -259,7 +273,7 @@ class DeviceScanner:
                             key_to_copy
                         ):
                             item_in[key_to_copy] = parent_item_in[key_to_copy]
-                gobj_out = UDevDevice()
+                udev_gobj_out = UDevDevice()
                 name_parts: list[str] = [
                     item_in.get('subsystem') or '??',
                     item_in.get('name') or '??',
@@ -273,42 +287,62 @@ class DeviceScanner:
                 full_name = GLib.markup_escape_text(
                     ' - '.join(filter(None, name_parts))
                 )
-                gobj_out.text_summary = full_name
+                udev_gobj_out.text_summary = full_name
                 if (
-                    gobjs_out_spi_only is not None
+                    udev_gobjs_out_spi_only is not None
                     and item_in['is_spi_related']
                 ):
-                    gobj_out_spi = UDevDevice()  # Won't have the same children, only the SPI-related ones
-                    gobj_out_spi.text_summary = gobj_out.text_summary
+                    udev_gobj_out_spi = UDevDevice()  # Won't have the same children, only the SPI-related ones
+                    udev_gobj_out_spi.text_summary = udev_gobj_out.text_summary
+
+                    if item_in.get('subsystem') == 'tty':
+                        spi_gobj_out = SerialPort()
+                        spi_gobj_out.tty_device_path = item_in.get('name')
+                        spi_gobj_out.sysfs_device_path = item_in.get('path')
+                        spi_gobj_out.usb_interface = item_in.get(
+                            'usb_interface'
+                        )
+                        spi_gobj_out.usb_vid_pid = item_in.get('usb_vid_pid')
+                        spi_gobj_out.usb_vendor = item_in.get('vendor')
+                        spi_gobj_out.usb_product = item_in.get('model')
+                        # spi_gobj_out.is_mm_detected = XX
+                        # spi_gobj_out.is_mm_inhibited = XX
+                        spi_gobjs_out.append(spi_gobj_out)
                 else:
-                    gobj_out_spi = None
+                    udev_gobj_out_spi = None
                 if item_in.get('children'):
                     item_in['children'] = visit(
                         item_in['children'],
                         item_in,
-                        gobj_out.children,
-                        gobj_out_spi.children
-                        if gobj_out_spi is not None
-                        else None,
+                        udev_gobj_out.children,
+                        (
+                            udev_gobj_out_spi.children
+                            if udev_gobj_out_spi is not None
+                            else None
+                        ),
+                        spi_gobjs_out,
                     )
-                if gobj_out.children.get_n_items():
-                    gobj_out.is_empty = False
+                if udev_gobj_out.children.get_n_items():
+                    udev_gobj_out.is_empty = False
                 if (
-                    gobj_out_spi is not None
-                    and gobj_out_spi.children.get_n_items()
+                    udev_gobj_out_spi is not None
+                    and udev_gobj_out_spi.children.get_n_items()
                 ):
-                    gobj_out_spi.is_empty = False
+                    udev_gobj_out_spi.is_empty = False
                 items_out.append(item_in)
-                gobjs_out.append(gobj_out)
-                if gobj_out_spi is not None:
-                    gobjs_out_spi_only.append(gobj_out_spi)
+                udev_gobjs_out.append(udev_gobj_out)
+                if udev_gobj_out_spi is not None:
+                    udev_gobjs_out_spi_only.append(udev_gobj_out_spi)
             return items_out
 
-        usb_gobjs = Gio.ListStore.new(UDevDevice)
-        spi_gobjs = Gio.ListStore.new(UDevDevice)
-        usb_devices = visit(root_devices, None, usb_gobjs, spi_gobjs)
+        udev_usb_gobjs = Gio.ListStore.new(UDevDevice)
+        udev_spi_gobjs = Gio.ListStore.new(UDevDevice)
+        spi_gobjs = Gio.ListStore.new(SerialPort)
+        usb_devices = visit(
+            root_devices, None, udev_usb_gobjs, udev_spi_gobjs, spi_gobjs
+        )
 
-        return (usb_devices, usb_gobjs, spi_gobjs)
+        return (usb_devices, udev_usb_gobjs, udev_spi_gobjs, spi_gobjs)
 
     def set_contaminating_flag(
         self, flag_name: str, path_to_device: Dict[str, dict], device: Device

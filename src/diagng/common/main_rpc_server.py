@@ -2,6 +2,7 @@
 from logging import debug, error, info, critical
 
 from diagng.gobject.udev_device import UDevDevice
+from diagng.gobject.serial_port import SerialPort
 
 import gi
 
@@ -22,9 +23,14 @@ class MainRPCServer(Jsonrpc.Server):
         self.add_handler(
             'sync_modem_debug_info', self.sync_modem_debug_info_handler
         )
-        self.add_handler('sync_usb_devices', self.sync_usb_devices_handler)
+        self.add_handler(
+            'sync_usb_device_tree', self.sync_usb_device_tree_handler
+        )
         self.add_handler(
             'sync_udev_debug_info', self.sync_udev_debug_info_handler
+        )
+        self.add_handler(
+            'sync_spi_device_tree', self.sync_spi_device_tree_handler
         )
         self.add_handler('sync_spi_devices', self.sync_spi_devices_handler)
         self.add_handler('test_ctos', self.test_ctos_handler)
@@ -76,7 +82,7 @@ class MainRPCServer(Jsonrpc.Server):
 
         peer.reply_async(id, GLib.Variant.new_boolean(True), None)
 
-    def sync_usb_devices_handler(
+    def sync_usb_device_tree_handler(
         self,
         this: Jsonrpc.Server,
         peer: Jsonrpc.Client,
@@ -87,9 +93,30 @@ class MainRPCServer(Jsonrpc.Server):
     ):
         info(f'Got call "{id}" for "{method}" with params "{params}"')
 
-        self.app.usb_devices.remove_all()
+        self.app.usb_device_tree.remove_all()
         for pos in range(params.n_children()):
-            self.app.usb_devices.append(
+            self.app.usb_device_tree.append(
+                UDevDevice.from_gvariant(
+                    params.get_child_value(pos).get_variant()
+                )
+            )
+
+        peer.reply_async(id, GLib.Variant.new_boolean(True), None)
+
+    def sync_spi_device_tree_handler(
+        self,
+        this: Jsonrpc.Server,
+        peer: Jsonrpc.Client,
+        method: str,
+        id: GLib.Variant,
+        params: GLib.Variant,
+        *user_data,
+    ):
+        info(f'Got call "{id}" for "{method}" with params "{params}"')
+
+        self.app.spi_device_tree.remove_all()
+        for pos in range(params.n_children()):
+            self.app.spi_device_tree.append(
                 UDevDevice.from_gvariant(
                     params.get_child_value(pos).get_variant()
                 )
@@ -111,7 +138,7 @@ class MainRPCServer(Jsonrpc.Server):
         self.app.spi_devices.remove_all()
         for pos in range(params.n_children()):
             self.app.spi_devices.append(
-                UDevDevice.from_gvariant(
+                SerialPort.from_gvariant(
                     params.get_child_value(pos).get_variant()
                 )
             )
