@@ -128,7 +128,7 @@ class DeviceScanner:
                     "X": "Y",
                 }
                 children: [
-                    ...
+                    ..<.
                 ]
             }
         ]
@@ -266,7 +266,7 @@ class DeviceScanner:
                     item_in.get('vendor') or '??',
                     item_in.get('model') or '??',
                 ]
-                for key in ('driver', 'path', 'usb_interface', 'usb_product'):
+                for key in ('driver', 'path', 'usb_interface', 'usb_vid_pid'):
                     value = item_in.get(key)
                     if value:
                         name_parts.append('%s=%s' % (key, value))
