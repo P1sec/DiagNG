@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 from os.path import dirname, realpath, exists, join
 from os import stat, scandir, access, W_OK
+from collections import defaultdict
+from typing import List, Dict
 from subprocess import run
 from shutil import which
 
 from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.gobject.serial_port import SerialPort
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
 
@@ -70,6 +73,7 @@ class MyWindow(Adw.ApplicationWindow):
     mm_version_label: Gtk.Label = Gtk.Template.Child()
 
     detected_modems_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    spi_ports_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     mm_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     mm_debug_view: GtkSource
@@ -150,6 +154,7 @@ class MyWindow(Adw.ApplicationWindow):
 
         # Connect signals
 
+        self.app.spi_devices.connect('items-changed', self.update_spi_devices)
         self.app.mm_instance.modems.connect(
             'items-changed', self.update_mm_modems
         )
@@ -163,6 +168,7 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_status_label.set_label('')
         self.mm_version_label.set_label('')
 
+        self.update_spi_devices()
         self.update_mm_modems()
         self.update_mm_instance()
         self.update_mm_debug_data()
@@ -215,6 +221,57 @@ class MyWindow(Adw.ApplicationWindow):
             self.udev_debug_view.get_buffer().set_text(
                 self.app.udev_debug_data
             )
+
+    def update_spi_devices(self, *args):
+        def visit(container: Gtk.Widget):
+            item = container.get_first_child()
+            while item:
+                next_item = item.get_next_sibling()
+                if isinstance(item, Adw.ExpanderRow):
+                    self.spi_ports_group.remove(item)
+                else:
+                    visit(item)
+                item = next_item
+
+        visit(self.spi_ports_group)
+
+        vid_pid_to_ports: Dict[str, List[SerialPort]] = defaultdict(list)
+
+        for pos in range(self.app.spi_devices.get_n_items()):
+            item = self.app.spi_devices.get_item(pos)
+
+            vid_pid_to_ports[item.usb_vid_pid].append(item)
+
+        for vid_pid, ports in vid_pid_to_ports.items():
+            first_port = ports[0]
+
+            main_row = Adw.ExpanderRow.new()
+            main_row.set_expanded(True)
+            main_row.set_title_selectable(True)
+            main_row.set_title(
+                '<b>%s %s</b> - %s'
+                % (
+                    GLib.markup_escape_text(first_port.usb_vendor, -1),
+                    GLib.markup_escape_text(first_port.usb_product, -1),
+                    GLib.markup_escape_text(first_port.usb_vid_pid, -1),
+                )
+            )
+
+            for port in ports:
+                port_row = Adw.ActionRow.new()
+                port_row.set_title_selectable(True)
+                port_row.set_subtitle_selectable(True)
+                port_row.set_title(
+                    '<b>%s</b>'
+                    % (GLib.markup_escape_text(port.tty_device_path, -1))
+                )
+                port_row.set_subtitle(
+                    (GLib.markup_escape_text(port.sysfs_device_path, -1))
+                )
+
+                main_row.add_row(port_row)
+
+            self.spi_ports_group.add(main_row)
 
     def update_mm_modems(self, *args):
         def visit(container: Gtk.Widget):

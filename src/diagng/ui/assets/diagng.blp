@@ -121,8 +121,8 @@ template $MainWindow: Adw.ApplicationWindow {
 
         Adw.ViewStackPage spi_tab {
           child: Adw.PreferencesPage {
-            Adw.PreferencesGroup {
-              title: "Detected SPI devices (TODO, use dropdowns aka ExpanderRow)";
+            Adw.PreferencesGroup spi_ports_group {
+              title: "Detected SPI devices";
 
               Adw.ExpanderRow {
                 expanded: true;
