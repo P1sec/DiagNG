@@ -115,7 +115,10 @@ class DeviceScanner:
                 "vendor": "{{ ID_VENDOR_FROM_DATABASE }}" or null,
                 "model": "{{ ID_MODEL_FROM_DATABASE }}" or null,
                 "usb_interface": "{{ INTERFACE }}" or null,
-                "usb_product": "{{ PRODUCT }}" or null,
+                "usb_vid_pid": "{{ ID_USB_VENDOR_ID }}:{{ ID_USB_MODEL_ID }}" or null,
+                "usb_vid": "{{ ID_USB_VENDOR_ID }}" or null,
+                "usb_pid": "{{ ID_USB_MODEL_ID }}" or null,
+                "usb_revision": "{{ ID_USB_REVISION }}" or null,
                 "driver": "{{ DRIVER }}" or null,
                 "is_usb_related": true or false, // SUBSYSTEM=usb* anywhere in ancestors or descents
                 "is_spi_related": true or false, // name=/dev/tty{USB,HS}* anywhere in ancestors or descents
@@ -181,7 +184,15 @@ class DeviceScanner:
                     or device.properties.get('ID_VENDOR'),
                     'model': model,
                     'usb_interface': device.properties.get('INTERFACE'),
-                    'usb_product': device.properties.get('PRODUCT'),
+                    'usb_vid_pid': f'{device.properties["ID_USB_VENDOR_ID"]}:{device.properties["ID_USB_MODEL_ID"]}'
+                    if (
+                        device.properties.get('ID_USB_VENDOR_ID')
+                        and device.properties.get('ID_USB_MODEL_ID')
+                    )
+                    else None,
+                    'usb_vid': device.properties.get('ID_USB_VENDOR_ID'),
+                    'usb_pid': device.properties.get('ID_USB_MODEL_ID'),
+                    'usb_revision': device.properties.get('ID_USB_REVISION'),
                     'driver': device.properties.get('DRIVER'),
                     'mac': possible_mac_addr,
                     'raw_props': dict(device.properties),
@@ -223,10 +234,12 @@ class DeviceScanner:
         # Ditch the non USB-related part of the device
         # tree, we don't need it as of today
 
-        # WIP OUTPUT TWO USB TREES: SPI AND USB-RELATED
+        # Ouput two distinct GObject trees: SPI-over-USB
+        # devices and all USB-related devices
 
         def visit(
-            items_in: list[dict],
+            items_in: List[dict],
+            parent_item_in: Optional[dict],
             gobjs_out: Gio.ListStore,
             gobjs_out_spi_only: Optional[Gio.ListStore],
         ):
@@ -234,6 +247,18 @@ class DeviceScanner:
             for item_in in items_in:
                 if not item_in['is_usb_related']:
                     continue
+                if parent_item_in:
+                    for key_to_copy in [
+                        'usb_interface',
+                        'usb_vid_pid',
+                        'usb_vid',
+                        'usb_pid',
+                        'usb_revision',
+                    ]:
+                        if parent_item_in.get(key_to_copy) and not item_in.get(
+                            key_to_copy
+                        ):
+                            item_in[key_to_copy] = parent_item_in[key_to_copy]
                 gobj_out = UDevDevice()
                 name_parts: list[str] = [
                     item_in.get('subsystem') or '??',
@@ -260,6 +285,7 @@ class DeviceScanner:
                 if item_in.get('children'):
                     item_in['children'] = visit(
                         item_in['children'],
+                        item_in,
                         gobj_out.children,
                         gobj_out_spi.children
                         if gobj_out_spi is not None
@@ -280,7 +306,7 @@ class DeviceScanner:
 
         usb_gobjs = Gio.ListStore.new(UDevDevice)
         spi_gobjs = Gio.ListStore.new(UDevDevice)
-        usb_devices = visit(root_devices, usb_gobjs, spi_gobjs)
+        usb_devices = visit(root_devices, None, usb_gobjs, spi_gobjs)
 
         return (usb_devices, usb_gobjs, spi_gobjs)
 
