@@ -39,9 +39,9 @@ class UDevDevice(GObject.Object):
 
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
-        modem = cls()
-        modem.update(data)
-        return modem
+        device = cls()
+        device.update(data)
+        return device
 
     def update(self, data: GLib.Variant):
         with self.freeze_notify():

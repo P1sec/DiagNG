@@ -26,9 +26,9 @@ class ModemManagerPort(GObject.Object):
 
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
-        modem = cls()
-        modem.update(data)
-        return modem
+        port = cls()
+        port.update(data)
+        return port
 
     def update(self, data: GLib.Variant):
         with self.freeze_notify():
