@@ -4,15 +4,26 @@
 
 # DiagNG 🍕 🎧 The next-generation baseband Diag-collecting software (2G/3G/4G)
 
-WIP: This draft repository (previously called `qcsuper-gui`/QCSuper v3) intends to produce a monolithic GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too?) allowing to control and manage interferences with the serial Diag port system wide.
+This software contains a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
 
-NEXT STEP: Configure logging on the base of what is done with `citsued` (https://github.com/P1sec/cits-ue-modem-intf/blob/main/citsued/logging.py).
+It is meant to be split into three components:
 
-NEXT STEP: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fd` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*` (QCSuper already does this: https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/inputs/usb_modem_pyserial.py#L106) - Maybe using a regular timeout/background task + root escalation of a forked subprocess? (use PIPE for communication?)
+* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
+* `com.p1security.diagngd`: The foreground, privilege-escalatable, single-instance Python3/GObject process handling ModemManager, UDev data acquisition, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
+* TODO: `com.p1security.diagmond`: The foreground, privileged, single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
+* Diag frame decoding itself should be done somewhere?
+
+This draft repository (previously called `qcsuper-gui`/QCSuper v3) hence intends to produce a modular GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too) allowing to control and manage interferences with the serial Diag port system wide.
+
+It shares code with `citsued`.
+
+Next tasks are being tracked here: https://github.com/P1sec/DiagNG/issues
 
 => **Put the parsed information in a GObject model and display it using a simple Adwaita UI?**
 
-Then, try to see how we can interace with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
+MAYBE DO LATER: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fd` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*` (QCSuper already does this: https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/inputs/usb_modem_pyserial.py#L106) - Maybe using a regular timeout/background task + root escalation of a forked subprocess? (use PIPE for communication?)
+
+Then, try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
 
 Double check about the ModemManager `InhibitDevice` API (https://www.freedesktop.org/software/ModemManager/api/latest/gdbus-org.freedesktop.ModemManager1.html#gdbus-method-org-freedesktop-ModemManager1.InhibitDevice) + device list + whether any lock mechanism was implemented since we last checked about it (https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/merge_requests/6)?
 
