@@ -10,6 +10,7 @@ It is meant to be split into three components:
 
 * `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
 * `com.p1security.diagngd`: The background, unprivileged, single-instance Python3/GObject process handling on Linux ModemManager communication, UDev data acquisition, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
+* ^ TODO: Perhaps merge these two?
 * TODO: `com.p1security.diagmond`: The background, privilege-escalatable, single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
   * Use tokio + [`dbus-rs/dbus-tokio`](https://github.com/diwic/dbus-rs/blob/master/dbus-tokio/examples/tokio_server_cr.rs) (`zbus` is slop) + [`nusb`](https://github.com/kevinmehall/nusb)?
 * Diag frame decoding itself should be done somewhere?
