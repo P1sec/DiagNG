@@ -21,7 +21,8 @@ impl Logging {
                     message
                 ))
             })
-            .level(log::LevelFilter::Debug)
+            .level(log::LevelFilter::Warn)
+            .level_for("diagmond", log::LevelFilter::Debug)
             .chain(std::io::stdout())
             .apply()
             .unwrap();
