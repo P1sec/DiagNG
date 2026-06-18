@@ -102,15 +102,10 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Detected USB devices (TODO, use dropdowns aka ExpanderRow)</property>
+                            <property name="title">Detected nusb device tree (NEXT TODO)</property>
                             <child>
-                              <object class="AdwExpanderRow"></object>
+                              <object class="GtkListView"></object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwPreferencesGroup">
-                            <property name="title">Detected USB devices with a priori non-Diag signature (TODO, use dropdowns aka ExpanderRow)</property>
                           </object>
                         </child>
                         <child>

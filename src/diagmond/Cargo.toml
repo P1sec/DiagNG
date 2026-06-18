@@ -1,0 +1,18 @@
+[package]
+name = "diagmond"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dbus-crossroads = "0.5.3"
+dbus-tokio = "0.7.6"
+fern = "0.7.1"
+futures-util = "0.3.32"
+glib = "0.22.7"
+hex = "0.4.3"
+humantime = "2.3.0"
+log = { version = "0.4.32", features = ["kv", "kv_std"] }
+nusb = { version = "0.2.3", features = ["tokio"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.150", features = ["preserve_order"] }
+tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros"] }
