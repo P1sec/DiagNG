@@ -41,8 +41,8 @@ async fn main() {
     loop {
         let devices: UsbDevicesEndpointResp = get_usb_metadata().await;
 
-        let devices_resp_string = serde_json::to_string(&devices).unwrap();
-        log::info!("USB data received: {:?}", devices_resp_string);
+        let _devices_resp_string = serde_json::to_string(&devices).unwrap();
+        log::info!("USB data received: {}", serde_json::to_string_pretty(&devices).unwrap());
 
         let next_event = hotplug_watch.next().await.unwrap();
         log::info!("USB event received: {:?}", next_event);

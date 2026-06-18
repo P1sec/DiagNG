@@ -23,7 +23,7 @@ impl Logging {
             })
             .level(log::LevelFilter::Warn)
             .level_for("diagmond", log::LevelFilter::Debug)
-            .chain(std::io::stdout())
+            .chain(std::io::stderr())
             .apply()
             .unwrap();
     }
