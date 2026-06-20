@@ -7,7 +7,7 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
     "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-<node>
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
     <interface name="org.freedesktop.DBus.Introspectable">
         <method name="Introspect">
             <arg name="data" type="s" direction="out" />
@@ -15,6 +15,91 @@
     </interface>
 
     <interface name="com.p1security.diagmetad">
+        <doc:doc>
+            <doc:description>
+                <doc:para>
+                    The background, unprivileged, single-instance
+                    Python3/GObject service handling on Linux ModemManager
+                    communication, UDev data acquisition, providing IPC.
+                </doc:para>
+            </doc:description>
+        </doc:doc>
+
+        <!-- ***************************************************************** -->
+        <property name="MMDebugInfo" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        ModemManager debug information, JSON-formatted.
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <property name="MMStatusInfo" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        ModemManager status information, using the
+                        format laid out in
+                        <doc:tt>diagng.gobject.mm_instance.ModemManagerInstance</doc:tt>
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <property name="UDevUSBDebugInfo" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        UDev USB device debug information, JSON-formatted.
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <property name="UDevUSBDeviceTree" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        UDev USB device tree information, using the
+                        format laid out in
+                        <doc:tt>diagng.gobject.udev_device.UDevDevice</doc:tt>
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <property name="UDevSPIDeviceTree" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        UDev USB device tree information, using the
+                        format laid out in
+                        <doc:tt>diagng.gobject.udev_device.UDevDevice</doc:tt>,
+                        SPI-related devices only
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <property name="SPIDeviceInformation" type="a{sv}" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        TTY serial port device tree information, using the
+                        format laid out in
+                        <doc:tt>diagng.gobject.serial_port.SerialPort</doc:tt>,
+                        extracted from UDev SPI information
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
     </interface>
 </node>
 

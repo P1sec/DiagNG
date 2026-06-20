@@ -24,9 +24,10 @@ PROPERTY:
 * `DiagmondOnSystemBus -> boolean` // Set on Diagmond.EscalatedPrivilege
 * `MMDebugInfo -> Vardict`
 * `MMStatusInfo -> Vardict`
-* `UdevUSBDeviceTree -> Vardict`
-* `UdevUSBDebugInfo -> Vardict`
-* `UdevSPIDeviceTree -> Vardict`
+* `UDevUSBDebugInfo -> Vardict`
+* `UDevUSBDeviceTree -> Vardict`
+* `UDevSPIDeviceTree -> Vardict`
+* `SPIDeviceInformation -> Vardict`
 
 SIGNAL:
 
