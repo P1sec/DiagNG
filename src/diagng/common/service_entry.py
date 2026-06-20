@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-from logging import debug, info, error, critical
+from logging import debug, info, error, warning, critical
 from traceback import format_exception
 import sys
 
 from diagng.system.modemmanager.modem_manager_dbus import ModemManagerIntf
 from diagng.common.service_rpc_client import ServiceRPCClient
 from diagng.system.udev.device_scanner import DeviceScanner
-from diagng.common.logging import LoggingCentral
+from diagng.utils.logging import LoggingCentral
+
+# Register resources
+import diagng.utils.gresources
 
 import gi
 
@@ -34,8 +37,8 @@ QUIT_WHEN_ZERO_CONNECTIONS = True
 
 
 class ServiceApplication(Gio.Application):
-    modem_manager: ModemManagerIntf = None
-    device_scanner: DeviceScanner = None
+    modem_manager: ModemManagerIntf
+    device_scanner: DeviceScanner
     number_clients: int = 0
     effective_addr: str
     effective_port: int
@@ -68,6 +71,48 @@ class ServiceApplication(Gio.Application):
             )
 
         sys.excepthook = error_handler
+
+    def do_dbus_register(
+        self, connection: Gio.DBusConnection, object_path: str
+    ):
+        pass  # WIP XX
+        # See ⚠️ https://lazka.github.io/pgi-docs/Gio-2.0/structs/Resource.html#Gio.Resource.lookup_data
+        # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
+        # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
+        # See: ⚠️ https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-dbushooks.c
+        XML_TREE = (
+            Gio.resources_lookup_data(
+                '/com/p1security/diagng/com.p1security.diagmetad.xml', 0
+            )
+            .get_data()
+            .decode('utf-8')
+        )
+
+        dbus_info = Gio.DBusNodeInfo.new_for_xml(XML_TREE)
+
+        connection.register_object_with_closures2(
+            object_path,
+            dbus_info.lookup_interface('com.p1security.diagmetad'),
+            self.on_method_call,
+            self.on_property_get,
+            self.on_property_set,
+        )
+        return True
+
+    def on_method_call(self, *args):
+        warning('Unhandled yet: on_method_call: %r' % args)
+        pass  # WIP
+
+    def on_property_get(self, *args):
+        warning('Unhandled yet: on_property_get: %r' % args)
+        pass  # WIP
+
+    def on_property_set(self, *args):
+        warning('Unhandled yet: on_property_set: %r' % args)
+        pass  # WIP
+
+    def do_dbus_unregister(self, connection: Gio.DBusConnection, path: str):
+        pass  # WIP XX
 
     def on_startup(self, app):
         info('Got startup signal')
@@ -103,6 +148,11 @@ class ServiceApplication(Gio.Application):
         # Spawn a RPC server in on_command_line
 
         self.port_to_client = {}
+
+        # WIP 2026-06-01 spawn ModemManager seeking background task
+
+        self.modem_manager = ModemManagerIntf(self)
+        self.device_scanner = DeviceScanner(self)
 
     def incr_connection_count(self):
         self.number_clients += 1
@@ -176,16 +226,7 @@ class ServiceApplication(Gio.Application):
 
         info(f'Sent "test_ctos" call to parent {client_port}')
 
-        # Spawn background tasks
-
-        if not self.modem_manager:
-            self.modem_manager = ModemManagerIntf(self)
-        else:
-            self.modem_manager.queue_state_update()
-        if not self.device_scanner:
-            self.device_scanner = DeviceScanner(self)
-        else:
-            self.device_scanner.queue_state_update()
+        self.modem_manager.queue_state_update()
 
         # XX set client into a global dict (use port as
         # a key) until it disconnects, so that we

@@ -2,7 +2,7 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.2 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="2e62ddf695fccaf3691cba917203bd66c2e751eb03694f416427f4cdd0c6eef1"/>
+  <gresources filename="diagng.gresource.xml" sha256="eb8b6fe6257866ffc72d7a09c6e891a7e88befe9c8e0b1d7dee2be77cbe67ff8"/>
   <css priority="600" is_global="1" filename="style.css" sha256="4973fcb9089f64b71e665a2f8e2bf53be60b0a02e6d2e5832dd1a3810a43d4a4"/>
   <ui template-class="MainWindow" filename="diagng.blp" sha256="d2387ed27500a5ae9f6a2ef1795e7db79805eb183d0e7bdb3d9c76889a050d77">
     <css-provider>style.css</css-provider>

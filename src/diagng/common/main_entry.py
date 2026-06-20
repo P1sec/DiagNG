@@ -12,8 +12,8 @@ from diagng.common.main_rpc_server import MainRPCServer
 from diagng.common.service_entry import service_main
 from diagng.gobject.udev_device import UDevDevice
 from diagng.gobject.serial_port import SerialPort
-from diagng.common.logging import LoggingCentral
-from diagng.ui.window import MyWindow
+from diagng.utils.logging import LoggingCentral
+from diagng.common.window import MyWindow
 
 try:
     from os import setpgrp

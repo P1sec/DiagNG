@@ -47,7 +47,7 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-"diagng.ui.assets" = [
+"diagng.assets" = [
     "diagng.gresource",
     "com.p1security.diagng.metainfo.xml",
     "com.p1security.diagng.desktop",

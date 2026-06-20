@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/pics/project_banner.png" alt="Landing illustration">
+<img src="https://github.com/P1sec/DiagNG/blob/main/docs/project_banner.png" alt="Landing illustration">
 </p>
 
 # DiagNG 🍕 🎧 The next-generation baseband Diag-collecting software (2G/3G/4G)
