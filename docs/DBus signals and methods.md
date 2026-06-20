@@ -2,6 +2,8 @@
 
 NOTE: `Vardict` = `a{sv}` = `Dict[str, object]` in Python
 
+TODO: Make the services auto-activatable?
+
 ## `com.p1security.diagng` (main Python process, provides UI, unprivileged)
 
 XX
@@ -40,6 +42,7 @@ XX
 
 PROPERTY:
 
+* `IsRunning -> boolean`
 * `USBData -> Vardict`
 * TODO: Diag connections
 
