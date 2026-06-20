@@ -42,7 +42,14 @@ async fn main() {
         let devices: UsbDevicesEndpointResp = get_usb_metadata().await;
 
         let _devices_resp_string = serde_json::to_string(&devices).unwrap();
-        log::info!("USB data received: {}", serde_json::to_string_pretty(&devices).unwrap());
+        log::info!(
+            "USB data received: {}",
+            serde_json::to_string_pretty(&devices).unwrap()
+        );
+
+        // NEXT TODO: 2026-06-18:
+        //  -> Send the DBus-serialized JSON data to the Python
+        // process (and eventually display it to the UI)
 
         let next_event = hotplug_watch.next().await.unwrap();
         log::info!("USB event received: {:?}", next_event);

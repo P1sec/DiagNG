@@ -49,7 +49,8 @@
 
     <launchable type="desktop-id">com.p1security.diagng.desktop</launchable>
     <provides>
-        <dbus type="user">com.p1security.diagngd</dbus>
+        <dbus type="user">com.p1security.diagmond</dbus>
+        <dbus type="user">com.p1security.diagmetad</dbus>
         <dbus type="user">com.p1security.diagng</dbus>
         <binary>diagng</binary>
         <!--mediatype>something</mediatype-->

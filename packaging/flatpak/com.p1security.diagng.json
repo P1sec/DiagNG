@@ -10,7 +10,8 @@
         "--socket=fallback-x11",
         "--socket=wayland",
         "--device=all",
-        "--own-name=com.p1security.diagngd",
+        "--own-name=com.p1security.diagmond",
+        "--own-name=com.p1security.diagmetad",
         "--own-name=com.p1security.diagng",
         "--system-talk-name=org.freedesktop.ModemManager1"
     ],

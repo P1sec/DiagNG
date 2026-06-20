@@ -209,7 +209,7 @@ class ServiceApplication(Gio.Application):
 
 def service_main():
     app = ServiceApplication(
-        application_id='com.p1security.diagngd',
+        application_id='com.p1security.diagmetad',
         flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
     )
     app.add_main_option(
@@ -238,7 +238,7 @@ def service_main():
     # TODO build app with a different DBus service name
     # than the primary process
     # self.app = Gio.Application.new(
-    #     'com.p1security.diagngd', Gio.ApplicationFlags.IS_SERVICE
+    #     'com.p1security.diagmetad', Gio.ApplicationFlags.IS_SERVICE
     # )
 
     """
