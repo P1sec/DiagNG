@@ -75,20 +75,17 @@ parts:
 
   share:
     plugin: dump
-    source: src/diagng/ui/assets/
+    source: src/diagng/ui/assets/share/
     parse-info: [com.p1security.diagng.metainfo.xml]
     source-type: local
 
     override-pull: |
       snapcraftctl pull
 
-      rm -f *.ui *.blp *.cmb *.sh *.gresource*
-
-      # Point icon to the correct location
-      sed -i -e 's|Icon=com.p1security.diagng|Icon=/usr/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg|g' com.p1security.diagng.desktop
-      install -Dm644 com.p1security.diagng.metainfo.xml -t usr/share/metainfo/
-      install -Dm644 com.p1security.diagng.desktop -t usr/share/applications/
-      install -Dm644 com.p1security.diagng.svg -t usr/share/icons/hicolor/scalable/apps/
+      sed -i -e 's|Icon=com.p1security.diagng|Icon=/usr/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg|g' share/applications/com.p1security.diagng.desktop
+      mkdir -p usr
+      mv share usr
+      chmod -R 644 usr/share
 
 layout:
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:

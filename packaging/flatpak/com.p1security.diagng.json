@@ -87,9 +87,9 @@
             "build-commands": [
                 "mkdir -p /app/bin/",
                 "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \".\" --no-build-isolation",
-                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.svg -t /app/share/icons/hicolor/scalable/apps/",
-                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.metainfo.xml -t /app/share/metainfo/",
-                "install -Dm644 ./src/diagng/ui/assets/com.p1security.diagng.desktop -t /app/share/applications/",
+                "install -Dm644 ./src/diagng/ui/assets/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg -t /app/share/icons/hicolor/scalable/apps/",
+                "install -Dm644 ./src/diagng/ui/assets/share/metainfo/com.p1security.diagng.metainfo.xml -t /app/share/metainfo/",
+                "install -Dm644 ./src/diagng/ui/assets/share/applications/com.p1security.diagng.desktop -t /app/share/applications/",
                 "rm -rf ./diagng/ *.g* packaging pics *.lock *.md *.yaml *.toml LICENSE"
             ],
             "sources": [
