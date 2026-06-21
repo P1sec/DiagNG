@@ -116,15 +116,15 @@ class ServiceApplication(Gio.Application):
         property_name: str,
     ) -> GLib.Variant:
         if property_name == 'MMDebugInfo':
-            return Json.gvariant_deserialize(
-                Json.from_string(dumps(self.modem_manager.json_state or {})), None
+            return GLib.Variant.new_string(
+                dumps(self.modem_manager.json_state, indent=4)
             )
         elif property_name == 'MMStatusInfo':
             return self.modem_manager.mm_instance.to_gvariant()
         elif property_name == 'UDevUSBDebugInfo':
-            return Json.gvariant_deserialize(
-                Json.from_string(dumps(self.device_scanner.json_state or [])), None
-            ) # NOTE: Not sending through, too large?
+            return GLib.Variant.new_string(
+                dumps(self.device_scanner.json_state, indent=4)
+            )
         elif property_name == 'UDevUSBDeviceTree':
             return self.device_scanner.usb_tree_gobjs
         elif property_name == 'UDevSPIDeviceTree':

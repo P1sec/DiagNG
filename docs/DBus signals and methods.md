@@ -22,9 +22,9 @@ PROPERTY:
 
 * `DiagmondRunning -> boolean`
 * `DiagmondOnSystemBus -> boolean` // Set on Diagmond.EscalatedPrivilege
-* `MMDebugInfo -> Vardict`
+* `MMDebugInfo -> string`
 * `MMStatusInfo -> Vardict`
-* `UDevUSBDebugInfo -> Vardict`
+* `UDevUSBDebugInfo -> string`
 * `UDevUSBDeviceTree -> Vardict`
 * `UDevSPIDeviceTree -> Vardict`
 * `SPIDeviceInformation -> Vardict`

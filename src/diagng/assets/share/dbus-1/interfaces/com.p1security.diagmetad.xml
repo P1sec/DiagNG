@@ -26,7 +26,7 @@
         </doc:doc>
 
         <!-- ***************************************************************** -->
-        <property name="MMDebugInfo" type="a{sv}" access="read">
+        <property name="MMDebugInfo" type="s" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>
@@ -50,7 +50,7 @@
         </property>
 
         <!-- ***************************************************************** -->
-        <property name="UDevUSBDebugInfo" type="aa{sv}" access="read">
+        <property name="UDevUSBDebugInfo" type="s" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>

@@ -241,6 +241,7 @@ class PinUnlockWaiter:
         return GLib.SOURCE_REMOVE
 """
 
+
 class ModemManagerIntf(GObject.Object):
     state_update_pending: bool = False
 
