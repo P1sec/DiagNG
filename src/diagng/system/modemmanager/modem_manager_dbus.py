@@ -728,6 +728,17 @@ class ModemManagerIntf(GObject.Object):
                 ),
             )
 
+            self.rpc_wrapper.get_dbus_connection().emit_signal(
+                None,
+                '/com/p1security/diagmetad',
+                'com.p1security.diagmetad',
+                'MMInfoUpdated',
+                GLib.Variant.new_tuple(
+                    self.mm_instance.to_gvariant(),
+                    GLib.Variant.new_string(dumps(self.json_state, indent=4)),
+                ),
+            )
+
     def dbus_metadata_to_json(self) -> dict:
         # Avoid memory leaks?
 

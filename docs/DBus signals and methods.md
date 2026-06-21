@@ -32,8 +32,8 @@ PROPERTY:
 SIGNAL:
 
 * `DiagmondLaunched ()`
-* `MMInfoUpdated (Vardict mm_status_info, Vardict mm_debug_info)`
-* `UDevInfoUpdated (Vardict usb_device_tree, Vardict usb_debug_info, Vardict spi_device_tree)`
+* `MMInfoUpdated (Vardict mm_status_info, string mm_debug_info)`
+* `UDevInfoUpdated (Vardict usb_device_tree, Vardict spi_device_tree, Vardict spi_devices, string usb_debug_info)`
 
 METHOD: 
 

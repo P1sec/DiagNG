@@ -132,6 +132,21 @@ class DeviceScanner:
                     ),
                 )
 
+                self.rpc_wrapper.get_dbus_connection().emit_signal(
+                    None,
+                    '/com/p1security/diagmetad',
+                    'com.p1security.diagmetad',
+                    'MMInfoUpdated',
+                    GLib.Variant.new_tuple(
+                        self.usb_tree_gobjs,
+                        self.spi_tree_gobjs,
+                        self.spi_gobjs,
+                        GLib.Variant.new_string(
+                            dumps(self.json_state, indent=4)
+                        ),
+                    ),
+                )
+
         finally:
             self.state_update_pending = False
 

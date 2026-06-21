@@ -26,6 +26,36 @@
         </doc:doc>
 
         <!-- ***************************************************************** -->
+        <signal name="MMInfoUpdated">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        Triggered when ModemManager-related properties were changed.
+                        Contains the values of the up-to-date given properties.
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+            <arg type="a{sv}" name="MMStatusInfo" direction="out" />
+            <arg type="s" name="MMDebugInfo" direction="out" />
+        </signal>
+
+        <!-- ***************************************************************** -->
+        <signal name="UDevInfoUpdated">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        Triggered when UDev-related properties were changed.
+                        Contains the values of the up-to-date given properties.
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+            <arg type="aa{sv}" name="UDevUSBDeviceTree" direction="out" />
+            <arg type="aa{sv}" name="UDevSPIDeviceTree" direction="out" />
+            <arg type="aa{sv}" name="SPIDeviceInformation" direction="out" />
+            <arg type="s" name="UDevUSBDebugInfo" direction="out" />
+        </signal>
+
+        <!-- ***************************************************************** -->
         <property name="MMDebugInfo" type="s" access="read">
             <doc:doc>
                 <doc:description>
