@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from os.path import dirname, realpath, exists, join
-from os import stat, scandir, access, W_OK
+from os import stat, walk, scandir, access, W_OK
 from subprocess import run
 from shutil import which
 
@@ -19,7 +19,11 @@ if not exists(RESOURCES_PATH) or (
     access(RESOURCES_PATH, W_OK)
     and which('blueprint-compiler')
     and which('glib-compile-resources')
-    and max(meta.stat().st_mtime for meta in scandir(ASSETS_DIR))
+    and max(
+        meta.stat().st_mtime
+        for dir_name, _, _ in walk(ASSETS_DIR)
+        for meta in scandir(dir_name)
+    )
     > stat(RESOURCES_PATH).st_mtime
 ):
     run(

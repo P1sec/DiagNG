@@ -75,7 +75,7 @@ class ServiceApplication(Gio.Application):
     def do_dbus_register(
         self, connection: Gio.DBusConnection, object_path: str
     ):
-        pass  # WIP XX
+
         # See ⚠️ https://lazka.github.io/pgi-docs/Gio-2.0/structs/Resource.html#Gio.Resource.lookup_data
         # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
         # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
@@ -89,10 +89,13 @@ class ServiceApplication(Gio.Application):
         )
 
         dbus_info = Gio.DBusNodeInfo.new_for_xml(XML_TREE)
+        interface_info = dbus_info.lookup_interface('com.p1security.diagmetad')
+        assert interface_info
+        assert object_path == '/com/p1security/diagmetad'
 
         connection.register_object_with_closures2(
             object_path,
-            dbus_info.lookup_interface('com.p1security.diagmetad'),
+            interface_info,
             self.on_method_call,
             self.on_property_get,
             self.on_property_set,
@@ -100,15 +103,15 @@ class ServiceApplication(Gio.Application):
         return True
 
     def on_method_call(self, *args):
-        warning('Unhandled yet: on_method_call: %r' % args)
+        warning('Unhandled yet: on_method_call: %r', args)
         pass  # WIP
 
     def on_property_get(self, *args):
-        warning('Unhandled yet: on_property_get: %r' % args)
+        warning('Unhandled yet: on_property_get: %r', args)
         pass  # WIP
 
     def on_property_set(self, *args):
-        warning('Unhandled yet: on_property_set: %r' % args)
+        warning('Unhandled yet: on_property_set: %r', args)
         pass  # WIP
 
     def do_dbus_unregister(self, connection: Gio.DBusConnection, path: str):
