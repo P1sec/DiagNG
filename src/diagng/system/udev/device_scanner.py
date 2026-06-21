@@ -20,11 +20,25 @@ class DeviceScanner:
     state_update_pending: bool = False
     timer_source: int = None
 
+    usb_tree_gobjs: GLib.Variant
+    spi_tree_gobjs: GLib.Variant
+    spi_gobjs: GLib.Variant
+
     rpc_wrapper: 'ServiceApplication'
     json_state: Optional[List[dict]] = None
 
     def __init__(self, rpc_wrapper: 'ServiceApplication'):
         self.rpc_wrapper = rpc_wrapper
+
+        self.usb_tree_gobjs = GLib.Variant.new_array(
+            GLib.VariantType.new('a{sv}'), []
+        )
+        self.spi_tree_gobjs = GLib.Variant.new_array(
+            GLib.VariantType.new('a{sv}'), []
+        )
+        self.spi_gobjs = GLib.Variant.new_array(
+            GLib.VariantType.new('a{sv}'), []
+        )
 
         self.state_update_pending = False
 
@@ -70,6 +84,30 @@ class DeviceScanner:
                 self.get_udev_device_tree()
             )
 
+            self.usb_tree_gobjs = GLib.Variant.new_array(
+                GLib.VariantType.new('a{sv}'),
+                [
+                    usb_tree_gobjs.get_item(position).to_gvariant()
+                    for position in range(usb_tree_gobjs.get_n_items())
+                ],
+            )
+
+            self.spi_tree_gobjs = GLib.Variant.new_array(
+                GLib.VariantType.new('a{sv}'),
+                [
+                    spi_tree_gobjs.get_item(position).to_gvariant()
+                    for position in range(spi_tree_gobjs.get_n_items())
+                ],
+            )
+
+            self.spi_gobjs = GLib.Variant.new_array(
+                GLib.VariantType.new('a{sv}'),
+                [
+                    spi_gobjs.get_item(position).to_gvariant()
+                    for position in range(spi_gobjs.get_n_items())
+                ],
+            )
+
             if self.rpc_wrapper:
                 debug(
                     'DEBUG: Got udev status data: '
@@ -77,33 +115,15 @@ class DeviceScanner:
                 )
                 self.rpc_wrapper.broadcast_message(
                     'sync_usb_device_tree',
-                    GLib.Variant.new_array(
-                        GLib.VariantType.new('a{sv}'),
-                        [
-                            usb_tree_gobjs.get_item(position).to_gvariant()
-                            for position in range(usb_tree_gobjs.get_n_items())
-                        ],
-                    ),
+                    self.usb_tree_gobjs,
                 )
                 self.rpc_wrapper.broadcast_message(
                     'sync_spi_device_tree',
-                    GLib.Variant.new_array(
-                        GLib.VariantType.new('a{sv}'),
-                        [
-                            spi_tree_gobjs.get_item(position).to_gvariant()
-                            for position in range(spi_tree_gobjs.get_n_items())
-                        ],
-                    ),
+                    self.spi_tree_gobjs,
                 )
                 self.rpc_wrapper.broadcast_message(
                     'sync_spi_devices',
-                    GLib.Variant.new_array(
-                        GLib.VariantType.new('a{sv}'),
-                        [
-                            spi_gobjs.get_item(position).to_gvariant()
-                            for position in range(spi_gobjs.get_n_items())
-                        ],
-                    ),
+                    self.spi_gobjs,
                 )
                 self.rpc_wrapper.broadcast_message(
                     'sync_udev_debug_info',

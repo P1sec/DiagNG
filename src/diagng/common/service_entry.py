@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from logging import debug, info, error, warning, critical
 from traceback import format_exception
+from json import dumps
 import sys
 
 from diagng.system.modemmanager.modem_manager_dbus import ModemManagerIntf
@@ -106,9 +107,36 @@ class ServiceApplication(Gio.Application):
         warning('Unhandled yet: on_method_call: %r', args)
         pass  # WIP
 
-    def on_property_get(self, *args):
-        warning('Unhandled yet: on_property_get: %r', args)
-        pass  # WIP
+    def on_property_get(
+        self,
+        dbus_connection: Gio.DBusConnection,
+        sender: str,
+        object_path: str,
+        interface_name: str,
+        property_name: str,
+    ) -> GLib.Variant:
+        if property_name == 'MMDebugInfo':
+            return Json.gvariant_deserialize(
+                Json.from_string(dumps(self.modem_manager.json_state or {})), None
+            )
+        elif property_name == 'MMStatusInfo':
+            return self.modem_manager.mm_instance.to_gvariant()
+        elif property_name == 'UDevUSBDebugInfo':
+            return Json.gvariant_deserialize(
+                Json.from_string(dumps(self.device_scanner.json_state or [])), None
+            ) # NOTE: Not sending through, too large?
+        elif property_name == 'UDevUSBDeviceTree':
+            return self.device_scanner.usb_tree_gobjs
+        elif property_name == 'UDevSPIDeviceTree':
+            return self.device_scanner.spi_tree_gobjs
+        elif property_name == 'SPIDeviceInformation':
+            return self.device_scanner.spi_gobjs
+        else:
+            warning(
+                'Unhandled yet: on_property_get: %s.%s',
+                interface_name,
+                property_name,
+            )
 
     def on_property_set(self, *args):
         warning('Unhandled yet: on_property_set: %r', args)

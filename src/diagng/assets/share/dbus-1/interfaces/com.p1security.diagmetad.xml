@@ -50,7 +50,7 @@
         </property>
 
         <!-- ***************************************************************** -->
-        <property name="UDevUSBDebugInfo" type="a{sv}" access="read">
+        <property name="UDevUSBDebugInfo" type="aa{sv}" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>
@@ -61,7 +61,7 @@
         </property>
 
         <!-- ***************************************************************** -->
-        <property name="UDevUSBDeviceTree" type="a{sv}" access="read">
+        <property name="UDevUSBDeviceTree" type="aa{sv}" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>
@@ -74,7 +74,7 @@
         </property>
 
         <!-- ***************************************************************** -->
-        <property name="UDevSPIDeviceTree" type="a{sv}" access="read">
+        <property name="UDevSPIDeviceTree" type="aa{sv}" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>
@@ -88,7 +88,7 @@
         </property>
 
         <!-- ***************************************************************** -->
-        <property name="SPIDeviceInformation" type="a{sv}" access="read">
+        <property name="SPIDeviceInformation" type="aa{sv}" access="read">
             <doc:doc>
                 <doc:description>
                     <doc:para>

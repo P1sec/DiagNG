@@ -42,6 +42,7 @@ from gi.repository import Gio, GLib, GObject, ModemManager, Json
 """
 
 
+"""
 class PinUnlockWaiter:
     WAIT_TIME = 2 * 60  # seconds, avg 30 seconds are needed
 
@@ -238,7 +239,7 @@ class PinUnlockWaiter:
             self.rpc_wrapper.set_response('text/plain', b'NOK\n')
 
         return GLib.SOURCE_REMOVE
-
+"""
 
 class ModemManagerIntf(GObject.Object):
     state_update_pending: bool = False
@@ -251,7 +252,7 @@ class ModemManagerIntf(GObject.Object):
     mm_pid: Optional[int] = None
     daemon_connected: bool = False
     rpc_wrapper: 'ServiceApplication' = None
-    json_state: Optional[List[dict]] = None
+    json_state: Optional[dict] = None
     system_bus: Gio.DBusConnection
     manager: ModemManager.Manager
 
