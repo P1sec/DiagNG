@@ -43,19 +43,19 @@ XX
 
 PROPERTY:
 
-* `IsRunning -> boolean`
+* `IsRunning -> boolean` (TODO: Don't, use get_name_owner?)
 * `USBData -> Vardict`
 * TODO: Diag connections
 
 SIGNAL:
 
 * `USBDataUpdated (Vardict data)`
-* `EscalatedPrivilege ()`
+* `EscalatedPrivilege ()` (TODO: Don't, always run as root?)
 * TODO: Diag connections event
 
 METHOD:
 
-* `TryPrivilegeEscalation () -> (boolean success)`
+* `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
 * `LockMMDevice (string uid) -> (boolean success)`
 * `ReleaseMMDevice (string uid) -> (boolean success)`
 * TODO: Diag-related methods
