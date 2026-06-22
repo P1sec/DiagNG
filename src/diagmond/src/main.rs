@@ -1,55 +1,88 @@
-// WIP: See README.md
-//  + https://github.com/diwic/dbus-rs/blob/master/dbus-tokio/examples/tokio_server_cr.rs
-//  + https://github.com/diwic/dbus-rs/blob/master/dbus-tokio/examples/tokio_adv_server_cr.rs
-
 mod logging;
 mod usb;
 
 use crate::logging::Logging;
 use crate::usb::{UsbDevicesEndpointResp, get_usb_metadata};
+
 use futures_util::StreamExt;
+use zbus::connection::Builder;
+use zbus::interface;
+use zbus::object_server::SignalEmitter;
+
+struct Diagmond {
+    pub usb_data: String,
+}
+
+// WIP 2026-06-22
+// Cf. https://docs.rs/zbus/latest/zbus/attr.interface.html
+// Cf. https://z-galaxy.github.io/zbus/client.html#more-advanced-example
+// Cf. https://z-galaxy.github.io/zbus/service.html#a-more-complete-example
+
+#[interface(name = "com.p1security.diagmond")]
+impl Diagmond {
+    #[zbus(name = "LockMMDevice")]
+    async fn lock_mm_device(&self, uid: &str) -> zbus::fdo::Result<bool> {
+        // WIP XX
+        log::debug!("Not implemented yet: LockMMDevice({})", uid);
+        Ok(true)
+    }
+
+    #[zbus(name = "ReleaseMMDevice")]
+    async fn release_mm_device(&self, uid: &str) -> zbus::fdo::Result<bool> {
+        // WIP XX
+        log::debug!("Not implemented yet: ReleaseMMDevice({})", uid);
+        Ok(true)
+    }
+
+    #[zbus(property, name = "USBData")]
+    async fn usb_data(&self) -> &str {
+        &self.usb_data
+    }
+
+    #[zbus(signal, name = "USBDataUpdated")]
+    async fn usb_data_updated(emitter: &SignalEmitter<'_>, data: &str) -> zbus::Result<()>;
+}
 
 #[tokio::main]
-async fn main() {
+async fn main() -> zbus::Result<()> {
     // Set up logging
     Logging::setup_logging_main_proc();
 
-    // Connect to the system bus
-    let (resource, conn) = dbus_tokio::connection::new_system_sync().unwrap();
+    let diagmond = Diagmond {
+        usb_data: "null".to_string(),
+    };
 
-    // The resource is a task that should be spawned onto a tokio compatible
-    // reactor ASAP. If the resource ever finishes, you lost connection to D-Bus.
-    //
-    // To shut down the connection, both call _handle.abort() and drop the connection.
-    let _handle = tokio::spawn(async {
-        let err = resource.await;
-        panic!("Lost connection to D-Bus: {}", err);
-    });
+    let connection = Builder::system()?
+        .name("com.p1security.diagmond")?
+        .serve_at("/com/p1security/diagmond", diagmond)?
+        .build()
+        .await?;
 
-    // Register a DBus named service, using a well-known name
-    // Don't allow takover of our own service name
-    // (TODO: Handle concurrent processes?)
-    conn.request_name("com.p1security.diagmond", false, true, false)
-        .await
-        .unwrap();
-
-    // WIP: Spawn USB parsing code and retrieve JSON serialized
-    // contents + send it back through JSON-RPC when we have connections
-
+    // Spawn USB parsing code and retrieve JSON serialized
+    // contents + send it back through D-Bus when we have connections
     let mut hotplug_watch = nusb::watch_devices().unwrap();
 
     loop {
         let devices: UsbDevicesEndpointResp = get_usb_metadata().await;
 
-        let _devices_resp_string = serde_json::to_string(&devices).unwrap();
-        log::info!(
-            "USB data received: {}",
-            serde_json::to_string_pretty(&devices).unwrap()
-        );
+        let devices_resp_string = serde_json::to_string_pretty(&devices).unwrap();
+        log::info!("USB data received: {}", devices_resp_string);
 
-        // NEXT TODO: 2026-06-18:
-        //  -> Send the DBus-serialized JSON data to the Python
-        // process (and eventually display it to the UI)
+        // Trigger the DBus property change
+        {
+            let iface_ref = connection
+                .object_server()
+                .interface::<_, Diagmond>("/com/p1security/diagmond")
+                .await?;
+
+            let mut iface = iface_ref.get_mut().await;
+            iface.usb_data = devices_resp_string.clone();
+
+            // Send the DBus-serialized JSON data to the Python
+            // process (and eventually display it to the UI)
+
+            iface_ref.usb_data_updated(&devices_resp_string).await?;
+        }
 
         let next_event = hotplug_watch.next().await.unwrap();
         log::info!("USB event received: {:?}", next_event);

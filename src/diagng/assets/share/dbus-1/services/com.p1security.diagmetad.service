@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.p1security.diagmetad
+Exec=/usr/bin/diagmetad

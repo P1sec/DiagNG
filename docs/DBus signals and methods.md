@@ -44,12 +44,12 @@ XX
 PROPERTY:
 
 * `IsRunning -> boolean` (TODO: Don't, use get_name_owner?)
-* `USBData -> Vardict`
+* `USBData -> string`
 * TODO: Diag connections
 
 SIGNAL:
 
-* `USBDataUpdated (Vardict data)`
+* `USBDataUpdated (string data)`
 * `EscalatedPrivilege ()` (TODO: Don't, always run as root?)
 * TODO: Diag connections event
 

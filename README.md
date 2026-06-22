@@ -11,7 +11,7 @@ It is meant to be split into three components:
 * `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
 * `com.p1security.diagmetad`: The background, unprivileged (runs on session bus), single-instance Python3/GObject process handling on Linux ModemManager communication, UDev data acquisition, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
 * TODO: `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
-  * Use tokio + [`dbus-rs/dbus-tokio`](https://github.com/diwic/dbus-rs/blob/master/dbus-tokio/examples/tokio_server_cr.rs) (`zbus` is slop) + [`jsonrpsee`](https://github.com/paritytech/jsonrpsee) + [`nusb`](https://github.com/kevinmehall/nusb)?
+  * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
 * Diag frame decoding itself should be done somewhere?
 
 This draft repository (previously called `qcsuper-gui`/QCSuper v3) hence intends to produce a modular GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too) allowing to control and manage interferences with the serial Diag port system wide.
