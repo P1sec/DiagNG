@@ -11,7 +11,6 @@ Build dependencies:
 ```
 sudo apt install flatpak-builder flatpak build-essential \
     libgirepository-2.0-dev libadwaita-1-dev \
-    gir1.2-jsonrpc-1.0 gir1.2-json-1.0 libjsonrpc-glib-1.0-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
     gir1.2-gtksource-5 libgtksourceview-5-dev \
     python3-dev python3-pip blueprint-compiler \

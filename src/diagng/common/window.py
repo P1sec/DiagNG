@@ -75,7 +75,7 @@ class MyWindow(Adw.ApplicationWindow):
 
         self.usb_selection.set_model(
             Gtk.TreeListModel.new(
-                root=self.app.usb_device_tree,
+                root=self.app.device_scanner.usb_device_tree,
                 passthrough=False,
                 autoexpand=True,
                 create_func=lambda item: item.children,
@@ -86,7 +86,7 @@ class MyWindow(Adw.ApplicationWindow):
 
         self.spi_selection.set_model(
             Gtk.TreeListModel.new(
-                root=self.app.spi_device_tree,
+                root=self.app.device_scanner.spi_device_tree,
                 passthrough=False,
                 autoexpand=True,
                 create_func=lambda item: item.children,
@@ -113,13 +113,19 @@ class MyWindow(Adw.ApplicationWindow):
 
         # Connect signals
 
-        self.app.spi_devices.connect('items-changed', self.update_spi_devices)
-        self.app.mm_instance.modems.connect(
+        self.app.device_scanner.spi_devices.connect(
+            'items-changed', self.update_spi_devices
+        )
+        self.app.modem_manager.mm_instance.modems.connect(
             'items-changed', self.update_mm_modems
         )
-        self.app.mm_instance.connect('notify', self.update_mm_instance)
-        self.app.connect('notify', self.update_mm_debug_data)
-        self.app.connect('notify', self.update_udev_debug_data)
+        self.app.modem_manager.mm_instance.connect(
+            'notify', self.update_mm_instance
+        )
+        self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
+        self.app.connect(
+            'notify::udev-debug-data', self.update_udev_debug_data
+        )
 
         # Reset the default UI state
 
@@ -151,24 +157,29 @@ class MyWindow(Adw.ApplicationWindow):
                 break
 
     def update_mm_instance(self, *args):
-        if self.app.mm_instance.initialized:
+        if self.app.modem_manager.mm_instance.initialized:
             self.mm_status_row.set_subtitle(
-                ('PID %d' % self.app.mm_instance.pid)
-                if self.app.mm_instance.is_running and self.app.mm_instance.pid
+                ('PID %d' % self.app.modem_manager.mm_instance.pid)
+                if self.app.modem_manager.mm_instance.is_running
+                and self.app.modem_manager.mm_instance.pid
                 else ''
             )
             self.mm_status_label.set_label(
-                'Started' if self.app.mm_instance.is_running else 'Stopped'
+                'Started'
+                if self.app.modem_manager.mm_instance.is_running
+                else 'Stopped'
             )
-            self.mm_version_row.set_visible(self.app.mm_instance.is_running)
+            self.mm_version_row.set_visible(
+                self.app.modem_manager.mm_instance.is_running
+            )
             self.mm_version_label.set_label(
-                self.app.mm_instance.version
-                if self.app.mm_instance.version
+                self.app.modem_manager.mm_instance.version
+                if self.app.modem_manager.mm_instance.version
                 else ''
             )
 
             self.detected_modems_group.set_visible(
-                bool(self.app.mm_instance.modems.get_n_items())
+                bool(self.app.modem_manager.mm_instance.modems.get_n_items())
             )
 
     def update_mm_debug_data(self, *args):
@@ -196,8 +207,8 @@ class MyWindow(Adw.ApplicationWindow):
 
         vid_pid_to_ports: Dict[str, List[SerialPort]] = defaultdict(list)
 
-        for pos in range(self.app.spi_devices.get_n_items()):
-            item = self.app.spi_devices.get_item(pos)
+        for pos in range(self.app.device_scanner.spi_devices.get_n_items()):
+            item = self.app.device_scanner.spi_devices.get_item(pos)
 
             vid_pid_to_ports[item.usb_vid_pid].append(item)
 
@@ -245,8 +256,10 @@ class MyWindow(Adw.ApplicationWindow):
 
         visit(self.detected_modems_group)
 
-        for pos in range(self.app.mm_instance.modems.get_n_items()):
-            item = self.app.mm_instance.modems.get_item(pos)
+        for pos in range(
+            self.app.modem_manager.mm_instance.modems.get_n_items()
+        ):
+            item = self.app.modem_manager.mm_instance.modems.get_item(pos)
 
             main_row = Adw.ExpanderRow.new()
             main_row.set_expanded(True)

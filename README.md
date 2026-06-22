@@ -6,11 +6,10 @@
 
 This software contains a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
 
-It is meant to be split into three components:
+It is meant to be split into two components:
 
-* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
-* `com.p1security.diagmetad`: The background, unprivileged (runs on session bus), single-instance Python3/GObject process handling on Linux ModemManager communication, UDev data acquisition, providing IPC (currently a DBus lock + JSON-RPC/GVariant interface)
-* TODO: `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
+* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
+* WIP: `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
   * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
 * Diag frame decoding itself should be done somewhere?
 
@@ -42,7 +41,6 @@ Dependencies on Ubuntu 26.04 LTS:
 
 ```bash
 sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
-    gir1.2-jsonrpc-1.0 gir1.2-json-1.0 libjsonrpc-glib-1.0-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
     gir1.2-gtksource-5 libgtksourceview-5-dev \
     python3-dev blueprint-compiler
@@ -51,7 +49,7 @@ sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
 Dependencies on Archlinux:
 
 ```bash
-sudo pacman -S uv blueprint-compiler python-gobject jsonrpc-glib \
+sudo pacman -S uv blueprint-compiler python-gobject \
     gtksourceview5 libadwaita libmm-glib
 ```
 

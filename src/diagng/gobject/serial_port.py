@@ -45,27 +45,19 @@ class SerialPort(GObject.Object):
 
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
-        port = cls()
-        port.update(data)
-        return port
-
-    def update(self, data: GLib.Variant):
-        with self.freeze_notify():
-            self.tty_device_path = data.lookup_value(
-                'tty_device_path'
-            ).get_string()
-            self.sysfs_device_path = data.lookup_value(
-                'sysfs_device_path'
-            ).get_string()
-            self.usb_interface = data.lookup_value(
-                'usb_interface'
-            ).get_string()
-            self.usb_vid_pid = data.lookup_value('usb_vid_pid').get_string()
-            self.usb_vendor = data.lookup_value('usb_vendor').get_string()
-            self.usb_product = data.lookup_value('usb_product').get_string()
-            self.is_mm_detected = data.lookup_value(
-                'is_mm_detected'
-            ).get_boolean()
-            self.is_mm_inhibited = data.lookup_value(
-                'is_mm_inhibited'
-            ).get_boolean()
+        self = cls()
+        self.tty_device_path = data.lookup_value(
+            'tty_device_path'
+        ).get_string()
+        self.sysfs_device_path = data.lookup_value(
+            'sysfs_device_path'
+        ).get_string()
+        self.usb_interface = data.lookup_value('usb_interface').get_string()
+        self.usb_vid_pid = data.lookup_value('usb_vid_pid').get_string()
+        self.usb_vendor = data.lookup_value('usb_vendor').get_string()
+        self.usb_product = data.lookup_value('usb_product').get_string()
+        self.is_mm_detected = data.lookup_value('is_mm_detected').get_boolean()
+        self.is_mm_inhibited = data.lookup_value(
+            'is_mm_inhibited'
+        ).get_boolean()
+        return self

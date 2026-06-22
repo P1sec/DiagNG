@@ -39,19 +39,15 @@ class UDevDevice(GObject.Object):
 
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
-        device = cls()
-        device.update(data)
-        return device
-
-    def update(self, data: GLib.Variant):
-        with self.freeze_notify():
-            self.text_summary = data.lookup_value('text_summary').get_string()
-            self.is_empty = data.lookup_value('is_empty').get_boolean()
-            children = data.lookup_value('children')
-            self.children.remove_all()
-            for pos in range(children.n_children()):
-                self.children.append(
-                    UDevDevice.from_gvariant(
-                        children.get_child_value(pos).get_variant()
-                    )
+        self = cls()
+        self.text_summary = data.lookup_value('text_summary').get_string()
+        self.is_empty = data.lookup_value('is_empty').get_boolean()
+        children = data.lookup_value('children')
+        self.children.remove_all()
+        for pos in range(children.n_children()):
+            self.children.append(
+                UDevDevice.from_gvariant(
+                    children.get_child_value(pos).get_variant()
                 )
+            )
+        return self

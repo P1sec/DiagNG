@@ -43,23 +43,16 @@ class ModemManagerInstance(GObject.Object):
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
         self = cls()
-        self.update(data)
-        return self
-
-    def update(self, data: GLib.Variant):
-        with self.freeze_notify():
-            self.initialized = data.lookup_value('initialized').get_boolean()
-            self.is_running = data.lookup_value('is_running').get_boolean()
-            self.pid = data.lookup_value('pid').get_int64()
-            self.version = data.lookup_value('version').get_string()
-            modems = data.lookup_value('modems')
-            self.modems.remove_all()
-            for pos in range(modems.n_children()):
-                self.modems.append(
-                    ModemManagerModem.from_gvariant(
-                        modems.get_child_value(pos).get_variant()
-                    )
+        self.initialized = data.lookup_value('initialized').get_boolean()
+        self.is_running = data.lookup_value('is_running').get_boolean()
+        self.pid = data.lookup_value('pid').get_int64()
+        self.version = data.lookup_value('version').get_string()
+        modems = data.lookup_value('modems')
+        self.modems.remove_all()
+        for pos in range(modems.n_children()):
+            self.modems.append(
+                ModemManagerModem.from_gvariant(
+                    modems.get_child_value(pos).get_variant()
                 )
-
-
-# (Test conversion between GObject <-> GLib-JSON issued GVariant <-> JSON and vice versa)
+            )
+        return self

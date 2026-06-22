@@ -3,8 +3,6 @@ from diagng.gobject.mm_port import ModemManagerPort
 from gi.repository import GObject, GLib, Gio
 from typing import Self
 
-# XX WIP 2026-06-01 Define a structure and add tests
-
 
 class ModemManagerModem(GObject.Object):
     modem_name = GObject.Property(
@@ -56,28 +54,19 @@ class ModemManagerModem(GObject.Object):
     @classmethod
     def from_gvariant(cls, data: GLib.Variant) -> Self:
         modem = cls()
-        modem.update(data)
-        return modem
-
-    def update(self, data: GLib.Variant):
-        with self.freeze_notify():
-            self.modem_name = data.lookup_value('modem_name').get_string()
-            self.modem_imei = data.lookup_value('modem_imei').get_string()
-            self.modem_firmware = data.lookup_value(
-                'modem_firmware'
-            ).get_string()
-            self.modem_device_id = data.lookup_value(
-                'modem_device_id'
-            ).get_string()
-            self.inhibited = data.lookup_value('inhibited').get_boolean()
-            ports = data.lookup_value('ports')
-            self.ports.remove_all()
-            for pos in range(ports.n_children()):
-                self.ports.append(
-                    ModemManagerPort.from_gvariant(
-                        ports.get_child_value(pos).get_variant()
-                    )
+        modem.modem_name = data.lookup_value('modem_name').get_string()
+        modem.modem_imei = data.lookup_value('modem_imei').get_string()
+        modem.modem_firmware = data.lookup_value('modem_firmware').get_string()
+        modem.modem_device_id = data.lookup_value(
+            'modem_device_id'
+        ).get_string()
+        modem.inhibited = data.lookup_value('inhibited').get_boolean()
+        ports = data.lookup_value('ports')
+        modem.ports.remove_all()
+        for pos in range(ports.n_children()):
+            modem.ports.append(
+                ModemManagerPort.from_gvariant(
+                    ports.get_child_value(pos).get_variant()
                 )
-
-
-# (Test conversion between GObject <-> GLib-JSON issued GVariant <-> JSON and vice versa)
+            )
+        return modem

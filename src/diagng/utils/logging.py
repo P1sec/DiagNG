@@ -19,7 +19,8 @@ from typing import List, Dict, Sequence
 from os.path import dirname, realpath
 from re import split, IGNORECASE
 from collections import deque
-from shlex import join
+
+# from shlex import join
 import sys
 
 
@@ -39,8 +40,8 @@ LOG_FILE_SIZE = 10 * 1024 * 1024
 MEMORY_LOG_LINES = 400
 LOG_FORMAT = '[{asctime}] [ui {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
 
-if '--service' in join(sys.argv).lower():
-    LOG_FORMAT = LOG_FORMAT.replace('ui ', 'service ')
+# if '--service' in join(sys.argv).lower():
+#     LOG_FORMAT = LOG_FORMAT.replace('ui ', 'service ')
 
 BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 

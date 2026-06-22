@@ -30,8 +30,7 @@ from diagng.gobject.mm_port import ModemManagerPort
 import gi
 
 gi.require_version('ModemManager', '1.0')
-gi.require_version('Json', '1.0')
-from gi.repository import Gio, GLib, GObject, ModemManager, Json
+from gi.repository import Gio, GLib, GObject, ModemManager
 
 
 """
@@ -42,227 +41,27 @@ from gi.repository import Gio, GLib, GObject, ModemManager, Json
 """
 
 
-"""
-class PinUnlockWaiter:
-    WAIT_TIME = 2 * 60  # seconds, avg 30 seconds are needed
-
-    rpc_wrapper: 'ServiceApplication'
-    timer: GLib.Source
-    timer_soon: GLib.Source
-    waiter: Gio.Cancellable
-    saved_signal: int
-
-    has_puk: bool
-    modem_imei: str  # Used to search for the modem in the actualized state
-
-    saved_unlock_attempts: str = None  # Used to check for changes in
-    # attempt count - using an ordered json.dumps output
-    modem_is_unlocked: bool = False
-    unlock_counts_changed: bool = False
-
-    intf: 'ModemManagerIntf'
-
-    def __init__(
-        self,
-        intf: 'ModemManagerIntf',
-        rpc_wrapper: 'ServiceApplication',
-        modem_imei: str,
-        pin: str,
-        optional_puk: str = None,
-    ):
-        self.modem_imei = modem_imei
-        self.intf = intf
-        self.rpc_wrapper = rpc_wrapper
-
-        self.has_puk = bool(optional_puk)
-
-        # This should initally set:
-        # self.saved_unlock_attempts
-        # self.modem_is_unlocked
-        # self.unlock_counts_changed
-        self.check_modem_unlock_state()
-        if self.modem_is_unlocked:
-            return self.end()
-
-        # We call here:
-        #   citsued.http.utils.HttpUtilsMixin._modem_generic_op
-        #    ^ we'll reuse this, but set a custom callback, like in
-        #      in citsued.http.modemmanager.HttpModemManagerViews.at_command_cb /
-        #         citsued.http.modemmanager.HttpModemManagerViews.at_command_finish
-        # Which will not call in turn:
-        #   citsued.http.utils.HttpUtilsMixin._generic_op_complete
-        #   instead, it will call our callback
-
-        if not self.has_puk:
-            # TO BE IMPLEMENTED
-            self.cmd_waiter = self.rpc_wrapper._modem_generic_op(
-                self.modem_imei,
-                ModemManager.Sim.send_pin,
-                self.initial_command_done_cb,
-                args=(pin,),
-                is_sim=True,
-                custom_callback=True,
-            )
-
-        else:
-            # TO BE IMPLEMENTED
-            self.cmd_waiter = self.rpc_wrapper._modem_generic_op(
-                self.modem_imei,
-                ModemManager.Sim.send_puk,
-                self.initial_command_done_cb,
-                args=(optional_puk, pin),
-                is_sim=True,
-                custom_callback=True,
-            )
-
-        if not self.cmd_waiter:
-            # The wrong IMSI has been provided and the
-            # request has already been cancelled
-            return
-
-        # - Wait for the modem to reboot (up to 3 minutes?),
-        #   and for the modem to be actually available
-        #
-        # - Create a signal declaration in citsued.system.networkmanager
-        #   or modemmanager for modem (un)lock status availbility change
-
-        self.timer = GLib.timeout_source_new_seconds(self.WAIT_TIME)
-        self.timer.set_callback(self.timer_cb)
-        self.timer.attach(None)
-
-        self.saved_signal = self.intf.connect(
-            'modem_state_change', self.modem_state_changed_cb
-        )  # (set state change callback in system.modem_manager)
-
-    def initial_command_done_cb(
-        self, sim: ModemManager.Sim, result: Gio.AsyncResult
-    ):
-        if not self.has_puk:
-            finish_method = ModemManager.Sim.send_pin_finish
-            finish_method_name = 'ModemManager.Sim.send_pin_finish'
-        else:
-            finish_method = ModemManager.Sim.send_puk_finish
-            finish_method_name = 'ModemManager.Sim.send_puk_finish'
-
-        try:
-            return_value = finish_method(sim, result)
-        except gi.repository.GLib.GError:
-            error(finish_method_name + ' error: ' + format_exc())
-        else:
-            info(
-                'Calling %s() on %s returned %s'
-                % (
-                    finish_method_name,
-                    sim.get_object_path(),
-                    'OK' if return_value else 'NOK',
-                )
-            )
-
-        self.check_modem_unlock_state()
-        if self.modem_is_unlocked or self.unlock_counts_changed:
-            self.end()
-        else:
-            self.timer_soon = GLib.timeout_source_new_seconds(3)
-            self.timer_soon.set_callback(self.timer_soon_cb)
-            self.timer_soon.attach(None)
-
-    def check_modem_unlock_state(self, refresh=True):
-        if refresh:
-            self.intf.update_state()
-
-        modems = self.intf.json_state['modems']
-        for modem in modems:
-            if modem['imei'] == self.modem_imei:
-                deep_obj = modem['unlock_retries']
-                if deep_obj:
-                    # Update self.saved_unlock_attempts:
-                    total_count = sum(lock['count'] for lock in deep_obj)
-
-                    if (
-                        self.saved_unlock_attempts
-                        and total_count < self.saved_unlock_attempts
-                    ):
-                        self.unlock_counts_changed = True
-                    self.saved_unlock_attempts = total_count
-                if modem['state']['short_name'] in (
-                    'enabled',
-                    'registered',
-                    'connected',
-                ):
-                    # Update self.modem_is_unlocked:
-                    self.modem_is_unlocked = True
-                break
-        else:
-            return  # Modem not found
-
-    def timer_cb(self, *args):
-        self.check_modem_unlock_state()
-        self.end()
-        return GLib.SOURCE_REMOVE
-
-    def timer_soon_cb(self, *args):
-        self.check_modem_unlock_state()
-        if self.modem_is_unlocked or self.unlock_counts_changed:
-            self.end()
-            return GLib.SOURCE_REMOVE
-        else:
-            return GLib.SOURCE_CONTINUE
-
-    def modem_state_changed_cb(self, *args):
-        self.check_modem_unlock_state(refresh=False)
-        if self.modem_is_unlocked or self.unlock_counts_changed:
-            self.end()
-
-    def end(self):
-        if self.timer:
-            self.timer.destroy()
-        if self.timer_soon:
-            self.timer_soon.destroy()
-        if self.cmd_waiter:
-            self.cmd_waiter.cancel()
-        if self.saved_signal:
-            self.intf.disconnect(self.saved_signal)
-
-        self.timer = self.timer_soon = None
-        self.cmd_waiter = self.saved_signal = None
-
-        # If the HTTP request was interrupted by
-        # HttpUtilsMixin._modem_generic_op, as
-        # HttpUtilsMixin._generic_op_complete was
-        # not called:
-
-        # TO BE IMPLEMENTED
-        if self.modem_is_unlocked:
-            self.rpc_wrapper._send_text('OK\n')
-        else:
-            self.rpc_wrapper.set_status(500)
-            self.rpc_wrapper.set_response('text/plain', b'NOK\n')
-
-        return GLib.SOURCE_REMOVE
-"""
-
-
 class ModemManagerIntf(GObject.Object):
     state_update_pending: bool = False
 
-    mm_instance: ModemManagerInstance
+    mm_instance = GObject.Property(type=ModemManagerInstance)
 
     modem_signal_ids: Dict[
         int, object
     ]  # This maps a GLib signal ID to an originating object
     mm_pid: Optional[int] = None
     daemon_connected: bool = False
-    rpc_wrapper: 'ServiceApplication' = None
+    main_app: 'MainApplication' = None
     json_state: Optional[dict] = None
     system_bus: Gio.DBusConnection
     manager: ModemManager.Manager
 
-    def __init__(self, rpc_wrapper):
+    def __init__(self, main_app):
         super().__init__()
 
         self.state_update_pending = False
 
-        self.rpc_wrapper = rpc_wrapper
+        self.main_app = main_app
 
         self.mm_instance = ModemManagerInstance()
 
@@ -394,7 +193,7 @@ class ModemManagerIntf(GObject.Object):
     def update_state(self, *args):
         try:
             self.json_state = self.dbus_metadata_to_json()
-            debug('ModemManager info: ' + dumps(self.json_state, indent=4))
+            debug('Got ModemManager info')  # dumps(self.json_state, indent=4)
 
             self.update_remote_state()
 
@@ -716,21 +515,12 @@ class ModemManagerIntf(GObject.Object):
                         modem.ports.append(port)
                 store.append(modem)
 
-            self.rpc_wrapper.broadcast_message(
-                'sync_modem_status', self.mm_instance.to_gvariant()
-            )
-
         if self.json_state:
-            self.rpc_wrapper.broadcast_message(
-                'sync_modem_debug_info',
-                Json.gvariant_deserialize(
-                    Json.from_string(dumps(self.json_state)), None
-                ),
-            )
+            self.main_app.mm_debug_data = dumps(self.json_state, indent=4)
 
-            self.rpc_wrapper.get_dbus_connection().emit_signal(
+            self.main_app.get_dbus_connection().emit_signal(
                 None,
-                '/com/p1security/diagmetad',
+                self.main_app.get_dbus_object_path(),
                 'com.p1security.diagmetad',
                 'MMInfoUpdated',
                 GLib.Variant.new_tuple(

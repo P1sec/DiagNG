@@ -4,17 +4,7 @@ NOTE: `Vardict` = `a{sv}` = `Dict[str, object]` in Python
 
 TODO: Make the services auto-activatable?
 
-## `com.p1security.diagng` (main Python process, provides UI, unprivileged)
-
-XX
-
-PROPERTY:
-
-SIGNAL: `
-
-METHOD: 
-
-## `com.p1security.diagmetad` (Python daemon, unprivileged - launch `diagmond` and store the privesc status?)
+## `com.p1security.diagmetad` (Python daemon, unprivileged - launch `diagmond`?)
 
 XX
 

@@ -1,88 +1,46 @@
 #!/usr/bin/env python3
 
-from logging import debug, error, info, critical
+from logging import debug, error, warning
 from traceback import format_exception
 from argparse import ArgumentParser
-from shlex import join
+from json import dumps
 import sys
 import gi
 
+from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
-from diagng.common.main_rpc_server import MainRPCServer
-from diagng.common.service_entry import service_main
+from diagng.system.udev_device_scanner import DeviceScanner
 from diagng.gobject.udev_device import UDevDevice
 from diagng.gobject.serial_port import SerialPort
 from diagng.utils.logging import LoggingCentral
 from diagng.common.window import MyWindow
 
-try:
-    from os import setpgrp
-except ImportError:  # UNIX-specific
-
-    def setpgrp():
-        pass
-
+# Register resources
+import diagng.utils.gresources
 
 gi.require_version('Adw', '1')
 from gi.repository import Adw, GLib, Gio, GObject
 
 """
-    Primary entry point of diagng, called
-    before spawning a provilege-elevated
-    subprocess in service_entry.py
+    Primary entry point of diagng
 """
 
 
 def main():
     args = ArgumentParser(description='Prototype for DiagNG 🍕 🎧')
-
-    args.add_argument(
-        '--service',
-        help=(
-            'This flag is present when the main instance of the app '
-            + 'is instancying a privileged subprocess for performing '
-            + 'privileged operations, such as acquiring data from '
-            + 'serial ports'
-        ),
-        action='store_true',
-    )
-
-    args.add_argument(
-        '--client-port',
-        help=(
-            'The JsonRPC TCP port for reaching of the parent, '
-            + 'unprivileged process when spawing a privileged child'
-        ),
-    )
-
     args = args.parse_args()
 
-    if args.service:
-        # We have been using a subprocess spawn + Jsonrpc listen operation
-        # (see https://lazka.github.io/pgi-docs/Jsonrpc-1.0/index.html +
-        # https://docs.gtk.org/glib/spawn.html +
-        # https://lazka.github.io/pgi-docs/GLib-2.0/functions.html#GLib.spawn_async_with_pipes)
-        # here
-
-        # We have been passed:
-        # argv[0] --service --client-port=${OCAL_TCP_PORT}
-        assert args.client_port
-        service_main()
-
-    else:
-        app = MainApplication(application_id='com.p1security.diagng')
-        app.run()
+    app = MainApplication(application_id='com.p1security.diagng')
+    app.run()
 
 
 class MainApplication(Adw.Application):
     window: MyWindow
 
-    mm_instance = GObject.Property(type=ModemManagerInstance)
-    mm_debug_data = GObject.Property(type=str)
+    modem_manager: ModemManagerIntf
+    device_scanner: DeviceScanner
 
-    usb_device_tree = GObject.Property(type=Gio.ListStore)
-    spi_device_tree = GObject.Property(type=Gio.ListStore)
-    spi_devices = GObject.Property(type=Gio.ListStore)
+    mm_debug_data = GObject.Property(type=str)
     udev_debug_data = GObject.Property(type=str)
 
     def __init__(self, **kwargs):
@@ -95,9 +53,6 @@ class MainApplication(Adw.Application):
 
         super().__init__(**kwargs)
         self.mm_instance = ModemManagerInstance()
-        self.usb_device_tree = Gio.ListStore.new(UDevDevice)
-        self.spi_device_tree = Gio.ListStore.new(UDevDevice)
-        self.spi_devices = Gio.ListStore.new(SerialPort)
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)
@@ -127,106 +82,80 @@ class MainApplication(Adw.Application):
 
         sys.excepthook = error_handler
 
+    def do_dbus_register(
+        self, connection: Gio.DBusConnection, object_path: str
+    ):
+
+        # See ⚠️ https://lazka.github.io/pgi-docs/Gio-2.0/structs/Resource.html#Gio.Resource.lookup_data
+        # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
+        # See: https://lazka.github.io/pgi-docs/Gio-2.0/classes/DBusConnection.html#Gio.DBusConnection.register_object_with_closures2
+        # See: ⚠️ https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-dbushooks.c
+        XML_TREE = (
+            Gio.resources_lookup_data(
+                '/com/p1security/diagng/com.p1security.diagmetad.xml', 0
+            )
+            .get_data()
+            .decode('utf-8')
+        )
+
+        dbus_info = Gio.DBusNodeInfo.new_for_xml(XML_TREE)
+        interface_info = dbus_info.lookup_interface('com.p1security.diagmetad')
+        assert interface_info
+
+        connection.register_object_with_closures2(
+            object_path,
+            interface_info,
+            self.on_method_call,
+            self.on_property_get,
+            self.on_property_set,
+        )
+        return True
+
+    def on_method_call(self, *args):
+        warning('Unhandled: on_method_call: %r', args)
+
+    def on_property_get(
+        self,
+        dbus_connection: Gio.DBusConnection,
+        sender: str,
+        object_path: str,
+        interface_name: str,
+        property_name: str,
+    ) -> GLib.Variant:
+        if property_name == 'MMDebugInfo':
+            return GLib.Variant.new_string(
+                dumps(self.modem_manager.json_state, indent=4)
+            )
+        elif property_name == 'MMStatusInfo':
+            return self.modem_manager.mm_instance.to_gvariant()
+        elif property_name == 'UDevUSBDebugInfo':
+            return GLib.Variant.new_string(
+                dumps(self.device_scanner.json_state, indent=4)
+            )
+        elif property_name == 'UDevUSBDeviceTree':
+            return self.device_scanner.usb_tree_gobjs
+        elif property_name == 'UDevSPIDeviceTree':
+            return self.device_scanner.spi_tree_gobjs
+        elif property_name == 'SPIDeviceInformation':
+            return self.device_scanner.spi_gobjs
+        else:
+            warning(
+                'Unhandled yet: on_property_get: %s.%s',
+                interface_name,
+                property_name,
+            )
+
+    def on_property_set(self, *args):
+        warning('Unhandled: on_property_set: %r', args)
+
+    def do_dbus_unregister(self, connection: Gio.DBusConnection, path: str):
+        pass
+
     def on_startup(self, app, *args):
+        self.modem_manager = ModemManagerIntf(self)
+        self.device_scanner = DeviceScanner(self)
+
         self.window = MyWindow(self)
-
-        # Spawn or connect to privileged --service
-        # subprocess here
-
-        # => Spawn our JsonRpc listener on a local socket
-
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.new
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_address
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_any_inet_port
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetAddress.html#Gio.InetAddress.new_loopback
-        # => https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetSocketAddress.html#Gio.InetSocketAddress.new
-        #    with port 0 + https://lazka.github.io/pgi-docs/Gio-2.0/classes/InetSocketAddress.html#Gio.InetSocketAddress.get_port
-        # should return an available port?
-        #     Cf. https://github.com/GNOME/glib/blob/2.89.0/gio/gsocketlistener.c#L1172
-        #     Cf.
-        #  ⚠️ ^ "Listens for TCP connections on any available port number for both IPv6 and IPv4 (if each is available).
-        #    This is useful if you need to have a socket for incoming connections but don’t care about the specific port number."
-        #   => https://github.com/GNOME/glib/blob/2.89.0/gio/gsocketlistener.c#L1133
-        #
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.add_inet_port
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/UnixSocketAddress.html#Gio.UnixSocketAddress.new
-
-        socket_service = Gio.SocketService.new()
-        success, bound_address = socket_service.add_address(
-            Gio.InetSocketAddress.new(
-                Gio.InetAddress.new_loopback(Gio.SocketFamily.IPV4), 0
-            ),
-            Gio.SocketType.STREAM,
-            Gio.SocketProtocol.TCP,
-            None,
-        )
-        if not success or not bound_address:
-            critical("Coun't bind to local address")
-            exit(1)
-        effective_addr: str = bound_address.get_address().to_string()
-        effective_port: int = bound_address.get_port()
-        info(
-            'Binding to local address: %s:%d'
-            % (effective_addr, effective_port)
-        )
-
-        # Use https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketListener.html#Gio.SocketListener.accept_async
-        # in order to obtain an Gio.SocketConnection inheriting Gio.IOStream,
-        # to be passed to https://lazka.github.io/pgi-docs/Jsonrpc-1.0/classes/Server.html#Jsonrpc.Server.accept_io_stream
-        # (and eventually connect back to a socket through getting RPC called with a TCP endpoint
-        # that we will pass to https://lazka.github.io/pgi-docs/Jsonrpc-1.0/classes/Client.html#Jsonrpc.Client.new
-
-        rpc_server = MainRPCServer(self)
-
-        def accept_socket(
-            socket_service: Gio.SocketService,
-            remote_socket: Gio.SocketConnection,
-            source_object,
-        ):
-            connector: Gio.InetSocketAddress = (
-                remote_socket.get_remote_address()
-            )
-            connector_addr: str = connector.get_address().to_string()
-            connector_port: int = connector.get_port()
-            info(
-                f'Received RPC connection from {connector_addr}:{connector_port}'
-            )
-            rpc_server.accept_io_stream(remote_socket)
-
-        socket_service.connect('incoming', accept_socket)
-
-        #   => Use --service --client-port=${OUR_PORT} to hopefully
-        #      trigger a call first to our JSONRPC socket endpoint
-        #      and wait
-
-        child_cmd_line = [
-            sys.argv[0],
-            '--service',
-            '--client-port=' + str(effective_port),
-        ]
-
-        # Use GLib.spawn_async so that we
-        # can merge the process group of the
-        # subprocess if any useful
-
-        child_pid, _, _, _ = GLib.spawn_async(
-            child_cmd_line,
-            child_setup=setpgrp,  # Do not inherit signals such as SIGINT
-        )
-
-        info(f'Spawning "{join(child_cmd_line)}" as pid {child_pid}...')
-
-        def child_exited(pid: int, wait_status: int, *args):
-            info('Child process exited with status ' + str(wait_status))
-            try:
-                GLib.spawn_check_wait_status(wait_status)
-            except Exception as err:
-                self.quit()
-                raise err
-
-        GLib.child_watch_add(
-            GLib.PRIORITY_DEFAULT_IDLE, child_pid, child_exited
-        )
 
         # Application will close once it has no longer has active
         # windows attached to it

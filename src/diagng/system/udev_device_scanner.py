@@ -12,11 +12,10 @@ from diagng.gobject.serial_port import SerialPort
 
 import gi
 
-gi.require_version('Json', '1.0')
-from gi.repository import GLib, Gio, Json
+from gi.repository import GLib, Gio, GObject
 
 
-class DeviceScanner:
+class DeviceScanner(GObject.Object):
     state_update_pending: bool = False
     timer_source: int = None
 
@@ -24,21 +23,21 @@ class DeviceScanner:
     spi_tree_gobjs: GLib.Variant
     spi_gobjs: GLib.Variant
 
-    rpc_wrapper: 'ServiceApplication'
+    usb_device_tree = GObject.Property(type=Gio.ListStore)
+    spi_device_tree = GObject.Property(type=Gio.ListStore)
+    spi_devices = GObject.Property(type=Gio.ListStore)
+
+    main_app: 'MainApplication'
     json_state: Optional[List[dict]] = None
 
-    def __init__(self, rpc_wrapper: 'ServiceApplication'):
-        self.rpc_wrapper = rpc_wrapper
+    def __init__(self, main_app: 'MainApplication'):
+        super().__init__()
 
-        self.usb_tree_gobjs = GLib.Variant.new_array(
-            GLib.VariantType.new('a{sv}'), []
-        )
-        self.spi_tree_gobjs = GLib.Variant.new_array(
-            GLib.VariantType.new('a{sv}'), []
-        )
-        self.spi_gobjs = GLib.Variant.new_array(
-            GLib.VariantType.new('a{sv}'), []
-        )
+        self.main_app = main_app
+
+        self.usb_device_tree = Gio.ListStore.new(UDevDevice)
+        self.spi_device_tree = Gio.ListStore.new(UDevDevice)
+        self.spi_devices = Gio.ListStore.new(SerialPort)
 
         self.state_update_pending = False
 
@@ -80,72 +79,66 @@ class DeviceScanner:
 
     def update_json_state(self, *args):
         try:
-            self.json_state, usb_tree_gobjs, spi_tree_gobjs, spi_gobjs = (
+            self.json_state, usb_device_tree, spi_device_tree, spi_devices = (
                 self.get_udev_device_tree()
             )
+
+            with self.usb_device_tree.freeze_notify():
+                self.usb_device_tree.remove_all()
+                for pos in range(usb_device_tree.get_n_items()):
+                    self.usb_device_tree.append(usb_device_tree.get_item(pos))
+
+            with self.spi_device_tree.freeze_notify():
+                self.spi_device_tree.remove_all()
+                for pos in range(spi_device_tree.get_n_items()):
+                    self.spi_device_tree.append(spi_device_tree.get_item(pos))
+
+            with self.spi_devices.freeze_notify():
+                self.spi_devices.remove_all()
+                for pos in range(spi_devices.get_n_items()):
+                    self.spi_devices.append(spi_devices.get_item(pos))
 
             self.usb_tree_gobjs = GLib.Variant.new_array(
                 GLib.VariantType.new('a{sv}'),
                 [
-                    usb_tree_gobjs.get_item(position).to_gvariant()
-                    for position in range(usb_tree_gobjs.get_n_items())
+                    self.usb_device_tree.get_item(position).to_gvariant()
+                    for position in range(self.usb_device_tree.get_n_items())
                 ],
             )
 
             self.spi_tree_gobjs = GLib.Variant.new_array(
                 GLib.VariantType.new('a{sv}'),
                 [
-                    spi_tree_gobjs.get_item(position).to_gvariant()
-                    for position in range(spi_tree_gobjs.get_n_items())
+                    self.spi_device_tree.get_item(position).to_gvariant()
+                    for position in range(self.spi_device_tree.get_n_items())
                 ],
             )
 
             self.spi_gobjs = GLib.Variant.new_array(
                 GLib.VariantType.new('a{sv}'),
                 [
-                    spi_gobjs.get_item(position).to_gvariant()
-                    for position in range(spi_gobjs.get_n_items())
+                    self.spi_devices.get_item(position).to_gvariant()
+                    for position in range(self.spi_devices.get_n_items())
                 ],
             )
 
-            if self.rpc_wrapper:
-                debug(
-                    'DEBUG: Got udev status data: '
-                    + dumps(self.json_state, indent=4)
-                )
-                self.rpc_wrapper.broadcast_message(
-                    'sync_usb_device_tree',
-                    self.usb_tree_gobjs,
-                )
-                self.rpc_wrapper.broadcast_message(
-                    'sync_spi_device_tree',
-                    self.spi_tree_gobjs,
-                )
-                self.rpc_wrapper.broadcast_message(
-                    'sync_spi_devices',
-                    self.spi_gobjs,
-                )
-                self.rpc_wrapper.broadcast_message(
-                    'sync_udev_debug_info',
-                    Json.gvariant_deserialize(
-                        Json.from_string(dumps(self.json_state)), None
-                    ),
-                )
+            debug(
+                'Got udev status data'  # dumps(self.json_state, indent=4)
+            )
+            self.main_app.udev_debug_data = dumps(self.json_state, indent=4)
 
-                self.rpc_wrapper.get_dbus_connection().emit_signal(
-                    None,
-                    '/com/p1security/diagmetad',
-                    'com.p1security.diagmetad',
-                    'MMInfoUpdated',
-                    GLib.Variant.new_tuple(
-                        self.usb_tree_gobjs,
-                        self.spi_tree_gobjs,
-                        self.spi_gobjs,
-                        GLib.Variant.new_string(
-                            dumps(self.json_state, indent=4)
-                        ),
-                    ),
-                )
+            self.main_app.get_dbus_connection().emit_signal(
+                None,
+                self.main_app.get_dbus_object_path(),
+                'com.p1security.diagmetad',
+                'MMInfoUpdated',
+                GLib.Variant.new_tuple(
+                    self.usb_tree_gobjs,
+                    self.spi_tree_gobjs,
+                    self.spi_gobjs,
+                    GLib.Variant.new_string(dumps(self.json_state, indent=4)),
+                ),
+            )
 
         finally:
             self.state_update_pending = False
