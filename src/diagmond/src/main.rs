@@ -14,8 +14,8 @@ async fn main() {
     // Set up logging
     Logging::setup_logging_main_proc();
 
-    // Connect to the session bus
-    let (resource, conn) = dbus_tokio::connection::new_session_sync().unwrap();
+    // Connect to the system bus
+    let (resource, conn) = dbus_tokio::connection::new_system_sync().unwrap();
 
     // The resource is a task that should be spawned onto a tokio compatible
     // reactor ASAP. If the resource ever finishes, you lost connection to D-Bus.

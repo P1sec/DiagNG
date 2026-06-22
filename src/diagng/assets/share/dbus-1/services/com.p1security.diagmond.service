@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.p1security.diagmond
+Exec=/usr/bin/diagmond
+User=root
