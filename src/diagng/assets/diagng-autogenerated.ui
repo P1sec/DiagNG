@@ -17,6 +17,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                   <object class="AdwViewStackPage" id="mm_tab">
                     <property name="child">
                       <object class="AdwPreferencesPage" id="mm_tab_page">
+                        <property name="banner">
+                          <object class="AdwBanner">
+                            <property name="revealed">true</property>
+                            <property name="title">ModemManager Link: ON - diagmond status: OFF</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="AdwPreferencesGroup" id="mm_status_group">
                             <property name="title" translatable="yes">ModemManager system daemon</property>
@@ -100,6 +106,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                   <object class="AdwViewStackPage" id="usb_tab">
                     <property name="child">
                       <object class="AdwPreferencesPage">
+                        <property name="banner">
+                          <object class="AdwBanner">
+                            <property name="revealed">true</property>
+                            <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="AdwPreferencesGroup">
                             <property name="title">Detected nusb device tree (NEXT TODO)</property>
@@ -154,6 +166,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                   <object class="AdwViewStackPage" id="spi_tab">
                     <property name="child">
                       <object class="AdwPreferencesPage">
+                        <property name="banner">
+                          <object class="AdwBanner">
+                            <property name="revealed">true</property>
+                            <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="AdwPreferencesGroup" id="spi_ports_group">
                             <property name="title">Detected SPI devices</property>
@@ -247,8 +265,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="adb_tab">
                     <property name="child">
-                      <object class="GtkLabel">
-                        <property name="label">Empty Page</property>
+                      <object class="AdwPreferencesPage">
+                        <property name="banner">
+                          <object class="AdwBanner">
+                            <property name="revealed">true</property>
+                            <property name="title">ADB daemon status: NOT RUNNING</property>
+                          </object>
+                        </property>
                       </object>
                     </property>
                     <property name="icon-name">network-cellular-connected-symbolic</property>

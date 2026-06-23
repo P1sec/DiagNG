@@ -8,12 +8,29 @@
 # https://github.com/P1sec/DiagNG/issues/1 for
 # standard DBus directories reference
 
-SLASH_RUN_DBUS_SYSTEM_SERVICE_SPEC_DIR = '/run/dbus-1/system-services'
+# => Launch the privileged subprocess directly
+# if the service is not installed/running/
+# launchable?
 
-SYSTEM_WIDE_DBUS_SYSTEM_SERVICE_SPEC_DIRS = [
+#  => Install the DBus policy file in a stub
+#     after running pkexec?
+
+#    => Display a status banner about the
+#       privileged subprocess in the main UI?
+
+# OR, do no auto-launch until the whole
+# thing is distributable?
+
+#  (Maybe later use an integrated build system
+#  like meson?)
+
+SLASH_RUN_SERVICE_SPEC_DIR = '/run/dbus-1/system-services'
+
+SYSTEM_WIDE_SERVICE_SPEC_DIRS = [
     '/etc/dbus-1/system-services',
     '/usr/local/share/dbus-1/system-services',
     '/usr/share/dbus-1/system-services',
 ]
 
-# =)
+class DiagmondManager:
+    WIP XX # =)

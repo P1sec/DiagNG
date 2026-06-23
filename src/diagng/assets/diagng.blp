@@ -7,6 +7,11 @@ template $MainWindow: Adw.ApplicationWindow {
       child: Adw.ViewStack global_stack {
         Adw.ViewStackPage mm_tab {
           child: Adw.PreferencesPage mm_tab_page {
+            banner: Adw.Banner {
+              revealed: true;
+              title: "ModemManager Link: ON - diagmond status: OFF";
+            };
+
             Adw.PreferencesGroup mm_status_group {
               title: _("ModemManager system daemon");
 
@@ -76,6 +81,11 @@ template $MainWindow: Adw.ApplicationWindow {
 
         Adw.ViewStackPage usb_tab {
           child: Adw.PreferencesPage {
+            banner: Adw.Banner {
+              revealed: true;
+              title: "UDev status: REACHABLE - diagmond status: OFF";
+            };
+
             Adw.PreferencesGroup {
               title: "Detected nusb device tree (NEXT TODO)";
 
@@ -117,6 +127,11 @@ template $MainWindow: Adw.ApplicationWindow {
 
         Adw.ViewStackPage spi_tab {
           child: Adw.PreferencesPage {
+            banner: Adw.Banner {
+              revealed: true;
+              title: "UDev status: REACHABLE - diagmond status: OFF";
+            };
+
             Adw.PreferencesGroup spi_ports_group {
               title: "Detected SPI devices";
 
@@ -197,8 +212,11 @@ template $MainWindow: Adw.ApplicationWindow {
         }
 
         Adw.ViewStackPage adb_tab {
-          child: Label {
-            label: "Empty Page";
+          child: Adw.PreferencesPage {
+            banner: Adw.Banner {
+              revealed: true;
+              title: "ADB daemon status: NOT RUNNING";
+            };
           };
 
           icon-name: "network-cellular-connected-symbolic";
