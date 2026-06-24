@@ -18,7 +18,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                     <property name="child">
                       <object class="AdwPreferencesPage" id="mm_tab_page">
                         <property name="banner">
-                          <object class="AdwBanner">
+                          <object class="AdwBanner" id="mm_link_banner">
                             <property name="revealed">true</property>
                             <property name="title">ModemManager Link: ON - diagmond status: OFF</property>
                           </object>
@@ -105,9 +105,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="usb_tab">
                     <property name="child">
-                      <object class="AdwPreferencesPage">
+                      <object class="AdwPreferencesPage" id="usb_tab_page">
                         <property name="banner">
-                          <object class="AdwBanner">
+                          <object class="AdwBanner" id="usb_link_banner">
                             <property name="revealed">true</property>
                             <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
                           </object>
@@ -165,9 +165,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="spi_tab">
                     <property name="child">
-                      <object class="AdwPreferencesPage">
+                      <object class="AdwPreferencesPage" id="spi_tab_page">
                         <property name="banner">
-                          <object class="AdwBanner">
+                          <object class="AdwBanner" id="spi_link_banner">
                             <property name="revealed">true</property>
                             <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
                           </object>
@@ -265,11 +265,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="adb_tab">
                     <property name="child">
-                      <object class="AdwPreferencesPage">
+                      <object class="AdwPreferencesPage" id="adb_tab_page">
                         <property name="banner">
-                          <object class="AdwBanner">
+                          <object class="AdwBanner" id="adb_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">ADB daemon status: NOT RUNNING</property>
+                            <property name="title">ADB daemon status: TODO</property>
                           </object>
                         </property>
                       </object>

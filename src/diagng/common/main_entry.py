@@ -36,6 +36,7 @@ def main():
 class MainApplication(Adw.Application):
     window: MyWindow
 
+    diagmond_communicator: DiagmondCommunicator
     modem_manager: ModemManagerIntf
     device_scanner: DeviceScanner
 

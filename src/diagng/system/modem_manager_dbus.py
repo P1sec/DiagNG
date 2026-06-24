@@ -50,7 +50,7 @@ class ModemManagerIntf(GObject.Object):
         int, object
     ]  # This maps a GLib signal ID to an originating object
     mm_pid: Optional[int] = None
-    daemon_connected: bool = False
+    daemon_connected = GObject.Property(type=bool, default=False)
     main_app: 'MainApplication' = None
     json_state: Optional[dict] = None
     system_bus: Gio.DBusConnection

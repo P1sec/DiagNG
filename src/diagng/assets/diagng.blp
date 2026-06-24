@@ -7,7 +7,7 @@ template $MainWindow: Adw.ApplicationWindow {
       child: Adw.ViewStack global_stack {
         Adw.ViewStackPage mm_tab {
           child: Adw.PreferencesPage mm_tab_page {
-            banner: Adw.Banner {
+            banner: Adw.Banner mm_link_banner {
               revealed: true;
               title: "ModemManager Link: ON - diagmond status: OFF";
             };
@@ -80,8 +80,8 @@ template $MainWindow: Adw.ApplicationWindow {
         }
 
         Adw.ViewStackPage usb_tab {
-          child: Adw.PreferencesPage {
-            banner: Adw.Banner {
+          child: Adw.PreferencesPage usb_tab_page {
+            banner: Adw.Banner usb_link_banner {
               revealed: true;
               title: "UDev status: REACHABLE - diagmond status: OFF";
             };
@@ -126,8 +126,8 @@ template $MainWindow: Adw.ApplicationWindow {
         }
 
         Adw.ViewStackPage spi_tab {
-          child: Adw.PreferencesPage {
-            banner: Adw.Banner {
+          child: Adw.PreferencesPage spi_tab_page {
+            banner: Adw.Banner spi_link_banner {
               revealed: true;
               title: "UDev status: REACHABLE - diagmond status: OFF";
             };
@@ -212,10 +212,10 @@ template $MainWindow: Adw.ApplicationWindow {
         }
 
         Adw.ViewStackPage adb_tab {
-          child: Adw.PreferencesPage {
-            banner: Adw.Banner {
+          child: Adw.PreferencesPage adb_tab_page {
+            banner: Adw.Banner adb_link_banner {
               revealed: true;
-              title: "ADB daemon status: NOT RUNNING";
+              title: "ADB daemon status: TODO";
             };
           };
 

@@ -26,6 +26,11 @@ class MyWindow(Adw.ApplicationWindow):
 
     # UI panel: ModemManager
 
+    mm_link_banner: Adw.ActionRow = Gtk.Template.Child()
+    usb_link_banner: Adw.ActionRow = Gtk.Template.Child()
+    spi_link_banner: Adw.ActionRow = Gtk.Template.Child()
+    adb_link_banner: Adw.ActionRow = Gtk.Template.Child()
+
     mm_status_row: Adw.ActionRow = Gtk.Template.Child()
     mm_status_label: Gtk.Label = Gtk.Template.Child()
     mm_version_row: Adw.ActionRow = Gtk.Template.Child()
@@ -120,6 +125,12 @@ class MyWindow(Adw.ApplicationWindow):
             'items-changed', self.update_mm_modems
         )
         self.app.modem_manager.mm_instance.connect(
+            'notify::is-running', self.update_daemon_statuses
+        )
+        self.app.diagmond_communicator.connect(
+            'notify::bus-connected', self.update_daemon_statuses
+        )
+        self.app.modem_manager.mm_instance.connect(
             'notify', self.update_mm_instance
         )
         self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
@@ -133,11 +144,34 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_status_label.set_label('')
         self.mm_version_label.set_label('')
 
+        self.update_daemon_statuses()
         self.update_spi_devices()
         self.update_mm_modems()
         self.update_mm_instance()
         self.update_mm_debug_data()
         self.update_udev_debug_data()
+
+    def update_daemon_statuses(self, *args):
+        mm_running = self.app.modem_manager.mm_instance.is_running
+        diagmond_running = self.app.diagmond_communicator.bus_connected
+        # udev_reachable = True
+        # adb_reachable = True
+
+        self.mm_link_banner.set_title(
+            'ModemManager Link: %s - diagmond status: %s'
+            % (
+                'ON' if mm_running else 'OFF',
+                'ON' if diagmond_running else 'OFF',
+            )
+        )
+        self.usb_link_banner.set_title(
+            'UDev status: REACHABLE - diagmond status: %s'
+            % ('ON' if diagmond_running else 'OFF')
+        )
+        self.spi_link_banner.set_title(
+            'UDev status: REACHABLE - diagmond status: %s'
+            % ('ON' if diagmond_running else 'OFF')
+        )
 
     def sync_sourceview_theme(self, *args):
         is_dark_mode: bool = self.adw_style_manager.get_dark()
