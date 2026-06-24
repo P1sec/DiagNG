@@ -16,10 +16,10 @@
 #     after running pkexec?
 
 #    => Display a status banner about the
-#       privileged subprocess in the main UI?
+#       privileged subprocess in the main UI?
 
 # OR, do no auto-launch until the whole
-# thing is distributable?
+# thing is distributable?
 
 #  (Maybe later use an integrated build system
 #  like meson?)
@@ -32,5 +32,6 @@ SYSTEM_WIDE_SERVICE_SPEC_DIRS = [
     '/usr/share/dbus-1/system-services',
 ]
 
+
 class DiagmondManager:
-    WIP XX # =)
+    WIP  # xx =)

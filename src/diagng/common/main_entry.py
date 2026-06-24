@@ -7,11 +7,10 @@ from json import dumps
 import sys
 import gi
 
+from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.system.udev_device_scanner import DeviceScanner
-from diagng.gobject.udev_device import UDevDevice
-from diagng.gobject.serial_port import SerialPort
 from diagng.utils.logging import LoggingCentral
 from diagng.common.window import MyWindow
 
@@ -152,6 +151,7 @@ class MainApplication(Adw.Application):
         pass
 
     def on_startup(self, app, *args):
+        self.diagmond_communicator = DiagmondCommunicator()
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
 

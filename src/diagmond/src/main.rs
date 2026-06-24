@@ -4,6 +4,9 @@ mod usb;
 use crate::logging::Logging;
 use crate::usb::{UsbDevicesEndpointResp, get_usb_metadata};
 
+#[cfg(target_os = "linux")]
+use std::os::unix::process::CommandExt;
+
 use futures_util::StreamExt;
 use zbus::connection::Builder;
 use zbus::interface;
@@ -47,6 +50,14 @@ impl Diagmond {
 async fn main() -> zbus::Result<()> {
     // Set up logging
     Logging::setup_logging_main_proc();
+
+    #[cfg(target_os = "linux")]
+    if nix::unistd::geteuid().as_raw() != 0 {
+        let args: Vec<String> = std::env::args().collect();
+        let _ = std::process::Command::new("pkexec").args(args).exec();
+        log::error!("Could not launch pkexec");
+        std::process::exit(1);
+    }
 
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
