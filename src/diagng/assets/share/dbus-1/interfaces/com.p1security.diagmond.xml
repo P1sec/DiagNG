@@ -14,7 +14,7 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         </method>
     </interface>
 
-    <interface name="com.p1security.diagmetad">
+    <interface name="com.p1security.diagmond">
         <doc:doc>
             <doc:description>
                 <doc:para>

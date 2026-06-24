@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from gi.repository import GObject, Gio
+from typing import Optional
 from logging import debug
 # XX WIP 2026-06-23
 
@@ -12,23 +13,43 @@ from logging import debug
 
 
 class DiagmondCommunicator(GObject.Object):
-    system_bus: Gio.DBusConnection
+    connection: Gio.DBusConnection
+    proxy: Gio.DBusProxy
+    bus_connected = GObject.Property(type=bool, default=False)
 
     def __init__(self):
         super().__init__()
 
-        self.system_bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
 
-        Gio.bus_watch_name_on_connection(
-            self.system_bus,
-            'com.p1security.diagmond',
-            Gio.BusNameWatcherFlags.AUTO_START,
-            self.name_appeared_closure,
-            self.name_vanished_closure,
+        XML_TREE = (
+            Gio.resources_lookup_data(
+                '/com/p1security/diagng/com.p1security.diagmond.xml', 0
+            )
+            .get_data()
+            .decode('utf-8')
         )
 
-    def name_appeared_closure(self, connection, bus_name, conn_name):
-        debug('Diagmond bus available')
+        dbus_info = Gio.DBusNodeInfo.new_for_xml(XML_TREE)
+        interface_info = dbus_info.lookup_interface('com.p1security.diagmond')
+        assert interface_info
 
-    def name_vanished_closure(self, connection, bus_name):
-        debug('Diagmond bus unavailable')
+        self.proxy = Gio.DBusProxy.new_sync(
+            self.connection,
+            Gio.DBusProxyFlags.NONE,
+            interface_info,
+            'com.p1security.diagmond',
+            '/com/p1security/diagmond',
+            'com.p1security.diagmond',
+            None,
+        )
+
+        self.proxy.connect('notify::g-name-owner', self.status_changed)
+        self.status_changed()
+
+    def status_changed(self, *args):
+        self.bus_connected = bool(self.proxy.get_name_owner())
+        if self.bus_connected:
+            debug('Diagmond bus available')
+        else:
+            debug('Diagmond bus unavailable')
