@@ -64,6 +64,13 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup mm_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-mm-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
+
               title: _("DBus information");
 
               ScrolledWindow mm_debug_viewport {
@@ -94,6 +101,13 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup nusb_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-nusb-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
+
               title: _("nusb debug information");
 
               ScrolledWindow nusb_debug_viewport {
@@ -117,14 +131,21 @@ template $MainWindow: Adw.ApplicationWindow {
                 max-content-height: 240;
                 min-content-height: 240;
               }
+            }
 
-              Adw.PreferencesGroup udev_debug_group {
-                title: _("UDev debug information");
+            Adw.PreferencesGroup udev_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-udev-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
 
-                ScrolledWindow udev_debug_viewport {
-                  max-content-height: 240;
-                  min-content-height: 240;
-                }
+              title: _("UDev debug information");
+
+              ScrolledWindow udev_debug_viewport {
+                max-content-height: 240;
+                min-content-height: 240;
               }
             }
           };

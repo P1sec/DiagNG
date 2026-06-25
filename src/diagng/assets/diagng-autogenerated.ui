@@ -85,6 +85,14 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="mm_debug_group">
+                            <property name="header-suffix">
+                              <object class="GtkButton">
+                                <property name="action-name">win.copy-mm-debug-info</property>
+                                <property name="has-tooltip">true</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                              </object>
+                            </property>
                             <property name="title" translatable="yes">DBus information</property>
                             <child>
                               <object class="GtkScrolledWindow" id="mm_debug_viewport">
@@ -125,6 +133,14 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="nusb_debug_group">
+                            <property name="header-suffix">
+                              <object class="GtkButton">
+                                <property name="action-name">win.copy-nusb-debug-info</property>
+                                <property name="has-tooltip">true</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                              </object>
+                            </property>
                             <property name="title" translatable="yes">nusb debug information</property>
                             <child>
                               <object class="GtkScrolledWindow" id="nusb_debug_viewport">
@@ -155,15 +171,23 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="min-content-height">240</property>
                               </object>
                             </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="udev_debug_group">
+                            <property name="header-suffix">
+                              <object class="GtkButton">
+                                <property name="action-name">win.copy-udev-debug-info</property>
+                                <property name="has-tooltip">true</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                              </object>
+                            </property>
+                            <property name="title" translatable="yes">UDev debug information</property>
                             <child>
-                              <object class="AdwPreferencesGroup" id="udev_debug_group">
-                                <property name="title" translatable="yes">UDev debug information</property>
-                                <child>
-                                  <object class="GtkScrolledWindow" id="udev_debug_viewport">
-                                    <property name="max-content-height">240</property>
-                                    <property name="min-content-height">240</property>
-                                  </object>
-                                </child>
+                              <object class="GtkScrolledWindow" id="udev_debug_viewport">
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
                               </object>
                             </child>
                           </object>

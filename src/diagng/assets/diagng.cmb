@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
-<!-- Created with Cambalache 1.0.2 -->
+<!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="19b44d62c77396053745b232b2e983d160d898b1f14ad8b5bf585ededbd95981"/>
   <css priority="600" is_global="1" filename="style.css" sha256="4973fcb9089f64b71e665a2f8e2bf53be60b0a02e6d2e5832dd1a3810a43d4a4"/>
-  <ui template-class="MainWindow" filename="diagng.blp" sha256="a02a1f6c680e10e862495660a1588e00efb9c4a86117a4e87ba3c06820b6bfd4">
+  <ui template-class="MainWindow" filename="diagng.blp" sha256="8564fd2a1a91ec0f82929173ce8c9071adf897dc3685ea8a2f2140536d9e358f">
     <css-provider>style.css</css-provider>
   </ui>
 </cambalache-project>
