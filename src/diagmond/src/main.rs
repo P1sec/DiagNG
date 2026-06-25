@@ -1,7 +1,9 @@
 mod logging;
+mod mm_lock;
 mod usb;
 
 use crate::logging::Logging;
+use crate::mm_lock::{lock_device, unlock_device};
 use crate::usb::{UsbDevicesEndpointResp, get_usb_metadata};
 
 #[cfg(target_os = "linux")]
@@ -24,16 +26,28 @@ struct Diagmond {
 #[interface(name = "com.p1security.diagmond")]
 impl Diagmond {
     #[zbus(name = "LockMMDevice")]
-    async fn lock_mm_device(&self, uid: &str) -> zbus::fdo::Result<bool> {
-        // WIP XX
-        log::debug!("Not implemented yet: LockMMDevice({})", uid);
+    async fn lock_mm_device(
+        &self,
+        #[zbus(connection)] conn: &zbus::Connection,
+        uid: &str,
+    ) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: LockMMDevice({})", uid);
+        if let Err(error) = lock_device(conn, uid).await {
+            log::error!("Could not execute LockMMDevice({}): {:?}", uid, error);
+        }
         Ok(true)
     }
 
     #[zbus(name = "ReleaseMMDevice")]
-    async fn release_mm_device(&self, uid: &str) -> zbus::fdo::Result<bool> {
-        // WIP XX
-        log::debug!("Not implemented yet: ReleaseMMDevice({})", uid);
+    async fn release_mm_device(
+        &self,
+        #[zbus(connection)] conn: &zbus::Connection,
+        uid: &str,
+    ) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: ReleaseMMDevice({})", uid);
+        if let Err(error) = unlock_device(conn, uid).await {
+            log::error!("Could not execute ReleaseMMDevice({}): {:?}", uid, error);
+        }
         Ok(true)
     }
 
