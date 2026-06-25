@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from gi.repository import GObject, Gio
+from gi.repository import GObject, GLib, Gio
+from json import dumps, loads
 from typing import Optional
 from logging import debug
 # XX WIP 2026-06-23
@@ -45,11 +46,31 @@ class DiagmondCommunicator(GObject.Object):
         )
 
         self.proxy.connect('notify::g-name-owner', self.status_changed)
+        self.proxy.connect('g-signal::USBDataUpdated', self.usb_data_changed)
+        # TODO NOTIFY ON USBDataUpdated signal triggered
+        # (= OR JUST WHEN PROP :USBData CHANGED?)
         self.status_changed()
 
     def status_changed(self, *args):
         self.bus_connected = bool(self.proxy.get_name_owner())
         if self.bus_connected:
             debug('Diagmond bus available')
+
+            usb_data_raw = self.proxy.get_cached_property('USBData')
+            if usb_data_raw:
+                self.process_usb_data(loads(usb_data_raw.get_string()))
         else:
             debug('Diagmond bus unavailable')
+
+    def usb_data_changed(
+        self,
+        dbus_proxy: Gio.DBusProxy,
+        sender_name: str,
+        signal_name: str,
+        parameters: GLib.Variant,
+    ):
+        self.process_usb_data(loads(parameters[0]))
+
+    def process_usb_data(self, usb_data: dict):
+        if usb_data:
+            debug('WIP parse: %s', dumps(usb_data, indent=4))

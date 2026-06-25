@@ -89,7 +89,9 @@ template $MainWindow: Adw.ApplicationWindow {
             Adw.PreferencesGroup {
               title: "Detected nusb device tree (NEXT TODO)";
 
-              ListView {}
+              ScrolledWindow {
+                child: ListView {};
+              }
             }
 
             Adw.PreferencesGroup {

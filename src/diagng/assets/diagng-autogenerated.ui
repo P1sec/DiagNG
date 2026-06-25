@@ -116,7 +116,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           <object class="AdwPreferencesGroup">
                             <property name="title">Detected nusb device tree (NEXT TODO)</property>
                             <child>
-                              <object class="GtkListView"></object>
+                              <object class="GtkScrolledWindow">
+                                <property name="child">
+                                  <object class="GtkListView"></object>
+                                </property>
+                              </object>
                             </child>
                           </object>
                         </child>
