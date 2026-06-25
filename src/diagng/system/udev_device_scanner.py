@@ -83,65 +83,92 @@ class DeviceScanner(GObject.Object):
                 self.get_udev_device_tree()
             )
 
-            with self.usb_device_tree.freeze_notify():
-                self.usb_device_tree.remove_all()
-                for pos in range(usb_device_tree.get_n_items()):
-                    self.usb_device_tree.append(usb_device_tree.get_item(pos))
+            def run_in_main_thread():
 
-            with self.spi_device_tree.freeze_notify():
-                self.spi_device_tree.remove_all()
-                for pos in range(spi_device_tree.get_n_items()):
-                    self.spi_device_tree.append(spi_device_tree.get_item(pos))
+                try:
+                    with self.usb_device_tree.freeze_notify():
+                        self.usb_device_tree.remove_all()
+                        for pos in range(usb_device_tree.get_n_items()):
+                            self.usb_device_tree.append(
+                                usb_device_tree.get_item(pos)
+                            )
 
-            with self.spi_devices.freeze_notify():
-                self.spi_devices.remove_all()
-                for pos in range(spi_devices.get_n_items()):
-                    self.spi_devices.append(spi_devices.get_item(pos))
+                    with self.spi_device_tree.freeze_notify():
+                        self.spi_device_tree.remove_all()
+                        for pos in range(spi_device_tree.get_n_items()):
+                            self.spi_device_tree.append(
+                                spi_device_tree.get_item(pos)
+                            )
 
-            self.usb_tree_gobjs = GLib.Variant.new_array(
-                GLib.VariantType.new('a{sv}'),
-                [
-                    self.usb_device_tree.get_item(position).to_gvariant()
-                    for position in range(self.usb_device_tree.get_n_items())
-                ],
-            )
+                    with self.spi_devices.freeze_notify():
+                        self.spi_devices.remove_all()
+                        for pos in range(spi_devices.get_n_items()):
+                            self.spi_devices.append(spi_devices.get_item(pos))
 
-            self.spi_tree_gobjs = GLib.Variant.new_array(
-                GLib.VariantType.new('a{sv}'),
-                [
-                    self.spi_device_tree.get_item(position).to_gvariant()
-                    for position in range(self.spi_device_tree.get_n_items())
-                ],
-            )
+                    self.usb_tree_gobjs = GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            self.usb_device_tree.get_item(
+                                position
+                            ).to_gvariant()
+                            for position in range(
+                                self.usb_device_tree.get_n_items()
+                            )
+                        ],
+                    )
 
-            self.spi_gobjs = GLib.Variant.new_array(
-                GLib.VariantType.new('a{sv}'),
-                [
-                    self.spi_devices.get_item(position).to_gvariant()
-                    for position in range(self.spi_devices.get_n_items())
-                ],
-            )
+                    self.spi_tree_gobjs = GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            self.spi_device_tree.get_item(
+                                position
+                            ).to_gvariant()
+                            for position in range(
+                                self.spi_device_tree.get_n_items()
+                            )
+                        ],
+                    )
 
-            debug(
-                'Got udev status data'  # dumps(self.json_state, indent=4)
-            )
-            self.main_app.udev_debug_data = dumps(self.json_state, indent=4)
+                    self.spi_gobjs = GLib.Variant.new_array(
+                        GLib.VariantType.new('a{sv}'),
+                        [
+                            self.spi_devices.get_item(position).to_gvariant()
+                            for position in range(
+                                self.spi_devices.get_n_items()
+                            )
+                        ],
+                    )
 
-            self.main_app.get_dbus_connection().emit_signal(
-                None,
-                self.main_app.get_dbus_object_path(),
-                'com.p1security.diagmetad',
-                'MMInfoUpdated',
-                GLib.Variant.new_tuple(
-                    self.usb_tree_gobjs,
-                    self.spi_tree_gobjs,
-                    self.spi_gobjs,
-                    GLib.Variant.new_string(dumps(self.json_state, indent=4)),
-                ),
-            )
+                    debug(
+                        'Got udev status data'  # dumps(self.json_state, indent=4)
+                    )
+                    self.main_app.udev_debug_data = dumps(
+                        self.json_state, indent=4
+                    )
 
-        finally:
+                    self.main_app.get_dbus_connection().emit_signal(
+                        None,
+                        self.main_app.get_dbus_object_path(),
+                        'com.p1security.diagmetad',
+                        'MMInfoUpdated',
+                        GLib.Variant.new_tuple(
+                            self.usb_tree_gobjs,
+                            self.spi_tree_gobjs,
+                            self.spi_gobjs,
+                            GLib.Variant.new_string(
+                                dumps(self.json_state, indent=4)
+                            ),
+                        ),
+                    )
+
+                finally:
+                    self.state_update_pending = False
+
+            GLib.idle_add(run_in_main_thread)
+
+        except Exception:
             self.state_update_pending = False
+            raise
 
     def get_udev_device_tree(
         self,
