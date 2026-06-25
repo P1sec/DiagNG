@@ -1,6 +1,3 @@
-// WIP 2026-06-25
-
-// TODO use z-bus as a client for the ModemManager locking mechanism here
 
 use zbus::{Connection, Result, proxy};
 
@@ -12,8 +9,6 @@ use zbus::{Connection, Result, proxy};
 trait ModemManager {
     async fn inhibit_device(&self, uid: &str, inhibit: bool) -> Result<()>;
 }
-
-// Although we use `tokio` here, you can use any async runtime of choice.
 
 pub async fn lock_device(connection: &Connection, device_name: &str) -> Result<()> {
     let proxy = ModemManagerProxy::new(connection).await?;
