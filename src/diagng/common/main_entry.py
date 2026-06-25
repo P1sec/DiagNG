@@ -42,6 +42,7 @@ class MainApplication(Adw.Application):
 
     mm_debug_data = GObject.Property(type=str)
     udev_debug_data = GObject.Property(type=str)
+    nusb_debug_data = GObject.Property(type=str)
 
     def __init__(self, **kwargs):
         LoggingCentral(debug_mode=True)
@@ -152,7 +153,7 @@ class MainApplication(Adw.Application):
         pass
 
     def on_startup(self, app, *args):
-        self.diagmond_communicator = DiagmondCommunicator()
+        self.diagmond_communicator = DiagmondCommunicator(self)
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
 

@@ -88,7 +88,6 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title" translatable="yes">DBus information</property>
                             <child>
                               <object class="GtkScrolledWindow" id="mm_debug_viewport">
-                                <property name="hscrollbar-policy">2</property>
                                 <property name="max-content-height">240</property>
                                 <property name="min-content-height">240</property>
                               </object>
@@ -125,6 +124,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </child>
                         <child>
+                          <object class="AdwPreferencesGroup" id="nusb_debug_group">
+                            <property name="title" translatable="yes">nusb debug information</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="nusb_debug_viewport">
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwPreferencesGroup">
                             <property name="title" translatable="yes">Detailed UDev device tree</property>
                             <child>
@@ -150,7 +160,6 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="title" translatable="yes">UDev debug information</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="udev_debug_viewport">
-                                    <property name="hscrollbar-policy">2</property>
                                     <property name="max-content-height">240</property>
                                     <property name="min-content-height">240</property>
                                   </object>

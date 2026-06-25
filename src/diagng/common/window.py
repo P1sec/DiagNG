@@ -51,6 +51,10 @@ class MyWindow(Adw.ApplicationWindow):
     udev_debug_view: GtkSource
     udev_sourceview_buffer: GtkSource.Buffer
 
+    nusb_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_debug_view: GtkSource
+    nusb_sourceview_buffer: GtkSource.Buffer
+
     # UI panel: SPI
 
     spi_selection: Gio.ListStore = Gtk.Template.Child()
@@ -68,7 +72,6 @@ class MyWindow(Adw.ApplicationWindow):
         self.mm_sourceview_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language('json')
         )
-        self.adw_style_manager = Adw.StyleManager.get_default()
 
         self.mm_debug_view = GtkSource.View.new_with_buffer(
             self.mm_sourceview_buffer
@@ -103,7 +106,6 @@ class MyWindow(Adw.ApplicationWindow):
         self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language('json')
         )
-        self.adw_style_manager = Adw.StyleManager.get_default()
 
         self.udev_debug_view = GtkSource.View.new_with_buffer(
             self.udev_sourceview_buffer
@@ -111,8 +113,21 @@ class MyWindow(Adw.ApplicationWindow):
         self.udev_debug_view.set_editable(False)
         self.udev_debug_viewport.set_child(self.udev_debug_view)
 
+        # Build nusb debug SourceView
+
+        self.nusb_sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
+        )
+
+        self.nusb_debug_view = GtkSource.View.new_with_buffer(
+            self.nusb_sourceview_buffer
+        )
+        self.nusb_debug_view.set_editable(False)
+        self.nusb_debug_viewport.set_child(self.nusb_debug_view)
+
         # Monitor for dark mode changes
 
+        self.adw_style_manager = Adw.StyleManager.get_default()
         self.sync_sourceview_theme()
         self.adw_style_manager.connect('notify', self.sync_sourceview_theme)
 
@@ -137,6 +152,9 @@ class MyWindow(Adw.ApplicationWindow):
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
         )
+        self.app.connect(
+            'notify::nusb-debug-data', self.update_nusb_debug_data
+        )
 
         # Reset the default UI state
 
@@ -150,6 +168,7 @@ class MyWindow(Adw.ApplicationWindow):
         self.update_mm_instance()
         self.update_mm_debug_data()
         self.update_udev_debug_data()
+        self.update_nusb_debug_data()
 
     def update_daemon_statuses(self, *args):
         mm_running = self.app.modem_manager.mm_instance.is_running
@@ -188,6 +207,9 @@ class MyWindow(Adw.ApplicationWindow):
                 self.udev_sourceview_buffer.set_style_scheme(
                     color_scheme_manager.get_scheme(scheme)
                 )
+                self.nusb_sourceview_buffer.set_style_scheme(
+                    color_scheme_manager.get_scheme(scheme)
+                )
                 break
 
     def update_mm_instance(self, *args):
@@ -224,6 +246,12 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.udev_debug_data:
             self.udev_debug_view.get_buffer().set_text(
                 self.app.udev_debug_data
+            )
+
+    def update_nusb_debug_data(self, *args):
+        if self.app.nusb_debug_data:
+            self.nusb_debug_view.get_buffer().set_text(
+                self.app.nusb_debug_data
             )
 
     def update_spi_devices(self, *args):

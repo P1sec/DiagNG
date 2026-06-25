@@ -343,9 +343,8 @@ class DeviceScanner(GObject.Object):
                     ' - '.join(filter(None, name_parts))
                 )
                 udev_gobj_out.text_summary = full_name
-                if (
-                    udev_gobjs_out_spi_only is not None
-                    and item_in['is_spi_related']
+                if udev_gobjs_out_spi_only is not None and item_in.get(
+                    'is_spi_related'
                 ):
                     udev_gobj_out_spi = UDevDevice()  # Won't have the same children, only the SPI-related ones
                     udev_gobj_out_spi.text_summary = udev_gobj_out.text_summary

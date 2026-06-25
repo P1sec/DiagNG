@@ -18,9 +18,12 @@ class DiagmondCommunicator(GObject.Object):
     proxy: Gio.DBusProxy
     bus_connected = GObject.Property(type=bool, default=False)
 
-    def __init__(self):
+    main_app: 'MainApplication'
+
+    def __init__(self, main_app: 'MainApplication'):
         super().__init__()
 
+        self.main_app = main_app
         self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
 
         XML_TREE = (
@@ -73,4 +76,6 @@ class DiagmondCommunicator(GObject.Object):
 
     def process_usb_data(self, usb_data: dict):
         if usb_data:
-            debug('WIP parse: %s', dumps(usb_data, indent=4))
+            debug('nusb data updated')
+
+            self.main_app.nusb_debug_data = dumps(usb_data, indent=4)
