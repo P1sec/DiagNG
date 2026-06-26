@@ -1,21 +1,25 @@
 mod logging;
 mod mm_lock;
-mod usb;
+mod serial_devices;
+mod usb_devices;
 
 use crate::logging::Logging;
 use crate::mm_lock::{lock_device, unlock_device};
-use crate::usb::{UsbDevicesEndpointResp, get_usb_metadata};
+use crate::serial_devices::list_devices;
+use crate::usb_devices::{UsbDevicesEndpointResp, get_usb_metadata};
 
 #[cfg(target_os = "linux")]
 use std::os::unix::process::CommandExt;
 
 use futures_util::StreamExt;
+use tokio_serial::SerialPortInfo;
 use zbus::connection::Builder;
 use zbus::interface;
 use zbus::object_server::SignalEmitter;
 
 struct Diagmond {
     pub usb_data: String,
+    pub tokio_serial_data: String,
 }
 
 // WIP 2026-06-22
@@ -56,8 +60,17 @@ impl Diagmond {
         &self.usb_data
     }
 
+    #[zbus(property, name = "TokioSerialData")]
+    async fn tokio_serial_data(&self) -> &str {
+        &self.tokio_serial_data
+    }
+
     #[zbus(signal, name = "USBDataUpdated")]
     async fn usb_data_updated(emitter: &SignalEmitter<'_>, data: &str) -> zbus::Result<()>;
+
+    #[zbus(signal, name = "TokioSerialDataUpdated")]
+    async fn tokio_serial_data_updated(emitter: &SignalEmitter<'_>, data: &str)
+    -> zbus::Result<()>;
 }
 
 #[tokio::main]
@@ -75,6 +88,7 @@ async fn main() -> zbus::Result<()> {
 
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
+        tokio_serial_data: "null".to_string(),
     };
 
     let connection = Builder::system()?
@@ -88,10 +102,15 @@ async fn main() -> zbus::Result<()> {
     let mut hotplug_watch = nusb::watch_devices().unwrap();
 
     loop {
-        let devices: UsbDevicesEndpointResp = get_usb_metadata().await;
+        let usb_devices: UsbDevicesEndpointResp = get_usb_metadata().await;
 
-        let devices_resp_string = serde_json::to_string_pretty(&devices).unwrap();
-        log::info!("USB data received: {}", devices_resp_string);
+        let devices_resp_string = serde_json::to_string_pretty(&usb_devices).unwrap();
+        log::info!("USB devices list received: {}", devices_resp_string);
+
+        let serial_devices: Vec<SerialPortInfo> = list_devices();
+
+        let serial_devices_string = serde_json::to_string_pretty(&serial_devices).unwrap();
+        log::info!("Serial devices list received: {}", serial_devices_string);
 
         // Trigger the DBus property change
         {
@@ -102,11 +121,15 @@ async fn main() -> zbus::Result<()> {
 
             let mut iface = iface_ref.get_mut().await;
             iface.usb_data = devices_resp_string.clone();
+            iface.tokio_serial_data = devices_resp_string.clone();
 
             // Send the DBus-serialized JSON data to the Python
             // process (and eventually display it to the UI)
 
             iface_ref.usb_data_updated(&devices_resp_string).await?;
+            iface_ref
+                .tokio_serial_data_updated(&devices_resp_string)
+                .await?;
         }
 
         let next_event = hotplug_watch.next().await.unwrap();

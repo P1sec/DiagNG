@@ -1,4 +1,3 @@
-
 use zbus::{Connection, Result, proxy};
 
 #[proxy(
