@@ -14,6 +14,7 @@ nusb = { version = "0.2.3", features = ["tokio"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = { version = "1.0.150", features = ["preserve_order"] }
 tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros"] }
+tokio-serial = { version = "5.5.0", features = ["libudev", "rt", "codec", "serde"] }
 zbus = { version = "5.16.0", default-features = false, features = ["tokio"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
