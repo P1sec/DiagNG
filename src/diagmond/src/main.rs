@@ -1,12 +1,18 @@
 mod logging;
-mod mm_lock;
-mod serial_devices;
-mod usb_devices;
+mod system {
+    pub mod mm_lock;
+    pub mod serial_devices;
+    pub mod usb_devices;
+}
+mod dbus {
+    pub mod device;
+    pub mod manager;
+}
 
+use crate::dbus::manager::{Diagmond, DiagmondSignals};
 use crate::logging::Logging;
-use crate::mm_lock::{lock_device, unlock_device};
-use crate::serial_devices::list_devices;
-use crate::usb_devices::{UsbDevicesEndpointResp, get_usb_metadata};
+use crate::system::serial_devices::list_devices;
+use crate::system::usb_devices::{UsbDevicesEndpointResp, get_usb_metadata};
 
 #[cfg(target_os = "linux")]
 use std::os::unix::process::CommandExt;
@@ -14,64 +20,6 @@ use std::os::unix::process::CommandExt;
 use futures_util::StreamExt;
 use tokio_serial::SerialPortInfo;
 use zbus::connection::Builder;
-use zbus::interface;
-use zbus::object_server::SignalEmitter;
-
-struct Diagmond {
-    pub usb_data: String,
-    pub tokio_serial_data: String,
-}
-
-// WIP 2026-06-22
-// Cf. https://docs.rs/zbus/latest/zbus/attr.interface.html
-// Cf. https://z-galaxy.github.io/zbus/client.html#more-advanced-example
-// Cf. https://z-galaxy.github.io/zbus/service.html#a-more-complete-example
-
-#[interface(name = "com.p1security.diagmond")]
-impl Diagmond {
-    #[zbus(name = "LockMMDevice")]
-    async fn lock_mm_device(
-        &self,
-        #[zbus(connection)] conn: &zbus::Connection,
-        uid: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: LockMMDevice({})", uid);
-        if let Err(error) = lock_device(conn, uid).await {
-            log::error!("Could not execute LockMMDevice({}): {:?}", uid, error);
-        }
-        Ok(true)
-    }
-
-    #[zbus(name = "ReleaseMMDevice")]
-    async fn release_mm_device(
-        &self,
-        #[zbus(connection)] conn: &zbus::Connection,
-        uid: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: ReleaseMMDevice({})", uid);
-        if let Err(error) = unlock_device(conn, uid).await {
-            log::error!("Could not execute ReleaseMMDevice({}): {:?}", uid, error);
-        }
-        Ok(true)
-    }
-
-    #[zbus(property, name = "USBData")]
-    async fn usb_data(&self) -> &str {
-        &self.usb_data
-    }
-
-    #[zbus(property, name = "TokioSerialData")]
-    async fn tokio_serial_data(&self) -> &str {
-        &self.tokio_serial_data
-    }
-
-    #[zbus(signal, name = "USBDataUpdated")]
-    async fn usb_data_updated(emitter: &SignalEmitter<'_>, data: &str) -> zbus::Result<()>;
-
-    #[zbus(signal, name = "TokioSerialDataUpdated")]
-    async fn tokio_serial_data_updated(emitter: &SignalEmitter<'_>, data: &str)
-    -> zbus::Result<()>;
-}
 
 #[tokio::main]
 async fn main() -> zbus::Result<()> {
