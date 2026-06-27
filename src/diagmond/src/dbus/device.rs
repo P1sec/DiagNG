@@ -15,10 +15,12 @@ use zbus::interface;
 // + nusb ==>
 //   https://docs.rs/nusb/latest/nusb/struct.Device.html
 
-pub struct Device {
-}
+pub struct Device {}
 
 #[interface(name = "com.p1security.diagmond.Device")]
 impl Device {
-        // WIP XX
+    // WIP XX
 }
+
+// WIP factory class:
+// pub struct DeviceCreator;

@@ -1,11 +1,13 @@
 use zbus::interface;
 use zbus::object_server::SignalEmitter;
 
+use crate::dbus::device::Device;
 use crate::system::mm_lock::{lock_device, unlock_device};
 
 pub struct Diagmond {
     pub usb_data: String,
     pub tokio_serial_data: String,
+    pub devices: Vec<Device>,
 }
 
 // WIP 2026-06-22

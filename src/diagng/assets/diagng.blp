@@ -218,6 +218,22 @@ template $MainWindow: Adw.ApplicationWindow {
               }
             }
 
+            Adw.PreferencesGroup tokio_serial_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-tokio-serial-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
+
+              title: _("tokio-serial debug information");
+
+              ScrolledWindow tokio_serial_debug_viewport {
+                max-content-height: 240;
+                min-content-height: 240;
+              }
+            }
+
             Adw.PreferencesGroup {
               title: _("Detailed UDev device tree");
 

@@ -5,7 +5,7 @@ mod system {
     pub mod usb_devices;
 }
 mod dbus {
-    // pub mod device;
+    pub mod device;
     pub mod manager;
 }
 
@@ -37,6 +37,7 @@ async fn main() -> zbus::Result<()> {
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
         tokio_serial_data: "null".to_string(),
+        devices: vec![],
     };
 
     let connection = Builder::system()?
@@ -53,12 +54,12 @@ async fn main() -> zbus::Result<()> {
         let usb_devices: UsbDevicesEndpointResp = get_usb_metadata().await;
 
         let devices_resp_string = serde_json::to_string_pretty(&usb_devices).unwrap();
-        log::info!("USB devices list received: {}", devices_resp_string);
+        log::info!("USB devices list received");
 
         let serial_devices: Vec<SerialPortInfo> = list_devices();
 
         let serial_devices_string = serde_json::to_string_pretty(&serial_devices).unwrap();
-        log::info!("Serial devices list received: {}", serial_devices_string);
+        log::info!("Serial devices list received");
 
         // Trigger the DBus property change
         {
@@ -69,14 +70,14 @@ async fn main() -> zbus::Result<()> {
 
             let mut iface = iface_ref.get_mut().await;
             iface.usb_data = devices_resp_string.clone();
-            iface.tokio_serial_data = devices_resp_string.clone();
+            iface.tokio_serial_data = serial_devices_string.clone();
 
             // Send the DBus-serialized JSON data to the Python
             // process (and eventually display it to the UI)
 
             iface_ref.usb_data_updated(&devices_resp_string).await?;
             iface_ref
-                .tokio_serial_data_updated(&devices_resp_string)
+                .tokio_serial_data_updated(&serial_devices_string)
                 .await?;
         }
 

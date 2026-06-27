@@ -270,6 +270,25 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </child>
                         <child>
+                          <object class="AdwPreferencesGroup" id="tokio_serial_debug_group">
+                            <property name="header-suffix">
+                              <object class="GtkButton">
+                                <property name="action-name">win.copy-tokio-serial-debug-info</property>
+                                <property name="has-tooltip">true</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                              </object>
+                            </property>
+                            <property name="title" translatable="yes">tokio-serial debug information</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="tokio_serial_debug_viewport">
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwPreferencesGroup">
                             <property name="title" translatable="yes">Detailed UDev device tree</property>
                             <child>

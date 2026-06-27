@@ -50,7 +50,10 @@ class DiagmondCommunicator(GObject.Object):
 
         self.proxy.connect('notify::g-name-owner', self.status_changed)
         self.proxy.connect('g-signal::USBDataUpdated', self.usb_data_changed)
-        # TODO NOTIFY ON USBDataUpdated signal triggered
+        self.proxy.connect(
+            'g-signal::TokioSerialDataUpdated', self.tokio_serial_data_changed
+        )
+        # NOTIFY ON USBDataUpdated signal triggered
         # (= OR JUST WHEN PROP :USBData CHANGED?)
         self.status_changed()
 
@@ -62,6 +65,13 @@ class DiagmondCommunicator(GObject.Object):
             usb_data_raw = self.proxy.get_cached_property('USBData')
             if usb_data_raw:
                 self.process_usb_data(loads(usb_data_raw.get_string()))
+            tokio_serial_data_raw = self.proxy.get_cached_property(
+                'TokioSerialData'
+            )
+            if tokio_serial_data_raw:
+                self.process_tokio_serial_data(
+                    loads(tokio_serial_data_raw.get_string())
+                )
         else:
             debug('Diagmond bus unavailable')
 
@@ -79,3 +89,20 @@ class DiagmondCommunicator(GObject.Object):
             debug('nusb data updated')
 
             self.main_app.nusb_debug_data = dumps(usb_data, indent=4)
+
+    def tokio_serial_data_changed(
+        self,
+        dbus_proxy: Gio.DBusProxy,
+        sender_name: str,
+        signal_name: str,
+        parameters: GLib.Variant,
+    ):
+        self.process_tokio_serial_data(loads(parameters[0]))
+
+    def process_tokio_serial_data(self, tokio_serial_data: dict):
+        if tokio_serial_data:
+            debug('tokio-serial data updated')
+
+            self.main_app.tokio_serial_debug_data = dumps(
+                tokio_serial_data, indent=4
+            )

@@ -48,12 +48,16 @@ class MyWindow(Adw.ApplicationWindow):
     usb_selection: Gio.ListStore = Gtk.Template.Child()
 
     udev_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
-    udev_debug_view: GtkSource
+    udev_debug_view: GtkSource.View
     udev_sourceview_buffer: GtkSource.Buffer
 
     nusb_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
-    nusb_debug_view: GtkSource
+    nusb_debug_view: GtkSource.View
     nusb_sourceview_buffer: GtkSource.Buffer
+
+    tokio_serial_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
+    tokio_serial_debug_view: GtkSource.View
+    tokio_serial_sourceview_buffer: GtkSource.Buffer
 
     # UI panel: SPI
 
@@ -125,6 +129,22 @@ class MyWindow(Adw.ApplicationWindow):
         self.nusb_debug_view.set_editable(False)
         self.nusb_debug_viewport.set_child(self.nusb_debug_view)
 
+        # Build tokio-serial debug SourceView
+
+        self.tokio_serial_sourceview_buffer = (
+            GtkSource.Buffer.new_with_language(
+                lang_manager.get_language('json')
+            )
+        )
+
+        self.tokio_serial_debug_view = GtkSource.View.new_with_buffer(
+            self.tokio_serial_sourceview_buffer
+        )
+        self.tokio_serial_debug_view.set_editable(False)
+        self.tokio_serial_debug_viewport.set_child(
+            self.tokio_serial_debug_view
+        )
+
         # Monitor for dark mode changes
 
         self.adw_style_manager = Adw.StyleManager.get_default()
@@ -159,6 +179,10 @@ class MyWindow(Adw.ApplicationWindow):
         self.app.connect(
             'notify::nusb-debug-data', self.update_nusb_debug_data
         )
+        self.app.connect(
+            'notify::tokio-serial-debug-data',
+            self.update_tokio_serial_debug_data,
+        )
 
         # Reset the default UI state
 
@@ -173,6 +197,7 @@ class MyWindow(Adw.ApplicationWindow):
         self.update_mm_debug_data()
         self.update_udev_debug_data()
         self.update_nusb_debug_data()
+        self.update_tokio_serial_debug_data()
 
     def add_simple_action(
         self, name, callback, param_type: Optional[GLib.VariantType] = None
@@ -201,6 +226,14 @@ class MyWindow(Adw.ApplicationWindow):
             clipboard.set(self.app.nusb_debug_data)
 
         self.add_simple_action('copy-nusb-debug-info', copy_nusb_debug_info)
+
+        def copy_tokio_serial_debug_info(*args):
+            clipboard = Gdk.Display.get_default().get_clipboard()
+            clipboard.set(self.app.tokio_serial_debug_data)
+
+        self.add_simple_action(
+            'copy-tokio-serial-debug-info', copy_tokio_serial_debug_info
+        )
 
     def update_daemon_statuses(self, *args):
         mm_running = self.app.modem_manager.mm_instance.is_running
@@ -240,6 +273,9 @@ class MyWindow(Adw.ApplicationWindow):
                     color_scheme_manager.get_scheme(scheme)
                 )
                 self.nusb_sourceview_buffer.set_style_scheme(
+                    color_scheme_manager.get_scheme(scheme)
+                )
+                self.tokio_serial_sourceview_buffer.set_style_scheme(
                     color_scheme_manager.get_scheme(scheme)
                 )
                 break
@@ -284,6 +320,12 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.nusb_debug_data:
             self.nusb_debug_view.get_buffer().set_text(
                 self.app.nusb_debug_data
+            )
+
+    def update_tokio_serial_debug_data(self, *args):
+        if self.app.tokio_serial_debug_data:
+            self.tokio_serial_debug_view.get_buffer().set_text(
+                self.app.tokio_serial_debug_data
             )
 
     def update_spi_devices(self, *args):
