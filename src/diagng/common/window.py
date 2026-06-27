@@ -329,9 +329,20 @@ class MyWindow(Adw.ApplicationWindow):
                     '<b>%s</b>'
                     % (GLib.markup_escape_text(port.tty_device_path, -1))
                 )
-                port_row.set_subtitle(
+                port_row.set_tooltip_text(
                     (GLib.markup_escape_text(port.sysfs_device_path, -1))
                 )
+
+                lock_port_btn = Gtk.Button()
+                lock_port_btn.set_label('Lock port')
+                lock_port_btn.add_css_class('pill')
+                port_row.add_suffix(lock_port_btn)
+
+                connect_btn = Gtk.Button()
+                connect_btn.set_label('Connect')
+                connect_btn.add_css_class('pill')
+                connect_btn.add_css_class('suggested-action')
+                port_row.add_suffix(connect_btn)
 
                 main_row.add_row(port_row)
 
