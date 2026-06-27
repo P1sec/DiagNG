@@ -51,7 +51,8 @@ METHOD:
   * `OpenSerialPort (string device_name) -> (boolean success, int? id)` (NEXT WIP?)
     * https://www.google.com/search?q=RUST+SERIAL+PORT+COMMUNICATION
       * **https://github.com/berkowski/tokio-serial**
-    * (⚠️ ⚠️ Export a SerialPort DBus sub-interface? With Close method, TCP port prop OR Read/Write methods, etc.?)
+    * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.Device` interface
+      * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface? With Close method, TCP port prop OR Read/Write methods, etc.?)
 * `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
 * `LockMMDevice (string uid) -> (boolean success)`
 * `ReleaseMMDevice (string uid) -> (boolean success)`
