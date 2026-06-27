@@ -1,3 +1,6 @@
+use zbus::interface;
+// use zbus::object_server::SignalEmitter;
+
 // NEXT TODO as of 2026-06-26 ⚠️
 
 // See https://docs.rs/tokio-serial/latest/tokio_serial/fn.new.html
@@ -11,6 +14,9 @@
 
 // + nusb ==>
 //   https://docs.rs/nusb/latest/nusb/struct.Device.html
+
+pub struct Device {
+}
 
 #[interface(name = "com.p1security.diagmond.Device")]
 impl Device {
