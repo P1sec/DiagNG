@@ -488,7 +488,13 @@ class MyWindow(Adw.ApplicationWindow):
         info(
             'lock_mm_port called on %s / %s'
             % (mm_modem.modem_device_id, mm_port.device_path)
-        )  # TODO
+        )
+
+        if self.app.diagmond_communicator.bus_connected:
+            if self.app.diagmond_communicator.proxy.LockMMDevice(
+                '(s)', mm_modem.modem_device_id
+            ):
+                mm_modem.inhibited = True
 
     def unlock_mm_port(
         self,
@@ -499,7 +505,13 @@ class MyWindow(Adw.ApplicationWindow):
         info(
             'lock_mm_unport called on %s / %s'
             % (mm_modem.modem_device_id, mm_port.device_path)
-        )  # TODO
+        )
+
+        if self.app.diagmond_communicator.bus_connected:
+            if self.app.diagmond_communicator.proxy.ReleaseMMDevice(
+                '(s)', mm_modem.modem_device_id
+            ):
+                mm_modem.inhibited = False
 
     def connect_mm_spi_port(
         self,
