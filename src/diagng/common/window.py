@@ -348,6 +348,9 @@ class MyWindow(Adw.ApplicationWindow):
         visit(self.spi_ports_group)
 
         vid_pid_to_ports: Dict[str, List[SerialPort]] = defaultdict(list)
+        vid_pid_to_mm_obj: Dict[str, List[ModemManagerModem]] = defaultdict(
+            list
+        )
         dev_path_to_mm_obj: Dict[
             str, Tuple[ModemManagerPort, ModemManagerModem]
         ] = {}
@@ -367,6 +370,10 @@ class MyWindow(Adw.ApplicationWindow):
 
             vid_pid_to_ports[item.usb_vid_pid].append(item)
 
+            if item.tty_device_path in dev_path_to_mm_obj:
+                mm_port, mm_modem = dev_path_to_mm_obj[item.tty_device_path]
+                vid_pid_to_mm_obj[item.usb_vid_pid] = mm_modem
+
         for vid_pid, ports in vid_pid_to_ports.items():
             first_port = ports[0]
 
@@ -381,6 +388,17 @@ class MyWindow(Adw.ApplicationWindow):
                     GLib.markup_escape_text(first_port.usb_vid_pid, -1),
                 )
             )
+
+            if first_port.usb_vid_pid in vid_pid_to_mm_obj:
+                mm_modem = vid_pid_to_mm_obj[first_port.usb_vid_pid]
+
+                main_row.set_subtitle(
+                    'IMEI: %s | Firmware: %s'
+                    % (
+                        GLib.markup_escape_text(mm_modem.modem_imei, -1),
+                        GLib.markup_escape_text(mm_modem.modem_firmware, -1),
+                    )
+                )
 
             for port in ports:
                 port_row = Adw.ActionRow.new()
