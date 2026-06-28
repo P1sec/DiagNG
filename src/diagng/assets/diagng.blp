@@ -269,6 +269,30 @@ template $MainWindow: Adw.ApplicationWindow {
           name: "adb_tab";
           title: "ADB";
         }
+
+        Adw.ViewStackPage udev_tab {
+          child: Adw.PreferencesPage udev_tab_page {
+            banner: Adw.Banner udev_link_banner {
+              revealed: true;
+              title: "UDev status: REACHABLE";
+            };
+
+            Adw.PreferencesGroup {
+              title: _("UDev rules list (WIP)");
+
+              ScrolledWindow {
+                child: ListView udev_rules_tree {};
+
+                max-content-height: 240;
+                min-content-height: 240;
+              }
+            }
+          };
+
+          icon-name: "applications-electronics-symbolic";
+          name: "udev_tab";
+          title: "UDev";
+        }
       };
     };
 

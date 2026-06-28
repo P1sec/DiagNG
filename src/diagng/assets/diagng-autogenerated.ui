@@ -335,6 +335,37 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                     <property name="title">ADB</property>
                   </object>
                 </child>
+                <child>
+                  <object class="AdwViewStackPage" id="udev_tab">
+                    <property name="child">
+                      <object class="AdwPreferencesPage" id="udev_tab_page">
+                        <property name="banner">
+                          <object class="AdwBanner" id="udev_link_banner">
+                            <property name="revealed">true</property>
+                            <property name="title">UDev status: REACHABLE</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">UDev rules list (WIP)</property>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="child">
+                                  <object class="GtkListView" id="udev_rules_tree"></object>
+                                </property>
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="icon-name">applications-electronics-symbolic</property>
+                    <property name="name">udev_tab</property>
+                    <property name="title">UDev</property>
+                  </object>
+                </child>
               </object>
             </property>
           </object>
