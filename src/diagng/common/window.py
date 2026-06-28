@@ -498,6 +498,13 @@ class MyWindow(Adw.ApplicationWindow):
                     '⚠️ Failed to lock modem: ' + format_exc(err), None
                 )
                 error('Failed to lock modem: ' + format_exc(err))
+
+                # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
+                # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
+                #  AS IN QCSUPER
+                # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
+                #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
+                #      DIAGMOND/SRC I GUESS?
             else:
                 mm_modem.inhibited = True
                 self.update_spi_devices()
@@ -529,6 +536,13 @@ class MyWindow(Adw.ApplicationWindow):
                     '⚠️ Failed to release modem: ' + format_exc(err), None
                 )
                 error('Failed to release modem: ' + format_exc(err))
+
+                # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
+                # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
+                #  AS IN QCSUPER
+                # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
+                #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
+                #      DIAGMOND/SRC I GUESS?
                 dialog.add_response('ok', 'Ok')
                 dialog.choose(self, None, None)
             else:
