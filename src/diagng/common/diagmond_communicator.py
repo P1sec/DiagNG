@@ -82,14 +82,17 @@ class DiagmondCommunicator(GObject.Object):
             # to ModemManager aren't
             # inhibited anymore
 
-            num_items = self.app.modem_manager.mm_instance.modems.get_n_items()
+            if self.main_app.modem_manager:
+                num_items = self.main_app.modem_manager.mm_instance.modems.get_n_items()
 
-            for pos in range(num_items):
-                item = self.app.modem_manager.mm_instance.modems.get_item(pos)
-                item.inhibited = False
+                for pos in range(num_items):
+                    item = self.main_app.modem_manager.mm_instance.modems.get_item(
+                        pos
+                    )
+                    item.inhibited = False
 
-            if num_items:
-                self.app.modem_manager.queue_state_update()
+                if num_items:
+                    self.main_app.modem_manager.queue_state_update()
 
     def usb_data_changed(
         self,

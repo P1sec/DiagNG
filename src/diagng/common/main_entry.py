@@ -36,9 +36,9 @@ def main():
 class MainApplication(Adw.Application):
     window: MyWindow
 
-    diagmond_communicator: DiagmondCommunicator
-    modem_manager: ModemManagerIntf
-    device_scanner: DeviceScanner
+    diagmond_communicator: DiagmondCommunicator = None
+    modem_manager: ModemManagerIntf = None
+    device_scanner: DeviceScanner = None
 
     mm_debug_data = GObject.Property(type=str)
     udev_debug_data = GObject.Property(type=str)

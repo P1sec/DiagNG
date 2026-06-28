@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from typing import List, Dict, Tuple, Optional
 from collections import defaultdict
-from logging import info
+from traceback import format_exc
+from logging import info, error
 
 # Register resources
 import diagng.utils.gresources
@@ -159,6 +160,9 @@ class MyWindow(Adw.ApplicationWindow):
         self.connect_actions()
 
         # Connect signals
+
+        self.connect('close-request', self.on_quit)
+        self.app.connect('shutdown', self.on_quit)
 
         self.app.device_scanner.spi_devices.connect(
             'items-changed', self.update_spi_devices
@@ -441,7 +445,6 @@ class MyWindow(Adw.ApplicationWindow):
                             'clicked',
                             self.lock_mm_port,
                             mm_modem,
-                            mm_port,
                         )
 
                     else:
@@ -449,7 +452,6 @@ class MyWindow(Adw.ApplicationWindow):
                             'clicked',
                             self.unlock_mm_port,
                             mm_modem,
-                            mm_port,
                         )
 
                     # Annotate devices with ModemManager function
@@ -483,37 +485,71 @@ class MyWindow(Adw.ApplicationWindow):
         self,
         target: Gtk.Button,
         mm_modem: ModemManagerModem,
-        mm_port: ModemManagerPort,
     ):
-        info(
-            'lock_mm_port called on %s / %s'
-            % (mm_modem.modem_device_id, mm_port.device_path)
-        )
+        info('lock_mm_port called on %s' % mm_modem.modem_device_id)
 
         if self.app.diagmond_communicator.bus_connected:
-            if self.app.diagmond_communicator.proxy.LockMMDevice(
-                '(s)', mm_modem.modem_device_id
-            ):
+            try:
+                self.app.diagmond_communicator.proxy.LockMMDevice(
+                    '(s)', mm_modem.modem_device_id
+                )
+            except Exception as err:
+                dialog = Adw.AlertDialog.new(
+                    '⚠️ Failed to lock modem: ' + format_exc(err), None
+                )
+                error('Failed to lock modem: ' + format_exc(err))
+            else:
                 mm_modem.inhibited = True
                 self.update_spi_devices()
+                dialog = Adw.AlertDialog.new('Modem locked ok', None)
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
+        else:
+            dialog = Adw.AlertDialog.new(
+                "⚠️ diagmond not available, can't lock modem", None
+            )
+            error("diagmond not available, can't lock modem")
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
 
     def unlock_mm_port(
         self,
         target: Gtk.Button,
         mm_modem: ModemManagerModem,
-        mm_port: ModemManagerPort,
     ):
-        info(
-            'lock_mm_unport called on %s / %s'
-            % (mm_modem.modem_device_id, mm_port.device_path)
-        )
+        info('unlock_mm_port called on %s' % mm_modem.modem_device_id)
 
         if self.app.diagmond_communicator.bus_connected:
-            if self.app.diagmond_communicator.proxy.ReleaseMMDevice(
-                '(s)', mm_modem.modem_device_id
-            ):
+            try:
+                self.app.diagmond_communicator.proxy.ReleaseMMDevice(
+                    '(s)', mm_modem.modem_device_id
+                )
+            except Exception as err:
+                dialog = Adw.AlertDialog.new(
+                    '⚠️ Failed to release modem: ' + format_exc(err), None
+                )
+                error('Failed to release modem: ' + format_exc(err))
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self, None, None)
+            else:
                 mm_modem.inhibited = False
                 self.update_spi_devices()
+        else:
+            dialog = Adw.AlertDialog.new(
+                "⚠️ diagmond not available, can't release modem", None
+            )
+            error("diagmond not available, can't release modem")
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
+
+    def on_quit(self, *args):
+        for pos in range(
+            self.app.modem_manager.mm_instance.modems.get_n_items()
+        ):
+            item = self.app.modem_manager.mm_instance.modems.get_item(pos)
+
+            if item.inhibited:
+                self.unlock_mm_port(None, item)
 
     def connect_mm_spi_port(
         self,
