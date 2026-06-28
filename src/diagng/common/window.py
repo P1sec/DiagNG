@@ -495,6 +495,7 @@ class MyWindow(Adw.ApplicationWindow):
                 '(s)', mm_modem.modem_device_id
             ):
                 mm_modem.inhibited = True
+                self.update_spi_devices()
 
     def unlock_mm_port(
         self,
@@ -512,6 +513,7 @@ class MyWindow(Adw.ApplicationWindow):
                 '(s)', mm_modem.modem_device_id
             ):
                 mm_modem.inhibited = False
+                self.update_spi_devices()
 
     def connect_mm_spi_port(
         self,

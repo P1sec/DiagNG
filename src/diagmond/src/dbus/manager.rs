@@ -26,6 +26,7 @@ impl Diagmond {
         log::debug!("Received: LockMMDevice({})", uid);
         if let Err(error) = lock_device(conn, uid).await {
             log::error!("Could not execute LockMMDevice({}): {:?}", uid, error);
+            return Err(zbus::fdo::Error::Failed(error.to_string()));
         }
         Ok(true)
     }
@@ -39,6 +40,7 @@ impl Diagmond {
         log::debug!("Received: ReleaseMMDevice({})", uid);
         if let Err(error) = unlock_device(conn, uid).await {
             log::error!("Could not execute ReleaseMMDevice({}): {:?}", uid, error);
+            return Err(zbus::fdo::Error::Failed(error.to_string()));
         }
         Ok(true)
     }

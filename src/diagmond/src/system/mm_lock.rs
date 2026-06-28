@@ -6,6 +6,7 @@ use zbus::{Connection, Result, proxy};
     default_path = "/org/freedesktop/ModemManager1"
 )]
 trait ModemManager {
+    #[zbus(name = "InhibitDevice")]
     async fn inhibit_device(&self, uid: &str, inhibit: bool) -> Result<()>;
 }
 
