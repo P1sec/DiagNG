@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-from typing import List, Dict, Optional
+from typing import List, Dict, Tuple, Optional
 from collections import defaultdict
+from logging import info
 
 # Register resources
 import diagng.utils.gresources
 
+from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.gobject.mm_port import ModemManagerPort
 from diagng.gobject.serial_port import SerialPort
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
@@ -162,6 +165,9 @@ class MyWindow(Adw.ApplicationWindow):
         )
         self.app.modem_manager.mm_instance.modems.connect(
             'items-changed', self.update_mm_modems
+        )
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_spi_devices
         )
         self.app.modem_manager.mm_instance.connect(
             'notify::is-running', self.update_daemon_statuses
@@ -342,6 +348,19 @@ class MyWindow(Adw.ApplicationWindow):
         visit(self.spi_ports_group)
 
         vid_pid_to_ports: Dict[str, List[SerialPort]] = defaultdict(list)
+        dev_path_to_mm_obj: Dict[
+            str, Tuple[ModemManagerPort, ModemManagerModem]
+        ] = {}
+
+        for pos in range(
+            self.app.modem_manager.mm_instance.modems.get_n_items()
+        ):
+            item = self.app.modem_manager.mm_instance.modems.get_item(pos)
+
+            for pos in range(item.ports.get_n_items()):
+                port = item.ports.get_item(pos)
+
+                dev_path_to_mm_obj[port.device_path] = (port, item)
 
         for pos in range(self.app.device_scanner.spi_devices.get_n_items()):
             item = self.app.device_scanner.spi_devices.get_item(pos)
@@ -371,24 +390,112 @@ class MyWindow(Adw.ApplicationWindow):
                     '<b>%s</b>'
                     % (GLib.markup_escape_text(port.tty_device_path, -1))
                 )
-                port_row.set_tooltip_text(
-                    (GLib.markup_escape_text(port.sysfs_device_path, -1))
-                )
-
-                lock_port_btn = Gtk.Button()
-                lock_port_btn.set_label('Lock port')
-                lock_port_btn.add_css_class('pill')
-                port_row.add_suffix(lock_port_btn)
+                port_row.set_tooltip_text(port.sysfs_device_path)
 
                 connect_btn = Gtk.Button()
                 connect_btn.set_label('Connect')
                 connect_btn.add_css_class('pill')
                 connect_btn.add_css_class('suggested-action')
+
+                # Annotate devices with USB interface
+
+                subtitle = 'Interface: %s' % port.usb_interface
+
+                # Don't propose to lock devices which are not
+                # known from ModemManager
+
+                if port.tty_device_path in dev_path_to_mm_obj:
+                    mm_port, mm_modem = dev_path_to_mm_obj[
+                        port.tty_device_path
+                    ]
+
+                    lock_port_btn = Gtk.Button()
+                    lock_port_btn.set_label(
+                        'Lock port'
+                        if not mm_modem.inhibited
+                        else 'Unlock port'
+                    )
+                    lock_port_btn.add_css_class('pill')
+                    port_row.add_suffix(lock_port_btn)
+
+                    if not mm_modem.inhibited:
+                        lock_port_btn.connect(
+                            'clicked',
+                            self.lock_mm_port,
+                            mm_modem,
+                            mm_port,
+                        )
+
+                    else:
+                        lock_port_btn.connect(
+                            'clicked',
+                            self.unlock_mm_port,
+                            mm_modem,
+                            mm_port,
+                        )
+
+                    # Annotate devices with ModemManager function
+
+                    subtitle += ' | Type: ' + mm_port.port_type
+
+                    connect_btn.connect(
+                        'clicked',
+                        self.connect_mm_spi_port,
+                        port,
+                        mm_modem,
+                        mm_port,
+                    )
+
+                else:
+                    connect_btn.connect(
+                        'clicked',
+                        self.connect_non_mm_spi_port,
+                        port,
+                    )
+
+                port_row.set_subtitle(GLib.markup_escape_text(subtitle, -1))
+
                 port_row.add_suffix(connect_btn)
 
                 main_row.add_row(port_row)
 
             self.spi_ports_group.add(main_row)
+
+    def lock_mm_port(
+        self,
+        target: Gtk.Button,
+        mm_modem: ModemManagerModem,
+        mm_port: ModemManagerPort,
+    ):
+        info(
+            'lock_mm_port called on %s / %s'
+            % (mm_modem.modem_device_id, mm_port.device_path)
+        )  # TODO
+
+    def unlock_mm_port(
+        self,
+        target: Gtk.Button,
+        mm_modem: ModemManagerModem,
+        mm_port: ModemManagerPort,
+    ):
+        info(
+            'lock_mm_unport called on %s / %s'
+            % (mm_modem.modem_device_id, mm_port.device_path)
+        )  # TODO
+
+    def connect_mm_spi_port(
+        self,
+        target: Gtk.Button,
+        port: SerialPort,
+        mm_modem: ModemManagerModem,
+        mm_port: ModemManagerPort,
+    ):
+        info('connect_mm_spi_port called on %s' % port.tty_device_path)  # TODO
+
+    def connect_non_mm_spi_port(self, target: Gtk.Button, port: SerialPort):
+        info(
+            'connect_non_mm_spi_port called on %s' % port.tty_device_path
+        )  # TODO
 
     def update_mm_modems(self, *args):
         def visit(container: Gtk.Widget):

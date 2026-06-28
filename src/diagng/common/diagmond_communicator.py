@@ -75,6 +75,22 @@ class DiagmondCommunicator(GObject.Object):
         else:
             debug('Diagmond bus unavailable')
 
+            # If the connection of Diagmond to the
+            # system bus disappeared then this
+            # means that devices inhibited
+            # using the InhibitDevice call
+            # to ModemManager aren't
+            # inhibited anymore
+
+            num_items = self.app.modem_manager.mm_instance.modems.get_n_items()
+
+            for pos in range(num_items):
+                item = self.app.modem_manager.mm_instance.modems.get_item(pos)
+                item.inhibited = False
+
+            if num_items:
+                self.app.modem_manager.queue_state_update()
+
     def usb_data_changed(
         self,
         dbus_proxy: Gio.DBusProxy,

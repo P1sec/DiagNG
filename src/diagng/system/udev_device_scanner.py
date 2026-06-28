@@ -359,8 +359,6 @@ class DeviceScanner(GObject.Object):
                         spi_gobj_out.usb_vid_pid = item_in.get('usb_vid_pid')
                         spi_gobj_out.usb_vendor = item_in.get('vendor')
                         spi_gobj_out.usb_product = item_in.get('model')
-                        # spi_gobj_out.is_mm_detected = XX
-                        # spi_gobj_out.is_mm_inhibited = XX
                         spi_gobjs_out.append(spi_gobj_out)
                 else:
                     udev_gobj_out_spi = None
