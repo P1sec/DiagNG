@@ -281,7 +281,7 @@ template $MainWindow: Adw.ApplicationWindow {
               title: _("UDev rules list (WIP)");
 
               ScrolledWindow {
-                child: ListView udev_rules_tree {};
+                child: ColumnView udev_column_view {};
 
                 max-content-height: 240;
                 min-content-height: 240;
