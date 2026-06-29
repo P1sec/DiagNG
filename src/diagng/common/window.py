@@ -497,7 +497,9 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.diagmond_communicator.bus_connected:
             try:
                 self.app.diagmond_communicator.proxy.LockMMDeviceUDev(
-                    '(s)', serial_port.kernel_name
+                    '(ss)',
+                    serial_port.tty_device_path,
+                    serial_port.kernel_name,
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
@@ -539,7 +541,9 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.diagmond_communicator.bus_connected:
             try:
                 self.app.diagmond_communicator.proxy.ReleaseMMDeviceUDev(
-                    '(s)', serial_port.kernel_name
+                    '(ss)',
+                    serial_port.tty_device_path,
+                    serial_port.kernel_name,
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
