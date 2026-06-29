@@ -1,6 +1,7 @@
 mod logging;
 mod system {
-    pub mod mm_lock;
+    // pub mod mm_dbus_lock;
+    pub mod mm_udev_lock;
     pub mod serial_devices;
     pub mod usb_devices;
 }

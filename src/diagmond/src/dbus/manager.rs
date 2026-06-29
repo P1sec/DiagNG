@@ -2,7 +2,6 @@ use zbus::interface;
 use zbus::object_server::SignalEmitter;
 
 use crate::dbus::device::Device;
-use crate::system::mm_lock::{lock_device, unlock_device};
 
 pub struct Diagmond {
     pub usb_data: String,
@@ -17,33 +16,61 @@ pub struct Diagmond {
 
 #[interface(name = "com.p1security.diagmond")]
 impl Diagmond {
-    #[zbus(name = "LockMMDevice")]
-    async fn lock_mm_device(
-        &self,
-        #[zbus(connection)] conn: &zbus::Connection,
-        uid: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: LockMMDevice({})", uid);
-        if let Err(error) = lock_device(conn, uid).await {
-            log::error!("Could not execute LockMMDevice({}): {:?}", uid, error);
+    #[zbus(name = "LockMMDeviceUDev")]
+    async fn lock_mm_device_udev(&self, devname: &str) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: LockMMDeviceUDev({})", devname);
+        if let Err(error) = crate::system::mm_udev_lock::lock_device(devname).await {
+            log::error!(
+                "Could not execute LockMMDeviceUDev({}): {:?}",
+                devname,
+                error
+            );
             return Err(zbus::fdo::Error::Failed(error.to_string()));
         }
         Ok(true)
     }
 
-    #[zbus(name = "ReleaseMMDevice")]
-    async fn release_mm_device(
-        &self,
-        #[zbus(connection)] conn: &zbus::Connection,
-        uid: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: ReleaseMMDevice({})", uid);
-        if let Err(error) = unlock_device(conn, uid).await {
-            log::error!("Could not execute ReleaseMMDevice({}): {:?}", uid, error);
+    #[zbus(name = "ReleaseMMDeviceUDev")]
+    async fn release_mm_device_udev(&self, devname: &str) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: ReleaseMMDeviceUDev({})", devname);
+        if let Err(error) = crate::system::mm_udev_lock::unlock_device(devname).await {
+            log::error!(
+                "Could not execute ReleaseMMDeviceUDev({}): {:?}",
+                devname,
+                error
+            );
             return Err(zbus::fdo::Error::Failed(error.to_string()));
         }
         Ok(true)
     }
+
+    /* #[zbus(name = "LockMMDeviceDBus")]
+    async fn lock_mm_device_dbus(
+        &self,
+        #[zbus(connection)] conn: &zbus::Connection,
+        uid: &str,
+    ) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: LockMMDeviceDBus({})", uid);
+        if let Err(error) = crate::system::mm_dbus_lock::lock_device(conn, uid).await {
+            log::error!("Could not execute LockMMDeviceDBus({}): {:?}", uid, error);
+            return Err(zbus::fdo::Error::Failed(error.to_string()));
+        }
+        Ok(true)
+    }
+
+    #[zbus(name = "ReleaseMMDeviceDBus")]
+    async fn release_mm_device_dbus(
+        &self,
+        #[zbus(connection)] conn: &zbus::Connection,
+        uid: &str,
+    ) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: ReleaseMMDeviceDBus({})", uid);
+        if let Err(error) = crate::system::mm_dbus_lock::unlock_device(conn, uid).await {
+            log::error!("Could not execute ReleaseMMDeviceDBus({}): {:?}", uid, error);
+            return Err(zbus::fdo::Error::Failed(error.to_string()));
+        }
+        Ok(true)
+    } */
 
     #[zbus(property, name = "USBData")]
     async fn usb_data(&self) -> &str {

@@ -54,5 +54,7 @@ METHOD:
     * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.Device` interface
       * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface? With Close method, TCP port prop OR Read/Write methods, etc.?)
 * `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
-* `LockMMDevice (string uid) -> (boolean success)`
-* `ReleaseMMDevice (string uid) -> (boolean success)`
+* `LockMMDeviceUDev (string devname) -> (boolean success)`
+* `ReleaseMMDeviceUDev (string devname) -> (boolean success)`
+* `LockMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
+* `ReleaseMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)

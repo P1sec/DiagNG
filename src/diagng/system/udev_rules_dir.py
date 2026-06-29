@@ -21,7 +21,7 @@ class UdevRulesMonitor:
 
         self.app = app
 
-        self.rules_dir = Gio.File.new_for_path('/tmp/toto_dir')
+        self.rules_dir = Gio.File.new_for_path(UDEV_RULES_DIR)
         self.rules_dir_monitor = self.rules_dir.monitor_directory(
             Gio.FileMonitorFlags.NONE, None
         )

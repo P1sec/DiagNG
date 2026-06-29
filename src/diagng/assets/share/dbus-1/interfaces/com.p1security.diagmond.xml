@@ -52,7 +52,56 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         </property>
 
         <!--*********************************************************************-->
-        <method name="LockMMDevice">
+        <method name="LockMMDeviceUDev">
+            <arg type="s" name="devname" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The Linux name of the ModemManager device to lock
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="b" name="success" direction="out">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            Result of the operation
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+        </method>
+
+        <!--*********************************************************************-->
+        <method name="ReleaseMMDeviceUDev">
+            <arg type="s" name="devname" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The Linux name of the ModemManager device to lock
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="b" name="success" direction="out">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            Result of the operation
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+        </method>
+
+        <!--
+            ⚠️ The functionality listed below is disabled because of
+            https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
+        -->
+
+        <!--*********************************************************************-->
+        <!--method name="LockMMDeviceDBus">
             <arg type="s" name="uid" direction="in">
                 <doc:doc>
                     <doc:summary>
@@ -73,10 +122,10 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
                     </doc:summary>
                 </doc:doc>
             </arg>
-        </method>
+        </method-->
 
         <!--*********************************************************************-->
-        <method name="ReleaseMMDevice">
+        <!--method name="ReleaseMMDeviceDBus">
             <arg type="s" name="uid" direction="in">
                 <doc:doc>
                     <doc:summary>
@@ -97,7 +146,7 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
                     </doc:summary>
                 </doc:doc>
             </arg>
-        </method>
+        </method-->
 
     </interface>
 </node>

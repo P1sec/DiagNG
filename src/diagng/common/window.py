@@ -442,16 +442,12 @@ class MyWindow(Adw.ApplicationWindow):
 
                     if not mm_modem.inhibited:
                         lock_port_btn.connect(
-                            'clicked',
-                            self.lock_mm_port,
-                            mm_modem,
+                            'clicked', self.lock_mm_port, mm_modem, mm_port
                         )
 
                     else:
                         lock_port_btn.connect(
-                            'clicked',
-                            self.unlock_mm_port,
-                            mm_modem,
+                            'clicked', self.unlock_mm_port, mm_modem, mm_port
                         )
 
                     # Annotate devices with ModemManager function
@@ -485,13 +481,14 @@ class MyWindow(Adw.ApplicationWindow):
         self,
         target: Gtk.Button,
         mm_modem: ModemManagerModem,
+        mm_port: ModemManagerPort,
     ):
-        info('lock_mm_port called on %s' % mm_modem.modem_device_id)
+        info('lock_mm_port called on %s' % mm_port.device_path)
 
         if self.app.diagmond_communicator.bus_connected:
             try:
-                self.app.diagmond_communicator.proxy.LockMMDevice(
-                    '(s)', mm_modem.modem_device_id
+                self.app.diagmond_communicator.proxy.LockMMDeviceUDev(
+                    '(s)', mm_port.device_path
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
@@ -508,7 +505,9 @@ class MyWindow(Adw.ApplicationWindow):
             else:
                 mm_modem.inhibited = True
                 self.update_spi_devices()
-                dialog = Adw.AlertDialog.new('Modem locked ok', None)
+                dialog = Adw.AlertDialog.new(
+                    'Modem lock instruction sent (⚠️ WIP 2026-06-29)', None
+                )
             dialog.add_response('ok', 'Ok')
             dialog.choose(self, None, None)
         else:
@@ -523,13 +522,14 @@ class MyWindow(Adw.ApplicationWindow):
         self,
         target: Gtk.Button,
         mm_modem: ModemManagerModem,
+        mm_port: ModemManagerPort,
     ):
-        info('unlock_mm_port called on %s' % mm_modem.modem_device_id)
+        info('unlock_mm_port called on %s' % mm_port.device_path)
 
         if self.app.diagmond_communicator.bus_connected:
             try:
-                self.app.diagmond_communicator.proxy.ReleaseMMDevice(
-                    '(s)', mm_modem.modem_device_id
+                self.app.diagmond_communicator.proxy.ReleaseMMDeviceUDev(
+                    '(s)', mm_port.device_path
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
