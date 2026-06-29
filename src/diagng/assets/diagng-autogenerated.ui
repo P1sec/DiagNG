@@ -351,7 +351,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
-                                  <object class="GtkColumnView" id="udev_column_view"></object>
+                                  <object class="GtkColumnView" id="udev_column_view">
+                                    <property name="model">
+                                      <object class="GtkSingleSelection"></object>
+                                    </property>
+                                    <child>
+                                      <object class="GtkColumnViewColumn" id="rule_file_name_col"></object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkColumnViewColumn" id="rule_text_col"></object>
+                                    </child>
+                                  </object>
                                 </property>
                                 <property name="max-content-height">240</property>
                                 <property name="min-content-height">240</property>

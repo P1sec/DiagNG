@@ -501,7 +501,7 @@ class MyWindow(Adw.ApplicationWindow):
 
                 # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
                 # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
-                #  AS IN QCSUPER
+                #  AS IN QCSUPER
                 # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
                 #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
                 #      DIAGMOND/SRC I GUESS?
@@ -539,7 +539,7 @@ class MyWindow(Adw.ApplicationWindow):
 
                 # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
                 # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
-                #  AS IN QCSUPER
+                #  AS IN QCSUPER
                 # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
                 #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
                 #      DIAGMOND/SRC I GUESS?

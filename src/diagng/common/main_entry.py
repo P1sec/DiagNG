@@ -11,6 +11,7 @@ from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.system.udev_device_scanner import DeviceScanner
+from diagng.system.udev_rules_dir import UdevRulesMonitor
 from diagng.utils.logging import LoggingCentral
 from diagng.common.window import MyWindow
 
@@ -38,6 +39,7 @@ class MainApplication(Adw.Application):
 
     diagmond_communicator: DiagmondCommunicator = None
     modem_manager: ModemManagerIntf = None
+    udev_rules_monitor: UdevRulesMonitor = None
     device_scanner: DeviceScanner = None
 
     mm_debug_data = GObject.Property(type=str)
@@ -156,6 +158,7 @@ class MainApplication(Adw.Application):
     def on_startup(self, app, *args):
         self.diagmond_communicator = DiagmondCommunicator(self)
         self.modem_manager = ModemManagerIntf(self)
+        self.udev_rules_monitor = UdevRulesMonitor(self)
         self.device_scanner = DeviceScanner(self)
 
         self.window = MyWindow(self)
