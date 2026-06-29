@@ -37,7 +37,7 @@ class UdevRulesMonitor:
     ):
         debug(
             'UDev rules directory event received: '
-            + 'file=%r - other_file%r - event=%r'
+            + 'file=%s - other_file%s - event=%s'
             % (
                 fd.get_path() if fd else None,
                 other_file.get_path() if other_file else None,

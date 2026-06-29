@@ -353,13 +353,61 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="child">
                                   <object class="GtkColumnView" id="udev_column_view">
                                     <property name="model">
-                                      <object class="GtkSingleSelection"></object>
+                                      <object class="GtkSingleSelection">
+                                        <property name="model">
+                                          <object class="GListStore" id="udev_rule_model"></object>
+                                        </property>
+                                      </object>
                                     </property>
                                     <child>
-                                      <object class="GtkColumnViewColumn" id="rule_file_name_col"></object>
+                                      <object class="GtkColumnViewColumn" id="rule_file_name_col">
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="rule_file_name" type="UDevRule">
+            <lookup name="item" type="GtkColumnViewCell">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>]]></property>
+                                          </object>
+                                        </property>
+                                        <property name="resizable">true</property>
+                                        <property name="title">File name</property>
+                                      </object>
                                     </child>
                                     <child>
-                                      <object class="GtkColumnViewColumn" id="rule_text_col"></object>
+                                      <object class="GtkColumnViewColumn" id="rule_text_col">
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="rule_text" type="UDevRule">
+            <lookup name="item" type="GtkColumnViewCell">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>]]></property>
+                                          </object>
+                                        </property>
+                                        <property name="resizable">true</property>
+                                        <property name="title">Rule</property>
+                                      </object>
                                     </child>
                                   </object>
                                 </property>

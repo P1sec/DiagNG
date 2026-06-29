@@ -4,7 +4,7 @@
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="19b44d62c77396053745b232b2e983d160d898b1f14ad8b5bf585ededbd95981"/>
   <css priority="600" is_global="1" filename="style.css" sha256="4973fcb9089f64b71e665a2f8e2bf53be60b0a02e6d2e5832dd1a3810a43d4a4"/>
-  <ui template-class="MainWindow" filename="diagng.blp" sha256="d24845d50220aeaf0ac16453ca4f702fb3832e0c3948d5b29d06305246625672">
+  <ui template-class="MainWindow" filename="diagng.blp" sha256="e1a650b2b432d2456249d8dc18ef5281c7ca0fda4b433104ce52c738db416200">
     <css-provider>style.css</css-provider>
   </ui>
 </cambalache-project>

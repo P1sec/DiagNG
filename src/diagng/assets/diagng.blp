@@ -1,5 +1,6 @@
 using Gtk 4.0;
 using Adw 1;
+using Gio 2.0;
 
 template $MainWindow: Adw.ApplicationWindow {
   content: Adw.ToolbarView {
@@ -282,11 +283,37 @@ template $MainWindow: Adw.ApplicationWindow {
 
               ScrolledWindow {
                 child: ColumnView udev_column_view {
-                  model: SingleSelection {};
+                  model: SingleSelection {
+                    model: Gio.ListStore udev_rule_model {};
+                  };
 
-                  ColumnViewColumn rule_file_name_col {}
+                  ColumnViewColumn rule_file_name_col {
+                    factory: BuilderListItemFactory {
+                      template ColumnViewCell {
+                        child: Label {
+                          xalign: 0;
+                          label: bind template.item as <$UDevRule>.rule_file_name;
+                        };
+                      }
+                    };
 
-                  ColumnViewColumn rule_text_col {}
+                    resizable: true;
+                    title: "File name";
+                  }
+
+                  ColumnViewColumn rule_text_col {
+                    factory: BuilderListItemFactory {
+                      template ColumnViewCell {
+                        child: Label {
+                          xalign: 0;
+                          label: bind template.item as <$UDevRule>.rule_text;
+                        };
+                      }
+                    };
+
+                    resizable: true;
+                    title: "Rule";
+                  }
                 };
 
                 max-content-height: 240;
