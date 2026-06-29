@@ -442,12 +442,20 @@ class MyWindow(Adw.ApplicationWindow):
 
                     if not mm_modem.inhibited:
                         lock_port_btn.connect(
-                            'clicked', self.lock_mm_port, mm_modem, mm_port
+                            'clicked',
+                            self.lock_mm_port,
+                            port,
+                            mm_modem,
+                            mm_port,
                         )
 
                     else:
                         lock_port_btn.connect(
-                            'clicked', self.unlock_mm_port, mm_modem, mm_port
+                            'clicked',
+                            self.unlock_mm_port,
+                            port,
+                            mm_modem,
+                            mm_port,
                         )
 
                     # Annotate devices with ModemManager function
@@ -480,6 +488,7 @@ class MyWindow(Adw.ApplicationWindow):
     def lock_mm_port(
         self,
         target: Gtk.Button,
+        serial_port: SerialPort,
         mm_modem: ModemManagerModem,
         mm_port: ModemManagerPort,
     ):
@@ -488,7 +497,7 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.diagmond_communicator.bus_connected:
             try:
                 self.app.diagmond_communicator.proxy.LockMMDeviceUDev(
-                    '(s)', mm_port.device_path
+                    '(s)', serial_port.kernel_name
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
@@ -521,6 +530,7 @@ class MyWindow(Adw.ApplicationWindow):
     def unlock_mm_port(
         self,
         target: Gtk.Button,
+        serial_port: SerialPort,
         mm_modem: ModemManagerModem,
         mm_port: ModemManagerPort,
     ):
@@ -529,7 +539,7 @@ class MyWindow(Adw.ApplicationWindow):
         if self.app.diagmond_communicator.bus_connected:
             try:
                 self.app.diagmond_communicator.proxy.ReleaseMMDeviceUDev(
-                    '(s)', mm_port.device_path
+                    '(s)', serial_port.kernel_name
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(

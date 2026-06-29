@@ -5,6 +5,7 @@ from typing import Self
 
 class SerialPort(GObject.Object):
     tty_device_path = GObject.Property(type=str)
+    kernel_name = GObject.Property(type=str)
     sysfs_device_path = GObject.Property(type=str)
     usb_interface = GObject.Property(type=str)
     usb_vid_pid = GObject.Property(type=str)
@@ -15,6 +16,9 @@ class SerialPort(GObject.Object):
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
             'tty_device_path', GLib.Variant.new_string(self.tty_device_path)
+        )
+        variant.insert_value(
+            'kernel_name', GLib.Variant.new_string(self.kernel_name)
         )
         variant.insert_value(
             'sysfs_device_path',
@@ -41,6 +45,7 @@ class SerialPort(GObject.Object):
         self.tty_device_path = data.lookup_value(
             'tty_device_path'
         ).get_string()
+        self.kernel_name = data.lookup_value('kernel_name').get_string()
         self.sysfs_device_path = data.lookup_value(
             'sysfs_device_path'
         ).get_string()

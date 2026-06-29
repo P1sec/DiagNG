@@ -352,6 +352,7 @@ class DeviceScanner(GObject.Object):
                     if item_in.get('subsystem') == 'tty':
                         spi_gobj_out = SerialPort()
                         spi_gobj_out.tty_device_path = item_in.get('name')
+                        spi_gobj_out.kernel_name = item_in.get('kernel_name')
                         spi_gobj_out.sysfs_device_path = item_in.get('path')
                         spi_gobj_out.usb_interface = item_in.get(
                             'usb_interface'

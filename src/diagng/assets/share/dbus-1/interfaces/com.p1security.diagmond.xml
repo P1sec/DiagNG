@@ -53,11 +53,11 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 
         <!--*********************************************************************-->
         <method name="LockMMDeviceUDev">
-            <arg type="s" name="devname" direction="in">
+            <arg type="s" name="kernel" direction="in">
                 <doc:doc>
                     <doc:summary>
                         <doc:para>
-                            The Linux name of the ModemManager device to lock
+                            The UDev KERNEL name of the ModemManager device to lock
                         </doc:para>
                     </doc:summary>
                 </doc:doc>
@@ -75,11 +75,11 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 
         <!--*********************************************************************-->
         <method name="ReleaseMMDeviceUDev">
-            <arg type="s" name="devname" direction="in">
+            <arg type="s" name="kernel" direction="in">
                 <doc:doc>
                     <doc:summary>
                         <doc:para>
-                            The Linux name of the ModemManager device to lock
+                            The UDev KERNEL name of the ModemManager device to unlock
                         </doc:para>
                     </doc:summary>
                 </doc:doc>

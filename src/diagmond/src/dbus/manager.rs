@@ -17,12 +17,12 @@ pub struct Diagmond {
 #[interface(name = "com.p1security.diagmond")]
 impl Diagmond {
     #[zbus(name = "LockMMDeviceUDev")]
-    async fn lock_mm_device_udev(&self, devname: &str) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: LockMMDeviceUDev({})", devname);
-        if let Err(error) = crate::system::mm_udev_lock::lock_device(devname).await {
+    async fn lock_mm_device_udev(&self, kernel_name: &str) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: LockMMDeviceUDev({})", kernel_name);
+        if let Err(error) = crate::system::mm_udev_lock::lock_device(kernel_name).await {
             log::error!(
                 "Could not execute LockMMDeviceUDev({}): {:?}",
-                devname,
+                kernel_name,
                 error
             );
             return Err(zbus::fdo::Error::Failed(error.to_string()));
@@ -31,12 +31,12 @@ impl Diagmond {
     }
 
     #[zbus(name = "ReleaseMMDeviceUDev")]
-    async fn release_mm_device_udev(&self, devname: &str) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: ReleaseMMDeviceUDev({})", devname);
-        if let Err(error) = crate::system::mm_udev_lock::unlock_device(devname).await {
+    async fn release_mm_device_udev(&self, kernel_name: &str) -> zbus::fdo::Result<bool> {
+        log::debug!("Received: ReleaseMMDeviceUDev({})", kernel_name);
+        if let Err(error) = crate::system::mm_udev_lock::unlock_device(kernel_name).await {
             log::error!(
                 "Could not execute ReleaseMMDeviceUDev({}): {:?}",
-                devname,
+                kernel_name,
                 error
             );
             return Err(zbus::fdo::Error::Failed(error.to_string()));
