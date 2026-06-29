@@ -574,10 +574,12 @@ class MyWindow(Adw.ApplicationWindow):
         for pos in range(
             self.app.modem_manager.mm_instance.modems.get_n_items()
         ):
-            item = self.app.modem_manager.mm_instance.modems.get_item(pos)
+            mm_modem = self.app.modem_manager.mm_instance.modems.get_item(pos)
 
-            if item.inhibited:
-                self.unlock_mm_port(None, item)
+            if mm_modem.inhibited:
+                # ⚠️ ⚠️ TODO NOT FUNCTIONAL CURRENTLY:
+                # ==> UPDATE THE ARGUMENTS TO THIS FUNCTION CALL
+                self.unlock_mm_port(None, mm_modem)
 
     def connect_mm_spi_port(
         self,

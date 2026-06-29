@@ -1,14 +1,30 @@
+use std::io::Write;
+
 pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()> {
     // TODO - Implement this feature based of QCSuper logic
     // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
 
-    log::error!("NOT IMPLEMENTED YET");
+    log::error!("NOT FULLY IMPLEMENTED YET");
 
-    // TODO: Add udev rule to "/run/udev/rules.d"
+    // Add udev rule to "/run/udev/rules.d"
 
-    // FILE NAME: "/run/udev/rules.d/99-diagmond-blacklist-%s.rules" % kernel_name
+    let file_name = format!(
+        "/run/udev/rules.d/99-diagmond-blacklist-{}.rules",
+        kernel_name
+    );
 
-    // FILE CONTENTS: 'KERNEL=="%s", ENV{ID_MM_PORT_IGNORE}="1"\n' % kernel_name
+    let file_contents = format!(
+        "KERNEL==\"{}\", ENV{{ID_MM_PORT_IGNORE}}=\"1\"\n",
+        kernel_name
+    );
+
+    std::fs::create_dir_all("/run/udev/rules.d")?;
+    {
+        let mut out_file = std::fs::File::create(file_name)?;
+        write!(out_file, "{}", file_contents)?;
+    }
+
+    // ( TODO: ⚠️ ⚠️ Delete this at daemon exit in order to ensure clean state?  ⚠️ )
 
     // MANPAGE TO READ URL: https://man7.org/linux/man-pages/man7/udev.7.html
 
@@ -32,7 +48,24 @@ pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()>
 }
 
 pub async fn unlock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()> {
-    log::error!("NOT IMPLEMENTED YET");
+    // TODO - Implement this feature based of QCSuper logic
+    // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
+
+    log::error!("NOT FULLY IMPLEMENTED YET");
+
+    let file_name = format!(
+        "/run/udev/rules.d/99-diagmond-blacklist-{}.rules",
+        kernel_name
+    );
+    if std::fs::exists(&file_name)? {
+        std::fs::remove_file(&file_name)?;
+    }
+
+    // TODO: Sync code contained in "udev_rules_dir.py"
+
+    // TODO: Reload udev rules (➡️ through which channel?)
+
+    // TODO: Restart ModemManager (➡️ through which channel?)
 
     Ok(())
 }

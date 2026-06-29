@@ -37,10 +37,22 @@ class UdevRulesMonitor:
     ):
         debug(
             'UDev rules directory event received: '
-            + 'file=%s - other_file%s - event=%s'
+            + 'file=%s - other_file=%s - event=%s'
             % (
                 fd.get_path() if fd else None,
                 other_file.get_path() if other_file else None,
                 event_type.value_name,
             )
         )  # WIP
+
+        """
+            TODO:
+            Sample data to process:
+
+            [2026-06-29 16:22:01,903] [ui 555365] - DEBUG - UDev rules directory event received: file=/run/udev/rules.d/99-diagmond-blacklist-ttyUSB1.rules - other_file=None - event=G_FILE_MONITOR_EVENT_CREATED (system/udev_rules_dir.py:38)
+            [2026-06-29 16:22:01,903] [ui 555365] - DEBUG - UDev rules directory event received: file=/run/udev/rules.d/99-diagmond-blacklist-ttyUSB1.rules - other_file=None - event=G_FILE_MONITOR_EVENT_CHANGED (system/udev_rules_dir.py:38)
+            [2026-06-29 16:22:01,904] [ui 555365] - DEBUG - UDev rules directory event received: file=/run/udev/rules.d/99-diagmond-blacklist-ttyUSB1.rules - other_file=None - event=G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT (system/udev_rules_dir.py:38)
+
+            [2026-06-29 16:34:31,331] [ui 588284] - DEBUG - UDev rules directory event received: file=/run/udev/rules.d/99-diagmond-blacklist-ttyUSB1.rules - other_file=None - event=G_FILE_MONITOR_EVENT_DELETED (system/udev_rules_dir.py:38)
+            [2026-06-29 16:34:54,914] [ui 588284] - DEBUG - UDev rules directory event received: file=/run/udev/rules.d/99-diagmond-blacklist-ttyUSB0.rules - other_file=None - event=G_FILE_MONITOR_EVENT_DELETED (system/udev_rules_dir.py:38)
+        """
