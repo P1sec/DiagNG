@@ -7,4 +7,12 @@
   <ui template-class="MainWindow" filename="diagng.blp" sha256="e1a650b2b432d2456249d8dc18ef5281c7ca0fda4b433104ce52c738db416200">
     <css-provider>style.css</css-provider>
   </ui>
+  <ui template-class="GtkListItem" filename="udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
+    <property id="accessible-description" type-id="gchararray"/>
+    <property id="accessible-label" type-id="gchararray" translatable="1"/>
+    <property id="activatable" type-id="gboolean" default-value="True"/>
+    <property id="child" type-id="GtkWidget" is-object="1"/>
+    <property id="focusable" type-id="gboolean" default-value="True"/>
+    <property id="selectable" type-id="gboolean" default-value="True"/>
+  </ui>
 </cambalache-project>

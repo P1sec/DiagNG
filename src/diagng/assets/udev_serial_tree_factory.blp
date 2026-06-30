@@ -3,11 +3,11 @@ using Gtk 4.0;
 template ListItem {
   child: TreeExpander {
     list-row: bind template.item as <Gtk.TreeListRow>;
-    hide-expander: bind ((template.item as <TreeListRow>).item as <$UDevDevice>).is_empty;
+    hide-expander: bind template.item as <TreeListRow>.item as <$UDevDevice>.is_empty;
 
     child: Label {
       use-markup: true;
-      label: bind ((template.item as <TreeListRow>.item) as <$UDevDevice>).text_summary;
+      label: bind template.item as <TreeListRow>.item as <$UDevDevice>.text_summary;
     };
   };
 }
