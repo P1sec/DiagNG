@@ -19,7 +19,8 @@ from diagng.common.window import MyWindow
 import diagng.utils.gresources
 
 gi.require_version('Adw', '1')
-from gi.repository import Adw, GLib, Gio, GObject
+gi.require_version('Gtk', '4.0')
+from gi.repository import Adw, Gtk, Gdk, GLib, Gio, GObject
 
 """
     Primary entry point of diagng
@@ -54,6 +55,9 @@ class MainApplication(Adw.Application):
         self.setup_error_handling()
 
         debug('Initializing app...')
+
+        icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+        icon_theme.add_resource_path('/com/p1security/diagng/')
 
         super().__init__(**kwargs)
         self.mm_instance = ModemManagerInstance()
@@ -158,10 +162,11 @@ class MainApplication(Adw.Application):
     def on_startup(self, app, *args):
         self.diagmond_communicator = DiagmondCommunicator(self)
         self.modem_manager = ModemManagerIntf(self)
-        self.udev_rules_monitor = UdevRulesMonitor(self)
         self.device_scanner = DeviceScanner(self)
 
         self.window = MyWindow(self)
+
+        self.udev_rules_monitor = UdevRulesMonitor(self)
 
         # Application will close once it has no longer has active
         # windows attached to it
