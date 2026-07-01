@@ -1,11 +1,12 @@
-mod logging;
-mod system {
+pub mod logging;
+pub mod system {
     // pub mod mm_dbus_lock;
     pub mod mm_udev_lock;
     pub mod serial_devices;
+    pub mod udev_rules;
     pub mod usb_devices;
 }
-mod dbus {
+pub mod dbus {
     pub mod device;
     pub mod manager;
 }
@@ -35,8 +36,11 @@ async fn main() -> zbus::Result<()> {
         std::process::exit(1);
     }
 
+    let udev_rules = crate::system::udev_rules::get_udev_rules_data().await?;
+
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
+        udev_rules: serde_json::to_string_pretty(&udev_rules).unwrap(), // WIP
         tokio_serial_data: "null".to_string(),
         devices: vec![],
     };
@@ -46,6 +50,11 @@ async fn main() -> zbus::Result<()> {
         .serve_at("/com/p1security/diagmond", diagmond)?
         .build()
         .await?;
+
+    // Spawn inotify watch over /run/udev/rules.d
+    tokio::spawn(crate::system::udev_rules::watch_udev_rules(
+        connection.clone(),
+    ));
 
     // Spawn USB parsing code and retrieve JSON serialized
     // contents + send it back through D-Bus when we have connections

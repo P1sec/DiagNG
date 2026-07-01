@@ -45,7 +45,34 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
                     <doc:para>
                         USB status information, using the
                         JSON structure laid out in
-                        <doc:tt>diagmond::usb::UsbDevicesEndpointResp</doc:tt>
+                        <doc:tt>diagmond::system::usb_devices::UsbDevicesEndpointResp</doc:tt>
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+        </property>
+
+        <!-- ***************************************************************** -->
+        <signal name="UDevRulesUpdated">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        Triggered when runtimes rules contained in
+                        /run/udev/rules.d on the host system are
+                        changed.
+                    </doc:para>
+                </doc:description>
+            </doc:doc>
+            <arg type="s" name="UDevRules" direction="out" />
+        </signal>
+
+        <!-- ***************************************************************** -->
+        <property name="UDevRules" type="s" access="read">
+            <doc:doc>
+                <doc:description>
+                    <doc:para>
+                        Runtime UDev rules information, using the
+                        JSON structure laid out in
+                        <doc:tt>diagmond::system::udev_rules::UDevRuleList</doc:tt>
                     </doc:para>
                 </doc:description>
             </doc:doc>

@@ -9,6 +9,7 @@ futures-util = "0.3.32"
 glib = "0.22.7"
 hex = "0.4.3"
 humantime = "2.3.0"
+inotify = "0.11.2"
 log = { version = "0.4.32", features = ["kv", "kv_std"] }
 nusb = { version = "0.2.3", features = ["tokio"] }
 serde = { version = "1.0.228", features = ["derive"] }

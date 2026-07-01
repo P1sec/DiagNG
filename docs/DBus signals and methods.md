@@ -35,12 +35,14 @@ PROPERTY:
 
 * `IsRunning -> boolean` (TODO: Don't, use get_name_owner?)
 * `USBData -> string`
+* `UDevRules -> string`
 * `TokioSerialData -> string`
 * TODO: Diag connections
 
 SIGNAL:
 
 * `USBDataUpdated (string data)`
+* `UDevRulesUpdated (string data)`
 * `TokioSerialDataUpdated (string data)`
 * `EscalatedPrivilege ()` (TODO: Don't, always run as root?)
 * TODO: Diag connections event
