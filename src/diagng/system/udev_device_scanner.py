@@ -10,8 +10,6 @@ from json import dumps
 from diagng.gobject.udev_device import UDevDevice
 from diagng.gobject.serial_port import SerialPort
 
-import gi
-
 from gi.repository import GLib, Gio, GObject
 
 

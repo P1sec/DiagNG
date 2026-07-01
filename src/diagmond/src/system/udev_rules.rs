@@ -47,9 +47,15 @@ pub async fn get_udev_rules_data() -> zbus::Result<UDevRuleList> {
 pub async fn watch_udev_rules(connection: zbus::Connection) -> zbus::Result<()> {
     let inotify = Inotify::init()?;
 
-    inotify
-        .watches()
-        .add(UDEV_RULES_DIR, WatchMask::ALL_EVENTS)?;
+    inotify.watches().add(
+        UDEV_RULES_DIR,
+        WatchMask::CREATE
+            | WatchMask::DELETE
+            | WatchMask::CLOSE_WRITE
+            | WatchMask::MODIFY
+            | WatchMask::MOVED_FROM
+            | WatchMask::MOVED_TO,
+    )?;
 
     let mut buffer = [0; 1024];
     let mut stream = inotify.into_event_stream(&mut buffer)?;

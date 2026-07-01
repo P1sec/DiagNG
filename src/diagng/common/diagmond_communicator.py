@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 from gi.repository import GObject, GLib, Gio
+from typing import List, Dict
 from json import dumps, loads
-from typing import Optional
 from logging import debug
-# XX WIP 2026-06-23
+
+from diagng.gobject.udev_rule import UDevRule
 
 #  ⚠️ ⚠️   https://docs.gtk.org/gio/func.bus_watch_name.html
 #     => https://lazka.github.io/pgi-docs/Gio-2.0/functions.html#Gio.bus_watch_name
@@ -20,11 +21,15 @@ class DiagmondCommunicator(GObject.Object):
 
     main_app: 'MainApplication'
 
+    udev_rules_model: Gio.ListStore
+
     def __init__(self, main_app: 'MainApplication'):
         super().__init__()
 
         self.main_app = main_app
         self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+
+        self.udev_rules_model = Gio.ListStore()
 
         XML_TREE = (
             Gio.resources_lookup_data(
@@ -53,6 +58,9 @@ class DiagmondCommunicator(GObject.Object):
         self.proxy.connect(
             'g-signal::TokioSerialDataUpdated', self.tokio_serial_data_changed
         )
+        self.proxy.connect(
+            'g-signal::UDevRulesUpdated', self.udev_rules_changed
+        )
         # NOTIFY ON USBDataUpdated signal triggered
         # (= OR JUST WHEN PROP :USBData CHANGED?)
         self.status_changed()
@@ -65,6 +73,7 @@ class DiagmondCommunicator(GObject.Object):
             usb_data_raw = self.proxy.get_cached_property('USBData')
             if usb_data_raw:
                 self.process_usb_data(loads(usb_data_raw.get_string()))
+
             tokio_serial_data_raw = self.proxy.get_cached_property(
                 'TokioSerialData'
             )
@@ -72,6 +81,10 @@ class DiagmondCommunicator(GObject.Object):
                 self.process_tokio_serial_data(
                     loads(tokio_serial_data_raw.get_string())
                 )
+
+            udev_rules_raw = self.proxy.get_cached_property('UDevRules')
+            if udev_rules_raw:
+                self.process_udev_rules(loads(udev_rules_raw.get_string()))
         else:
             debug('Diagmond bus unavailable')
 
@@ -125,3 +138,22 @@ class DiagmondCommunicator(GObject.Object):
             self.main_app.tokio_serial_debug_data = dumps(
                 tokio_serial_data, indent=4
             )
+
+    def udev_rules_changed(
+        self,
+        dbus_proxy: Gio.DBusProxy,
+        sender_name: str,
+        signal_name: str,
+        parameters: GLib.Variant,
+    ):
+        self.process_udev_rules(loads(parameters[0]))
+
+    def process_udev_rules(self, udev_rules: List[Dict[str, str]]):
+        with self.udev_rules_model.freeze_notify():
+            self.udev_rules_model.remove_all()
+
+            for udev_rule_dict in udev_rules:
+                udev_rule_obj = UDevRule()
+                udev_rule_obj.rule_file_name = udev_rule_dict['rule_file_name']
+                udev_rule_obj.rule_text = udev_rule_dict['rule_text']
+                self.udev_rules_model.append(udev_rule_obj)

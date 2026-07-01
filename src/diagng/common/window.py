@@ -49,7 +49,7 @@ class MyWindow(Adw.ApplicationWindow):
 
     # UI panel: USB
 
-    usb_selection: Gio.ListStore = Gtk.Template.Child()
+    usb_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
     udev_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     udev_debug_view: GtkSource.View
@@ -65,7 +65,11 @@ class MyWindow(Adw.ApplicationWindow):
 
     # UI panel: SPI
 
-    spi_selection: Gio.ListStore = Gtk.Template.Child()
+    spi_selection: Gtk.SingleSelection = Gtk.Template.Child()
+
+    # UI panel: UDev
+
+    udev_rules_selection: Gio.ListStore = Gtk.Template.Child()
 
     def __init__(self, app):
         super().__init__()
@@ -96,6 +100,12 @@ class MyWindow(Adw.ApplicationWindow):
                 autoexpand=True,
                 create_func=lambda item: item.children,
             )
+        )
+
+        # Build UDev rules list
+
+        self.udev_rules_selection.set_model(
+            self.app.diagmond_communicator.udev_rules_model
         )
 
         # Build SPI device tree view

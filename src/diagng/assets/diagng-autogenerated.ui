@@ -347,17 +347,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </property>
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title" translatable="yes">UDev rules list (WIP)</property>
+                            <property name="title" translatable="yes">UDev rules list in /run/udev/rules.d</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
                                   <object class="GtkColumnView" id="udev_column_view">
                                     <property name="model">
-                                      <object class="GtkSingleSelection">
-                                        <property name="model">
-                                          <object class="GListStore" id="udev_rule_model"></object>
-                                        </property>
-                                      </object>
+                                      <object class="GtkSingleSelection" id="udev_rules_selection"></object>
                                     </property>
                                     <child>
                                       <object class="GtkColumnViewColumn" id="rule_file_name_col">

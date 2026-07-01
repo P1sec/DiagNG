@@ -1,6 +1,5 @@
 using Gtk 4.0;
 using Adw 1;
-using Gio 2.0;
 
 template $MainWindow: Adw.ApplicationWindow {
   content: Adw.ToolbarView {
@@ -279,13 +278,11 @@ template $MainWindow: Adw.ApplicationWindow {
             };
 
             Adw.PreferencesGroup {
-              title: _("UDev rules list (WIP)");
+              title: _("UDev rules list in /run/udev/rules.d");
 
               ScrolledWindow {
                 child: ColumnView udev_column_view {
-                  model: SingleSelection {
-                    model: Gio.ListStore udev_rule_model {};
-                  };
+                  model: SingleSelection udev_rules_selection {};
 
                   ColumnViewColumn rule_file_name_col {
                     factory: BuilderListItemFactory {
