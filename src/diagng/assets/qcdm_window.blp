@@ -1,0 +1,39 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $QCDMWindow: Adw.Window {
+  content: Adw.ToolbarView {
+    content: Adw.ToastOverlay {
+      child: Adw.ViewStack qcdm_stack {
+        Adw.ViewStackPage info_page {
+          child: Adw.PreferencesPage {};
+
+          icon-name: "info-symbolic";
+          name: "info_page";
+          title: "Info";
+        }
+
+        Adw.ViewStackPage pcap_page {
+          child: Adw.PreferencesPage {};
+
+          icon-name: "notes-app-symbolic";
+          name: "pcap_page";
+          title: "PCAP";
+        }
+      };
+    };
+
+    [top]
+    Adw.HeaderBar {}
+
+    [top]
+    Adw.ViewSwitcherBar qcdm_view_switcher {
+      reveal: true;
+      stack: qcdm_stack;
+    }
+  };
+
+  default-height: 420;
+  default-width: 720;
+  title: "/dev/ttyUSB1 - TEST";
+}
