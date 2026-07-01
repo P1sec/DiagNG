@@ -1,7 +1,58 @@
 use std::io::Write;
+use tokio::process::Command;
+
+async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
+    // MANPAGE TO READ: https://man7.org/linux/man-pages/man7/udev.7.html
+
+    // WIP: Sync code contained in "udev_rules_dir.py"
+
+    // Reload udev rules (➡️ through which channel?)
+    //    => ⚠️ udevadm + https://docs.rs/tokio/latest/tokio/process/index.html ?
+
+    // If using CLI:
+    //  - "udevadm control --reload-rules"
+    //  - "udevadm trigger --name-match=%s" % full_name
+    // If using another channel: ?
+
+    let mut child = Command::new("udevadm")
+        .arg("control")
+        .arg("--reload-rules")
+        .spawn()?;
+
+    let status = child.wait().await?;
+    println!("udevadm control --reload-rules existed with: {}", status);
+
+    let mut child = Command::new("udevadm")
+        .arg("trigger")
+        .arg(format!("--name-match={}", device_name))
+        .spawn()?;
+
+    let status = child.wait().await?;
+    println!(
+        "udevadm trigger --name-match={} existed with: {}",
+        device_name, status
+    );
+
+    // TODO: Restart ModemManager IF ACTIVE (➡️ through which channel?)
+
+    // If using CLI:
+    //  - "systemctl restart ModemManager"
+    //  - If using systemd/DBus: ?
+    //    - ZBus client to systemd? ⚠️
+
+    let mut child = Command::new("systemctl")
+        .arg("restart")
+        .arg("ModemManager")
+        .spawn()?;
+
+    let status = child.wait().await?;
+    println!("systemctl restart ModemManager existed with: {}", status);
+
+    Ok(())
+}
 
 pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()> {
-    // TODO - Implement this feature based of QCSuper logic
+    // WIP - Implement this feature based of QCSuper logic
     // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
 
     log::error!("NOT FULLY IMPLEMENTED YET");
@@ -26,23 +77,7 @@ pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()>
 
     // ( TODO: ⚠️ ⚠️ Delete this at daemon exit in order to ensure clean state?  ⚠️ )
 
-    // MANPAGE TO READ URL: https://man7.org/linux/man-pages/man7/udev.7.html
-
-    // TODO: Sync code contained in "udev_rules_dir.py"
-
-    // TODO: Reload udev rules (➡️ through which channel?)
-
-    // If using CLI:
-    //  - "udevadm control --reload-rules"
-    //  - "udevadm trigger --name-match=%s" % full_name (TODO: why?)
-    // If using another channel: ?
-
-    // TODO: Restart ModemManager (➡️ through which channel?)
-
-    // If using CLI:
-    //  - "systemctl restart ModemManager"
-    //  - If using systemd/DBus: ?
-    //    - ZBus client to systemd? ⚠️
+    reload_udev_rules(full_name).await?;
 
     Ok(())
 }
@@ -61,11 +96,7 @@ pub async fn unlock_device(full_name: &str, kernel_name: &str) -> zbus::Result<(
         std::fs::remove_file(&file_name)?;
     }
 
-    // TODO: Sync code contained in "udev_rules_dir.py"
-
-    // TODO: Reload udev rules (➡️ through which channel?)
-
-    // TODO: Restart ModemManager (➡️ through which channel?)
+    reload_udev_rules(full_name).await?;
 
     Ok(())
 }
