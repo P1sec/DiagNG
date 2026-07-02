@@ -1,13 +1,13 @@
 use zbus::interface;
 use zbus::object_server::SignalEmitter;
 
-use crate::dbus::device::Device;
+use crate::dbus::serial_device::SerialDevice;
 
 pub struct Diagmond {
     pub usb_data: String,
     pub udev_rules: String,
     pub tokio_serial_data: String,
-    pub devices: Vec<Device>,
+    pub devices: Vec<SerialDevice>,
 }
 
 // WIP 2026-06-22
@@ -17,6 +17,18 @@ pub struct Diagmond {
 
 #[interface(name = "com.p1security.diagmond")]
 impl Diagmond {
+    #[zbus(name = "OpenSerialPort")]
+    async fn open_serial_port(
+        &self,
+        device_path: &str
+    ) { // WIP XX --> ⚠️ RETURN D-BUS OBJECT PATH TYPE?
+
+    }
+
+    // TODO move this to serial_device.rs, so that UDev rule-based locks
+    // are released when ZBus Device objects are destroyed
+    // (at app/DBus ⚠️ client connection connection close event
+    // if everything goes well)
     #[zbus(name = "LockMMDeviceUDev")]
     async fn lock_mm_device_udev(
         &self,
@@ -36,6 +48,10 @@ impl Diagmond {
         Ok(true)
     }
 
+    // TODO move this to serial_device.rs, so that UDev rule-based locks
+    // are released when ZBus Device objects are destroyed
+    // (at app/DBus ⚠️ client connection connection close event
+    // if everything goes well)
     #[zbus(name = "ReleaseMMDeviceUDev")]
     async fn release_mm_device_udev(
         &self,

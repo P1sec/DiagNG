@@ -7,7 +7,7 @@ pub mod system {
     pub mod usb_devices;
 }
 pub mod dbus {
-    pub mod device;
+    pub mod serial_device;
     pub mod manager;
 }
 

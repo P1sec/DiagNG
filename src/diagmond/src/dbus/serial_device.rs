@@ -15,10 +15,10 @@ use zbus::interface;
 // + nusb ==>
 //   https://docs.rs/nusb/latest/nusb/struct.Device.html
 
-pub struct Device {}
+pub struct SerialDevice {}
 
-#[interface(name = "com.p1security.diagmond.Device")]
-impl Device {
+#[interface(name = "com.p1security.diagmond.SerialDevice")]
+impl SerialDevice {
     // WIP XX
 }
 

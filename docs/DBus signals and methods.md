@@ -53,10 +53,11 @@ METHOD:
   * `OpenSerialPort (string device_name) -> (boolean success, int? id)` (NEXT WIP?)
     * https://www.google.com/search?q=RUST+SERIAL+PORT+COMMUNICATION
       * **https://github.com/berkowski/tokio-serial**
-    * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.Device` interface
+    * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
       * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface? With Close method, TCP port prop OR Read/Write methods, etc.?)
+      * Delete at client connection cut
 * `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
-* `LockMMDeviceUDev (string devname) -> (boolean success)`
-* `ReleaseMMDeviceUDev (string devname) -> (boolean success)`
+* `LockMMDeviceUDev (string devname) -> (boolean success)` (TODO: Move under `com.p1security.diagmond.SerialDevice`)
+* `ReleaseMMDeviceUDev (string devname) -> (boolean success)` (TODO: Move under `com.p1security.diagmond.SerialDevice`)
 * `LockMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
 * `ReleaseMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
