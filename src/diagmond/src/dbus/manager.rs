@@ -26,6 +26,17 @@ impl Diagmond {
         device_path: &str,
         kernel_path: &str,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        // See:
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/trait.SerialPort.html#tymethod.set_timeout
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html#method.readable
+
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/fn.new.html
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.UsbPortInfo.html
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html
+        //
+        //   => https://github.com/berkowski/tokio-serial/blob/master/examples/serial_println.rs
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialPortBuilder.html
+
         log::debug!("Opening {}...", device_path);
 
         let serial_dev = match tokio_serial::new(device_path, 115200)
@@ -59,69 +70,23 @@ impl Diagmond {
         obj_server.at(&object_path, dev).await?;
         log::debug!("{} registered...", object_path);
 
+        // Add UDev rule if ModemManager is running
+
+        if kernel_path.len() > 0 {
+            if let Err(error) =
+                crate::system::mm_udev_lock::lock_device(device_path, kernel_path).await
+            {
+                log::error!(
+                    "Could not add UDev lock for ModemManager device {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    error
+                );
+                return Err(zbus::fdo::Error::Failed(error.to_string()));
+            }
+        }
+
         Ok(object_path)
-
-        // https://docs.rs/tokio-serial/latest/tokio_serial/trait.SerialPort.html#tymethod.set_timeout
-        // https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html#method.readable
-
-        // TODO: Use
-        //   => https://docs.rs/tokio-serial/latest/tokio_serial/fn.new.html
-        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.UsbPortInfo.html
-        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html
-        //
-        //   => https://github.com/berkowski/tokio-serial/blob/master/examples/serial_println.rs
-        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialPortBuilder.html
-    }
-
-    // TODO move this to serial_device.rs, so that UDev rule-based locks
-    // are released when ZBus Device objects are destroyed
-    // (at app/DBus ⚠️ client connection connection close event
-    // if everything goes well)
-    #[zbus(name = "LockMMDeviceUDev")]
-    async fn lock_mm_device_udev(
-        &self,
-        full_name: &str,
-        kernel_name: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!("Received: LockMMDeviceUDev({}, {})", full_name, kernel_name);
-        if let Err(error) = crate::system::mm_udev_lock::lock_device(full_name, kernel_name).await {
-            log::error!(
-                "Could not execute LockMMDeviceUDev({}, {}): {:?}",
-                full_name,
-                kernel_name,
-                error
-            );
-            return Err(zbus::fdo::Error::Failed(error.to_string()));
-        }
-        Ok(true)
-    }
-
-    // TODO move this to serial_device.rs, so that UDev rule-based locks
-    // are released when ZBus Device objects are destroyed
-    // (at app/DBus ⚠️ client connection connection close event
-    // if everything goes well)
-    #[zbus(name = "ReleaseMMDeviceUDev")]
-    async fn release_mm_device_udev(
-        &self,
-        full_name: &str,
-        kernel_name: &str,
-    ) -> zbus::fdo::Result<bool> {
-        log::debug!(
-            "Received: ReleaseMMDeviceUDev({}, {})",
-            full_name,
-            kernel_name
-        );
-        if let Err(error) = crate::system::mm_udev_lock::unlock_device(full_name, kernel_name).await
-        {
-            log::error!(
-                "Could not execute ReleaseMMDeviceUDev({}, {}): {:?}",
-                full_name,
-                kernel_name,
-                error
-            );
-            return Err(zbus::fdo::Error::Failed(error.to_string()));
-        }
-        Ok(true)
     }
 
     /* #[zbus(name = "LockMMDeviceDBus")]

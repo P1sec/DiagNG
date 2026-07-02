@@ -6,8 +6,8 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
 
     // WIP: Sync code contained in "udev_rules_dir.py"
 
-    // Reload udev rules (➡️ through which channel?)
-    //    => ⚠️ udevadm + https://docs.rs/tokio/latest/tokio/process/index.html ?
+    // Reload udev rules
+    //    => udevadm + https://docs.rs/tokio/latest/tokio/process/index.html ?
 
     // If using CLI:
     //  - "udevadm control --reload-rules"
@@ -20,7 +20,7 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
         .spawn()?;
 
     let status = child.wait().await?;
-    println!("udevadm control --reload-rules existed with: {}", status);
+    log::debug!("udevadm control --reload-rules existed with: {}", status);
 
     let mut child = Command::new("udevadm")
         .arg("trigger")
@@ -28,25 +28,37 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
         .spawn()?;
 
     let status = child.wait().await?;
-    println!(
+    log::debug!(
         "udevadm trigger --name-match={} existed with: {}",
-        device_name, status
+        device_name,
+        status
     );
 
-    // TODO: Restart ModemManager IF ACTIVE (➡️ through which channel?)
+    // Restart ModemManager
 
-    // If using CLI:
-    //  - "systemctl restart ModemManager"
-    //  - If using systemd/DBus: ?
-    //    - ZBus client to systemd? ⚠️
+    // - If using CLI (let's do this for
+    // the moment):
+    //   - "systemctl restart ModemManager"
+    // - If using systemd/DBus: ?
+    //   - ZBus client to systemd? ⚠️
+
+    // => Check if ModemManager is running
 
     let mut child = Command::new("systemctl")
-        .arg("restart")
+        .arg("--quiet")
+        .arg("is-active")
         .arg("ModemManager")
         .spawn()?;
 
-    let status = child.wait().await?;
-    println!("systemctl restart ModemManager existed with: {}", status);
+    if child.wait().await?.success() {
+        let mut child = Command::new("systemctl")
+            .arg("restart")
+            .arg("ModemManager")
+            .spawn()?;
+
+        let status = child.wait().await?;
+        log::debug!("systemctl restart ModemManager existed with: {}", status);
+    }
 
     Ok(())
 }

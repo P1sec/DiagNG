@@ -110,68 +110,6 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
             </arg>
         </method>
 
-        <!--*********************************************************************-->
-        <method name="LockMMDeviceUDev">
-            <arg type="s" name="full_name" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The full /dev name of the ModemManager device to lock
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="s" name="kernel_name" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The UDev KERNEL name of the ModemManager device to lock
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="b" name="success" direction="out">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            Result of the operation
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-        </method>
-
-        <!--*********************************************************************-->
-        <method name="ReleaseMMDeviceUDev">
-            <arg type="s" name="full_name" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The full /dev name of the ModemManager device to release
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="s" name="kernel_name" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The UDev KERNEL name of the ModemManager device to release
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="b" name="success" direction="out">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            Result of the operation
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-        </method>
-
         <!--
             ⚠️ The functionality listed below is disabled because of
             https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075

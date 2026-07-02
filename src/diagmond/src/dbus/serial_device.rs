@@ -1,4 +1,7 @@
-use zbus::interface;
+use tokio::io::AsyncWriteExt;
+use zbus::message::Header;
+use zbus::{ObjectServer, interface};
+use zvariant::ObjectPath;
 // use zbus::object_server::SignalEmitter;
 use tokio_serial::SerialStream;
 
@@ -23,7 +26,50 @@ pub struct SerialDevice {
 }
 
 #[interface(name = "com.p1security.diagmond.SerialDevice")]
-impl SerialDevice {}
+impl SerialDevice {
+    #[zbus(name = "Close")]
+    async fn close(
+        &mut self,
+        #[zbus(header)] header: Header<'_>,
+        #[zbus(object_server)] obj_server: &ObjectServer,
+    ) -> zbus::fdo::Result<()> {
+        log::debug!(
+            "Received: Close over serial port {} (KERNEL=={})",
+            self.device_name,
+            self.kernel_name
+        );
+
+        // Remove UDev rule if applicable
+
+        if self.kernel_name.len() > 0 {
+            if let Err(error) =
+                crate::system::mm_udev_lock::unlock_device(&self.device_name, &self.kernel_name)
+                    .await
+            {
+                log::error!(
+                    "Could not execute Close over serial port {} (KERNEL=={}): {:?}",
+                    self.device_name,
+                    self.kernel_name,
+                    error
+                );
+                return Err(zbus::fdo::Error::Failed(error.to_string()));
+            }
+        }
+
+        // UNREGISTER from DBus
+
+        obj_server
+            .remove::<Self, ObjectPath>(header.path().unwrap().clone())
+            .await
+            .unwrap();
+
+        // Disconnect serial port
+
+        self.port.shutdown().await.ok();
+
+        Ok(())
+    }
+}
 
 // WIP factory class:
 // pub struct DeviceCreator;

@@ -10,8 +10,6 @@ XX
 
 PROPERTY:
 
-* `DiagmondRunning -> boolean`
-* `DiagmondOnSystemBus -> boolean` // Set on Diagmond.EscalatedPrivilege
 * `MMDebugInfo -> string`
 * `MMStatusInfo -> Vardict`
 * `UDevUSBDebugInfo -> string`
@@ -33,7 +31,6 @@ XX
 
 PROPERTY:
 
-* `IsRunning -> boolean` (TODO: Don't, use get_name_owner?)
 * `USBData -> string`
 * `UDevRules -> string`
 * `TokioSerialData -> string`
@@ -44,7 +41,6 @@ SIGNAL:
 * `USBDataUpdated (string data)`
 * `UDevRulesUpdated (string data)`
 * `TokioSerialDataUpdated (string data)`
-* `EscalatedPrivilege ()` (TODO: Don't, always run as root?)
 * TODO: Diag connections event
 
 METHOD:
@@ -59,8 +55,3 @@ METHOD:
         * With a `ReadHdlcFrame` method returning bytes
         * With a `WriteHdlcFrame` method taking bytes
       * Delete at client connection cut
-* `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
-* `LockMMDeviceUDev (string devname) -> (boolean success)` (TODO: Move under `com.p1security.diagmond.SerialDevice`)
-* `ReleaseMMDeviceUDev (string devname) -> (boolean success)` (TODO: Move under `com.p1security.diagmond.SerialDevice`)
-* `LockMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
-* `ReleaseMMDeviceDBus (string uid) -> (boolean success)` (currently disabled because https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
