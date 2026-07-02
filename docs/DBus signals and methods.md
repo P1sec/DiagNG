@@ -53,8 +53,11 @@ METHOD:
   * `OpenSerialPort (string device_name, string kernel_path) -> (ObjectPath path)` (WIP)
     * https://www.google.com/search?q=RUST+SERIAL+PORT+COMMUNICATION
       * **https://github.com/berkowski/tokio-serial**
-    * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
-      * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface? With Close method, TCP port prop OR Read/Write methods, etc.?)
+    * Spawns a `/com/p1security/diagmond/SerialDevices/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
+      * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface?)
+        * With a `Close` method to close the serial port, delete the UDev rules, unexport the object from the bus (called by `diagmond` both when closing and starting)
+        * With a `ReadHdlcFrame` method returning bytes
+        * With a `WriteHdlcFrame` method taking bytes
       * Delete at client connection cut
 * `TryPrivilegeEscalation () -> (boolean success)` (TODO: Don't, always run as root?)
 * `LockMMDeviceUDev (string devname) -> (boolean success)` (TODO: Move under `com.p1security.diagmond.SerialDevice`)
