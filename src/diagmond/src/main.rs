@@ -7,8 +7,8 @@ pub mod system {
     pub mod usb_devices;
 }
 pub mod dbus {
-    pub mod serial_device;
     pub mod manager;
+    pub mod serial_device;
 }
 
 use crate::dbus::manager::{Diagmond, DiagmondSignals};
@@ -42,7 +42,7 @@ async fn main() -> zbus::Result<()> {
         usb_data: "null".to_string(),
         udev_rules: serde_json::to_string_pretty(&udev_rules).unwrap(), // WIP
         tokio_serial_data: "null".to_string(),
-        devices: vec![],
+        serial_device_ctr: 1,
     };
 
     let connection = Builder::system()?

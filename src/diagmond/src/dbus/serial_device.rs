@@ -1,5 +1,6 @@
 use zbus::interface;
 // use zbus::object_server::SignalEmitter;
+use tokio_serial::SerialStream;
 
 // NEXT TODO as of 2026-06-26 ⚠️
 
@@ -15,12 +16,14 @@ use zbus::interface;
 // + nusb ==>
 //   https://docs.rs/nusb/latest/nusb/struct.Device.html
 
-pub struct SerialDevice {}
+pub struct SerialDevice {
+    pub port: SerialStream,
+    pub device_name: String,
+    pub kernel_name: String,
+}
 
 #[interface(name = "com.p1security.diagmond.SerialDevice")]
-impl SerialDevice {
-    // WIP XX
-}
+impl SerialDevice {}
 
 // WIP factory class:
 // pub struct DeviceCreator;

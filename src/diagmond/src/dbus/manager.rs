@@ -1,5 +1,7 @@
+use tokio_serial::SerialPortBuilderExt;
 use zbus::interface;
 use zbus::object_server::SignalEmitter;
+use zvariant::ObjectPath;
 
 use crate::dbus::serial_device::SerialDevice;
 
@@ -7,7 +9,7 @@ pub struct Diagmond {
     pub usb_data: String,
     pub udev_rules: String,
     pub tokio_serial_data: String,
-    pub devices: Vec<SerialDevice>,
+    pub serial_device_ctr: u64,
 }
 
 // WIP 2026-06-22
@@ -20,9 +22,53 @@ impl Diagmond {
     #[zbus(name = "OpenSerialPort")]
     async fn open_serial_port(
         &self,
-        device_path: &str
-    ) { // WIP XX --> ⚠️ RETURN D-BUS OBJECT PATH TYPE?
+        #[zbus(connection)] conn: &zbus::Connection,
+        device_path: &str,
+        kernel_path: &str,
+    ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        let serial_dev = match tokio_serial::new(device_path, 115200)
+            .dtr_on_open(true)
+            .open_native_async()
+        {
+            Ok(obj) => obj,
+            Err(err) => {
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
 
+        let dev = SerialDevice {
+            port: serial_dev,
+            device_name: device_path.to_string(),
+            kernel_name: kernel_path.to_string(),
+        };
+
+        let iface_ref = conn
+            .object_server()
+            .interface::<_, Diagmond>("/com/p1security/diagmond")
+            .await?;
+
+        let mut iface = iface_ref.get_mut().await;
+        let object_path = ObjectPath::try_from(format!(
+            "/com/p1security/diagmond/SerialDevices/{}",
+            iface.serial_device_ctr
+        ))
+        .unwrap();
+        iface.serial_device_ctr += 1;
+
+        conn.object_server().at(&object_path, dev).await?;
+
+        Ok(object_path)
+
+        // https://docs.rs/tokio-serial/latest/tokio_serial/trait.SerialPort.html#tymethod.set_timeout
+        // https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html#method.readable
+
+        // TODO: Use
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/fn.new.html
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.UsbPortInfo.html
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html
+        //
+        //   => https://github.com/berkowski/tokio-serial/blob/master/examples/serial_println.rs
+        //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialPortBuilder.html
     }
 
     // TODO move this to serial_device.rs, so that UDev rule-based locks

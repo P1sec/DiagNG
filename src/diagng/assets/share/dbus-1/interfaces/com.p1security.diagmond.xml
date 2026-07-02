@@ -79,6 +79,38 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         </property>
 
         <!--*********************************************************************-->
+        <method name="OpenSerialPort">
+            <arg type="s" name="device_path" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The full /dev name of the serial port device to connect
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="s" name="kernel_path" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The UDev KERNEL name of the serial port device to connect
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="o" name="success" direction="out">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            New object path created user /com/p1security/diagmond/Device
+                            after this operation
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+        </method>
+
+        <!--*********************************************************************-->
         <method name="LockMMDeviceUDev">
             <arg type="s" name="full_name" direction="in">
                 <doc:doc>

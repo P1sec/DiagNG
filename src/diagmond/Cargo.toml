@@ -17,6 +17,7 @@ serde_json = { version = "1.0.150", features = ["preserve_order"] }
 tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros", "process"] }
 tokio-serial = { version = "5.5.0", features = ["libudev", "rt", "codec", "serde"] }
 zbus = { version = "5.16.0", default-features = false, features = ["tokio"] }
+zvariant = "5.12.0"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 nix = { version = "0.31.3", features = ["user"] }

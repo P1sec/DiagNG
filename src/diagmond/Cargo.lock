@@ -137,6 +137,7 @@ dependencies = [
  "tokio",
  "tokio-serial",
  "zbus",
+ "zvariant",
 ]
 
 [[package]]

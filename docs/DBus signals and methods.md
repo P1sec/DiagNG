@@ -50,7 +50,7 @@ SIGNAL:
 METHOD:
 
 * WIP: Diag-related methods
-  * `OpenSerialPort (string device_name) -> (boolean success, int? id)` (NEXT WIP?)
+  * `OpenSerialPort (string device_name, string kernel_path) -> (ObjectPath path)` (WIP)
     * https://www.google.com/search?q=RUST+SERIAL+PORT+COMMUNICATION
       * **https://github.com/berkowski/tokio-serial**
     * Spawns a `/com/p1security/diagmond/Device/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
