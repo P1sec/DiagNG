@@ -1,6 +1,6 @@
 use tokio_serial::SerialPortBuilderExt;
 use zbus::interface;
-use zbus::object_server::SignalEmitter;
+use zbus::object_server::{ObjectServer, SignalEmitter};
 use zvariant::ObjectPath;
 
 use crate::dbus::serial_device::SerialDevice;
@@ -21,11 +21,13 @@ pub struct Diagmond {
 impl Diagmond {
     #[zbus(name = "OpenSerialPort")]
     async fn open_serial_port(
-        &self,
-        #[zbus(connection)] conn: &zbus::Connection,
+        &mut self,
+        #[zbus(object_server)] obj_server: &ObjectServer,
         device_path: &str,
         kernel_path: &str,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        log::debug!("Opening {}...", device_path);
+
         let serial_dev = match tokio_serial::new(device_path, 115200)
             .dtr_on_open(true)
             .open_native_async()
@@ -36,26 +38,26 @@ impl Diagmond {
             }
         };
 
+        log::debug!("Opened {}...", device_path);
+
         let dev = SerialDevice {
             port: serial_dev,
             device_name: device_path.to_string(),
             kernel_name: kernel_path.to_string(),
         };
 
-        let iface_ref = conn
-            .object_server()
-            .interface::<_, Diagmond>("/com/p1security/diagmond")
-            .await?;
+        log::debug!("Reading /com/p1security/diagmond properties...");
 
-        let mut iface = iface_ref.get_mut().await;
         let object_path = ObjectPath::try_from(format!(
             "/com/p1security/diagmond/SerialDevices/{}",
-            iface.serial_device_ctr
+            self.serial_device_ctr
         ))
         .unwrap();
-        iface.serial_device_ctr += 1;
+        log::debug!("Listening to {}...", object_path);
+        self.serial_device_ctr += 1;
 
-        conn.object_server().at(&object_path, dev).await?;
+        obj_server.at(&object_path, dev).await?;
+        log::debug!("{} registered...", object_path);
 
         Ok(object_path)
 
