@@ -1,3 +1,4 @@
+use tokio::io::AsyncReadExt;
 use tokio::io::AsyncWriteExt;
 use zbus::message::Header;
 use zbus::{ObjectServer, interface};
@@ -27,6 +28,32 @@ pub struct SerialDevice {
 
 #[interface(name = "com.p1security.diagmond.SerialDevice")]
 impl SerialDevice {
+    // TODO: Push towards the client using a DBus signal
+    // rather than waiting for pulling?
+    // (what about buffering then?)
+
+    #[zbus(name = "Read")]
+    async fn read(&mut self) -> zbus::fdo::Result<Vec<u8>> {
+        let mut buffer: [u8; 4096] = [0; 4096];
+        let len_read: usize = match self.port.read(&mut buffer).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+        Ok(buffer[..len_read].to_vec())
+        // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncReadExt.html#method.read
+    }
+
+    #[zbus(name = "Write")]
+    async fn write(&mut self, data: &[u8]) -> zbus::fdo::Result<()> {
+        if let Err(err) = self.port.write_all(data).await {
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        }
+        Ok(())
+        // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncWriteExt.html#method.write_all
+    }
+
     #[zbus(name = "Close")]
     async fn close(
         &mut self,

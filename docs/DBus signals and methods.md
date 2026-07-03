@@ -52,6 +52,7 @@ METHOD:
     * Spawns a `/com/p1security/diagmond/SerialDevices/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
       * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface?)
         * With a `Close` method to close the serial port, delete the UDev rules, unexport the object from the bus (called by `diagmond` both when closing and starting)
-        * With a `ReadHdlcFrame` method returning bytes
-        * With a `WriteHdlcFrame` method taking bytes
+        * With a `Read` method returning bytes (`ay`)
+        * With a `Write` method taking bytes (`ay`)
+        * (TODO: Think of putting buffering + an HDLC decoder here? MAYBE as an optional mode as operation?)
       * Delete at client connection cut
