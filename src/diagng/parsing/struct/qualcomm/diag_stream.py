@@ -3,7 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
-from diagng.parsing.struct.qualcomm import diag_message
+from diagng.parsing.struct.qualcomm import diag_response
 import diagng.parsing.hdlc
 
 
@@ -33,7 +33,7 @@ class DiagStream(KaitaiStruct):
             _process = diagng.parsing.hdlc.HdlcDecoder()
             self._raw_frames.append(_process.decode(self._raw__raw_frames[-1]))
             _io__raw_frames = KaitaiStream(BytesIO(self._raw_frames[-1]))
-            self.frames.append(diag_message.DiagMessage(_io__raw_frames))
+            self.frames.append(diag_response.DiagResponse(_io__raw_frames))
             i += 1
 
     def _fetch_instances(self):
