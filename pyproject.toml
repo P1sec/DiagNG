@@ -28,6 +28,7 @@ classifiers = [
     "Environment :: X11 Applications :: Gnome"
 ]
 dependencies = [
+    "kaitaistruct>=0.11",
     "pygobject>=3.56.2",
     "pyudev>=0.24.4",
 ]

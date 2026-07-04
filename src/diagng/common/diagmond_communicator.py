@@ -107,6 +107,11 @@ class DiagmondCommunicator(GObject.Object):
                 if num_items:
                     self.main_app.modem_manager.queue_state_update()
 
+    def cleanup_connections(self):
+        pass  # ⚠️ WIP 2026-07-03
+        # XX Call this both at app initialization and exit
+        # XX use GetManagedObjects here?
+
     def usb_data_changed(
         self,
         dbus_proxy: Gio.DBusProxy,
