@@ -65,7 +65,8 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         <!--
             OpenSerialPort:
             @device_path: The full /dev name of the serial port device to connect
-            @kernel_path: The UDev KERNEL name of the serial port device to connect
+            @kernel_path: The UDev KERNEL name of the serial port device to connect.
+              Leave empty if unknown
             @success: New object path created under
               #/com/p1security/diagmond/Device after this operation
         -->

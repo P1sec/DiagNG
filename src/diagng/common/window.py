@@ -472,20 +472,11 @@ class MyWindow(Adw.ApplicationWindow):
 
                     subtitle += ' | Type: ' + mm_port.port_type
 
-                    connect_btn.connect(
-                        'clicked',
-                        self.connect_mm_spi_port,
-                        port,
-                        mm_modem,
-                        mm_port,
-                    )
-
-                else:
-                    connect_btn.connect(
-                        'clicked',
-                        self.connect_non_mm_spi_port,
-                        port,
-                    )
+                connect_btn.connect(
+                    'clicked',
+                    self.connect_spi_port,
+                    port,
+                )
 
                 port_row.set_subtitle(GLib.markup_escape_text(subtitle, -1))
 
@@ -584,21 +575,33 @@ class MyWindow(Adw.ApplicationWindow):
             if mm_modem.inhibited:
                 # ⚠️ ⚠️ TODO NOT FUNCTIONAL CURRENTLY:
                 # ==> UPDATE THE ARGUMENTS TO THIS FUNCTION CALL
-                self.unlock_mm_port(None, mm_modem)
+                pass  # self.unlock_mm_port(None, mm_modem)
 
-    def connect_mm_spi_port(
-        self,
-        target: Gtk.Button,
-        port: SerialPort,
-        mm_modem: ModemManagerModem,
-        mm_port: ModemManagerPort,
-    ):
-        info('connect_mm_spi_port called on %s' % port.tty_device_path)  # TODO
+    def connect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
+        info('connect_spi_port called on %s' % serial_port.tty_device_path)
 
-    def connect_non_mm_spi_port(self, target: Gtk.Button, port: SerialPort):
-        info(
-            'connect_non_mm_spi_port called on %s' % port.tty_device_path
-        )  # TODO
+        if self.app.diagmond_communicator.bus_connected:
+            try:
+                self.app.diagmond_communicator.proxy.OpenSerialPort(
+                    '(ss)',
+                    serial_port.tty_device_path,
+                    serial_port.kernel_name,
+                )
+            except Exception as err:
+                dialog = Adw.AlertDialog.new(
+                    '⚠️ Failed to open port: ' + format_exc(err), None
+                )
+                error('Failed to open port: ' + format_exc(err))
+
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self, None, None)
+        else:
+            dialog = Adw.AlertDialog.new(
+                "⚠️ diagmond not available, can't open port", None
+            )
+            error("diagmond not available, can't open port")
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
 
     def update_mm_modems(self, *args):
         def visit(container: Gtk.Widget):
