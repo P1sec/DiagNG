@@ -505,6 +505,8 @@ class MyWindow(Adw.ApplicationWindow):
         info('lock_mm_port called on %s' % mm_port.device_path)
 
         if self.app.diagmond_communicator.bus_connected:
+            dialog = Adw.AlertDialog.new('⚠️ Currently not implemented', None)
+            """
             try:
                 self.app.diagmond_communicator.proxy.LockMMDeviceUDev(
                     '(ss)',
@@ -516,19 +518,13 @@ class MyWindow(Adw.ApplicationWindow):
                     '⚠️ Failed to lock modem: ' + format_exc(err), None
                 )
                 error('Failed to lock modem: ' + format_exc(err))
-
-                # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
-                # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
-                #  AS IN QCSUPER
-                # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
-                #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
-                #      DIAGMOND/SRC I GUESS?
             else:
                 mm_modem.inhibited = True
                 self.update_spi_devices()
                 dialog = Adw.AlertDialog.new(
                     'Modem lock instruction sent (⚠️ WIP 2026-06-29)', None
                 )
+            """
             dialog.add_response('ok', 'Ok')
             dialog.choose(self, None, None)
         else:
@@ -549,6 +545,10 @@ class MyWindow(Adw.ApplicationWindow):
         info('unlock_mm_port called on %s' % mm_port.device_path)
 
         if self.app.diagmond_communicator.bus_connected:
+            dialog = Adw.AlertDialog.new('⚠️ Currently not implemented', None)
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
+            """
             try:
                 self.app.diagmond_communicator.proxy.ReleaseMMDeviceUDev(
                     '(ss)',
@@ -561,17 +561,12 @@ class MyWindow(Adw.ApplicationWindow):
                 )
                 error('Failed to release modem: ' + format_exc(err))
 
-                # ⚠️ ⚠️ TODO ADD CODE FOR HANDLING
-                # => FALL BACK ON CLASSICAL UDEV-RELATED LOGIC
-                #  AS IN QCSUPER
-                # https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
-                #   => ALMOST ALL THE EXTRA CODE SHOULD BE IN
-                #      DIAGMOND/SRC I GUESS?
                 dialog.add_response('ok', 'Ok')
                 dialog.choose(self, None, None)
             else:
                 mm_modem.inhibited = False
                 self.update_spi_devices()
+            """
         else:
             dialog = Adw.AlertDialog.new(
                 "⚠️ diagmond not available, can't release modem", None
