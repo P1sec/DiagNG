@@ -13,6 +13,13 @@ from diagng.gobject.udev_rule import UDevRule
 
 # https://docs.gtk.org/gio/type_func.DBusProxy.new_for_bus.html
 
+# ⚠️ TODO Move to a subclass of `DBusObjectManagerClient`
+# as we will need to ⚠️ enumerate and watch for ⚠️
+# SerialDevice objects with DBusObjectManagerClient.
+# get_objects(), etc.?
+# Cf. https://docs.gtk.org/gio/class.DBusObjectManagerClient.html
+# + ➡️ https://lazka.github.io/pgi-docs/Gio-2.0/interfaces/DBusObjectManager.html
+
 
 class DiagmondCommunicator(GObject.Object):
     connection: Gio.DBusConnection
@@ -108,7 +115,7 @@ class DiagmondCommunicator(GObject.Object):
                     self.main_app.modem_manager.queue_state_update()
 
     def cleanup_connections(self):
-        pass  # ⚠️ WIP 2026-07-03
+        pass  #  WIP 2026-07-03
         # XX Call this both at app initialization and exit
         # XX use GetManagedObjects here?
 
