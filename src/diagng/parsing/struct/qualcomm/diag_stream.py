@@ -28,9 +28,9 @@ class DiagStream(KaitaiStruct):
         i = 0
         while not self._io.is_eof():
             self._raw__raw_frames.append(
-                self._io.read_bytes_term(126, False, True, True)
+                self._io.read_bytes_term(126, True, True, True)
             )
-            _process = diagng.parsing.hdlc.HdlcDecode()
+            _process = diagng.parsing.hdlc.HdlcDecoder()
             self._raw_frames.append(_process.decode(self._raw__raw_frames[-1]))
             _io__raw_frames = KaitaiStream(BytesIO(self._raw_frames[-1]))
             self.frames.append(diag_message.DiagMessage(_io__raw_frames))

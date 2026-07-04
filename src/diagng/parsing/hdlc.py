@@ -11,6 +11,19 @@ QCDM pseudo-HDLC muxer/demuxer
 - TRAILER: 1 byte: 0x7e
 """
 
-class HdlcDecode:
-    def decode():
-        pass # WIP XX
+
+class BadTrailerException(ValueError):
+    pass
+
+
+class InvalidCRCException(ValueError):
+    pass
+
+
+def hdlc_decode(data: bytes) -> bytes:
+    pass  # TODO
+
+
+class HdlcDecoder:
+    def decode(self, data: bytes):
+        return hdlc_decode(data)
