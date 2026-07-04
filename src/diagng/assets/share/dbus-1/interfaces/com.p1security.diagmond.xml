@@ -7,107 +7,72 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+<node>
     <interface name="org.freedesktop.DBus.Introspectable">
         <method name="Introspect">
             <arg name="data" type="s" direction="out" />
         </method>
     </interface>
 
-    <interface name="com.p1security.diagmond">
-        <doc:doc>
-            <doc:description>
-                <doc:para>
-                    The background, privileged, single-instance
-                    Rust/Tokio service handling raw USB/SPI, USB,
-                    Diag frag acquisition, providing IPC.
-                </doc:para>
-            </doc:description>
-        </doc:doc>
+    <!--
+        com.p1security.diagmond:
 
-        <!-- ***************************************************************** -->
+        The background, privileged, single-instance
+        Rust/Tokio service handling raw USB/SPI, USB,
+        Diag frag acquisition, providing IPC.
+    -->
+    <interface name="com.p1security.diagmond">
+        <!--
+            USBDataUpdated:
+
+            Triggered when nusb-related metadata is changed.
+            Contains the values of the up-to-date metadata.
+        -->
         <signal name="USBDataUpdated">
-            <doc:doc>
-                <doc:description>
-                    <doc:para>
-                        Triggered when nusb-related metadata is changed.
-                        Contains the values of the up-to-date metadata.
-                    </doc:para>
-                </doc:description>
-            </doc:doc>
             <arg type="s" name="USBData" direction="out" />
         </signal>
 
-        <!-- ***************************************************************** -->
-        <property name="USBData" type="s" access="read">
-            <doc:doc>
-                <doc:description>
-                    <doc:para>
-                        USB status information, using the
-                        JSON structure laid out in
-                        <doc:tt>diagmond::system::usb_devices::UsbDevicesEndpointResp</doc:tt>
-                    </doc:para>
-                </doc:description>
-            </doc:doc>
-        </property>
+        <!--
+            USBData:
 
-        <!-- ***************************************************************** -->
+            USB status information, using the
+            JSON structure laid out in
+            #diagmond::system::usb_devices::UsbDevicesEndpointResp
+        -->
+        <property name="USBData" type="s" access="read" />
+
+        <!--
+            UDevRulesUpdated:
+
+            Triggered when runtimes rules contained in
+            /run/udev/rules.d on the host system are
+            changed.
+        -->
         <signal name="UDevRulesUpdated">
-            <doc:doc>
-                <doc:description>
-                    <doc:para>
-                        Triggered when runtimes rules contained in
-                        /run/udev/rules.d on the host system are
-                        changed.
-                    </doc:para>
-                </doc:description>
-            </doc:doc>
             <arg type="s" name="UDevRules" direction="out" />
         </signal>
 
-        <!-- ***************************************************************** -->
-        <property name="UDevRules" type="s" access="read">
-            <doc:doc>
-                <doc:description>
-                    <doc:para>
-                        Runtime UDev rules information, using the
-                        JSON structure laid out in
-                        <doc:tt>diagmond::system::udev_rules::UDevRuleList</doc:tt>
-                    </doc:para>
-                </doc:description>
-            </doc:doc>
-        </property>
+        <!--
+            UDevRules:
 
-        <!--*********************************************************************-->
+            Runtime UDev rules information, using the
+            JSON structure laid out in
+            #diagmond::system::udev_rules::UDevRuleList
+        -->
+        <property name="UDevRules" type="s" access="read" />
+
+
+        <!--
+            OpenSerialPort:
+            @device_path: The full /dev name of the serial port device to connect
+            @kernel_path: The UDev KERNEL name of the serial port device to connect
+            @success: New object path created under
+              #/com/p1security/diagmond/Device after this operation
+        -->
         <method name="OpenSerialPort">
-            <arg type="s" name="device_path" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The full /dev name of the serial port device to connect
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="s" name="kernel_path" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            The UDev KERNEL name of the serial port device to connect
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
-            <arg type="o" name="success" direction="out">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            New object path created user /com/p1security/diagmond/Device
-                            after this operation
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
+            <arg type="s" name="device_path" direction="in" />
+            <arg type="s" name="kernel_path" direction="in" />
+            <arg type="o" name="object_path" direction="out" />
         </method>
 
         <!--

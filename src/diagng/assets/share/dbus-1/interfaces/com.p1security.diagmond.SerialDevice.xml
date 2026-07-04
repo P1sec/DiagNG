@@ -7,59 +7,47 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+<node>
     <interface name="org.freedesktop.DBus.Introspectable">
         <method name="Introspect">
             <arg name="data" type="s" direction="out" />
         </method>
     </interface>
 
+    <!--
+        com.p1security.diagmond.SerialDevice:
+
+        A serial port device exposed through the `diagmond` daemon.
+    -->
     <interface name="com.p1security.diagmond.SerialDevice">
-        <doc:doc>
-            <doc:description>
-                <doc:para>
-                    A serial port device exposed through
-                    the `diagmond` daemon.
-                </doc:para>
-            </doc:description>
-        </doc:doc>
+        <!--
+            Read:
+            @data: Data read from the serial port
 
-        <!--*********************************************************************-->
+            Perform a single read operation over the
+            given serial port.
+        -->
         <method name="Read">
-            <arg type="ay" name="data" direction="out">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            Data read from the serial port
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
+            <arg type="ay" name="data" direction="out" />
         </method>
 
-        <!--*********************************************************************-->
+        <!--
+            Write:
+            @data: Data to write to the serial port
+
+            Perform a single write operation over the
+            given serial port.
+        -->
         <method name="Write">
-            <arg type="ay" name="data" direction="in">
-                <doc:doc>
-                    <doc:summary>
-                        <doc:para>
-                            Data to write to the serial port
-                        </doc:para>
-                    </doc:summary>
-                </doc:doc>
-            </arg>
+            <arg type="ay" name="data" direction="in" />
         </method>
 
-        <!--*********************************************************************-->
-        <method name="Close">
-            <doc:doc>
-                <doc:summary>
-                    <doc:para>
-                        Close the serial port
-                    </doc:para>
-                </doc:summary>
-            </doc:doc>
-        </method>
+        <!--
+            Close:
+
+            Close the serial port
+        -->
+        <method name="Close" />
 
     </interface>
 </node>
