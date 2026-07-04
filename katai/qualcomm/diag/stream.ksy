@@ -19,7 +19,7 @@ meta:
   id: diag_stream
   endian: le
   imports:
-    - qcdm_message
+    - message
 
 seq:
   - id: frames

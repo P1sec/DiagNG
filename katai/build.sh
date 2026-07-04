@@ -8,7 +8,7 @@ ksc \
     --target python \
     --python-package diagng.parsing.struct.qualcomm \
     --outdir ../src/diagng/parsing/struct/qualcomm \
-    qualcomm/*
+    qualcomm/diag/*
 
 cd ..
 ruff format

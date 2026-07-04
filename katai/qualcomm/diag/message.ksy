@@ -2,7 +2,7 @@ meta:
   id: diag_message
   endian: le
   imports:
-    - qcdm_cmd_code
+    - cmd_code
 
 seq:
   - id: cmd_code
