@@ -20,7 +20,7 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
         .spawn()?;
 
     let status = child.wait().await?;
-    log::debug!("udevadm control --reload-rules existed with: {}", status);
+    log::debug!("udevadm control --reload-rules exited with: {}", status);
 
     let mut child = Command::new("udevadm")
         .arg("trigger")
@@ -29,7 +29,7 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
 
     let status = child.wait().await?;
     log::debug!(
-        "udevadm trigger --name-match={} existed with: {}",
+        "udevadm trigger --name-match={} exited with: {}",
         device_name,
         status
     );
@@ -57,7 +57,7 @@ async fn reload_udev_rules(device_name: &str) -> zbus::Result<()> {
             .spawn()?;
 
         let status = child.wait().await?;
-        log::debug!("systemctl restart ModemManager existed with: {}", status);
+        log::debug!("systemctl restart ModemManager exited with: {}", status);
     }
 
     Ok(())
