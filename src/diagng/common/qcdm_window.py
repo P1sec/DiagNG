@@ -44,3 +44,19 @@ class QCDMWindow(Adw.Window):
             )
         )
         self.present()
+
+        self.gather_device_info()
+
+    def gather_device_info(self):
+        # WIP use self.dbus_serial_device to display
+        # Diag-related info in the first tab of
+        # QCDMWindow
+
+        # = Spawn a GLib task reading (and logging?)
+        # pseudo-HDLC events from the serial stream
+        # (use nesting objects as adapters?)
+
+        # + Send a write command to the DBus
+        # daemon
+
+        pass
