@@ -42,31 +42,29 @@ class DiagmondSerialDeviceOM(GObject.Object):
             Gio.DBusObjectManagerClientFlags.DO_NOT_AUTO_START,
             'com.p1security.diagmond',
             '/com/p1security/diagmond/SerialDevices',
-            None,  # self.get_proxy_type,
+            None,
             None,
             None,
             self.om_ready,
             None,
         )
 
-    def get_proxy_type(
+    def om_ready(
         self,
-        manager: Gio.DBusObjectManagerClient,
-        object_path: str,
-        interface_name: Optional[str],
+        source_object: Optional[GObject.Object],
+        result: Gio.AsyncResult,
         data: Optional[object],
-    ) -> GObject.GType:
-        debug(
-            'Received get_proxy_type_func call for '
-            + f'path={object_path} interface={interface_name}'
-        )
+    ):
+        self.om = Gio.DBusObjectManagerClient.new_finish(result)
 
-        if interface_name:
-            return Gio.DBusProxy
-        else:
-            return Gio.DBusObjectProxy
+        self.om.connect('object-added', self.on_object_added)
+        self.om.connect('object-removed', self.on_object_removed)
+        self.om.connect('interface-added', self.on_interface_added)
+        self.om.connect('interface-removed', self.on_interface_removed)
 
-    def process_objects(self):
+        self.remove_dangling_objects()
+
+    def remove_dangling_objects(self):
         for obj in self.om.get_objects():
             debug('Found dangling SerialDevice object at startup: %r' % obj)
 
@@ -119,18 +117,3 @@ class DiagmondSerialDeviceOM(GObject.Object):
     ):
         # Never called?
         debug('SerialDevice interface removed: %r->%r' % (obj, intf))
-
-    def om_ready(
-        self,
-        source_object: Optional[GObject.Object],
-        result: Gio.AsyncResult,
-        data: Optional[object],
-    ):
-        self.om = Gio.DBusObjectManagerClient.new_finish(result)
-
-        self.om.connect('object-added', self.on_object_added)
-        self.om.connect('object-removed', self.on_object_removed)
-        self.om.connect('interface-added', self.on_interface_added)
-        self.om.connect('interface-removed', self.on_interface_removed)
-
-        self.process_objects()

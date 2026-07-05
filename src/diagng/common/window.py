@@ -565,6 +565,13 @@ class MyWindow(Adw.ApplicationWindow):
             dialog.choose(self, None, None)
 
     def on_quit(self, *args):
+        if (
+            self.app.diagmond_serialdevice_om
+            and self.app.diagmond_serialdevice_om.om
+        ):
+            self.app.diagmond_serialdevice_om.remove_dangling_objects()
+
+        """
         for pos in range(
             self.app.modem_manager.mm_instance.modems.get_n_items()
         ):
@@ -574,6 +581,7 @@ class MyWindow(Adw.ApplicationWindow):
                 # ⚠️ ⚠️ TODO NOT FUNCTIONAL CURRENTLY:
                 # ==> UPDATE THE ARGUMENTS TO THIS FUNCTION CALL
                 pass  # self.unlock_mm_port(None, mm_modem)
+        """
 
     def connect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('connect_spi_port called on %s' % serial_port.tty_device_path)
