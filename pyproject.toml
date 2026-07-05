@@ -35,6 +35,7 @@ dependencies = [
 
 [project.scripts]
 diagng = "diagng.common.main_entry:main"
+diagmond = "diagng.utils.spawn_diagmond:main"
 
 [project.urls]
 Homepage = "https://github.com/P1sec/DiagNG"

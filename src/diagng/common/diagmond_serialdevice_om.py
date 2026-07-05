@@ -93,11 +93,13 @@ class DiagmondSerialDeviceOM(GObject.Object):
             )
 
     def on_object_added(self, om: Gio.DBusObjectManager, obj: Gio.DBusObject):
+        # TODO ⚠️ Create/display QCDMWindow
         debug('SerialDevice object added: %r' % obj)
 
     def on_object_removed(
         self, om: Gio.DBusObjectManager, obj: Gio.DBusObject
     ):
+        # TODO ⚠️ Freeze QCDMWindow
         debug('SerialDevice object removed: %r' % obj)
 
     def on_interface_added(

@@ -12,8 +12,8 @@ from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.system.udev_device_scanner import DeviceScanner
+from diagng.common.main_window import MainWindow
 from diagng.utils.logging import LoggingCentral
-from diagng.common.window import MyWindow
 
 # Register resources
 import diagng.utils.gresources
@@ -36,7 +36,7 @@ def main():
 
 
 class MainApplication(Adw.Application):
-    window: MyWindow
+    window: MainWindow
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
@@ -176,7 +176,7 @@ class MainApplication(Adw.Application):
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
 
-        self.window = MyWindow(self)
+        self.window = MainWindow(self)
 
         # Application will close once it has no longer has active
         # windows attached to it
