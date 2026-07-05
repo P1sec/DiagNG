@@ -83,10 +83,18 @@ class MainApplication(Adw.Application):
         # Cf. https://gitlab.gnome.org/GNOME/pygobject/-/blob/3.48.2/tests/test_generictreemodel.py#L335
 
         def error_handler(exctype, value, traceback):
-            error(
-                'Caught Python exception: \n'
-                + ''.join(format_exception(exctype, value, traceback)).rstrip()
-            )
+            tb_string = ''.join(
+                format_exception(exctype, value, traceback)
+            ).rstrip()
+
+            error('Caught Python exception: \n' + tb_string)
+
+            if self.window:
+                dialog = Adw.AlertDialog.new(
+                    '⚠️ Caught Python exception: \n' + tb_string, None
+                )
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self.window, None, None)
 
         sys.excepthook = error_handler
 
