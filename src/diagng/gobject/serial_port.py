@@ -15,26 +15,27 @@ class SerialPort(GObject.Object):
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
-            'tty_device_path', GLib.Variant.new_string(self.tty_device_path)
+            'tty_device_path',
+            GLib.Variant.new_string(self.tty_device_path or ''),
         )
         variant.insert_value(
-            'kernel_name', GLib.Variant.new_string(self.kernel_name)
+            'kernel_name', GLib.Variant.new_string(self.kernel_name or '')
         )
         variant.insert_value(
             'sysfs_device_path',
-            GLib.Variant.new_string(self.sysfs_device_path),
+            GLib.Variant.new_string(self.sysfs_device_path or ''),
         )
         variant.insert_value(
-            'usb_interface', GLib.Variant.new_string(self.usb_interface)
+            'usb_interface', GLib.Variant.new_string(self.usb_interface or '')
         )
         variant.insert_value(
-            'usb_vid_pid', GLib.Variant.new_string(self.usb_vid_pid)
+            'usb_vid_pid', GLib.Variant.new_string(self.usb_vid_pid or '')
         )
         variant.insert_value(
-            'usb_vendor', GLib.Variant.new_string(self.usb_vendor)
+            'usb_vendor', GLib.Variant.new_string(self.usb_vendor or '')
         )
         variant.insert_value(
-            'usb_product', GLib.Variant.new_string(self.usb_product)
+            'usb_product', GLib.Variant.new_string(self.usb_product or '')
         )
 
         return variant.end()

@@ -7,6 +7,7 @@ from json import dumps
 import sys
 import gi
 
+from diagng.common.diagmond_serialdevice_om import DiagmondSerialDeviceOM
 from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
@@ -38,6 +39,7 @@ class MainApplication(Adw.Application):
     window: MyWindow
 
     diagmond_communicator: DiagmondCommunicator = None
+    diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
     modem_manager: ModemManagerIntf = None
     device_scanner: DeviceScanner = None
 
@@ -159,6 +161,10 @@ class MainApplication(Adw.Application):
 
     def on_startup(self, app, *args):
         self.diagmond_communicator = DiagmondCommunicator(self)
+        self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
+            self.diagmond_communicator.connection
+        )
+
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
 

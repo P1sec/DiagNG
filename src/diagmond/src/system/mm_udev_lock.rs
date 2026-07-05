@@ -67,7 +67,7 @@ pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()>
     // WIP - Implement this feature based of QCSuper logic
     // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
 
-    log::error!("NOT FULLY IMPLEMENTED YET");
+    log::warn!("NOT FULLY IMPLEMENTED YET");
 
     // Add udev rule to "/run/udev/rules.d"
 
@@ -98,7 +98,7 @@ pub async fn unlock_device(full_name: &str, kernel_name: &str) -> zbus::Result<(
     // TODO - Implement this feature based of QCSuper logic
     // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
 
-    log::error!("NOT FULLY IMPLEMENTED YET");
+    log::warn!("NOT FULLY IMPLEMENTED YET");
 
     let file_name = format!(
         "/run/udev/rules.d/99-diagmond-blacklist-{}.rules",

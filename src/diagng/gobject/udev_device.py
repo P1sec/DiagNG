@@ -19,7 +19,7 @@ class UDevDevice(GObject.Object):
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
-            'text_summary', GLib.Variant.new_string(self.text_summary)
+            'text_summary', GLib.Variant.new_string(self.text_summary or '')
         )
         variant.insert_value(
             'is_empty', GLib.Variant.new_boolean(self.is_empty)

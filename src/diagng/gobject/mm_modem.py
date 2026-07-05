@@ -21,19 +21,19 @@ class ModemManagerModem(GObject.Object):
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
-            'modem_name', GLib.Variant.new_string(self.modem_name)
+            'modem_name', GLib.Variant.new_string(self.modem_name or '')
         )
         variant.insert_value(
             'modem_imei',
-            GLib.Variant.new_string(self.modem_imei),
+            GLib.Variant.new_string(self.modem_imei or ''),
         )
         variant.insert_value(
             'modem_firmware',
-            GLib.Variant.new_string(self.modem_firmware),
+            GLib.Variant.new_string(self.modem_firmware or ''),
         )
         variant.insert_value(
             'modem_device_id',
-            GLib.Variant.new_string(self.modem_device_id),
+            GLib.Variant.new_string(self.modem_device_id or ''),
         )
         variant.insert_value(
             'inhibited', GLib.Variant.new_boolean(self.inhibited)

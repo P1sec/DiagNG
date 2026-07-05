@@ -13,13 +13,6 @@ from diagng.gobject.udev_rule import UDevRule
 
 # https://docs.gtk.org/gio/type_func.DBusProxy.new_for_bus.html
 
-# ⚠️ TODO Move to a subclass of `DBusObjectManagerClient`
-# as we will need to ⚠️ enumerate and watch for ⚠️
-# SerialDevice objects with DBusObjectManagerClient.
-# get_objects(), etc.?
-# Cf. https://docs.gtk.org/gio/class.DBusObjectManagerClient.html
-# + ➡️ https://lazka.github.io/pgi-docs/Gio-2.0/interfaces/DBusObjectManager.html
-
 
 class DiagmondCommunicator(GObject.Object):
     connection: Gio.DBusConnection

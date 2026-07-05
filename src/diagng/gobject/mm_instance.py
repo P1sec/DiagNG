@@ -26,7 +26,9 @@ class ModemManagerInstance(GObject.Object):
             'is_running', GLib.Variant.new_boolean(self.is_running)
         )
         variant.insert_value('pid', GLib.Variant.new_int64(self.pid))
-        variant.insert_value('version', GLib.Variant.new_string(self.version))
+        variant.insert_value(
+            'version', GLib.Variant.new_string(self.version or '')
+        )
         variant.insert_value(
             'modems',
             GLib.Variant.new_array(

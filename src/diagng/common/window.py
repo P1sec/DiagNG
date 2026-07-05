@@ -397,9 +397,9 @@ class MyWindow(Adw.ApplicationWindow):
             main_row.set_title(
                 '<b>%s %s</b> - %s'
                 % (
-                    GLib.markup_escape_text(first_port.usb_vendor, -1),
-                    GLib.markup_escape_text(first_port.usb_product, -1),
-                    GLib.markup_escape_text(first_port.usb_vid_pid, -1),
+                    GLib.markup_escape_text(first_port.usb_vendor or '', -1),
+                    GLib.markup_escape_text(first_port.usb_product or '', -1),
+                    GLib.markup_escape_text(first_port.usb_vid_pid or '', -1),
                 )
             )
 
@@ -409,8 +409,10 @@ class MyWindow(Adw.ApplicationWindow):
                 main_row.set_subtitle(
                     'IMEI: %s | Firmware: %s'
                     % (
-                        GLib.markup_escape_text(mm_modem.modem_imei, -1),
-                        GLib.markup_escape_text(mm_modem.modem_firmware, -1),
+                        GLib.markup_escape_text(mm_modem.modem_imei or '', -1),
+                        GLib.markup_escape_text(
+                            mm_modem.modem_firmware or '', -1
+                        ),
                     )
                 )
 
@@ -420,7 +422,7 @@ class MyWindow(Adw.ApplicationWindow):
                 port_row.set_subtitle_selectable(True)
                 port_row.set_title(
                     '<b>%s</b>'
-                    % (GLib.markup_escape_text(port.tty_device_path, -1))
+                    % (GLib.markup_escape_text(port.tty_device_path or '', -1))
                 )
                 port_row.set_tooltip_text(port.sysfs_device_path)
 
@@ -470,7 +472,7 @@ class MyWindow(Adw.ApplicationWindow):
 
                     # Annotate devices with ModemManager function
 
-                    subtitle += ' | Type: ' + mm_port.port_type
+                    subtitle += ' | Type: %s' % mm_port.port_type
 
                 connect_btn.connect(
                     'clicked',
@@ -625,19 +627,20 @@ class MyWindow(Adw.ApplicationWindow):
             main_row.set_expanded(True)
             main_row.set_title_selectable(True)
             main_row.set_title(
-                '<b>%s</b>' % GLib.markup_escape_text(item.modem_name, -1)
+                '<b>%s</b>'
+                % GLib.markup_escape_text(item.modem_name or '', -1)
             )
             main_row.set_subtitle(
                 'IMEI: %s | Firmware: %s'
                 % (
-                    GLib.markup_escape_text(item.modem_imei, -1),
-                    GLib.markup_escape_text(item.modem_firmware, -1),
+                    GLib.markup_escape_text(item.modem_imei or '', -1),
+                    GLib.markup_escape_text(item.modem_firmware or '', -1),
                 )
             )
             for pos in range(item.ports.get_n_items()):
                 port = item.ports.get_item(pos)
 
-                port_title = port.device_path
+                port_title = port.device_path or ''
                 port_title += ' (type: %s)' % port.port_type
                 if port.is_primary:
                     port_title += ' - Primary'

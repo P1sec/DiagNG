@@ -13,10 +13,11 @@ class UDevRule(GObject.Object):
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
-            'rule_file_name', GLib.Variant.new_string(self.rule_file_name)
+            'rule_file_name',
+            GLib.Variant.new_string(self.rule_file_name or ''),
         )
         variant.insert_value(
-            'rule_text', GLib.Variant.new_string(self.rule_text)
+            'rule_text', GLib.Variant.new_string(self.rule_text or '')
         )
 
         return variant.end()

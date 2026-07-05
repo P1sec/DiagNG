@@ -13,10 +13,10 @@ class ModemManagerPort(GObject.Object):
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
         variant.insert_value(
-            'device_path', GLib.Variant.new_string(self.device_path)
+            'device_path', GLib.Variant.new_string(self.device_path or '')
         )
         variant.insert_value(
-            'port_type', GLib.Variant.new_string(self.port_type)
+            'port_type', GLib.Variant.new_string(self.port_type or '')
         )
         variant.insert_value(
             'is_primary', GLib.Variant.new_boolean(self.is_primary)
