@@ -25,6 +25,10 @@ class QCDMWindow(Adw.Window):
     def __init__(
         self,
         parent: Adw.ApplicationWindow,
+
+        # TODO : Before instancing this
+        # object, merge these two fields
+        # in a single
         dbus_serial_device: Gio.DBusProxy,
         serial_port: SerialPort,
     ):
@@ -62,6 +66,8 @@ class QCDMWindow(Adw.Window):
         #    for different input sources (USB, ADB,
         #    SPI, DLF file, etc.) through
         #    subclassing?
+        #        => Use Python metaclasses for
+        #           abstracting?
 
         # + Send a write command to the DBus
         # daemon
