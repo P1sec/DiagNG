@@ -22,6 +22,7 @@ use std::os::unix::process::CommandExt;
 use futures_util::StreamExt;
 use tokio_serial::SerialPortInfo;
 use zbus::connection::Builder;
+use zbus::fdo::ObjectManager;
 
 #[tokio::main]
 async fn main() -> zbus::Result<()> {
@@ -48,6 +49,8 @@ async fn main() -> zbus::Result<()> {
     let connection = Builder::system()?
         .name("com.p1security.diagmond")?
         .serve_at("/com/p1security/diagmond", diagmond)?
+        .serve_at("/com/p1security/diagmond", ObjectManager {})?
+        .serve_at("/com/p1security/diagmond/SerialDevices", ObjectManager {})?
         .build()
         .await?;
 
