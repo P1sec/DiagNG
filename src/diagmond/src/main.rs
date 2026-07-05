@@ -53,12 +53,16 @@ async fn main() -> zbus::Result<()> {
         .build()
         .await?;
 
-    connection
+    if let Err(err) = connection
         .request_name_with_flags(
             "com.p1security.diagmond",
             RequestNameFlags::DoNotQueue.into(),
         )
-        .await?;
+        .await
+    {
+        log::error!("Could not register D-Bus service: {:?}", err);
+        std::process::exit(1);
+    }
 
     // Spawn inotify watch over /run/udev/rules.d
     tokio::spawn(crate::system::udev_rules::watch_udev_rules(
