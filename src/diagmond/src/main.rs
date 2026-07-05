@@ -37,7 +37,7 @@ async fn main() -> zbus::Result<()> {
         std::process::exit(1);
     }
 
-    let udev_rules = crate::system::udev_rules::get_udev_rules_data().await?;
+    let udev_rules = crate::system::udev_rules::get_udev_rules_data(true).await?;
 
     let diagmond = Diagmond {
         usb_data: "null".to_string(),

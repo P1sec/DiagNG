@@ -1,6 +1,7 @@
 use inotify::{Inotify, StreamExt, WatchMask};
 
 use crate::dbus::manager::{Diagmond, DiagmondSignals};
+use crate::system::mm_udev_lock::reload_udev_rules;
 
 const UDEV_RULES_DIR: &'static str = "/run/udev/rules.d";
 
@@ -27,18 +28,32 @@ struct UDevRule {
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct UDevRuleList(Vec<UDevRule>);
 
-pub async fn get_udev_rules_data() -> zbus::Result<UDevRuleList> {
+pub async fn get_udev_rules_data(stale_rules: bool) -> zbus::Result<UDevRuleList> {
     let mut rules_vec: Vec<UDevRule> = vec![];
+
+    let mut removed_rules = false;
 
     for entry in std::fs::read_dir(UDEV_RULES_DIR)? {
         let entry = entry?;
         let path = entry.path();
-        if let Ok(content) = std::fs::read_to_string(&path) {
+
+        let base_name = path.file_name().unwrap().display().to_string();
+        let full_name = path.display().to_string();
+
+        if stale_rules && base_name.starts_with("99-diagmond-blacklist-") {
+            log::warn!("Removing stale rule: {}", full_name);
+            std::fs::remove_file(&path)?;
+            removed_rules = true;
+        } else if let Ok(content) = std::fs::read_to_string(&path) {
             rules_vec.push(UDevRule {
-                rule_file_name: path.display().to_string(),
+                rule_file_name: full_name,
                 rule_text: content,
             });
         }
+    }
+
+    if removed_rules {
+        reload_udev_rules(None).await?;
     }
 
     Ok(UDevRuleList(rules_vec))
@@ -63,7 +78,7 @@ pub async fn watch_udev_rules(connection: zbus::Connection) -> zbus::Result<()> 
     while let Some(event_or_error) = stream.next().await {
         log::debug!("Received inotify event: {:?}", event_or_error?);
 
-        let udev_rules = get_udev_rules_data().await?;
+        let udev_rules = get_udev_rules_data(false).await?;
         let udev_rules = serde_json::to_string_pretty(&udev_rules).unwrap();
 
         // Send ZBus upstream update:

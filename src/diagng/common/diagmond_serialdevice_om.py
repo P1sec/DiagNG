@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from gi.repository import GObject, Gio
+from logging import debug, info
 from typing import Optional
-from logging import debug
 
 # ⚠️ TODO Move to a subclass of `DBusObjectManagerClient`
 # as we will need to ⚠️ enumerate and watch for ⚠️
@@ -14,12 +14,31 @@ from logging import debug
 
 class DiagmondSerialDeviceOM(GObject.Object):
     om: Gio.DBusObjectManagerClient
+    connection: Gio.DBusConnection
+    interface_info: Gio.DBusInterfaceInfo
 
     def __init__(self, connection: Gio.DBusConnection):
         super().__init__()
 
+        self.connection = connection
+
+        XML_TREE = (
+            Gio.resources_lookup_data(
+                '/com/p1security/diagng/com.p1security.diagmond.SerialDevice.xml',
+                0,
+            )
+            .get_data()
+            .decode('utf-8')
+        )
+
+        dbus_info = Gio.DBusNodeInfo.new_for_xml(XML_TREE)
+        self.interface_info = dbus_info.lookup_interface(
+            'com.p1security.diagmond.SerialDevice'
+        )
+        assert self.interface_info
+
         Gio.DBusObjectManagerClient.new(
-            connection,
+            self.connection,
             Gio.DBusObjectManagerClientFlags.DO_NOT_AUTO_START,
             'com.p1security.diagmond',
             '/com/p1security/diagmond/SerialDevices',
@@ -49,7 +68,31 @@ class DiagmondSerialDeviceOM(GObject.Object):
 
     def process_objects(self):
         for obj in self.om.get_objects():
-            debug('Detected SerialDevice object: %r' % obj)
+            debug('Found dangling SerialDevice object at startup: %r' % obj)
+
+            obj_path = obj.get_object_path()
+
+            proxy = Gio.DBusProxy.new_sync(
+                self.connection,
+                Gio.DBusProxyFlags.NONE,
+                self.interface_info,
+                'com.p1security.diagmond',
+                obj_path,
+                'com.p1security.diagmond.SerialDevice',
+                None,
+            )
+
+            def port_closed(proxy, result, obj_path):
+                if isinstance(result, Exception):
+                    raise result
+                else:
+                    info('Dangling %s port closed successfully' % obj_path)
+
+            proxy.Close(
+                '()',
+                result_handler=port_closed,
+                user_data=obj_path,
+            )
 
     def on_object_added(self, om: Gio.DBusObjectManager, obj: Gio.DBusObject):
         debug('SerialDevice object added: %r' % obj)
