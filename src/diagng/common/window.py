@@ -322,10 +322,6 @@ class MyWindow(Adw.ApplicationWindow):
                 else ''
             )
 
-            self.detected_modems_group.set_visible(
-                bool(self.app.modem_manager.mm_instance.modems.get_n_items())
-            )
-
     def update_mm_debug_data(self, *args):
         if self.app.mm_debug_data:
             self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
@@ -606,6 +602,11 @@ class MyWindow(Adw.ApplicationWindow):
             dialog.choose(self, None, None)
 
     def update_mm_modems(self, *args):
+
+        self.detected_modems_group.set_visible(
+            bool(self.app.modem_manager.mm_instance.modems.get_n_items())
+        )
+
         def visit(container: Gtk.Widget):
             item = container.get_first_child()
             while item:
