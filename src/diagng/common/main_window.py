@@ -171,7 +171,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Connect signals
 
-        self.connect('close-request', self.on_quit)
+        # self.connect('close-request', self.on_quit)
         self.app.connect('shutdown', self.on_quit)
 
         self.app.device_scanner.spi_devices.connect(

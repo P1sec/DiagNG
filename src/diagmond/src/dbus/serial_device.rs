@@ -97,12 +97,14 @@ impl SerialDevice {
         let object_path = header.path().unwrap().to_owned();
 
         tokio::spawn(async move {
+            tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+
             log::debug!("Unregistering from D-Bus...");
 
             obj_server
-            .remove::<Self, ObjectPath>(object_path)
-            .await
-            .unwrap();
+                .remove::<Self, ObjectPath>(object_path)
+                .await
+                .unwrap();
         });
 
         log::debug!("Sending response to Close call...");
