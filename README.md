@@ -68,5 +68,12 @@ uv sync
 # system-wide (creates a symlink to the source in "~/.local/bin")
 uv tool install -e .
 
+sudo install -Dm644 src/diagng/assets/share/dbus-1/system.d/com.p1security.diagmond.conf \
+    /etc/dbus-1/system.d/com.p1security.diagmond.conf
+
+# In one tab:
+diagmond
+
+# In another tab:
 diagng
 ```
