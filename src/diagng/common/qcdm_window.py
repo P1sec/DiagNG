@@ -56,6 +56,13 @@ class QCDMWindow(Adw.Window):
         # pseudo-HDLC events from the serial stream
         # (use nesting objects as adapters?)
 
+        #   ===> Define a GObject INTERFACE with
+        #    callback and signal-based connectivity
+        #    in order to provide different adapters
+        #    for different input sources (USB, ADB,
+        #    SPI, DLF file, etc.) through
+        #    subclassing?
+
         # + Send a write command to the DBus
         # daemon
 
