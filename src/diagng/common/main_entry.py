@@ -31,6 +31,8 @@ def main():
     args = ArgumentParser(description='Prototype for DiagNG 🍕 🎧')
     args = args.parse_args()
 
+    GLib.set_prgname('com.p1security.diagng')
+
     app = MainApplication(application_id='com.p1security.diagng')
     app.run()
 

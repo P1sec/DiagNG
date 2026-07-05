@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=Utility;GTK;Network;
-Exec=%f
+Exec=diagng %f
 Icon=com.p1security.diagng
 # See https://github.com/lemenkov/shared-mime-info/blob/master/freedesktop.org.xml.in
 # regarding the applicable mime types

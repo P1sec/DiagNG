@@ -71,6 +71,12 @@ uv tool install -e .
 sudo install -Dm644 src/diagng/assets/share/dbus-1/system.d/com.p1security.diagmond.conf \
     /etc/dbus-1/system.d/com.p1security.diagmond.conf
 
+install -Dm644 src/diagng/assets/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg \
+    ~/.local/share/icons/com.p1security.diagng.svg
+
+install -Dm644 src/diagng/assets/share/applications/com.p1security.diagng.desktop \
+    ~/.local/share/applications/com.p1security.diagng.desktop
+
 # In one tab:
 diagmond
 
