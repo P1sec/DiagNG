@@ -6,7 +6,19 @@ template $QCDMWindow: Adw.Window {
     content: Adw.ToastOverlay {
       child: Adw.ViewStack qcdm_stack {
         Adw.ViewStackPage info_page {
-          child: Adw.PreferencesPage {};
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup device_info_group {
+              title: "Device information";
+
+              TextView device_info_textarea {
+                buffer: TextBuffer device_info_buffer {};
+
+                editable: false;
+                height-request: 240;
+                monospace: true;
+              }
+            }
+          };
 
           icon-name: "info-symbolic";
           name: "info_page";

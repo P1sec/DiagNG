@@ -16,7 +16,23 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="info_page">
                     <property name="child">
-                      <object class="AdwPreferencesPage"></object>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup" id="device_info_group">
+                            <property name="title">Device information</property>
+                            <child>
+                              <object class="GtkTextView" id="device_info_textarea">
+                                <property name="buffer">
+                                  <object class="GtkTextBuffer" id="device_info_buffer"></object>
+                                </property>
+                                <property name="editable">false</property>
+                                <property name="height-request">240</property>
+                                <property name="monospace">true</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
                     </property>
                     <property name="icon-name">info-symbolic</property>
                     <property name="name">info_page</property>
