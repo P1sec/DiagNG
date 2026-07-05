@@ -15,5 +15,5 @@
     <property id="focusable" type-id="gboolean" default-value="True"/>
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
-  <ui template-class="QCDMWindow" filename="qcdm_window.blp" sha256="86b78dd4efd786217481898a5bbce7adf965084da373efdbd8464dec7d00e8f7"/>
+  <ui template-class="QCDMWindow" filename="qcdm_window.blp" sha256="6377ba18ef8d77f05d7a023db7777dd2b1c2a8fdedb9669271ac34e61e6470ac"/>
 </cambalache-project>

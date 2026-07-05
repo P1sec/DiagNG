@@ -20,6 +20,36 @@ template $QCDMWindow: Adw.Window {
           name: "pcap_page";
           title: "PCAP";
         }
+
+        Adw.ViewStackPage logs_page {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "xsi-search-symbolic";
+          name: "logs_page";
+          title: "Logs";
+        }
+
+        Adw.ViewStackPage efs_page {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "folder-remote-symbolic";
+          name: "efs_page";
+          title: "EFS";
+        }
+
+        Adw.ViewStackPage raw_page {
+          child: Label {
+            label: "Empty Page";
+          };
+
+          icon-name: "folder-documents-symbolic";
+          name: "raw_page";
+          title: "Raw";
+        }
       };
     };
 
