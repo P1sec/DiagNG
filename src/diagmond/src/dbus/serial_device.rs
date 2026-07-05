@@ -68,6 +68,8 @@ impl SerialDevice {
 
         // Remove UDev rule if applicable
 
+        log::debug!("Deleting UDev rule...");
+
         if self.kernel_name.len() > 0 {
             if let Err(error) =
                 crate::system::mm_udev_lock::unlock_device(&self.device_name, &self.kernel_name)
@@ -83,20 +85,28 @@ impl SerialDevice {
             }
         }
 
-        // UNREGISTER from DBus
-
-        obj_server
-            .remove::<Self, ObjectPath>(header.path().unwrap().clone())
-            .await
-            .unwrap();
-
         // Disconnect serial port
 
+        log::debug!("Shutting down serial port...");
+
         self.port.shutdown().await.ok();
+
+        // Unregister from DBus
+
+        let obj_server = obj_server.clone();
+        let object_path = header.path().unwrap().to_owned();
+
+        tokio::spawn(async move {
+            log::debug!("Unregistering from D-Bus...");
+
+            obj_server
+            .remove::<Self, ObjectPath>(object_path)
+            .await
+            .unwrap();
+        });
+
+        log::debug!("Sending response to Close call...");
 
         Ok(())
     }
 }
-
-// WIP factory class:
-// pub struct DeviceCreator;

@@ -169,14 +169,15 @@ class MainApplication(Adw.Application):
 
     def on_startup(self, app, *args):
         self.diagmond_communicator = DiagmondCommunicator(self)
-        self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
-            self.diagmond_communicator.connection
-        )
 
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
 
         self.window = MainWindow(self)
+
+        self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
+            self.window, self.diagmond_communicator.connection
+        )
 
         # Application will close once it has no longer has active
         # windows attached to it

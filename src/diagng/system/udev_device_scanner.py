@@ -144,20 +144,22 @@ class DeviceScanner(GObject.Object):
                         self.json_state, indent=4
                     )
 
-                    self.main_app.get_dbus_connection().emit_signal(
-                        None,
-                        self.main_app.get_dbus_object_path(),
-                        'com.p1security.diagmetad',
-                        'MMInfoUpdated',
-                        GLib.Variant.new_tuple(
-                            self.usb_tree_gobjs,
-                            self.spi_tree_gobjs,
-                            self.spi_gobjs,
-                            GLib.Variant.new_string(
-                                dumps(self.json_state, indent=4)
+                    dbus_connection = self.main_app.get_dbus_connection()
+                    if dbus_connection:
+                        dbus_connection.emit_signal(
+                            None,
+                            self.main_app.get_dbus_object_path(),
+                            'com.p1security.diagmetad',
+                            'MMInfoUpdated',
+                            GLib.Variant.new_tuple(
+                                self.usb_tree_gobjs,
+                                self.spi_tree_gobjs,
+                                self.spi_gobjs,
+                                GLib.Variant.new_string(
+                                    dumps(self.json_state, indent=4)
+                                ),
                             ),
-                        ),
-                    )
+                        )
 
                 finally:
                     self.state_update_pending = False

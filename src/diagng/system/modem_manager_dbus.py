@@ -518,16 +518,20 @@ class ModemManagerIntf(GObject.Object):
         if self.json_state:
             self.main_app.mm_debug_data = dumps(self.json_state, indent=4)
 
-            self.main_app.get_dbus_connection().emit_signal(
-                None,
-                self.main_app.get_dbus_object_path(),
-                'com.p1security.diagmetad',
-                'MMInfoUpdated',
-                GLib.Variant.new_tuple(
-                    self.mm_instance.to_gvariant(),
-                    GLib.Variant.new_string(dumps(self.json_state, indent=4)),
-                ),
-            )
+            dbus_connection = self.main_app.get_dbus_connection()
+            if dbus_connection:
+                dbus_connection.emit_signal(
+                    None,
+                    self.main_app.get_dbus_object_path(),
+                    'com.p1security.diagmetad',
+                    'MMInfoUpdated',
+                    GLib.Variant.new_tuple(
+                        self.mm_instance.to_gvariant(),
+                        GLib.Variant.new_string(
+                            dumps(self.json_state, indent=4)
+                        ),
+                    ),
+                )
 
     def dbus_metadata_to_json(self) -> dict:
         # Avoid memory leaks?

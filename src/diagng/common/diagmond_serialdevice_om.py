@@ -1,25 +1,40 @@
 #!/usr/bin/env python3
 
-from gi.repository import GObject, Gio
-from logging import debug, info
+from logging import debug, info, error
 from typing import Optional
 
-# ⚠️ TODO Move to a subclass of `DBusObjectManagerClient`
-# as we will need to ⚠️ enumerate and watch for ⚠️
-# SerialDevice objects with DBusObjectManagerClient.
-# get_objects(), etc.?
+from diagng.gobject.serial_port import SerialPort
+from diagng.common.qcdm_window import QCDMWindow
+
+import gi
+
+gi.require_version('Adw', '1')
+
+from gi.repository import GObject, Gio, Adw
+
+# In this class we enumerate and watch for SerialDevice
+# objects with DBusObjectManagerClient. get_objects(), etc.
+#
 # Cf. https://docs.gtk.org/gio/class.DBusObjectManagerClient.html
 # + ➡️ https://lazka.github.io/pgi-docs/Gio-2.0/interfaces/DBusObjectManager.html
 
 
 class DiagmondSerialDeviceOM(GObject.Object):
-    om: Gio.DBusObjectManagerClient
+    om: Gio.DBusObjectManagerClient = None
     connection: Gio.DBusConnection
+
     interface_info: Gio.DBusInterfaceInfo
 
-    def __init__(self, connection: Gio.DBusConnection):
+    main_window: Adw.ApplicationWindow
+
+    def __init__(
+        self,
+        main_window: Adw.ApplicationWindow,
+        connection: Gio.DBusConnection,
+    ):
         super().__init__()
 
+        self.main_window = main_window
         self.connection = connection
 
         XML_TREE = (
@@ -66,7 +81,7 @@ class DiagmondSerialDeviceOM(GObject.Object):
 
     def remove_dangling_objects(self):
         for obj in self.om.get_objects():
-            debug('Found dangling SerialDevice object at startup: %r' % obj)
+            debug('Cleaning up dangling SerialDevice object: %r' % obj)
 
             obj_path = obj.get_object_path()
 
@@ -82,7 +97,10 @@ class DiagmondSerialDeviceOM(GObject.Object):
 
             def port_closed(proxy, result, obj_path):
                 if isinstance(result, Exception):
-                    raise result
+                    error(
+                        'Did not receive cleanup response for SerialDevice: %r'
+                        % result
+                    )
                 else:
                     info('Dangling %s port closed successfully' % obj_path)
 
@@ -92,8 +110,20 @@ class DiagmondSerialDeviceOM(GObject.Object):
                 user_data=obj_path,
             )
 
+    def create_qcdm_window(self, object_path: str, serial_port: SerialPort):
+        proxy = Gio.DBusProxy.new_sync(
+            self.connection,
+            Gio.DBusProxyFlags.NONE,
+            self.interface_info,
+            'com.p1security.diagmond',
+            object_path,
+            'com.p1security.diagmond.SerialDevice',
+            None,
+        )
+
+        QCDMWindow(self.main_window, proxy, serial_port)
+
     def on_object_added(self, om: Gio.DBusObjectManager, obj: Gio.DBusObject):
-        # TODO ⚠️ Create/display QCDMWindow
         debug('SerialDevice object added: %r' % obj)
 
     def on_object_removed(

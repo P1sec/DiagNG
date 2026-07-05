@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Union
+from logging import info, error, debug
 from collections import defaultdict
 from traceback import format_exc
-from logging import info, error
 
 # Register resources
 import diagng.utils.gresources
@@ -587,20 +587,31 @@ class MainWindow(Adw.ApplicationWindow):
         info('connect_spi_port called on %s' % serial_port.tty_device_path)
 
         if self.app.diagmond_communicator.bus_connected:
-            try:
-                self.app.diagmond_communicator.proxy.OpenSerialPort(
-                    '(ss)',
-                    serial_port.tty_device_path,
-                    serial_port.kernel_name,
-                )
-            except Exception as err:
-                dialog = Adw.AlertDialog.new(
-                    '⚠️ Failed to open port: ' + format_exc(err), None
-                )
-                error('Failed to open port: ' + format_exc(err))
 
-                dialog.add_response('ok', 'Ok')
-                dialog.choose(self, None, None)
+            def port_opened(proxy, result: Union[str, Exception], serial_port):
+                if isinstance(result, Exception):
+                    dialog = Adw.AlertDialog.new(
+                        '⚠️ Failed to open port: ' + format_exc(result), None
+                    )
+                    error('Failed to open port: ' + format_exc(result))
+
+                    dialog.add_response('ok', 'Ok')
+                    dialog.choose(self, None, None)
+                else:
+                    object_path = result
+                    info('Got new SerialDevice object path: ' + object_path)
+
+                    self.app.diagmond_serialdevice_om.create_qcdm_window(
+                        object_path, serial_port
+                    )
+
+            self.app.diagmond_communicator.proxy.OpenSerialPort(
+                '(ss)',
+                serial_port.tty_device_path,
+                serial_port.kernel_name,
+                result_handler=port_opened,
+                user_data=serial_port,
+            )
         else:
             dialog = Adw.AlertDialog.new(
                 "⚠️ diagmond not available, can't open port", None
