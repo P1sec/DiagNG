@@ -44,25 +44,18 @@ class QCDMWindow(Adw.Window):
 
         self.gather_device_info()
 
+        self.connect('close-request', self.on_quit)
+
+    def on_quit(self, *args):
+        self.input_obj.close()
+
+        # TODO Update the state of the main window as well
+
     def gather_device_info(self):
-        # WIP use self.dbus_serial_device to display
-        # Diag-related info in the first tab of
-        # QCDMWindow
-
-        # = Spawn a GLib task reading (and logging?)
-        # pseudo-HDLC events from the serial stream
-        # (use nesting objects as adapters?)
-
-        #   ===> Define a GObject INTERFACE with
-        #    callback and signal-based connectivity
-        #    in order to provide different adapters
-        #    for different input sources (USB, ADB,
-        #    SPI, DLF file, etc.) through
-        #    subclassing
-        #        => Use Python metaclasses for
-        #           abstracting
-
-        # + Send a write command to the DBus
+        # Use self.input_obj to display Diag-related
+        # info in the first tab of QCDMWindow
+        #
+        # For this, send a write command to the DBus
         # daemon
 
         payload = DiagVernoFReq()

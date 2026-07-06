@@ -122,6 +122,18 @@ class DiagmondSerialDeviceOM(GObject.Object):
             None,
         )
 
+        # Spawn a GLib task reading and logging
+        # pseudo-HDLC events from the serial stream,
+        # using SPI-specific adapter code
+        #
+        #   ===> This leverages a GObject-based
+        #    interface (the BaseInput class),
+        #    callbacks and signal-based connectivity
+        #    that can be extended to provide different
+        #    adapters for different input sources (USB,
+        #    ADB, SPI, DLF file, etc.) through
+        #    subclassing
+
         input_obj = SerialQCDMInput(proxy, serial_port)
 
         QCDMWindow(self.main_window, input_obj)
