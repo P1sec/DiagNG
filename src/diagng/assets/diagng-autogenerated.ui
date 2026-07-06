@@ -345,9 +345,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title">UDev status: REACHABLE</property>
                           </object>
                         </property>
+                        <property name="description">This page contains a list of the temporary UDev rules containes in the /run system directory, for debugging purposes.</property>
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title" translatable="yes">UDev rules list in /run/udev/rules.d</property>
+                            <property name="description">Some of these rules may be added dynamically by DiagNG (with the purpose to prevent interference with ModemManager). In this case, it is indicated in their name.</property>
+                            <property name="title" translatable="yes">List of UDev rules in /run/udev/rules.d</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">

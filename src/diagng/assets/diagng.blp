@@ -277,8 +277,11 @@ template $MainWindow: Adw.ApplicationWindow {
               title: "UDev status: REACHABLE";
             };
 
+            description: "This page contains a list of the temporary UDev rules containes in the /run system directory, for debugging purposes.";
+
             Adw.PreferencesGroup {
-              title: _("UDev rules list in /run/udev/rules.d");
+              description: "Some of these rules may be added dynamically by DiagNG (with the purpose to prevent interference with ModemManager). In this case, it is indicated in their name.";
+              title: _("List of UDev rules in /run/udev/rules.d");
 
               ScrolledWindow {
                 child: ColumnView udev_column_view {
