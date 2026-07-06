@@ -5,26 +5,31 @@ meta:
 seq:
   - id: compile_date # %b %d %Y
     type: str
+    encoding: ASCII
     size: 11
     pad-right: 0x20
     terminator: 0x00
   - id: compile_time # %H:%M:%S
     type: str
+    encoding: ASCII
     size: 8
     pad-right: 0x20
     terminator: 0x00
   - id: release_date # %b %d %Y
     type: str
+    encoding: ASCII
     size: 11
     pad-right: 0x20
     terminator: 0x00
   - id: release_time # %H:%M:%S
     type: str
+    encoding: ASCII
     size: 8
     pad-right: 0x20
     terminator: 0x00
   - id: version_directory
     type: str
+    encoding: ASCII
     size: 8
     pad-right: 0x20
     terminator: 0x00

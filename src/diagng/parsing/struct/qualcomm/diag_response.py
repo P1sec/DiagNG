@@ -2,7 +2,7 @@
 # type: ignore
 
 import kaitaistruct
-from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
+from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from diagng.parsing.struct.qualcomm import diag_unknown
 from diagng.parsing.struct.qualcomm import diag_cmd_code
 from diagng.parsing.struct.qualcomm import diag_verno_f_rsp
@@ -15,12 +15,11 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
     )
 
 
-class DiagResponse(KaitaiStruct):
-    def __init__(self, _io, _parent=None, _root=None):
+class DiagResponse(ReadWriteKaitaiStruct):
+    def __init__(self, _io=None, _parent=None, _root=None):
         super(DiagResponse, self).__init__(_io)
         self._parent = _parent
         self._root = _root or self
-        self._read()
 
     def _read(self):
         self.cmd_code = KaitaiStream.resolve_enum(
@@ -32,11 +31,14 @@ class DiagResponse(KaitaiStruct):
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
             self.payload = diag_verno_f_rsp.DiagVernoFRsp(_io__raw_payload)
+            self.payload._read()
         else:
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
             self.payload = diag_unknown.DiagUnknown(_io__raw_payload)
+            self.payload._read()
+        self._dirty = False
 
     def _fetch_instances(self):
         pass
@@ -47,3 +49,58 @@ class DiagResponse(KaitaiStruct):
         else:
             pass
             self.payload._fetch_instances()
+
+    def _write__seq(self, io=None):
+        super(DiagResponse, self)._write__seq(io)
+        self._io.write_u1(int(self.cmd_code))
+        _on = self.cmd_code
+        if _on == diag_cmd_code.DiagCmdCode.DiagCmd.verno_f:
+            pass
+            _io__raw_payload = KaitaiStream(
+                BytesIO(bytearray(self._io.size() - self._io.pos()))
+            )
+            self._io.add_child_stream(_io__raw_payload)
+            _pos2 = self._io.pos()
+            self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
+
+            def handler(parent, _io__raw_payload=_io__raw_payload):
+                self._raw_payload = _io__raw_payload.to_byte_array()
+                parent.write_bytes(self._raw_payload)
+                if not parent.is_eof():
+                    raise kaitaistruct.ConsistencyError(
+                        'raw(payload)', 0, parent.size() - parent.pos()
+                    )
+
+            _io__raw_payload.write_back_handler = (
+                KaitaiStream.WriteBackHandler(_pos2, handler)
+            )
+            self.payload._write__seq(_io__raw_payload)
+        else:
+            pass
+            _io__raw_payload = KaitaiStream(
+                BytesIO(bytearray(self._io.size() - self._io.pos()))
+            )
+            self._io.add_child_stream(_io__raw_payload)
+            _pos2 = self._io.pos()
+            self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
+
+            def handler(parent, _io__raw_payload=_io__raw_payload):
+                self._raw_payload = _io__raw_payload.to_byte_array()
+                parent.write_bytes(self._raw_payload)
+                if not parent.is_eof():
+                    raise kaitaistruct.ConsistencyError(
+                        'raw(payload)', 0, parent.size() - parent.pos()
+                    )
+
+            _io__raw_payload.write_back_handler = (
+                KaitaiStream.WriteBackHandler(_pos2, handler)
+            )
+            self.payload._write__seq(_io__raw_payload)
+
+    def _check(self):
+        _on = self.cmd_code
+        if _on == diag_cmd_code.DiagCmdCode.DiagCmd.verno_f:
+            pass
+        else:
+            pass
+        self._dirty = False

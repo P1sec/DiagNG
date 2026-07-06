@@ -2,7 +2,7 @@
 # type: ignore
 
 import kaitaistruct
-from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
+from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -12,15 +12,21 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
     )
 
 
-class DiagVernoFReq(KaitaiStruct):
-    def __init__(self, _io, _parent=None, _root=None):
+class DiagVernoFReq(ReadWriteKaitaiStruct):
+    def __init__(self, _io=None, _parent=None, _root=None):
         super(DiagVernoFReq, self).__init__(_io)
         self._parent = _parent
         self._root = _root or self
-        self._read()
 
     def _read(self):
         pass
+        self._dirty = False
 
     def _fetch_instances(self):
         pass
+
+    def _write__seq(self, io=None):
+        super(DiagVernoFReq, self)._write__seq(io)
+
+    def _check(self):
+        self._dirty = False
