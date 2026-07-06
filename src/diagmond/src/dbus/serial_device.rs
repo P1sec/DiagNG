@@ -36,6 +36,9 @@ impl SerialDevice {
     #[zbus(signal, name = "Read")]
     async fn read(emitter: &SignalEmitter<'_>, data: Vec<u8>) -> zbus::Result<()>;
 
+    #[zbus(signal, name = "Closed")]
+    async fn closed(emitter: &SignalEmitter<'_>, reason: String) -> zbus::Result<()>;
+
     #[zbus(name = "Write")]
     async fn write(&self, data: Vec<u8>) -> zbus::fdo::Result<()> {
         if let Err(err) = self.serial_cmd_tx.send(SerialCommand::Write(data)) {

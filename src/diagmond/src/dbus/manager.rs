@@ -102,6 +102,7 @@ impl Diagmond {
         let obj_server = obj_server.clone();
         tokio::spawn(async move {
             let mut buffer: [u8; 4096] = [0; 4096];
+            let mut reason_closed: Option<String> = None;
             loop {
                 tokio::select!(
                     cmd = serial_cmd_rx.recv() => match cmd {
@@ -110,8 +111,7 @@ impl Diagmond {
                                 SerialCommand::Write(data) => {
                                     // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncWriteExt.html#method.write_all
                                     if let Err(err) = serial_dev.write_all(&data).await {
-                                        log::error!("Writing to serial port failed: {:?}", err);
-                                        // TODO propagate error evt to diagng?
+                                        reason_closed = Some(format!("Writing to serial port failed: {:?}", err));
                                         break;
                                     }
                                     else {
@@ -128,16 +128,14 @@ impl Diagmond {
                                 }
                             },
                         None => {
-                            log::error!("MPSC channel closed");
-                            // TODO propagate error evt to diagng?
+                            reason_closed = Some(format!("MPSC channel closed"));
                             break;
                         }
                     },
                     result = serial_dev.read(&mut buffer) => match result {
                         Ok(size_read) => {
                             if size_read == 0 {
-                                log::error!("Received zero-length read result on serial port");
-                                // TODO propagate error evt to diagng?
+                                reason_closed = Some("Received zero-length read result on serial port".to_string());
                                 break;
                             }
                             else {
@@ -148,28 +146,36 @@ impl Diagmond {
                                     let iface_ref = match obj_server.interface::<_, SerialDevice>(object_path_clone).await {
                                         Ok(obj) => obj,
                                         Err(err) => {
-                                            log::error!("Serial port object destroyed: {:?}", err);
-                                            // TODO propagate error evt to diagng?
+                                            reason_closed = Some(format!("Serial port object destroyed: {:?}", err));
                                             break;
                                         }
                                     };
 
                                     // Send Read event
                                     if let Err(err) = iface_ref.read(buffer[..size_read].to_vec()).await {
-                                        log::error!("Could not dispatch serial port data: {:?}", err);
-                                        // TODO propagate error evt to diagng?
+                                        reason_closed = Some(format!("Could not dispatch serial port data: {:?}", err));
                                         break;
                                     }
                                 }
                             }
                         },
                         Err(err) => {
-                            log::error!("Reading from serial port failed: {:?}", err);
-                            // TODO propagate error evt to diagng?
+                            reason_closed = Some(format!("Reading from serial port failed: {:?}", err));
                             break;
                         }
                     }
                 );
+            }
+
+            if let Some(reason) = reason_closed {
+                log::error!("{}", reason);
+
+                if let Ok(iface_ref) = obj_server
+                    .interface::<_, SerialDevice>(object_path_clone.clone())
+                    .await
+                {
+                    iface_ref.closed(reason).await.ok();
+                }
             }
 
             // Remove UDev rule if applicable

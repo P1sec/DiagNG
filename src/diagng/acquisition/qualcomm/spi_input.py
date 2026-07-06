@@ -3,8 +3,8 @@
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
 from diagng.gobject.serial_port import SerialPort
 
+from logging import error, warning, debug
 from gi.repository import Gio, GLib
-from logging import error, debug
 
 
 class SerialQCDMInput(BaseQCDMInput):
@@ -29,9 +29,10 @@ class SerialQCDMInput(BaseQCDMInput):
             serial_port.usb_vid_pid or '',
         )
 
-        self.dbus_serial_device.connect('g-signal::Read', self._read_next)
+        self.dbus_serial_device.connect('g-signal::Read', self._on_read)
+        self.dbus_serial_device.connect('g-signal::Closed', self._on_closed)
 
-    def _read_next(
+    def _on_read(
         self,
         dbus_proxy: Gio.DBusProxy,
         sender_name: str,
@@ -41,6 +42,17 @@ class SerialQCDMInput(BaseQCDMInput):
         data = bytes(parameters[0])
         debug('Received data from serial port: %r' % data)
         self.process_input(data)
+
+    def _on_closed(
+        self,
+        dbus_proxy: Gio.DBusProxy,
+        sender_name: str,
+        signal_name: str,
+        parameters: GLib.Variant,
+    ):
+        reason = str(parameters[0])
+        warning('Serial port closed, reason: ' + reason)
+        # TODO: Process this
 
     def send_raw(self, data: bytes):
         def write_cb(proxy, result, obj_path):

@@ -32,6 +32,19 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         </signal>
 
         <!--
+            Closed:
+            @reason: Plaintext reason for which the
+              serial port was closed
+
+            Emitted when the serial port got unavailable,
+            which also means that the current D-Bus object
+            will be unregistered very soon
+        -->
+        <signal name="Closed">
+            <arg type="s" name="reason" direction="out" />
+        </signal>
+
+        <!--
             Write:
             @data: Data to write to the serial port
 
