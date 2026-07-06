@@ -3,6 +3,7 @@
 from logging import debug, info, error
 from typing import Optional
 
+from diagng.acquisition.qualcomm.spi_input import SerialQCDMInput
 from diagng.gobject.serial_port import SerialPort
 from diagng.common.qcdm_window import QCDMWindow
 
@@ -121,7 +122,9 @@ class DiagmondSerialDeviceOM(GObject.Object):
             None,
         )
 
-        QCDMWindow(self.main_window, proxy, serial_port)
+        input_obj = SerialQCDMInput(proxy, serial_port)
+
+        QCDMWindow(self.main_window, input_obj)
 
     def on_object_added(self, om: Gio.DBusObjectManager, obj: Gio.DBusObject):
         debug('SerialDevice object added: %r' % obj)

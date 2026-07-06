@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
+# Register resources
+import diagng.utils.gresources
+
+from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
+from diagng.gobject.serial_port import SerialPort
+
 import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, Gio
-
-# Register resources
-import diagng.utils.gresources
-
-from diagng.gobject.serial_port import SerialPort
 
 
 @Gtk.Template(
@@ -19,33 +20,17 @@ from diagng.gobject.serial_port import SerialPort
 class QCDMWindow(Adw.Window):
     __gtype_name__ = 'QCDMWindow'
 
-    dbus_serial_device: Gio.DBusProxy
-    serial_port: SerialPort
+    input_obj: BaseQCDMInput
 
     def __init__(
-        self,
-        parent: Adw.ApplicationWindow,
-        # TODO : Before instancing this
-        # object, merge these two fields
-        # in a single
-        dbus_serial_device: Gio.DBusProxy,
-        serial_port: SerialPort,
+        self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
     ):
         super().__init__()
 
-        self.serial_port = serial_port
-        self.dbus_serial_device = dbus_serial_device
+        self.input_obj = input_obj
 
         self.set_transient_for(parent)
-        self.set_title(
-            '%s - %s %s (%s)'
-            % (
-                serial_port.tty_device_path,
-                serial_port.usb_vendor or '',
-                serial_port.usb_product or '',
-                serial_port.usb_vid_pid or '',
-            )
-        )
+        self.set_title(self.input_obj.full_name)
         self.present()
 
         self.gather_device_info()

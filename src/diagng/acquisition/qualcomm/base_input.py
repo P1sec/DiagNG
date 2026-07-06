@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 
-from abc import ABC, abstractmethod
 from gi.repository import GObject
+from abc import abstractmethod
 from typing import Callable
 
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
 
 
-class BaseQCDMInput(ABC, GObject.Object):
+class BaseQCDMInput(GObject.Object):
     short_name = GObject.Property(type=str)
     full_name = GObject.Property(type=str)
 
     @GObject.Signal
-    def frame_sent(self, request: DiagRequest):
+    def frame_sent(self, request):  # response: DiagRequest
         pass
 
     @GObject.Signal
-    def frame_received(self, response: DiagResponse):
+    def frame_received(self, response):  # response: DiagResponse
         pass
 
     @GObject.Signal
@@ -33,7 +33,7 @@ class BaseQCDMInput(ABC, GObject.Object):
         pass
 
     def send_recv(
-        self, request: DiagRequest, callback: Callable[DiagResponse]
+        self, request: DiagRequest, callback: Callable[DiagResponse, []]
     ):
         def temp_callback(self, *args):
             print('DEBUG temp_callback called with:', args)
