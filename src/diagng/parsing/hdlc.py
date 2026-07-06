@@ -35,7 +35,14 @@ def hdlc_encode(data: bytes) -> bytes:
 
 
 def hdlc_decode(data: bytes) -> bytes:
-    pass  # TODO
+    assert data.endswith(TRAILER_CHAR)
+    assert data.count(TRAILER_CHAR) == 1
+    data = data.replace(b'\x7d\x5e', b'\x7e')
+    data = data.replace(b'\x7d\x5d', b'\x7d')
+    assert len(data) >= 4
+    crc = CRC16_CCITT(data[:-3]).to_bytes(2, 'little')
+    assert data[-3:-1] == crc
+    return data[:-3]
 
 
 class HdlcDecoder:

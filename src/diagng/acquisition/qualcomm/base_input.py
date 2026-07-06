@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
+from logging import warning, debug, info
 from kaitaistruct import KaitaiStream
 from gi.repository import GObject
+from traceback import format_exc
 from abc import abstractmethod
 from typing import Callable
 from io import BytesIO
 
+from diagng.parsing.hdlc import hdlc_encode, hdlc_decode, TRAILER_CHAR
 from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
-from diagng.parsing.hdlc import hdlc_encode
 
 
 class BaseQCDMInput(GObject.Object):
     short_name = GObject.Property(type=str)
     full_name = GObject.Property(type=str)
+
+    buffered_data: bytes = b''
 
     @GObject.Signal
     def frame_sent(self, request):  # request: DiagRequest
@@ -36,7 +40,30 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     def process_input(self, data: bytes):
-        print('DEBUG todo pls demux:', data)
+        debug('Demuxing pseudo-HDLC data: %r' % data)
+
+        self.buffered_data += data
+
+        while TRAILER_CHAR in self.buffered_data:
+            payload, sep, self.buffered_data = self.buffered_data.partition(
+                TRAILER_CHAR
+            )
+            try:
+                data = hdlc_decode(payload + sep)
+            except AssertionError:
+                warning(
+                    'Could not demux pseudo-HDLC frame: %r' % (payload + sep)
+                )
+            else:
+                try:
+                    stream = KaitaiStream(BytesIO(data))
+                    resp = DiagResponse(stream)
+                    resp._read()
+                except Exception:
+                    warning('Failed to parse Diag response: ' + format_exc())
+                else:
+                    info('PARSED DIAG RESPONSE ==> %r' % resp)
+                    # TODO dispatch the Diag response using GLib signals
 
     def send(self, request: DiagRequest):
         buf = BytesIO()
