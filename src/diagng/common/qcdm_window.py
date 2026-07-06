@@ -25,9 +25,8 @@ class QCDMWindow(Adw.Window):
     def __init__(
         self,
         parent: Adw.ApplicationWindow,
-
-        # TODO : Before instancing this
-        # object, merge these two fields
+        # TODO : Before instancing this
+        # object, merge these two fields
         # in a single
         dbus_serial_device: Gio.DBusProxy,
         serial_port: SerialPort,
@@ -58,16 +57,16 @@ class QCDMWindow(Adw.Window):
 
         # = Spawn a GLib task reading (and logging?)
         # pseudo-HDLC events from the serial stream
-        # (use nesting objects as adapters?)
+        # (use nesting objects as adapters?)
 
-        #   ===> Define a GObject INTERFACE with
-        #    callback and signal-based connectivity
-        #    in order to provide different adapters
+        #   ===> Define a GObject INTERFACE with
+        #    callback and signal-based connectivity
+        #    in order to provide different adapters
         #    for different input sources (USB, ADB,
-        #    SPI, DLF file, etc.) through
+        #    SPI, DLF file, etc.) through
         #    subclassing?
         #        => Use Python metaclasses for
-        #           abstracting?
+        #           abstracting?
 
         # + Send a write command to the DBus
         # daemon
