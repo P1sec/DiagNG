@@ -8,6 +8,7 @@ from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
 from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
+from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from logging import info
 
@@ -28,6 +29,7 @@ class QCDMWindow(Adw.Window):
     __gtype_name__ = 'QCDMWindow'
 
     input_obj: BaseQCDMInput
+    device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     def __init__(
         self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
@@ -73,6 +75,9 @@ class QCDMWindow(Adw.Window):
 
         def req_cb(response: DiagResponse):
             info('DiagResponse received for DiagCmd.verno_f: %r' % response)
+
+            pretty_info = pretty_print_struct(response)
+            self.device_info_buffer.set_text(pretty_info)
 
         self.input_obj.send_recv(diag_request, req_cb, accept_error=True)
 

@@ -591,9 +591,9 @@ class MainWindow(Adw.ApplicationWindow):
             def port_opened(proxy, result: Union[str, Exception], serial_port):
                 if isinstance(result, Exception):
                     dialog = Adw.AlertDialog.new(
-                        '⚠️ Failed to open port', format_exc(result)
+                        '⚠️ Failed to open port', repr(result)
                     )
-                    error('Failed to open port: ' + format_exc(result))
+                    error('Failed to open port: ' + repr(result))
 
                     dialog.add_response('ok', 'Ok')
                     dialog.choose(self, None, None)
