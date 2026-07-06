@@ -1,10 +1,6 @@
-use tokio::io::AsyncReadExt;
-use tokio::io::AsyncWriteExt;
-use zbus::message::Header;
-use zbus::{ObjectServer, interface};
-use zvariant::ObjectPath;
-// use zbus::object_server::SignalEmitter;
-use tokio_serial::SerialStream;
+use tokio::sync::mpsc::UnboundedSender;
+use zbus::interface;
+use zbus::object_server::SignalEmitter;
 
 // NEXT TODO as of 2026-06-26 ⚠️
 
@@ -20,8 +16,13 @@ use tokio_serial::SerialStream;
 // + nusb ==>
 //   https://docs.rs/nusb/latest/nusb/struct.Device.html
 
+pub enum SerialCommand {
+    Write(Vec<u8>),
+    Close,
+}
+
 pub struct SerialDevice {
-    pub port: SerialStream,
+    pub serial_cmd_tx: UnboundedSender<SerialCommand>,
     pub device_name: String,
     pub kernel_name: String,
 }
@@ -32,82 +33,28 @@ impl SerialDevice {
     // rather than waiting for pulling?
     // (what about buffering then?)
 
-    #[zbus(name = "Read")]
-    async fn read(&mut self) -> zbus::fdo::Result<Vec<u8>> {
-        let mut buffer: [u8; 4096] = [0; 4096];
-        let len_read: usize = match self.port.read(&mut buffer).await {
-            Ok(obj) => obj,
-            Err(err) => {
-                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
-            }
-        };
-        Ok(buffer[..len_read].to_vec())
-        // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncReadExt.html#method.read
-    }
+    #[zbus(signal, name = "Read")]
+    async fn read(emitter: &SignalEmitter<'_>, data: Vec<u8>) -> zbus::Result<()>;
 
     #[zbus(name = "Write")]
-    async fn write(&mut self, data: &[u8]) -> zbus::fdo::Result<()> {
-        if let Err(err) = self.port.write_all(data).await {
+    async fn write(&self, data: Vec<u8>) -> zbus::fdo::Result<()> {
+        if let Err(err) = self.serial_cmd_tx.send(SerialCommand::Write(data)) {
             return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
         }
         Ok(())
-        // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncWriteExt.html#method.write_all
     }
 
     #[zbus(name = "Close")]
-    async fn close(
-        &mut self,
-        #[zbus(header)] header: Header<'_>,
-        #[zbus(object_server)] obj_server: &ObjectServer,
-    ) -> zbus::fdo::Result<()> {
+    async fn close(&self) -> zbus::fdo::Result<()> {
         log::debug!(
             "Received: Close over serial port {} (KERNEL=={})",
             self.device_name,
             self.kernel_name
         );
 
-        // Remove UDev rule if applicable
-
-        log::debug!("Deleting UDev rule...");
-
-        if self.kernel_name.len() > 0 {
-            if let Err(error) =
-                crate::system::mm_udev_lock::unlock_device(&self.device_name, &self.kernel_name)
-                    .await
-            {
-                log::error!(
-                    "Could not execute Close over serial port {} (KERNEL=={}): {:?}",
-                    self.device_name,
-                    self.kernel_name,
-                    error
-                );
-                return Err(zbus::fdo::Error::Failed(error.to_string()));
-            }
+        if let Err(err) = self.serial_cmd_tx.send(SerialCommand::Close) {
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
         }
-
-        // Disconnect serial port
-
-        log::debug!("Shutting down serial port...");
-
-        self.port.shutdown().await.ok();
-
-        // Unregister from DBus
-
-        let obj_server = obj_server.clone();
-        let object_path = header.path().unwrap().to_owned();
-
-        tokio::spawn(async move {
-            tokio::time::sleep(std::time::Duration::from_millis(500)).await;
-
-            log::debug!("Unregistering from D-Bus...");
-
-            obj_server
-                .remove::<Self, ObjectPath>(object_path)
-                .await
-                .unwrap();
-        });
-
-        log::debug!("Sending response to Close call...");
 
         Ok(())
     }

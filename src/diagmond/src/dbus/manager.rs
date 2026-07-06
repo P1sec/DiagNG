@@ -1,9 +1,11 @@
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::sync::mpsc::unbounded_channel;
 use tokio_serial::SerialPortBuilderExt;
 use zbus::interface;
 use zbus::object_server::{ObjectServer, SignalEmitter};
 use zvariant::ObjectPath;
 
-use crate::dbus::serial_device::SerialDevice;
+use crate::dbus::serial_device::{SerialCommand, SerialDevice, SerialDeviceSignals};
 
 pub struct Diagmond {
     pub usb_data: String,
@@ -23,8 +25,8 @@ impl Diagmond {
     async fn open_serial_port(
         &mut self,
         #[zbus(object_server)] obj_server: &ObjectServer,
-        device_path: &str,
-        kernel_path: &str,
+        device_path: String,
+        kernel_path: String,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
         // See:
         //   => https://docs.rs/tokio-serial/latest/tokio_serial/trait.SerialPort.html#tymethod.set_timeout
@@ -39,7 +41,7 @@ impl Diagmond {
 
         log::debug!("Opening {}...", device_path);
 
-        let serial_dev = match tokio_serial::new(device_path, 115200)
+        let mut serial_dev = match tokio_serial::new(device_path.clone(), 115200)
             .dtr_on_open(true)
             .open_native_async()
         {
@@ -51,10 +53,18 @@ impl Diagmond {
 
         log::debug!("Opened {}...", device_path);
 
+        #[cfg(unix)]
+        if let Err(err) = serial_dev.set_exclusive(true) {
+            log::error!("Could not lock serial port: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        }
+
+        let (serial_cmd_tx, mut serial_cmd_rx) = unbounded_channel::<SerialCommand>();
+
         let dev = SerialDevice {
-            port: serial_dev,
-            device_name: device_path.to_string(),
-            kernel_name: kernel_path.to_string(),
+            serial_cmd_tx: serial_cmd_tx,
+            device_name: device_path.clone(),
+            kernel_name: kernel_path.clone(),
         };
 
         log::debug!("Reading /com/p1security/diagmond properties...");
@@ -74,7 +84,7 @@ impl Diagmond {
 
         if kernel_path.len() > 0 {
             if let Err(error) =
-                crate::system::mm_udev_lock::lock_device(device_path, kernel_path).await
+                crate::system::mm_udev_lock::lock_device(&device_path, &kernel_path).await
             {
                 log::error!(
                     "Could not add UDev lock for ModemManager device {} (KERNEL=={}): {:?}",
@@ -85,6 +95,124 @@ impl Diagmond {
                 return Err(zbus::fdo::Error::Failed(error.to_string()));
             }
         }
+
+        // Read port until closed
+
+        let object_path_clone = object_path.clone();
+        let obj_server = obj_server.clone();
+        tokio::spawn(async move {
+            let mut buffer: [u8; 4096] = [0; 4096];
+            loop {
+                tokio::select!(
+                    cmd = serial_cmd_rx.recv() => match cmd {
+                        Some(operation) =>
+                            match operation {
+                                SerialCommand::Write(data) => {
+                                    // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncWriteExt.html#method.write_all
+                                    if let Err(err) = serial_dev.write_all(&data).await {
+                                        log::error!("Writing to serial port failed: {:?}", err);
+                                        // TODO propagate error evt to diagng?
+                                        break;
+                                    }
+                                    else {
+                                        log::debug!(
+                                            "Sent {} bytes to serial port - {}",
+                                            data.len(),
+                                            device_path
+                                        );
+                                    }
+                                },
+                                SerialCommand::Close => {
+                                    log::info!("Closing serial port on client bail-out...");
+                                    break;
+                                }
+                            },
+                        None => {
+                            log::error!("MPSC channel closed");
+                            // TODO propagate error evt to diagng?
+                            break;
+                        }
+                    },
+                    result = serial_dev.read(&mut buffer) => match result {
+                        Ok(size_read) => {
+                            if size_read == 0 {
+                                log::error!("Received zero-length read result on serial port");
+                                // TODO propagate error evt to diagng?
+                                break;
+                            }
+                            else {
+                                log::debug!("Read {} bytes from serial port", size_read);
+
+                                let object_path_clone = object_path_clone.clone();
+                                {
+                                    let iface_ref = match obj_server.interface::<_, SerialDevice>(object_path_clone).await {
+                                        Ok(obj) => obj,
+                                        Err(err) => {
+                                            log::error!("Serial port object destroyed: {:?}", err);
+                                            // TODO propagate error evt to diagng?
+                                            break;
+                                        }
+                                    };
+
+                                    // Send Read event
+                                    if let Err(err) = iface_ref.read(buffer[..size_read].to_vec()).await {
+                                        log::error!("Could not dispatch serial port data: {:?}", err);
+                                        // TODO propagate error evt to diagng?
+                                        break;
+                                    }
+                                }
+                            }
+                        },
+                        Err(err) => {
+                            log::error!("Reading from serial port failed: {:?}", err);
+                            // TODO propagate error evt to diagng?
+                            break;
+                        }
+                    }
+                );
+            }
+
+            // Remove UDev rule if applicable
+
+            log::debug!("Deleting UDev rule...");
+
+            if kernel_path.len() > 0 {
+                if let Err(error) =
+                    crate::system::mm_udev_lock::unlock_device(&device_path, &kernel_path).await
+                {
+                    log::error!(
+                        "Could not execute Close over serial port {} (KERNEL=={}): {:?}",
+                        device_path,
+                        kernel_path,
+                        error
+                    );
+                }
+            }
+
+            // Disconnect serial port
+
+            log::debug!("Shutting down serial port...");
+
+            serial_dev.shutdown().await.ok();
+
+            // Unregister from DBus
+
+            let obj_server = obj_server.clone();
+
+            tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+
+            log::debug!("Unregistering from D-Bus...");
+
+            if let Err(error) = obj_server
+                .remove::<SerialDevice, ObjectPath>(object_path_clone)
+                .await
+            {
+                log::error!(
+                    "Could not unregister SerialDevice object from D-Bus log: {:?}",
+                    error
+                )
+            }
+        });
 
         Ok(object_path)
     }

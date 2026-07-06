@@ -3,9 +3,10 @@
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
 from diagng.gobject.serial_port import SerialPort
+from diagng.parsing.hdlc import hdlc_encode
 
-from gi.repository import Gio, GObject
 from kaitaistruct import KaitaiStream
+from gi.repository import Gio, GLib
 from io import BytesIO
 
 
@@ -31,33 +32,32 @@ class SerialQCDMInput(BaseQCDMInput):
             serial_port.usb_vid_pid or '',
         )
 
-        self.read_next()
+        self.dbus_serial_device.connect('g-signal::Read', self.read_next)
 
-    def read_next(self):
-        def read_cb(proxy, result, obj_path):
-            print('DEBUG: read_cb received: %r' % result)
-            if isinstance(result, Exception):
-                raise result
-            # TODO propagate READ signal
-            self.read_next()
-
-        self.dbus_serial_device.Read('()', result_handler=read_cb)
+    def read_next(
+        self,
+        dbus_proxy: Gio.DBusProxy,
+        sender_name: str,
+        signal_name: str,
+        parameters: GLib.Variant,
+    ):
+        print('DEBUG: read_cb received: %r' % parameters)
+        # TODO propagate READ signal
 
     def send(self, request: DiagRequest):
         def write_cb(proxy, result, obj_path):
-            print('DEBUG: send_cb called: %r / %r', request, buf.getvalue())
+            print('DEBUG: send_cb called: %r / %r' % (request, buf.getvalue()))
             if isinstance(result, Exception):
                 raise result
             # TODO propagate WRITE signal
 
         buf = BytesIO()
         stream = KaitaiStream(buf)
-        request._check()
         request._write(stream)
 
-        self.dbus_serial_device.Write(
-            '(ay)', buf.getvalue(), result_handler=write_cb
-        )
+        data = hdlc_encode(buf.getvalue())
+
+        self.dbus_serial_device.Write('(ay)', data, result_handler=write_cb)
 
     def close(self):
         def close_cb(proxy, result, obj_path):

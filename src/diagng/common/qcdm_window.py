@@ -3,8 +3,10 @@
 # Register resources
 import diagng.utils.gresources
 
+from diagng.parsing.struct.qualcomm.diag_verno_f_req import DiagVernoFReq
+from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
+from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
-from diagng.gobject.serial_port import SerialPort
 
 import gi
 
@@ -12,6 +14,12 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Adw, Gio
+
+DiagCmd = DiagCmdCode.DiagCmd
+
+from kaitaistruct import KaitaiStream
+
+KaitaiStream._ensure_bytes_left_to_write = lambda a, b, c: True
 
 
 @Gtk.Template(
@@ -49,11 +57,21 @@ class QCDMWindow(Adw.Window):
         #    in order to provide different adapters
         #    for different input sources (USB, ADB,
         #    SPI, DLF file, etc.) through
-        #    subclassing?
+        #    subclassing
         #        => Use Python metaclasses for
-        #           abstracting?
+        #           abstracting
 
         # + Send a write command to the DBus
         # daemon
+
+        payload = DiagVernoFReq()
+        payload._check()
+
+        diag_request = DiagRequest()
+        diag_request.cmd_code = DiagCmd.verno_f
+        diag_request.payload = payload
+        diag_request._check()
+
+        self.input_obj.send(diag_request)
 
         pass

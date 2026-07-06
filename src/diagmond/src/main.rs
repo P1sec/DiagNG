@@ -14,6 +14,7 @@ pub mod dbus {
 use crate::dbus::manager::{Diagmond, DiagmondSignals};
 use crate::logging::Logging;
 use crate::system::serial_devices::list_devices;
+use crate::system::udev_rules::get_udev_rules_data;
 use crate::system::usb_devices::{UsbDevicesEndpointResp, get_usb_metadata};
 
 #[cfg(target_os = "linux")]
@@ -37,7 +38,7 @@ async fn main() -> zbus::Result<()> {
         std::process::exit(1);
     }
 
-    let udev_rules = crate::system::udev_rules::get_udev_rules_data(true).await?;
+    let udev_rules = get_udev_rules_data(false).await?;
 
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
@@ -62,6 +63,22 @@ async fn main() -> zbus::Result<()> {
     {
         log::error!("Could not register D-Bus service: {:?}", err);
         std::process::exit(1);
+    }
+
+    // If we can acquire the bus, prune any stale UDev rules
+
+    let udev_rules = get_udev_rules_data(true).await?;
+    let udev_rules = serde_json::to_string_pretty(&udev_rules).unwrap();
+
+    // Trigger the DBus property change
+    {
+        let iface_ref = connection
+            .object_server()
+            .interface::<_, Diagmond>("/com/p1security/diagmond")
+            .await?;
+
+        let mut iface = iface_ref.get_mut().await;
+        iface.udev_rules = udev_rules.clone();
     }
 
     // Spawn inotify watch over /run/udev/rules.d

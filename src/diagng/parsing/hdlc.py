@@ -11,6 +11,10 @@ QCDM pseudo-HDLC muxer/demuxer
 - TRAILER: 1 byte: 0x7e
 """
 
+from crcmod import mkCrcFun
+
+CRC16_CCITT = mkCrcFun(0x11021, initCrc=0, xorOut=0xFFFF)
+
 
 class BadTrailerException(ValueError):
     pass
@@ -18,6 +22,16 @@ class BadTrailerException(ValueError):
 
 class InvalidCRCException(ValueError):
     pass
+
+
+TRAILER_CHAR = b'\x7e'
+
+
+def hdlc_encode(data: bytes) -> bytes:
+    data += CRC16_CCITT(data).to_bytes(2, 'little')
+    data = data.replace(b'\x7d', b'\x7d\x5d')
+    data = data.replace(b'\x7e', b'\x7d\x5e')
+    return data + TRAILER_CHAR
 
 
 def hdlc_decode(data: bytes) -> bytes:

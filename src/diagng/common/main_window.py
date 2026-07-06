@@ -504,7 +504,7 @@ class MainWindow(Adw.ApplicationWindow):
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
-                    '⚠️ Failed to lock modem: ' + format_exc(err), None
+                    '⚠️ Failed to lock modem', format_exc(err)
                 )
                 error('Failed to lock modem: ' + format_exc(err))
             else:
@@ -546,7 +546,7 @@ class MainWindow(Adw.ApplicationWindow):
                 )
             except Exception as err:
                 dialog = Adw.AlertDialog.new(
-                    '⚠️ Failed to release modem: ' + format_exc(err), None
+                    '⚠️ Failed to release modem', format_exc(err)
                 )
                 error('Failed to release modem: ' + format_exc(err))
 
@@ -591,7 +591,7 @@ class MainWindow(Adw.ApplicationWindow):
             def port_opened(proxy, result: Union[str, Exception], serial_port):
                 if isinstance(result, Exception):
                     dialog = Adw.AlertDialog.new(
-                        '⚠️ Failed to open port: ' + format_exc(result), None
+                        '⚠️ Failed to open port', format_exc(result)
                     )
                     error('Failed to open port: ' + format_exc(result))
 

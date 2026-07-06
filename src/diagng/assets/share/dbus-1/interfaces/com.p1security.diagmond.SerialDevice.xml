@@ -24,12 +24,12 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
             Read:
             @data: Data read from the serial port
 
-            Perform a single read operation over the
-            given serial port.
+            Emitted when data has been received
+            from the serial port
         -->
-        <method name="Read">
+        <signal name="Read">
             <arg type="ay" name="data" direction="out" />
-        </method>
+        </signal>
 
         <!--
             Write:
