@@ -4,6 +4,7 @@
 import diagng.utils.gresources
 
 from diagng.parsing.struct.qualcomm.diag_verno_f_req import DiagVernoFReq
+from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
 from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
@@ -16,10 +17,6 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, Gio
 
 DiagCmd = DiagCmdCode.DiagCmd
-
-from kaitaistruct import KaitaiStream
-
-KaitaiStream._ensure_bytes_left_to_write = lambda a, b, c: True
 
 
 @Gtk.Template(
@@ -72,6 +69,9 @@ class QCDMWindow(Adw.Window):
         diag_request.payload = payload
         diag_request._check()
 
-        self.input_obj.send(diag_request)
+        def req_cb(response: DiagResponse):
+            print('DEBUG DiagResponse received: %r' % response)
+
+        self.input_obj.send_recv(diag_request, req_cb)
 
         pass

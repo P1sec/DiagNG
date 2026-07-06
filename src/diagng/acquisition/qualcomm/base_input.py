@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
+from kaitaistruct import KaitaiStream
 from gi.repository import GObject
 from abc import abstractmethod
 from typing import Callable
+from io import BytesIO
 
-from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
+from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
+from diagng.parsing.hdlc import hdlc_encode
 
 
 class BaseQCDMInput(GObject.Object):
@@ -13,7 +16,7 @@ class BaseQCDMInput(GObject.Object):
     full_name = GObject.Property(type=str)
 
     @GObject.Signal
-    def frame_sent(self, request):  # response: DiagRequest
+    def frame_sent(self, request):  # request: DiagRequest
         pass
 
     @GObject.Signal
@@ -25,15 +28,26 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @abstractmethod
-    def send(self, request: DiagRequest):
+    def send_raw(self, data: bytes):
         pass
 
     @abstractmethod
     def close(self):
         pass
 
+    def process_input(self, data: bytes):
+        print('DEBUG todo pls demux:', data)
+
+    def send(self, request: DiagRequest):
+        buf = BytesIO()
+        stream = KaitaiStream(buf)
+        stream._ensure_bytes_left_to_write = lambda *args: True
+        request._write(stream)
+
+        self.send_raw(hdlc_encode(buf.getvalue()))
+
     def send_recv(
-        self, request: DiagRequest, callback: Callable[DiagResponse, []]
+        self, request: DiagRequest, callback: Callable[DiagResponse, None]
     ):
         def temp_callback(self, *args):
             print('DEBUG temp_callback called with:', args)
