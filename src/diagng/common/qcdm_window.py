@@ -9,6 +9,8 @@ from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
 
+from logging import info
+
 import gi
 
 gi.require_version('Gtk', '4.0')
@@ -70,8 +72,8 @@ class QCDMWindow(Adw.Window):
         diag_request._check()
 
         def req_cb(response: DiagResponse):
-            print('DEBUG DiagResponse received: %r' % response)
+            info('DiagResponse received for DiagCmd.verno_f: %r' % response)
 
-        self.input_obj.send_recv(diag_request, req_cb)
+        self.input_obj.send_recv(diag_request, req_cb, accept_error=True)
 
         pass

@@ -4,6 +4,7 @@ from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
 from diagng.gobject.serial_port import SerialPort
 
 from gi.repository import Gio, GLib
+from logging import error, debug
 
 
 class SerialQCDMInput(BaseQCDMInput):
@@ -38,23 +39,20 @@ class SerialQCDMInput(BaseQCDMInput):
         parameters: GLib.Variant,
     ):
         data = bytes(parameters[0])
-        print('DEBUG: read_cb received: %r' % data)
+        debug('Received data from serial port: %r' % data)
         self.process_input(data)
 
     def send_raw(self, data: bytes):
         def write_cb(proxy, result, obj_path):
-            print('DEBUG: send_cb called: %r' % data)
             if isinstance(result, Exception):
-                raise result
-            # TODO propagate WRITE signal
+                error('Failed to write serial port: %r' % result)
 
         self.dbus_serial_device.Write('(ay)', data, result_handler=write_cb)
 
     def close(self):
         def close_cb(proxy, result, obj_path):
-            print('DEBUG: close_cb called')
+            self.closed.emit()
             if isinstance(result, Exception):
-                raise result
-            # TODO propagate CLOSE signal
+                error('Failed to close serial port: %r' % result)
 
         self.dbus_serial_device.Close('()', result_handler=close_cb)
