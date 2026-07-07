@@ -6,6 +6,7 @@ from collections import defaultdict
 from logging import info, debug
 from threading import Thread
 from json import dumps
+from time import time
 
 from diagng.acquisition.qualcomm import spi_input
 from diagng.gobject.udev_device import UDevDevice
@@ -78,6 +79,8 @@ class DeviceScanner(GObject.Object):
 
     def update_json_state(self, *args):
         try:
+            start_time = time()
+
             self.json_state, usb_device_tree, spi_device_tree, spi_devices = (
                 self.get_udev_device_tree()
             )
@@ -156,8 +159,12 @@ class DeviceScanner(GObject.Object):
                         ],
                     )
 
+                    nonlocal start_time
+                    elapsed = time() - start_time
+
                     debug(
-                        'Got udev status data'  # dumps(self.json_state, indent=4)
+                        'Got udev status data in %g seconds'
+                        % elapsed  # dumps(self.json_state, indent=4)
                     )
                     self.main_app.udev_debug_data = dumps(
                         self.json_state, indent=4
@@ -236,7 +243,17 @@ class DeviceScanner(GObject.Object):
         root_devices: List[dict] = []
         path_to_device: Dict[str, dict] = defaultdict(dict)
 
-        for device in Context().list_devices():
+        for device in (
+            Context()
+            .list_devices()
+            .match_property('SUBSYSTEM', 'usb')
+            .match_property('SUBSYSTEM', 'usb-serial')
+            .match_property('SUBSYSTEM', 'pci')
+            .match_property('SUBSYSTEM', 'tty')
+            .match_property('SUBSYSTEM', 'usbmisc')
+            .match_property('SUBSYSTEM', 'net')
+            .match_property('SUBSYSTEM', 'rfkill')
+        ):
             possible_mac_addr = device.properties.get('ID_NET_NAME_MAC')
             if possible_mac_addr:
                 possible_mac_addr = ':'.join(
@@ -361,7 +378,7 @@ class DeviceScanner(GObject.Object):
         ):
             items_out = []
             for item_in in items_in:
-                if not item_in['is_usb_related']:
+                if not item_in.get('is_usb_related'):
                     continue
                 if parent_item_in:
                     for key_to_copy in [
