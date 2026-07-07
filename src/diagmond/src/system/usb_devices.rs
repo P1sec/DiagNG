@@ -221,7 +221,11 @@ impl UsbDevice {
             can_open_string,
             usb_version_info,
             speed_info
-        );
+        )
+        .replace(" - <b> </b>", "")
+        .replace("  ", " ")
+        .trim()
+        .to_string();
         device_string
     }
 }

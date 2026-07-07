@@ -427,11 +427,13 @@ class DeviceScanner(GObject.Object):
                     name_parts[pos] = GLib.markup_escape_text(name_parts[pos])
                     if pos >= 2:
                         name_parts[pos] = '<b>%s</b>' % name_parts[pos]
-                for key in ('driver', 'path', 'usb_interface', 'usb_vid_pid'):
+                for key in ('driver', 'usb_vid_pid', 'usb_interface', 'path'):
                     value = item_in.get(key)
                     if value:
                         value = GLib.markup_escape_text(value)
-                        name_parts.append('%s=%s' % (key, value))
+                        name_parts.append(
+                            '%s=%s' % (key.replace('usb_', ''), value)
+                        )
                 full_name = ' - '.join(filter(None, name_parts))
                 udev_gobj_out.text_summary = full_name
                 if udev_gobjs_out_spi_only is not None and item_in.get(
