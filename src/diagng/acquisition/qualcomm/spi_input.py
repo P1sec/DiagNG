@@ -22,8 +22,15 @@ class SerialQCDMInput(BaseQCDMInput):
         self.serial_port = serial_port
 
         self.short_name = serial_port.tty_device_path
-        self.full_name = '%s - %s %s (%s)' % (
-            serial_port.tty_device_path,
+        self.full_name = '%s - ' + serial_port.tty_device_path
+
+        # if serial_port.usb_vendor_alt:
+        #     self.full_name += '%s %s -' % (
+        #         serial_port.usb_vendor_alt or '',
+        #         serial_port.usb_product_alt or '',
+        #     )
+
+        self.full_name += '%s %s (%s)' % (
             serial_port.usb_vendor or '',
             serial_port.usb_product or '',
             serial_port.usb_vid_pid or '',

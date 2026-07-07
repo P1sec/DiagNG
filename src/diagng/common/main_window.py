@@ -387,17 +387,32 @@ class MainWindow(Adw.ApplicationWindow):
         for vid_pid, ports in vid_pid_to_ports.items():
             first_port = ports[0]
 
+            markup = '<b>%s %s</b> - %s' % (
+                GLib.markup_escape_text(first_port.usb_vendor or '', -1),
+                GLib.markup_escape_text(first_port.usb_product or '', -1),
+                GLib.markup_escape_text(first_port.usb_vid_pid or '', -1),
+            )
+
+            """
+            if first_port.usb_vendor_alt:
+                markup = (
+                    '<b>%s %s</b> - '
+                    % (
+                        GLib.markup_escape_text(
+                            first_port.usb_vendor_alt or '', -1
+                        ),
+                        GLib.markup_escape_text(
+                            first_port.usb_product_alt or '', -1
+                        ),
+                    )
+                    + markup
+                )
+            """
+
             main_row = Adw.ExpanderRow.new()
             main_row.set_expanded(True)
             main_row.set_title_selectable(True)
-            main_row.set_title(
-                '<b>%s %s</b> - %s'
-                % (
-                    GLib.markup_escape_text(first_port.usb_vendor or '', -1),
-                    GLib.markup_escape_text(first_port.usb_product or '', -1),
-                    GLib.markup_escape_text(first_port.usb_vid_pid or '', -1),
-                )
-            )
+            main_row.set_title(markup)
 
             if first_port.usb_vid_pid in vid_pid_to_mm_obj:
                 mm_modem = vid_pid_to_mm_obj[first_port.usb_vid_pid]

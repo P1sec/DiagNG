@@ -181,7 +181,9 @@ class DeviceScanner(GObject.Object):
                 "name": "{{ device.sys_name }}",
                 "path": "{{ device.sys_path }}",
                 "vendor": "{{ ID_VENDOR_FROM_DATABASE }}" or null,
+                "vendor_alt": "{{ ID_VENDOR_ENC.decode('unicode-escape') }}" or null,
                 "model": "{{ ID_MODEL_FROM_DATABASE }}" or null,
+                "model_alt": "{{ ID_MODEL_ENC.decode('unicode-escape') }}" or null,
                 "usb_interface": "{{ INTERFACE }}" or null,
                 "usb_vid_pid": "{{ ID_USB_VENDOR_ID }}:{{ ID_USB_MODEL_ID }}" or null,
                 "usb_vid": "{{ ID_USB_VENDOR_ID }}" or null,
@@ -225,22 +227,42 @@ class DeviceScanner(GObject.Object):
                     for i in range(6)
                 ).lower()
 
-            model = device.properties.get(
-                'ID_MODEL_FROM_DATABASE'
-            ) or device.properties.get('ID_MODEL')
-            if (
-                model
-                and 'xHCI' in model
-                and device.properties.get('ID_MODEL')
-                and 'xHCI' not in device.properties.get('ID_MODEL')
-            ):
-                model = device.properties.get('ID_MODEL')
-
             device_name = device.properties.get('DEVNAME')
             if not device_name or (
                 device_name and device.sys_name not in device_name
             ):
                 device_name = device.sys_name
+
+            model_alt = device.properties.get('ID_MODEL_ENC')
+            vendor_alt = device.properties.get('ID_VENDOR_ENC')
+
+            if model_alt:
+                model_alt = (
+                    model_alt.encode('utf-8')
+                    .decode('unicode-escape')
+                    .replace(',', ' ')
+                    .strip()
+                )
+            if vendor_alt:
+                vendor_alt = (
+                    vendor_alt.encode('utf-8')
+                    .decode('unicode-escape')
+                    .replace(',', ' ')
+                    .strip()
+                )
+
+            vendor = (
+                device.properties.get('ID_VENDOR_FROM_DATABASE') or vendor_alt
+            )
+            model = (
+                device.properties.get('ID_MODEL_FROM_DATABASE') or model_alt
+            )
+
+            if model == model_alt:
+                model_alt = None
+            if vendor == vendor_alt or vendor == model_alt or not model_alt:
+                vendor_alt = None
+                model_alt = None
 
             path_to_device[device.sys_path].update(
                 {
@@ -248,9 +270,10 @@ class DeviceScanner(GObject.Object):
                     'name': device_name,
                     'kernel_name': device.sys_name,
                     'path': device.sys_path,
-                    'vendor': device.properties.get('ID_VENDOR_FROM_DATABASE')
-                    or device.properties.get('ID_VENDOR'),
+                    'vendor': vendor,
                     'model': model,
+                    'vendor_alt': vendor_alt,
+                    'model_alt': model_alt,
                     'usb_interface': device.properties.get('INTERFACE'),
                     'usb_vid_pid': f'{device.properties["ID_USB_VENDOR_ID"]}:{device.properties["ID_USB_MODEL_ID"]}'
                     if (
@@ -323,15 +346,35 @@ class DeviceScanner(GObject.Object):
                         'usb_vid',
                         'usb_pid',
                         'usb_revision',
+                        'vendor',
+                        'model',
                     ]:
                         if parent_item_in.get(key_to_copy) and not item_in.get(
                             key_to_copy
                         ):
                             item_in[key_to_copy] = parent_item_in[key_to_copy]
+                    if (
+                        parent_item_in.get('vendor_alt')
+                        and not item_in.get('vendor_alt')
+                        and (item_in.get('vendor'), item_in.get('model'))
+                        == (
+                            parent_item_in.get('vendor'),
+                            parent_item_in.get('model'),
+                        )
+                    ):
+                        item_in['vendor_alt'] = parent_item_in['vendor_alt']
+                        item_in['model_alt'] = parent_item_in['model_alt']
                 udev_gobj_out = UDevDevice()
                 name_parts: list[str] = [
                     item_in.get('subsystem') or '??',
                     item_in.get('name') or '??',
+                ]
+                if item_in.get('vendor_alt'):
+                    name_parts += [
+                        item_in.get('vendor_alt') or '??',
+                        item_in.get('model_alt') or '??',
+                    ]
+                name_parts += [
                     item_in.get('vendor') or '??',
                     item_in.get('model') or '??',
                 ]
@@ -360,6 +403,8 @@ class DeviceScanner(GObject.Object):
                         spi_gobj_out.usb_vid_pid = item_in.get('usb_vid_pid')
                         spi_gobj_out.usb_vendor = item_in.get('vendor')
                         spi_gobj_out.usb_product = item_in.get('model')
+                        spi_gobj_out.usb_vendor_alt = item_in.get('vendor_alt')
+                        spi_gobj_out.usb_product_alt = item_in.get('model_alt')
                         spi_gobjs_out.append(spi_gobj_out)
                 else:
                     udev_gobj_out_spi = None

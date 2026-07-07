@@ -11,6 +11,8 @@ class SerialPort(GObject.Object):
     usb_vid_pid = GObject.Property(type=str)
     usb_vendor = GObject.Property(type=str)
     usb_product = GObject.Property(type=str)
+    usb_vendor_alt = GObject.Property(type=str)
+    usb_product_alt = GObject.Property(type=str)
 
     def to_gvariant(self) -> GLib.Variant:
         variant = GLib.VariantDict.new(None)
@@ -37,6 +39,14 @@ class SerialPort(GObject.Object):
         variant.insert_value(
             'usb_product', GLib.Variant.new_string(self.usb_product or '')
         )
+        variant.insert_value(
+            'usb_vendor_alt',
+            GLib.Variant.new_string(self.usb_vendor_alt or ''),
+        )
+        variant.insert_value(
+            'usb_product_alt',
+            GLib.Variant.new_string(self.usb_product_alt or ''),
+        )
 
         return variant.end()
 
@@ -54,4 +64,8 @@ class SerialPort(GObject.Object):
         self.usb_vid_pid = data.lookup_value('usb_vid_pid').get_string()
         self.usb_vendor = data.lookup_value('usb_vendor').get_string()
         self.usb_product = data.lookup_value('usb_product').get_string()
+        self.usb_vendor_alt = data.lookup_value('usb_vendor_alt').get_string()
+        self.usb_product_alt = data.lookup_value(
+            'usb_product_alt'
+        ).get_string()
         return self
