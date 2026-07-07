@@ -346,12 +346,12 @@ pub async fn get_usb_metadata() -> UsbDevicesEndpointResp {
         let linux_path;
         let linux_bus;
 
-        #[cfg(any(target_os = "linux", target_os = "android"))]
+        #[cfg(target_os = "linux")]
         {
             linux_bus = Some(device.busnum());
             linux_path = Some(device.sysfs_path().display().to_string());
         }
-        #[cfg(not(any(target_os = "linux", target_os = "android")))]
+        #[cfg(not(target_os = "linux"))]
         {
             linux_bus = None;
             linux_path = None;
@@ -577,12 +577,12 @@ pub async fn get_usb_metadata() -> UsbDevicesEndpointResp {
             for bus in buses {
                 let linux_bus;
                 let linux_path;
-                #[cfg(any(target_os = "linux", target_os = "android"))]
+                #[cfg(target_os = "linux")]
                 {
                     linux_bus = Some(bus.busnum());
                     linux_path = Some(bus.sysfs_path().display().to_string());
                 }
-                #[cfg(not(any(target_os = "linux", target_os = "android")))]
+                #[cfg(not(target_os = "linux"))]
                 {
                     linux_bus = None;
                     linux_path = None;
