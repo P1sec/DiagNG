@@ -28,6 +28,7 @@ if not exists(RESOURCES_PATH) or (
 ):
     for blueprint_name in [
         'udev_serial_tree_factory',
+        'nusb_tree_factory',
         'diagng',
         'qcdm_window',
     ]:

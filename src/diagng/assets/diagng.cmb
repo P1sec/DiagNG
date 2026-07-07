@@ -2,12 +2,20 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="3fa102e543dcd0f966873cab4a400a6012b8a58a265ebf7b42ab19cea1fdafd5"/>
+  <gresources filename="diagng.gresource.xml" sha256="714024173138cb5b7599186af96ce6731ce5841f0805d3c16d79ef260751ea2b"/>
   <css priority="600" is_global="1" filename="style.css" sha256="4973fcb9089f64b71e665a2f8e2bf53be60b0a02e6d2e5832dd1a3810a43d4a4"/>
-  <ui template-class="MainWindow" filename="diagng.blp" sha256="ba3f02ee71245b8272ffec2f6de8a9b37247f343b853420818f09d068010d59c">
+  <ui template-class="MainWindow" filename="diagng.blp" sha256="8c96d8d119de11bb552e9a13ec28076791c8f60e84eab76da59bf924ff88bdf6">
     <css-provider>style.css</css-provider>
   </ui>
   <ui template-class="GtkListItem" filename="udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
+    <property id="accessible-description" type-id="gchararray"/>
+    <property id="accessible-label" type-id="gchararray" translatable="1"/>
+    <property id="activatable" type-id="gboolean" default-value="True"/>
+    <property id="child" type-id="GtkWidget" is-object="1"/>
+    <property id="focusable" type-id="gboolean" default-value="True"/>
+    <property id="selectable" type-id="gboolean" default-value="True"/>
+  </ui>
+  <ui template-class="GtkListItem" filename="nusb_tree_factory.blp" sha256="828eb8d8c524a9d831272eb3a8e6f44f67976d06db1ac3dd91a2761073fe42f9">
     <property id="accessible-description" type-id="gchararray"/>
     <property id="accessible-label" type-id="gchararray" translatable="1"/>
     <property id="activatable" type-id="gboolean" default-value="True"/>

@@ -50,6 +50,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: USB
 
+    nusb_selection: Gtk.SingleSelection = Gtk.Template.Child()
+
     usb_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
     udev_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
@@ -92,7 +94,17 @@ class MainWindow(Adw.ApplicationWindow):
         self.mm_debug_view.set_editable(False)
         self.mm_debug_viewport.set_child(self.mm_debug_view)
 
-        # Build USB device tree view
+        # Build USB device tree views, for the nusb
+        # and UDev data sources
+
+        self.nusb_selection.set_model(
+            Gtk.TreeListModel.new(
+                root=self.app.diagmond_communicator.nusb_device_tree,
+                passthrough=False,
+                autoexpand=True,
+                create_func=lambda item: item.children,
+            )
+        )
 
         self.usb_selection.set_model(
             Gtk.TreeListModel.new(

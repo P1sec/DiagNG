@@ -30,16 +30,25 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
         -->
         <signal name="USBDataUpdated">
             <arg type="s" name="USBData" direction="out" />
+            <arg type="s" name="USBDataPretty" direction="out" />
         </signal>
 
         <!--
-            USBData:
+        USBData:
 
-            USB status information, using the
-            JSON structure laid out in
-            #diagmond::system::usb_devices::UsbDevicesEndpointResp
+        Nusb status information, using the
+        JSON structure laid out in
+        #diagmond::system::usb_devices::UsbDevicesEndpointResp
         -->
         <property name="USBData" type="s" access="read" />
+
+        <!--
+        USBDataPretty:
+
+        Nusb status information, in a less detailed
+        and more formatted structured JSON output
+        -->
+        <property name="USBDataPretty" type="s" access="read" />
 
         <!--
             UDevRulesUpdated:

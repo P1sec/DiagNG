@@ -5,6 +5,7 @@ from typing import List, Dict
 from json import dumps, loads
 from logging import debug
 
+from diagng.gobject.nusb_device import NusbDevice
 from diagng.gobject.udev_rule import UDevRule
 
 #  ⚠️ ⚠️   https://docs.gtk.org/gio/func.bus_watch_name.html
@@ -19,15 +20,18 @@ class DiagmondCommunicator(GObject.Object):
     proxy: Gio.DBusProxy
     bus_connected = GObject.Property(type=bool, default=False)
 
-    main_app: 'MainApplication'
-
+    nusb_device_tree = GObject.Property(type=Gio.ListStore)
     udev_rules_model: Gio.ListStore
+
+    main_app: 'MainApplication'
 
     def __init__(self, main_app: 'MainApplication'):
         super().__init__()
 
         self.main_app = main_app
         self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+
+        self.nusb_device_tree = Gio.ListStore.new(NusbDevice)
 
         self.udev_rules_model = Gio.ListStore()
 
@@ -71,8 +75,12 @@ class DiagmondCommunicator(GObject.Object):
             debug('Diagmond bus available')
 
             usb_data_raw = self.proxy.get_cached_property('USBData')
+            usb_data_pretty = self.proxy.get_cached_property('USBDataPretty')
             if usb_data_raw:
-                self.process_usb_data(loads(usb_data_raw.get_string()))
+                self.process_usb_data(
+                    loads(usb_data_raw.get_string()),
+                    loads(usb_data_pretty.get_string()),
+                )
 
             tokio_serial_data_raw = self.proxy.get_cached_property(
                 'TokioSerialData'
@@ -107,11 +115,6 @@ class DiagmondCommunicator(GObject.Object):
                 if num_items:
                     self.main_app.modem_manager.queue_state_update()
 
-    def cleanup_connections(self):
-        pass  #  WIP 2026-07-03
-        # XX Call this both at app initialization and exit
-        # XX use GetManagedObjects here?
-
     def usb_data_changed(
         self,
         dbus_proxy: Gio.DBusProxy,
@@ -119,13 +122,33 @@ class DiagmondCommunicator(GObject.Object):
         signal_name: str,
         parameters: GLib.Variant,
     ):
-        self.process_usb_data(loads(parameters[0]))
+        self.process_usb_data(loads(parameters[0]), loads(parameters[1]))
 
-    def process_usb_data(self, usb_data: dict):
+    def process_usb_data(self, usb_data: dict, usb_data_pretty: dict):
         if usb_data:
             debug('nusb data updated')
 
             self.main_app.nusb_debug_data = dumps(usb_data, indent=4)
+
+            if usb_data_pretty:
+                with self.nusb_device_tree.freeze_notify():
+                    self.nusb_device_tree.remove_all()
+
+                    def visit(store: Gio.ListStore, item: dict[str, object]):
+                        obj = NusbDevice()
+                        obj.description = item['description']
+                        obj.original_json = item['original_json']
+                        obj.children = Gio.ListStore()
+
+                        for child in item['children']:
+                            visit(obj.children, child)
+
+                        obj.is_empty = not bool(len(obj.children))
+
+                        store.append(obj)
+
+                    for item in usb_data_pretty['devices']:
+                        visit(self.nusb_device_tree, item)
 
     def tokio_serial_data_changed(
         self,

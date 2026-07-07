@@ -5,6 +5,7 @@ pub mod system {
     pub mod serial_devices;
     pub mod udev_rules;
     pub mod usb_devices;
+    pub mod usb_devices_pretty;
 }
 pub mod dbus {
     pub mod manager;
@@ -16,6 +17,7 @@ use crate::logging::Logging;
 use crate::system::serial_devices::list_devices;
 use crate::system::udev_rules::get_udev_rules_data;
 use crate::system::usb_devices::{UsbDevicesEndpointResp, get_usb_metadata};
+use crate::system::usb_devices_pretty::{UsbDeviceTreePretty, device_tree_to_pretty};
 
 #[cfg(target_os = "linux")]
 use std::os::unix::process::CommandExt;
@@ -42,6 +44,7 @@ async fn main() -> zbus::Result<()> {
 
     let diagmond = Diagmond {
         usb_data: "null".to_string(),
+        usb_data_pretty: "null".to_string(),
         udev_rules: serde_json::to_string_pretty(&udev_rules).unwrap(), // WIP
         tokio_serial_data: "null".to_string(),
         serial_device_ctr: 1,
@@ -92,8 +95,11 @@ async fn main() -> zbus::Result<()> {
 
     loop {
         let usb_devices: UsbDevicesEndpointResp = get_usb_metadata().await;
-
         let devices_resp_string = serde_json::to_string_pretty(&usb_devices).unwrap();
+
+        let usb_devices_pretty: UsbDeviceTreePretty = device_tree_to_pretty(usb_devices);
+        let devices_resp_pretty = serde_json::to_string_pretty(&usb_devices_pretty).unwrap();
+
         log::info!("USB devices list received");
 
         let serial_devices: Vec<SerialPortInfo> = list_devices();
@@ -110,12 +116,15 @@ async fn main() -> zbus::Result<()> {
 
             let mut iface = iface_ref.get_mut().await;
             iface.usb_data = devices_resp_string.clone();
+            iface.usb_data_pretty = devices_resp_pretty.clone();
             iface.tokio_serial_data = serial_devices_string.clone();
 
             // Send the DBus-serialized JSON data to the Python
             // process (and eventually display it to the UI)
 
-            iface_ref.usb_data_updated(&devices_resp_string).await?;
+            iface_ref
+                .usb_data_updated(&devices_resp_string, &devices_resp_pretty)
+                .await?;
             iface_ref
                 .tokio_serial_data_updated(&serial_devices_string)
                 .await?;

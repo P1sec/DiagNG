@@ -82,7 +82,7 @@ pub struct UsbInterface {
 }
 
 impl UsbInterface {
-    pub fn _get_markup(&self) -> String {
+    pub fn get_markup(&self) -> String {
         let mut interface_string = format!("Interface {}", self.b_interface_number);
         if let Some(name) = &self.i_interface {
             interface_string += format!(" (<b>{}</b>)", glib::markup_escape_text(name)).as_str();
@@ -189,7 +189,7 @@ pub struct UsbDevice {
 }
 
 impl UsbDevice {
-    pub fn _get_markup(&self) -> String {
+    pub fn get_markup(&self) -> String {
         let speed_info = match &self.speed_type {
             None => "",
             Some(speed) => match speed {
