@@ -482,38 +482,48 @@ class ModemManagerIntf(GObject.Object):
 
             store: Gio.ListStore = self.mm_instance.modems
 
-            while True:
-                for pos in range(store.get_n_items()):
-                    if not store.get_item(pos).inhibited:
+            known_device_ids: set[str] = set()
+
+            with store.freeze_notify():
+                while True:
+                    for pos in range(store.get_n_items()):
+                        modem = store.get_item(pos)
+                        if not modem.inhibited:
+                            store.remove(pos)
+                            break
+                        elif modem.modem_device_id:
+                            known_device_ids.add(modem.modem_device_id)
+                    else:
                         break
-                else:
-                    break
-                store.remove(pos)
 
-            for obj in self.manager.get_objects():
-                mm_modem = obj.get_modem()
+                for obj in self.manager.get_objects():
+                    mm_modem = obj.get_modem()
 
-                modem = ModemManagerModem()
-                modem.modem_name = (
-                    f'{mm_modem.get_manufacturer()} {mm_modem.get_model()}'
-                )
-                modem.modem_imei = mm_modem.get_equipment_identifier()
-                modem.modem_firmware = mm_modem.get_revision()
-                modem.modem_device_id = mm_modem.get_device()
-                modem.inhibited = False
-                primary_port = mm_modem.get_primary_port()
-                success, ports = mm_modem.get_ports()
-                if ports:
-                    for mm_port in ports:
-                        port = ModemManagerPort()
-                        if mm_port.type.value_nick.upper() == 'NET':
-                            port.device_path = '/sys/class/net/' + mm_port.name
-                        else:
-                            port.device_path = '/dev/' + mm_port.name
-                        port.port_type = mm_port.type.value_nick.upper()
-                        port.is_primary = mm_port.name == primary_port
-                        modem.ports.append(port)
-                store.append(modem)
+                    modem = ModemManagerModem()
+                    modem.modem_name = (
+                        f'{mm_modem.get_manufacturer()} {mm_modem.get_model()}'
+                    )
+                    modem.modem_imei = mm_modem.get_equipment_identifier()
+                    modem.modem_firmware = mm_modem.get_revision()
+                    modem.modem_device_id = mm_modem.get_device()
+                    if modem.modem_device_id in known_device_ids:
+                        continue
+                    modem.inhibited = False
+                    primary_port = mm_modem.get_primary_port()
+                    success, ports = mm_modem.get_ports()
+                    if ports:
+                        for mm_port in ports:
+                            port = ModemManagerPort()
+                            if mm_port.type.value_nick.upper() == 'NET':
+                                port.device_path = (
+                                    '/sys/class/net/' + mm_port.name
+                                )
+                            else:
+                                port.device_path = '/dev/' + mm_port.name
+                            port.port_type = mm_port.type.value_nick.upper()
+                            port.is_primary = mm_port.name == primary_port
+                            modem.ports.append(port)
+                    store.append(modem)
 
         if self.json_state:
             self.main_app.mm_debug_data = dumps(self.json_state, indent=4)

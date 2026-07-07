@@ -7,6 +7,7 @@ from logging import info, debug
 from threading import Thread
 from json import dumps
 
+from diagng.acquisition.qualcomm import spi_input
 from diagng.gobject.udev_device import UDevDevice
 from diagng.gobject.serial_port import SerialPort
 
@@ -99,9 +100,27 @@ class DeviceScanner(GObject.Object):
                             )
 
                     with self.spi_devices.freeze_notify():
-                        self.spi_devices.remove_all()
+                        # Don't remove connected devices
+
+                        known_device_ids: set[str] = set()
+
+                        while True:
+                            for pos in range(self.spi_devices.get_n_items()):
+                                device = self.spi_devices.get_item(pos)
+                                if not device.connected:
+                                    self.spi_devices.remove(pos)
+                                    break
+                                elif device.tty_device_path:
+                                    known_device_ids.add(
+                                        device.tty_device_path
+                                    )
+                            else:
+                                break
+
                         for pos in range(spi_devices.get_n_items()):
-                            self.spi_devices.append(spi_devices.get_item(pos))
+                            device = spi_devices.get_item(pos)
+                            if device.tty_device_path not in known_device_ids:
+                                self.spi_devices.append(device)
 
                     self.usb_tree_gobjs = GLib.Variant.new_array(
                         GLib.VariantType.new('a{sv}'),
@@ -425,6 +444,10 @@ class DeviceScanner(GObject.Object):
                         spi_gobj_out = SerialPort()
                         spi_gobj_out.tty_device_path = item_in.get('name')
                         spi_gobj_out.kernel_name = item_in.get('kernel_name')
+                        spi_gobj_out.connected = (
+                            spi_gobj_out.tty_device_path
+                            in spi_input._connected_ports
+                        )
                         spi_gobj_out.sysfs_device_path = item_in.get('path')
                         spi_gobj_out.usb_interface = item_in.get(
                             'usb_interface'

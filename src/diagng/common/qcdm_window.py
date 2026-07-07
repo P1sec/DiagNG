@@ -29,6 +29,7 @@ class QCDMWindow(Adw.Window):
     __gtype_name__ = 'QCDMWindow'
 
     input_obj: BaseQCDMInput
+    parent: Adw.ApplicationWindow
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     def __init__(
@@ -37,19 +38,26 @@ class QCDMWindow(Adw.Window):
         super().__init__()
 
         self.input_obj = input_obj
+        self.parent = parent
 
         self.set_transient_for(parent)
         self.set_title(self.input_obj.full_name)
+        self.input_obj.connect('notify::full-name', self.on_title_change)
         self.present()
 
         self.gather_device_info()
 
+        self.input_obj.connect('closed', self.on_input_closed)
         self.connect('close-request', self.on_quit)
+
+    def on_title_change(self, *args):
+        self.set_title(self.input_obj.full_name)
+
+    def on_input_closed(self, *args):
+        self.parent.update_spi_devices()
 
     def on_quit(self, *args):
         self.input_obj.close()
-
-        # TODO Update the state of the main window as well
 
     def gather_device_info(self):
         # Use self.input_obj to display Diag-related

@@ -9,6 +9,7 @@ import diagng.utils.gresources
 
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.mm_port import ModemManagerPort
+from diagng.acquisition.qualcomm import spi_input
 from diagng.gobject.serial_port import SerialPort
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
@@ -436,7 +437,9 @@ class MainWindow(Adw.ApplicationWindow):
                 port_row.set_tooltip_text(port.sysfs_device_path)
 
                 connect_btn = Gtk.Button()
-                connect_btn.set_label('Connect')
+                connect_btn.set_label(
+                    'Disconnect' if port.connected else 'Connect'
+                )
                 connect_btn.add_css_class('pill')
                 connect_btn.add_css_class('suggested-action')
 
@@ -447,7 +450,10 @@ class MainWindow(Adw.ApplicationWindow):
                 # Don't propose to lock devices which are not
                 # known from ModemManager
 
-                if port.tty_device_path in dev_path_to_mm_obj:
+                if (
+                    port.tty_device_path in dev_path_to_mm_obj
+                    and not port.connected
+                ):
                     mm_port, mm_modem = dev_path_to_mm_obj[
                         port.tty_device_path
                     ]
@@ -483,11 +489,18 @@ class MainWindow(Adw.ApplicationWindow):
 
                     subtitle += ' | Type: %s' % mm_port.port_type
 
-                connect_btn.connect(
-                    'clicked',
-                    self.connect_spi_port,
-                    port,
-                )
+                if port.connected:
+                    connect_btn.connect(
+                        'clicked',
+                        self.disconnect_spi_port,
+                        port,
+                    )
+                else:
+                    connect_btn.connect(
+                        'clicked',
+                        self.connect_spi_port,
+                        port,
+                    )
 
                 port_row.set_subtitle(GLib.markup_escape_text(subtitle, -1))
 
@@ -596,6 +609,12 @@ class MainWindow(Adw.ApplicationWindow):
                 pass  # self.unlock_mm_port(None, mm_modem)
         """
 
+    def disconnect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
+        info('disconnect_spi_port called on %s' % serial_port.tty_device_path)
+
+        if serial_port.tty_device_path in spi_input._connected_ports:
+            spi_input._connected_ports.close()
+
     def connect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('connect_spi_port called on %s' % serial_port.tty_device_path)
 
@@ -610,6 +629,9 @@ class MainWindow(Adw.ApplicationWindow):
 
                     dialog.add_response('ok', 'Ok')
                     dialog.choose(self, None, None)
+
+                    serial_port.connected = False
+                    self.update_spi_devices()
                 else:
                     object_path = result
                     info('Got new SerialDevice object path: ' + object_path)
@@ -617,6 +639,9 @@ class MainWindow(Adw.ApplicationWindow):
                     self.app.diagmond_serialdevice_om.create_qcdm_window(
                         object_path, serial_port
                     )
+
+            serial_port.connected = True
+            self.update_spi_devices()
 
             self.app.diagmond_communicator.proxy.OpenSerialPort(
                 '(ss)',

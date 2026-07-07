@@ -134,7 +134,7 @@ class DiagmondSerialDeviceOM(GObject.Object):
         #    ADB, SPI, DLF file, etc.) through
         #    subclassing
 
-        input_obj = SerialQCDMInput(proxy, serial_port)
+        input_obj = SerialQCDMInput(proxy, serial_port, self.main_window)
 
         QCDMWindow(self.main_window, input_obj)
 
