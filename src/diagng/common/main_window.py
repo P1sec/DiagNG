@@ -613,7 +613,7 @@ class MainWindow(Adw.ApplicationWindow):
         info('disconnect_spi_port called on %s' % serial_port.tty_device_path)
 
         if serial_port.tty_device_path in spi_input._connected_ports:
-            spi_input._connected_ports.close()
+            spi_input._connected_ports[serial_port.tty_device_path].close()
 
     def connect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('connect_spi_port called on %s' % serial_port.tty_device_path)
