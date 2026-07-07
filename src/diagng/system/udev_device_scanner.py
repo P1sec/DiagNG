@@ -260,7 +260,12 @@ class DeviceScanner(GObject.Object):
 
             if model == model_alt:
                 model_alt = None
-            if vendor == vendor_alt or vendor == model_alt or not model_alt:
+            if vendor_alt and (
+                vendor_alt.isdigit()
+                or vendor == vendor_alt
+                or vendor == model_alt
+                or not model_alt
+            ):
                 vendor_alt = None
                 model_alt = None
 
@@ -369,22 +374,46 @@ class DeviceScanner(GObject.Object):
                     item_in.get('subsystem') or '??',
                     item_in.get('name') or '??',
                 ]
-                if item_in.get('vendor_alt'):
+                if item_in.get('vendor_alt') and (
+                    not parent_item_in
+                    or (
+                        item_in.get('vendor_alt'),
+                        item_in.get('model_alt'),
+                    )
+                    != (
+                        parent_item_in.get('vendor_alt'),
+                        parent_item_in.get('model_alt'),
+                    )
+                ):
                     name_parts += [
                         item_in.get('vendor_alt') or '??',
                         item_in.get('model_alt') or '??',
                     ]
-                name_parts += [
-                    item_in.get('vendor') or '??',
-                    item_in.get('model') or '??',
-                ]
+                if item_in.get('vendor') and (
+                    not parent_item_in
+                    or (
+                        item_in.get('vendor'),
+                        item_in.get('model'),
+                    )
+                    != (
+                        parent_item_in.get('vendor'),
+                        parent_item_in.get('model'),
+                    )
+                ):
+                    name_parts += [
+                        item_in.get('vendor') or '??',
+                        item_in.get('model') or '??',
+                    ]
+                for pos in range(len(name_parts)):
+                    name_parts[pos] = GLib.markup_escape_text(name_parts[pos])
+                    if pos >= 2:
+                        name_parts[pos] = '<b>%s</b>' % name_parts[pos]
                 for key in ('driver', 'path', 'usb_interface', 'usb_vid_pid'):
                     value = item_in.get(key)
                     if value:
+                        value = GLib.markup_escape_text(value)
                         name_parts.append('%s=%s' % (key, value))
-                full_name = GLib.markup_escape_text(
-                    ' - '.join(filter(None, name_parts))
-                )
+                full_name = ' - '.join(filter(None, name_parts))
                 udev_gobj_out.text_summary = full_name
                 if udev_gobjs_out_spi_only is not None and item_in.get(
                     'is_spi_related'

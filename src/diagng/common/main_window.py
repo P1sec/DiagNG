@@ -393,7 +393,6 @@ class MainWindow(Adw.ApplicationWindow):
                 GLib.markup_escape_text(first_port.usb_vid_pid or '', -1),
             )
 
-            """
             if first_port.usb_vendor_alt:
                 markup = (
                     '<b>%s %s</b> - '
@@ -407,7 +406,6 @@ class MainWindow(Adw.ApplicationWindow):
                     )
                     + markup
                 )
-            """
 
             main_row = Adw.ExpanderRow.new()
             main_row.set_expanded(True)
