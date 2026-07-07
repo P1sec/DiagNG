@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+from gi.repository import Gio
+
+from diagng.gobject.usb_interface import USBInterface
+
 # WIP 2026-06-25: Import logic here from usb_modem_pyusb_devfinder.py
 # @ qcsuper.
 
@@ -27,3 +32,9 @@ input_mode.add_argument(
 
 # Should be able to provide content to generate Adw.ExpanderRow
 # items for raw USB ports, eventually.
+
+
+def detect_diag_usb_ports(
+    udev_device_tree: list[dict], nusb_device_tree: list[dict]
+) -> Gio.ListStore[USBInterface]:
+    pass  # WIP
