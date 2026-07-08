@@ -27,10 +27,10 @@ if not exists(RESOURCES_PATH) or (
     > stat(RESOURCES_PATH).st_mtime
 ):
     for blueprint_name in [
-        'udev_serial_tree_factory',
-        'nusb_tree_factory',
-        'diagng',
-        'qcdm_window',
+        'templates/main_window/udev_serial_tree_factory',
+        'templates/main_window/nusb_tree_factory',
+        'templates/main_window/window',
+        'templates/qcdm_window/window',
     ]:
         run(
             [
