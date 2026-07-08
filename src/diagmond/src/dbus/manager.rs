@@ -22,6 +22,20 @@ pub struct Diagmond {
 
 #[interface(name = "com.p1security.diagmond")]
 impl Diagmond {
+    #[zbus(name = "OpenUSBInterface")]
+    async fn open_usb_interface(
+        &mut self,
+        #[zbus(object_server)] _obj_server: &ObjectServer,
+        _vid_pid: String,
+        _configuration: u8,
+        _interface: u8,
+        _alt_setting: u8,
+    ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        log::error!("Not implemented yet: OpenUSBInterface");
+
+        Err(zbus::fdo::Error::Failed("Not implemented yet".to_string()))
+    }
+
     #[zbus(name = "OpenSerialPort")]
     async fn open_serial_port(
         &mut self,

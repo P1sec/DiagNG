@@ -46,13 +46,19 @@ SIGNAL:
 METHOD:
 
 * WIP: Diag-related methods
-  * `OpenSerialPort (string device_name, string kernel_path) -> (ObjectPath path)` (WIP)
+  * `OpenUSBInterface (string vid_pid, int configuration, int interface, int alt_setting) -> (ObjectPath path)` (WIP)
+    * **https://docs.rs/nusb/latest/nusb/#example-usage**
+    * Spawns a `/com/p1security/diagmond/SerialDevices/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
+      * With a `Close` method to close the serial port, delete the UDev rules, unexport the object from the bus (called by `diagmond` both when closing and starting)
+      * With a `Read` signal emitting bytes (`ay`)
+      * With a `Write` method taking bytes (`ay`)
+      * ⚠️ NOTE: This will need to take in account DETACHING THE DRIVER WHEN NEEDED (https://docs.rs/nusb/latest/nusb/struct.Device.html#method.detach_kernel_driver)
+      * ➡️➡️ REUSE THE SERIALDEVICE RUST CLASS?
+  * `OpenSerialPort (string device_name, string kernel_path) -> (ObjectPath path)`
     * https://www.google.com/search?q=RUST+SERIAL+PORT+COMMUNICATION
       * **https://github.com/berkowski/tokio-serial**
     * Spawns a `/com/p1security/diagmond/SerialDevices/$NUM` object implementing the `com.p1security.diagmond.SerialDevice` interface
-      * (⚠️ ⚠️ Export a `Device` SerialPort/USB DBus sub-interface?)
-        * With a `Close` method to close the serial port, delete the UDev rules, unexport the object from the bus (called by `diagmond` both when closing and starting)
-        * With a `Read` signal emitting bytes (`ay`)
-        * With a `Write` method taking bytes (`ay`)
-        * (TODO: Think of putting buffering + an HDLC decoder here? MAYBE as an optional mode as operation?)
-      * Delete at client connection cut
+      * With a `Close` method to close the serial port, delete the UDev rules, unexport the object from the bus (called by `diagmond` both when closing and starting)
+      * With a `Read` signal emitting bytes (`ay`)
+      * With a `Write` method taking bytes (`ay`)
+      * (TODO: Think of putting buffering + an HDLC decoder here? MAYBE as an optional mode as operation?)
