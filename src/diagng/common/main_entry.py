@@ -12,7 +12,7 @@ from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.system.udev_device_scanner import DeviceScanner
-from diagng.common.main_window import MainWindow
+from diagng.common.main_window.imp import MainWindow
 from diagng.utils.logging import LoggingCentral
 
 # Register resources
@@ -62,7 +62,6 @@ class MainApplication(Adw.Application):
         icon_theme.add_resource_path('/com/p1security/diagng/')
 
         super().__init__(**kwargs)
-        self.mm_instance = ModemManagerInstance()
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)

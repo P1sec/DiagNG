@@ -7,6 +7,7 @@ from traceback import format_exc
 # Register resources
 import diagng.utils.gresources
 
+from diagng.common.main_window.detected_modems import create_mm_modem
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.acquisition.qualcomm import spi_input
@@ -187,31 +188,40 @@ class MainWindow(Adw.ApplicationWindow):
         # self.connect('close-request', self.on_quit)
         self.app.connect('shutdown', self.on_quit)
 
-        self.app.device_scanner.spi_devices.connect(
-            'items-changed', self.update_spi_devices
-        )
-        self.app.modem_manager.mm_instance.modems.connect(
-            'items-changed', self.update_mm_modems
-        )
-        self.app.modem_manager.mm_instance.modems.connect(
-            'items-changed', self.update_spi_devices
-        )
         self.app.modem_manager.mm_instance.connect(
             'notify::is-running', self.update_daemon_statuses
         )
         self.app.diagmond_communicator.connect(
             'notify::bus-connected', self.update_daemon_statuses
         )
+
         self.app.modem_manager.mm_instance.connect(
             'notify', self.update_mm_instance
         )
+
         self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
+
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_mm_modems
+        )
+        self.detected_modems_group.bind_model(
+            self.app.modem_manager.mm_instance.modems, create_mm_modem
+        )
+
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
         )
         self.app.connect(
             'notify::nusb-debug-data', self.update_nusb_debug_data
         )
+
+        self.app.device_scanner.spi_devices.connect(
+            'items-changed', self.update_spi_devices
+        )
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_spi_devices
+        )
+
         self.app.connect(
             'notify::tokio-serial-debug-data',
             self.update_tokio_serial_debug_data,
@@ -675,50 +685,3 @@ class MainWindow(Adw.ApplicationWindow):
         self.detected_modems_group.set_visible(
             bool(self.app.modem_manager.mm_instance.modems.get_n_items())
         )
-
-        def visit(container: Gtk.Widget):
-            item = container.get_first_child()
-            while item:
-                next_item = item.get_next_sibling()
-                if isinstance(item, Adw.ExpanderRow):
-                    self.detected_modems_group.remove(item)
-                else:
-                    visit(item)
-                item = next_item
-
-        visit(self.detected_modems_group)
-
-        for pos in range(
-            self.app.modem_manager.mm_instance.modems.get_n_items()
-        ):
-            item = self.app.modem_manager.mm_instance.modems.get_item(pos)
-
-            main_row = Adw.ExpanderRow.new()
-            main_row.set_expanded(True)
-            main_row.set_title_selectable(True)
-            main_row.set_title(
-                '<b>%s</b>'
-                % GLib.markup_escape_text(item.modem_name or '', -1)
-            )
-            main_row.set_subtitle(
-                'IMEI: %s | Firmware: %s'
-                % (
-                    GLib.markup_escape_text(item.modem_imei or '', -1),
-                    GLib.markup_escape_text(item.modem_firmware or '', -1),
-                )
-            )
-            for pos in range(item.ports.get_n_items()):
-                port = item.ports.get_item(pos)
-
-                port_title = port.device_path or ''
-                port_title += ' (type: %s)' % port.port_type
-                if port.is_primary:
-                    port_title += ' - Primary'
-
-                port_row = Adw.ActionRow.new()
-                port_row.set_title_selectable(True)
-                port_row.set_title(GLib.markup_escape_text(port_title, -1))
-
-                main_row.add_row(port_row)
-
-            self.detected_modems_group.add(main_row)
