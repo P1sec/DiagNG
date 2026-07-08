@@ -50,11 +50,12 @@ class ModemManagerInstance(GObject.Object):
         self.pid = data.lookup_value('pid').get_int64()
         self.version = data.lookup_value('version').get_string()
         modems = data.lookup_value('modems')
-        self.modems.remove_all()
-        for pos in range(modems.n_children()):
-            self.modems.append(
-                ModemManagerModem.from_gvariant(
-                    modems.get_child_value(pos).get_variant()
+        with self.modems.freeze_notify():
+            self.modems.remove_all()
+            for pos in range(modems.n_children()):
+                self.modems.append(
+                    ModemManagerModem.from_gvariant(
+                        modems.get_child_value(pos).get_variant()
+                    )
                 )
-            )
         return self

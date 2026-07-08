@@ -32,7 +32,7 @@ class SerialQCDMInput(BaseQCDMInput):
         self.main_window = main_window
 
         self.serial_port.connected = True
-        self.main_window.update_spi_devices()
+        self.main_window.update_serial_modems()
         _connected_ports[serial_port.tty_device_path] = self
 
         self.short_name = serial_port.tty_device_path
@@ -87,7 +87,7 @@ class SerialQCDMInput(BaseQCDMInput):
         if self.serial_port.tty_device_path in _connected_ports:
             del _connected_ports[self.serial_port.tty_device_path]
         self.serial_port.connected = False
-        self.main_window.update_spi_devices()
+        self.main_window.update_serial_modems()
 
         reason = str(parameters[0])
         warning('Serial port closed, reason: ' + reason)
@@ -105,7 +105,7 @@ class SerialQCDMInput(BaseQCDMInput):
             if self.serial_port.tty_device_path in _connected_ports:
                 del _connected_ports[self.serial_port.tty_device_path]
             self.serial_port.connected = False
-            self.main_window.update_spi_devices()
+            self.main_window.update_serial_modems()
 
             if isinstance(result, Exception):
                 error('Failed to close serial port: %r' % result)

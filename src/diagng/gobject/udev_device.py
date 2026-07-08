@@ -43,11 +43,12 @@ class UDevDevice(GObject.Object):
         self.text_summary = data.lookup_value('text_summary').get_string()
         self.is_empty = data.lookup_value('is_empty').get_boolean()
         children = data.lookup_value('children')
-        self.children.remove_all()
-        for pos in range(children.n_children()):
-            self.children.append(
-                UDevDevice.from_gvariant(
-                    children.get_child_value(pos).get_variant()
+        with self.children.freeze_notify():
+            self.children.remove_all()
+            for pos in range(children.n_children()):
+                self.children.append(
+                    UDevDevice.from_gvariant(
+                        children.get_child_value(pos).get_variant()
+                    )
                 )
-            )
         return self

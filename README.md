@@ -8,7 +8,7 @@ This software contains a work-in-progress intended sequel (v3) for [QCSuper](htt
 
 It is meant to be split into two components:
 
-* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
+* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
 * WIP: `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
   * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
 * Diag frame decoding itself should be done somewhere?

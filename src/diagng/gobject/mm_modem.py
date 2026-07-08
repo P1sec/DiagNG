@@ -62,11 +62,12 @@ class ModemManagerModem(GObject.Object):
         ).get_string()
         modem.inhibited = data.lookup_value('inhibited').get_boolean()
         ports = data.lookup_value('ports')
-        modem.ports.remove_all()
-        for pos in range(ports.n_children()):
-            modem.ports.append(
-                ModemManagerPort.from_gvariant(
-                    ports.get_child_value(pos).get_variant()
+        with modem.ports.freeze_notify():
+            modem.ports.remove_all()
+            for pos in range(ports.n_children()):
+                modem.ports.append(
+                    ModemManagerPort.from_gvariant(
+                        ports.get_child_value(pos).get_variant()
+                    )
                 )
-            )
         return modem

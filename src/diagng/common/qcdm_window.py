@@ -54,7 +54,7 @@ class QCDMWindow(Adw.Window):
         self.set_title(self.input_obj.full_name)
 
     def on_input_closed(self, *args):
-        self.parent.update_spi_devices()
+        self.parent.update_serial_modems()
 
     def on_quit(self, *args):
         self.input_obj.close()
