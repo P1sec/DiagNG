@@ -94,6 +94,60 @@ template $MainWindow: Adw.ApplicationWindow {
 
             Adw.PreferencesGroup {
               title: "Potential Qualcomm Diag USB devices (WIP)";
+
+              Adw.ExpanderRow {
+                expanded: true;
+                title: "ZTE MF667 (placeholder)";
+                visible: false;
+
+                Adw.ActionRow {
+                  subtitle: "class=255, subclass=255, interface=48";
+                  title: "/dev/ttyHS0";
+
+                  Button {
+                    has-tooltip: true;
+                    label: _("Detach driver");
+                    tooltip-text: _("Block ModemManager from interfering with this device");
+
+                    styles [
+                      "pill",
+                    ]
+                  }
+
+                  Button {
+                    label: "Connect";
+
+                    styles [
+                      "pill",
+                      "suggested-action",
+                    ]
+                  }
+                }
+
+                Adw.ActionRow {
+                  subtitle: "class=255, subclass=255, interface=255";
+                  title: "/dev/ttyHS1";
+
+                  Button {
+                    has-tooltip: true;
+                    label: _("Detach driver");
+                    tooltip-text: _("Block ModemManager from interfering with this device");
+
+                    styles [
+                      "pill",
+                    ]
+                  }
+
+                  Button {
+                    label: _("Connect");
+
+                    styles [
+                      "pill",
+                      "suggested-action",
+                    ]
+                  }
+                }
+              }
             }
 
             Adw.PreferencesGroup nusb_tree_group {
@@ -180,7 +234,7 @@ template $MainWindow: Adw.ApplicationWindow {
 
               Adw.ExpanderRow {
                 expanded: true;
-                title: "ZTE MF667";
+                title: "ZTE MF667 (placeholder)";
                 visible: false;
 
                 Adw.ActionRow {
