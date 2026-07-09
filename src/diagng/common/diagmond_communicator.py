@@ -138,7 +138,7 @@ class DiagmondCommunicator(GObject.Object):
                         obj = NusbTreeNode()
                         obj.description = item['description']
                         obj.original_json = item['original_json']
-                        obj.children = Gio.ListStore()
+                        obj.children = Gio.ListStore.new(NusbTreeNode)
 
                         for child in item['children']:
                             visit(obj.children, child)

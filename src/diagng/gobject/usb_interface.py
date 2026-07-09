@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from gi.repository import GObject
 
+from diagng.gobject.mm_modem import ModemManagerPort
+
 # WIP
 
 # Store, for the combinations matched by
@@ -16,8 +18,6 @@ from gi.repository import GObject
 
 
 class USBInterface(GObject.Object):
-    vid_pid = GObject.Property(type=str)
-
     usb_class = GObject.Property(type=int)
     usb_subclass = GObject.Property(type=int)
     usb_protocol = GObject.Property(type=int)
@@ -31,14 +31,7 @@ class USBInterface(GObject.Object):
     intf_num = GObject.Property(type=int)
     alt_setting_num = GObject.Property(type=int)
 
-    device_id = GObject.Property(type=str)  # Unused for the moment?
-
-    vendor_name = GObject.Property(type=str)
-    model_name = GObject.Property(type=str)
-
-    alt_vendor_name = GObject.Property(type=str)
-    alt_model_name = GObject.Property(type=str)
-
     udev_tty_device_path = GObject.Property(type=str)
     udev_tty_kernel_name = GObject.Property(type=str)
-    pass  # XX WIP
+
+    mm_obj = GObject.Property(type=ModemManagerPort)

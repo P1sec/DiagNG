@@ -8,16 +8,16 @@ from json import loads
 # Register resources
 import diagng.utils.gresources
 
-from diagng.common.main_window.usb_interfaces import create_usb_interface
+from diagng.common.main_window.usb_interfaces import create_usb_interfaces
 from diagng.common.main_window.spi_modems import create_spi_modem
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
 from diagng.common.main_window.mm_modems import create_mm_modem
-from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.acquisition.qualcomm import spi_input
 from diagng.gobject.serial_port import SerialPort
+from diagng.gobject.usb_device import USBDevice
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
 
@@ -61,7 +61,7 @@ class MainWindow(Adw.ApplicationWindow):
     # UI panel: USB
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
-    usb_interfaces: Gio.ListStore  # Of USBInterface items
+    usb_devices: Gio.ListStore  # Of USBDevice items
 
     nusb_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
@@ -134,13 +134,13 @@ class MainWindow(Adw.ApplicationWindow):
         self.mm_debug_view.set_editable(False)
         self.mm_debug_viewport.set_child(self.mm_debug_view)
 
-        # Build USB interfces list (depends on both
+        # Build USB interfaces list (depends on both
         # nusb raw descriptors and UDev device specs)
 
-        self.usb_interfaces = Gio.ListStore.new(USBInterface)
+        self.usb_devices = Gio.ListStore.new(USBDevice)
 
         self.usb_interfaces_group.bind_model(
-            self.usb_interfaces, create_usb_interface, self
+            self.usb_devices, create_usb_interfaces, self
         )
 
         # Build USB device tree views, for the nusb
@@ -302,8 +302,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         # USB tab
 
-        self.app.connect('notify::udev-debug-data', self.update_usb_interfaces)
-        self.app.connect('notify::nusb-debug-data', self.update_usb_interfaces)
+        self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
+        self.app.connect('notify::udev-debug-data', self.update_usb_devices)
 
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
@@ -343,9 +343,9 @@ class MainWindow(Adw.ApplicationWindow):
 
         # USB tab
 
-        self.update_usb_interfaces()
-        self.update_udev_debug_data()
+        self.update_usb_devices()
         self.update_nusb_debug_data()
+        self.update_udev_debug_data()
 
         # SPI tab
 
@@ -423,25 +423,23 @@ class MainWindow(Adw.ApplicationWindow):
         if self.app.mm_debug_data:
             self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
 
-    def update_usb_interfaces(self, *args):
-        debug('WIP should update USB interfaces here')
-
+    def update_usb_devices(self, *args):
         detect_diag_usb_ports(
             loads(self.app.udev_debug_data or 'null'),
             loads(self.app.nusb_debug_data or 'null'),
-            self.usb_interfaces,
+            self.usb_devices,
         )
-
-    def update_udev_debug_data(self, *args):
-        if self.app.udev_debug_data:
-            self.udev_debug_view.get_buffer().set_text(
-                self.app.udev_debug_data
-            )
 
     def update_nusb_debug_data(self, *args):
         if self.app.nusb_debug_data:
             self.nusb_debug_view.get_buffer().set_text(
                 self.app.nusb_debug_data
+            )
+
+    def update_udev_debug_data(self, *args):
+        if self.app.udev_debug_data:
+            self.udev_debug_view.get_buffer().set_text(
+                self.app.udev_debug_data
             )
 
     def update_tokio_serial_debug_data(self, *args):
