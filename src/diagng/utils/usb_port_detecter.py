@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from gi.repository import Gio
 
-from diagng.gobject.usb_interface import USBInterface
+from diagng.gobject.nusb_interface import USBInterface
 
 # WIP 2026-06-25: Import logic here from usb_modem_pyusb_devfinder.py
 # @ qcsuper.
@@ -35,6 +35,8 @@ input_mode.add_argument(
 
 
 def detect_diag_usb_ports(
-    udev_device_tree: list[dict], nusb_device_tree: list[dict]
-) -> Gio.ListStore[USBInterface]:
+    udev_device_tree: list[dict],
+    nusb_device_tree: list[dict],
+    gobjs_out: Gio.ListStore[USBInterface],
+):
     pass  # WIP

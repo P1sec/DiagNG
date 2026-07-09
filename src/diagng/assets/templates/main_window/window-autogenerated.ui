@@ -120,7 +120,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </property>
                         <child>
-                          <object class="AdwPreferencesGroup">
+                          <object class="AdwPreferencesGroup" id="usb_interfaces_group">
                             <property name="title">Potential Qualcomm Diag USB devices (WIP)</property>
                             <child>
                               <object class="AdwExpanderRow">
