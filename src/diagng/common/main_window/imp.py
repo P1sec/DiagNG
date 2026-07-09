@@ -87,6 +87,24 @@ class MainWindow(Adw.ApplicationWindow):
         self.app = app
         self.set_application(app)
 
+        # Perform data bindings
+
+        self.bind_data()
+
+        # Connect actions
+
+        self.connect_actions()
+
+        # Connect signals
+
+        self.connect_signals()
+
+        # Reset the default UI state
+
+        self.reset_state()
+
+    def bind_data(self):
+
         lang_manager = GtkSource.LanguageManager.new()
 
         # Bind ModemManager modem list
@@ -199,18 +217,6 @@ class MainWindow(Adw.ApplicationWindow):
         self.adw_style_manager = Adw.StyleManager.get_default()
         self.sync_sourceview_theme()
         self.adw_style_manager.connect('notify', self.sync_sourceview_theme)
-
-        # Connect actions
-
-        self.connect_actions()
-
-        # Connect signals
-
-        self.connect_signals()
-
-        # Reset the default UI state
-
-        self.reset_state()
 
     def add_simple_action(
         self, name, callback, param_type: Optional[GLib.VariantType] = None
