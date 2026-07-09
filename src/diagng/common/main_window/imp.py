@@ -12,7 +12,7 @@ from diagng.common.main_window.usb_interfaces import create_usb_interface
 from diagng.common.main_window.spi_modems import create_spi_modem
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
 from diagng.common.main_window.mm_modems import create_mm_modem
-from diagng.gobject.nusb_interface import USBInterface
+from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort

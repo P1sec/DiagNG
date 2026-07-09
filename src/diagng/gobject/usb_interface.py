@@ -16,20 +16,29 @@ from gi.repository import GObject
 
 
 class USBInterface(GObject.Object):
+    vid_pid = GObject.Property(type=str)
+
     usb_class = GObject.Property(type=int)
     usb_subclass = GObject.Property(type=int)
     usb_protocol = GObject.Property(type=int)
 
     num_endpoints = GObject.Property(type=int)
 
-    device_id = GObject.Property(type=str)
+    conf_name = GObject.Property(type=str)
+    intf_name = GObject.Property(type=str)
 
-    udev_vendor_name = GObject.Property(type=str)
-    udev_model_name = GObject.Property(type=str)
+    conf_num = GObject.Property(type=int)
+    intf_num = GObject.Property(type=int)
+    alt_setting_num = GObject.Property(type=int)
 
-    udev_alt_vendor_name = GObject.Property(type=str)
-    udev_alt_model_name = GObject.Property(type=str)
+    device_id = GObject.Property(type=str)  # Unused for the moment?
 
-    udev_tty_device_name = GObject.Property(type=str)
-    udev_kernel_name = GObject.Property(type=str)
+    vendor_name = GObject.Property(type=str)
+    model_name = GObject.Property(type=str)
+
+    alt_vendor_name = GObject.Property(type=str)
+    alt_model_name = GObject.Property(type=str)
+
+    udev_tty_device_path = GObject.Property(type=str)
+    udev_tty_kernel_name = GObject.Property(type=str)
     pass  # XX WIP
