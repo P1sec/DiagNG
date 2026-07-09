@@ -64,46 +64,6 @@ def create_spi_modem(
         connect_btn.add_css_class('pill')
         connect_btn.add_css_class('suggested-action')
 
-        # Annotate devices with USB interface
-
-        subtitle = 'Interface: %s' % port.usb_interface
-
-        # Don't propose to lock devices which are not
-        # known from ModemManager
-
-        if port.mm_obj and item.mm_obj and not port.connected:
-            mm_port = port.mm_obj
-            mm_modem = item.mm_obj
-
-            lock_port_btn = Gtk.Button()
-            lock_port_btn.set_label(
-                'Lock port' if not mm_modem.inhibited else 'Unlock port'
-            )
-            lock_port_btn.add_css_class('pill')
-            port_row.add_suffix(lock_port_btn)
-
-            if not mm_modem.inhibited:
-                lock_port_btn.connect(
-                    'clicked',
-                    window.lock_mm_port,
-                    port,
-                    mm_modem,
-                    mm_port,
-                )
-
-            else:
-                lock_port_btn.connect(
-                    'clicked',
-                    window.unlock_mm_port,
-                    port,
-                    mm_modem,
-                    mm_port,
-                )
-
-            # Annotate devices with ModemManager function
-
-            subtitle += ' | Type: %s' % mm_port.port_type
-
         if port.connected:
             connect_btn.connect(
                 'clicked',
@@ -116,6 +76,15 @@ def create_spi_modem(
                 window.connect_spi_port,
                 port,
             )
+
+        # Annotate devices with USB interface
+
+        subtitle = 'Interface: %s' % port.usb_interface
+
+        # Annotate devices with ModemManager function
+
+        if port.mm_obj:
+            subtitle += ' | Type: %s' % port.mm_obj.port_type
 
         port_row.set_subtitle(GLib.markup_escape_text(subtitle, -1))
 

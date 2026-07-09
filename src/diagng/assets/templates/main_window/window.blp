@@ -241,16 +241,6 @@ template $MainWindow: Adw.ApplicationWindow {
                   title: "/dev/ttyHS0";
 
                   Button {
-                    has-tooltip: true;
-                    label: _("Lock port");
-                    tooltip-text: _("Block ModemManager from interfering with this device");
-
-                    styles [
-                      "pill",
-                    ]
-                  }
-
-                  Button {
                     label: "Connect";
 
                     styles [
@@ -262,16 +252,6 @@ template $MainWindow: Adw.ApplicationWindow {
 
                 Adw.ActionRow {
                   title: "/dev/ttyHS1";
-
-                  Button {
-                    has-tooltip: true;
-                    label: _("Lock port");
-                    tooltip-text: _("Block ModemManager from interfering with this device");
-
-                    styles [
-                      "pill",
-                    ]
-                  }
 
                   Button {
                     label: _("Connect");

@@ -494,104 +494,12 @@ class MainWindow(Adw.ApplicationWindow):
             for obj in vid_pid_to_obj.values():
                 self.serial_modems.append(obj)
 
-    def lock_mm_port(
-        self,
-        target: Gtk.Button,
-        serial_port: SerialPort,
-        mm_modem: ModemManagerModem,
-        mm_port: ModemManagerPort,
-    ):
-        info('lock_mm_port called on %s' % mm_port.device_path)
-
-        if self.app.diagmond_communicator.bus_connected:
-            dialog = Adw.AlertDialog.new('⚠️ Currently not implemented', None)
-            """
-            try:
-                self.app.diagmond_communicator.proxy.LockMMDeviceUDev(
-                    '(ss)',
-                    serial_port.tty_device_path,
-                    serial_port.kernel_name,
-                )
-            except Exception as err:
-                dialog = Adw.AlertDialog.new(
-                    '⚠️ Failed to lock modem', format_exc(err)
-                )
-                error('Failed to lock modem: ' + format_exc(err))
-            else:
-                mm_modem.inhibited = True
-                self.update_serial_modems()
-                dialog = Adw.AlertDialog.new(
-                    'Modem lock instruction sent (⚠️ WIP 2026-06-29)', None
-                )
-            """
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
-        else:
-            dialog = Adw.AlertDialog.new(
-                "⚠️ diagmond not available, can't lock modem", None
-            )
-            error("diagmond not available, can't lock modem")
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
-
-    def unlock_mm_port(
-        self,
-        target: Gtk.Button,
-        serial_port: SerialPort,
-        mm_modem: ModemManagerModem,
-        mm_port: ModemManagerPort,
-    ):
-        info('unlock_mm_port called on %s' % mm_port.device_path)
-
-        if self.app.diagmond_communicator.bus_connected:
-            dialog = Adw.AlertDialog.new('⚠️ Currently not implemented', None)
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
-            """
-            try:
-                self.app.diagmond_communicator.proxy.ReleaseMMDeviceUDev(
-                    '(ss)',
-                    serial_port.tty_device_path,
-                    serial_port.kernel_name,
-                )
-            except Exception as err:
-                dialog = Adw.AlertDialog.new(
-                    '⚠️ Failed to release modem', format_exc(err)
-                )
-                error('Failed to release modem: ' + format_exc(err))
-
-                dialog.add_response('ok', 'Ok')
-                dialog.choose(self, None, None)
-            else:
-                mm_modem.inhibited = False
-                self.update_serial_modems()
-            """
-        else:
-            dialog = Adw.AlertDialog.new(
-                "⚠️ diagmond not available, can't release modem", None
-            )
-            error("diagmond not available, can't release modem")
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
-
     def on_quit(self, *args):
         if (
             self.app.diagmond_serialdevice_om
             and self.app.diagmond_serialdevice_om.om
         ):
             self.app.diagmond_serialdevice_om.remove_dangling_objects()
-
-        """
-        for pos in range(
-            self.app.modem_manager.mm_instance.modems.get_n_items()
-        ):
-            mm_modem = self.app.modem_manager.mm_instance.modems.get_item(pos)
-
-            if mm_modem.inhibited:
-                # ⚠️ ⚠️ TODO NOT FUNCTIONAL CURRENTLY:
-                # ==> UPDATE THE ARGUMENTS TO THIS FUNCTION CALL
-                pass  # self.unlock_mm_port(None, mm_modem)
-        """
 
     def disconnect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('disconnect_spi_port called on %s' % serial_port.tty_device_path)

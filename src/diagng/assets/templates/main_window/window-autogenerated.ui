@@ -295,16 +295,6 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                     <property name="title">/dev/ttyHS0</property>
                                     <child>
                                       <object class="GtkButton">
-                                        <property name="has-tooltip">true</property>
-                                        <property name="label" translatable="yes">Lock port</property>
-                                        <property name="tooltip-text" translatable="yes">Block ModemManager from interfering with this device</property>
-                                        <style>
-                                          <class name="pill"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton">
                                         <property name="label">Connect</property>
                                         <style>
                                           <class name="pill"/>
@@ -317,16 +307,6 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">/dev/ttyHS1</property>
-                                    <child>
-                                      <object class="GtkButton">
-                                        <property name="has-tooltip">true</property>
-                                        <property name="label" translatable="yes">Lock port</property>
-                                        <property name="tooltip-text" translatable="yes">Block ModemManager from interfering with this device</property>
-                                        <style>
-                                          <class name="pill"/>
-                                        </style>
-                                      </object>
-                                    </child>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="label" translatable="yes">Connect</property>

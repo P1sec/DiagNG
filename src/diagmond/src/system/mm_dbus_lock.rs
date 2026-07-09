@@ -16,7 +16,7 @@ pub async fn lock_device(connection: &Connection, device_name: &str) -> Result<(
 
     // TODO
     // See: https://github.com/P1sec/QCSuper/blob/master/src/qcsuper/inputs/usb_modem_pyserial.py
-    // DROP INHIBITPROXY FOR NOW (BECAUSE OF https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
+    // DROP INHIBITDEVICE FOR NOW (BECAUSE OF https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075)
     // AND USE UDEV RULES INSTEAD
 
     // ^ WE NEED SOMETHING ELSE THAN THE DEVICE_UID FROM MODEMMANAGER
