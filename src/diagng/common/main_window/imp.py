@@ -543,18 +543,29 @@ class MainWindow(Adw.ApplicationWindow):
             usb_intf.connected = True
             self.update_serial_modems()
 
-            self.app.diagmond_communicator.proxy.OpenUSBInterface(
-                '(sayqqyyy)',
-                usb_dev.bus_id,
-                usb_dev.port_chain,
-                int(usb_dev.vid_pid.split(':')[0], 16),
-                int(usb_dev.vid_pid.split(':')[1], 16),
-                usb_intf.conf_num,
-                usb_intf.intf_num,
-                usb_intf.alt_setting_num,
-                result_handler=port_opened,
-                user_data=(usb_dev, usb_intf),
-            )
+            if usb_intf.udev_tty_device_path:
+                self.app.diagmond_communicator.proxy.OpenSerialPort(
+                    '(ss)',
+                    usb_intf.udev_tty_device_path,
+                    usb_intf.udev_tty_kernel_name,
+                    result_handler=port_opened,
+                    user_data=(usb_dev, usb_intf),
+                )
+            else:
+                self.app.diagmond_communicator.proxy.OpenUSBInterface(
+                    '(sssayqqyyy)',
+                    usb_intf.udev_tty_device_path or '',
+                    usb_intf.udev_tty_kernel_name or '',
+                    usb_dev.bus_id,
+                    usb_dev.port_chain,
+                    int(usb_dev.vid_pid.split(':')[0], 16),
+                    int(usb_dev.vid_pid.split(':')[1], 16),
+                    usb_intf.conf_num,
+                    usb_intf.intf_num,
+                    usb_intf.alt_setting_num,
+                    result_handler=port_opened,
+                    user_data=(usb_dev, usb_intf),
+                )
         else:
             dialog = Adw.AlertDialog.new(
                 "⚠️ diagmond not available, can't open interface", None

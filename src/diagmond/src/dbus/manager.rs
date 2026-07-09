@@ -1,3 +1,7 @@
+use nusb::descriptors::TransferType;
+use nusb::io::{EndpointRead, EndpointWrite};
+use nusb::list_devices;
+use nusb::transfer::{Bulk, Direction, In, Out};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::sync::mpsc::unbounded_channel;
 use tokio_serial::SerialPortBuilderExt;
@@ -26,14 +30,150 @@ impl Diagmond {
     async fn open_usb_interface(
         &mut self,
         #[zbus(object_server)] _obj_server: &ObjectServer,
-        _bus_id: String,
-        _port_chain: Vec<u8>,
-        _vid: u16,
-        _pid: u16,
-        _configuration: u8,
-        _interface: u8,
-        _alt_setting: u8,
+        device_path: String,
+        kernel_path: String,
+        bus_id: String,
+        port_chain: Vec<u8>,
+        vid: u16,
+        pid: u16,
+        configuration_id: u8,
+        interface_id: u8,
+        alt_setting_id: u8,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        // Add UDev rule if ModemManager is running
+
+        if kernel_path.len() > 0 {
+            if let Err(error) =
+                crate::system::mm_udev_lock::lock_device(&device_path, &kernel_path).await
+            {
+                log::error!(
+                    "Could not add UDev lock for ModemManager device {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    error
+                );
+                return Err(zbus::fdo::Error::Failed(error.to_string()));
+            }
+        }
+
+        let mut devices = match list_devices().await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not list USB devices: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+
+        let device_info = match devices.find(|dev| {
+            dev.bus_id() == bus_id
+                && dev.port_chain().to_vec() == port_chain
+                && dev.vendor_id() == vid
+                && dev.product_id() == pid
+        }) {
+            Some(obj) => obj,
+            None => {
+                log::error!("Could not find USB device");
+                return Err(zbus::fdo::Error::Failed(
+                    "Could not find USB device".to_string(),
+                ));
+            }
+        };
+
+        let device = match device_info.open().await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not open USB device: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+
+        device.detach_kernel_driver(interface_id).ok();
+
+        if let Err(err) = device.set_configuration(configuration_id).await {
+            log::error!("Could not set USB device configuration: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        };
+
+        let interface = match device.claim_interface(interface_id).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not claim USB device interface: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+
+        if let Err(err) = interface.set_alt_setting(alt_setting_id).await {
+            log::error!("Could not set USB alternate setting: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        };
+
+        let mut endpoints = match interface.descriptor() {
+            Some(obj) => obj,
+            None => {
+                log::error!("Could not retrieve USB interface descriptor");
+                return Err(zbus::fdo::Error::Failed(
+                    "Could not retrieve USB interface descriptor".to_string(),
+                ));
+            }
+        }
+        .endpoints();
+
+        let out_endpoint_addr = match endpoints.find(|endpoint| {
+            endpoint.direction() == Direction::Out && endpoint.transfer_type() == TransferType::Bulk
+        }) {
+            Some(obj) => obj,
+            None => {
+                log::error!("Could not find outbound descriptor");
+                return Err(zbus::fdo::Error::Failed(
+                    "Could not find outbound descriptor".to_string(),
+                ));
+            }
+        }
+        .address();
+
+        let in_endpoint_addr = match endpoints.find(|endpoint| {
+            endpoint.direction() == Direction::In && endpoint.transfer_type() == TransferType::Bulk
+        }) {
+            Some(obj) => obj,
+            None => {
+                log::error!("Could not find inbound descriptor");
+                return Err(zbus::fdo::Error::Failed(
+                    "Could not find inbound descriptor".to_string(),
+                ));
+            }
+        }
+        .address();
+
+        let out_endpoint = match interface.endpoint::<Bulk, Out>(out_endpoint_addr) {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not open USB outbound descriptor: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+
+        let in_endpoint = match interface.endpoint::<Bulk, In>(in_endpoint_addr) {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not open USB inbound descriptor: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            }
+        };
+
+        let mut out_writer = out_endpoint.writer(4096);
+
+        let in_reader = in_endpoint.reader(4096);
+
+        if let Err(err) = out_writer.shutdown().await {
+            log::error!("Could not shutdown writer: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        };
+
+        if let Err(err) = device.attach_kernel_driver(interface_id) {
+            log::error!("Could not reattach kernel drivers: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        };
+
         log::error!("Not implemented yet: OpenUSBInterface");
 
         Err(zbus::fdo::Error::Failed("Not implemented yet".to_string()))
@@ -56,6 +196,22 @@ impl Diagmond {
         //
         //   => https://github.com/berkowski/tokio-serial/blob/master/examples/serial_println.rs
         //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialPortBuilder.html
+
+        // Add UDev rule if ModemManager is running
+
+        if kernel_path.len() > 0 {
+            if let Err(error) =
+                crate::system::mm_udev_lock::lock_device(&device_path, &kernel_path).await
+            {
+                log::error!(
+                    "Could not add UDev lock for ModemManager device {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    error
+                );
+                return Err(zbus::fdo::Error::Failed(error.to_string()));
+            }
+        }
 
         log::debug!("Opening {}...", device_path);
 
@@ -92,27 +248,11 @@ impl Diagmond {
             self.serial_device_ctr
         ))
         .unwrap();
-        log::debug!("Listening to {}...", object_path);
         self.serial_device_ctr += 1;
+        log::debug!("Trying to register {}...", object_path);
 
         obj_server.at(&object_path, dev).await?;
         log::debug!("{} registered...", object_path);
-
-        // Add UDev rule if ModemManager is running
-
-        if kernel_path.len() > 0 {
-            if let Err(error) =
-                crate::system::mm_udev_lock::lock_device(&device_path, &kernel_path).await
-            {
-                log::error!(
-                    "Could not add UDev lock for ModemManager device {} (KERNEL=={}): {:?}",
-                    device_path,
-                    kernel_path,
-                    error
-                );
-                return Err(zbus::fdo::Error::Failed(error.to_string()));
-            }
-        }
 
         // Read port until closed
 

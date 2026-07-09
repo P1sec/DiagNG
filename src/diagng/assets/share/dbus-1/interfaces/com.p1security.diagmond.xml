@@ -73,6 +73,10 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 
         <!--
             OpenUSBInterface:
+            @device_path: TTY device path to block
+              from ModemManager to use, if applicable
+            @kernel_path: UDev kernel name to block
+              from ModemManager to use, if applicable
             @bus_id: Bus ID from the nusb library
             @port_chain: Port chain from the nusb library
             @vendor_id: VID of the USB device on which
@@ -90,6 +94,8 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
               this operation
         -->
         <method name="OpenUSBInterface">
+            <arg type="s" name="device_path" direction="in" />
+            <arg type="s" name="kernel_path" direction="in" />
             <arg type="s" name="bus_id" direction="in" />
             <arg type="ay" name="port_chain" direction="in" />
             <arg type="q" name="vendor_id" direction="in" />
