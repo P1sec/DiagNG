@@ -13,7 +13,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
           <lookup name="item" type="GtkListItem">GtkListItem</lookup>
         </binding>
         <binding name="hide-expander">
-          <lookup name="is_empty" type="NusbDevice">
+          <lookup name="is_empty" type="NusbTreeNode">
             <lookup name="item" type="GtkTreeListRow">
               <lookup name="item" type="GtkListItem">GtkListItem</lookup>
             </lookup>
@@ -23,7 +23,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
           <object class="GtkLabel">
             <property name="use-markup">true</property>
             <binding name="label">
-              <lookup name="description" type="NusbDevice">
+              <lookup name="description" type="NusbTreeNode">
                 <lookup name="item" type="GtkTreeListRow">
                   <lookup name="item" type="GtkListItem">GtkListItem</lookup>
                 </lookup>

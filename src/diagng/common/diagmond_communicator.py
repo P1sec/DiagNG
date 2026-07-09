@@ -5,7 +5,7 @@ from typing import List, Dict
 from json import dumps, loads
 from logging import debug
 
-from diagng.gobject.nusb_device import NusbDevice
+from diagng.gobject.nusb_tree_node import NusbTreeNode
 from diagng.gobject.udev_rule import UDevRule
 
 #  ⚠️ ⚠️   https://docs.gtk.org/gio/func.bus_watch_name.html
@@ -31,7 +31,7 @@ class DiagmondCommunicator(GObject.Object):
         self.main_app = main_app
         self.connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
 
-        self.nusb_device_tree = Gio.ListStore.new(NusbDevice)
+        self.nusb_device_tree = Gio.ListStore.new(NusbTreeNode)
 
         self.udev_rules_model = Gio.ListStore()
 
@@ -135,7 +135,7 @@ class DiagmondCommunicator(GObject.Object):
                     self.nusb_device_tree.remove_all()
 
                     def visit(store: Gio.ListStore, item: dict[str, object]):
-                        obj = NusbDevice()
+                        obj = NusbTreeNode()
                         obj.description = item['description']
                         obj.original_json = item['original_json']
                         obj.children = Gio.ListStore()
