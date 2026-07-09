@@ -39,4 +39,22 @@ def detect_diag_usb_ports(
     nusb_device_tree: list[dict],
     gobjs_out: Gio.ListStore[USBInterface],
 ):
-    pass  # WIP
+    with gobjs_out.freeze_notify():
+        gobjs_out.remove_all()
+
+        if nusb_device_tree and nusb_device_tree.get('device_tree'):
+            for bus in nusb_device_tree['device_tree']:
+                for device in bus['devices']:
+                    vid_pid = device['vendor_id'] + ':' + device['product_id']
+                    for configuration in device['configurations']:
+                        for interface in configuration['interfaces']:
+                            intf_class = interface['class']
+                            intf_subclass = interface['subclass']
+                            intf_subprotocol = interface['protocol']
+                            for alt_setting in interface['alt_settings']:
+                                num_endpoints = len(alt_setting['endpoints'])
+
+                                pass  # WIP process this data
+
+                                # TODO: Handle having multiple time the
+                                # same device model on the USB tree?

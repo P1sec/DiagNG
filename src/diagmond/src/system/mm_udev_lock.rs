@@ -74,6 +74,15 @@ pub async fn reload_udev_rules(device_name: Option<&str>) -> zbus::Result<()> {
 }
 
 pub async fn lock_device(full_name: &str, kernel_name: &str) -> zbus::Result<()> {
+    let kernel_name = kernel_name
+        .replace("\"", "")
+        .replace("/", "")
+        .replace("\\", "")
+        .replace("\n", "")
+        .replace("\r", "")
+        .replace("\t", "")
+        .replace("\x00", "");
+
     // Add udev rule to "/run/udev/rules.d"
 
     let file_name = format!(
