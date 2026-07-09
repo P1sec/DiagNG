@@ -45,19 +45,6 @@ class MainWindow(Adw.ApplicationWindow):
     spi_link_banner: Adw.ActionRow = Gtk.Template.Child()
     adb_link_banner: Adw.ActionRow = Gtk.Template.Child()
 
-    # UI panel: ModemManager
-
-    mm_status_row: Adw.ActionRow = Gtk.Template.Child()
-    mm_status_label: Gtk.Label = Gtk.Template.Child()
-    mm_version_row: Adw.ActionRow = Gtk.Template.Child()
-    mm_version_label: Gtk.Label = Gtk.Template.Child()
-
-    detected_modems_group: Adw.PreferencesGroup = Gtk.Template.Child()
-
-    mm_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
-    mm_debug_view: GtkSource
-    mm_sourceview_buffer: GtkSource.Buffer
-
     # UI panel: USB
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
@@ -85,6 +72,19 @@ class MainWindow(Adw.ApplicationWindow):
     tokio_serial_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     tokio_serial_debug_view: GtkSource.View
     tokio_serial_sourceview_buffer: GtkSource.Buffer
+
+    # UI panel: ModemManager
+
+    mm_status_row: Adw.ActionRow = Gtk.Template.Child()
+    mm_status_label: Gtk.Label = Gtk.Template.Child()
+    mm_version_row: Adw.ActionRow = Gtk.Template.Child()
+    mm_version_label: Gtk.Label = Gtk.Template.Child()
+
+    detected_modems_group: Adw.PreferencesGroup = Gtk.Template.Child()
+
+    mm_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
+    mm_debug_view: GtkSource
+    mm_sourceview_buffer: GtkSource.Buffer
 
     # UI panel: UDev
 
@@ -115,33 +115,6 @@ class MainWindow(Adw.ApplicationWindow):
     def bind_data(self):
 
         lang_manager = GtkSource.LanguageManager.new()
-
-        # Bind ModemManager modem list
-
-        self.detected_modems_group.bind_model(
-            self.app.modem_manager.mm_instance.modems, create_mm_modem
-        )
-
-        # Build ModemManager debug SourceView
-
-        self.mm_sourceview_buffer = GtkSource.Buffer.new_with_language(
-            lang_manager.get_language('json')
-        )
-
-        self.mm_debug_view = GtkSource.View.new_with_buffer(
-            self.mm_sourceview_buffer
-        )
-        self.mm_debug_view.set_editable(False)
-        self.mm_debug_viewport.set_child(self.mm_debug_view)
-
-        # Build USB interfaces list (depends on both
-        # nusb raw descriptors and UDev device specs)
-
-        self.usb_devices = Gio.ListStore.new(USBDevice)
-
-        self.usb_interfaces_group.bind_model(
-            self.usb_devices, create_usb_interfaces, self
-        )
 
         # Build USB device tree views, for the nusb
         # and UDev data sources
@@ -176,7 +149,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.nusb_debug_view.set_editable(False)
         self.nusb_debug_viewport.set_child(self.nusb_debug_view)
 
-        # Build UDev debug SourceView
+        # Build UDev devices debug SourceView
 
         self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language('json')
@@ -224,6 +197,33 @@ class MainWindow(Adw.ApplicationWindow):
             self.tokio_serial_debug_view
         )
 
+        # Bind ModemManager modem list
+
+        self.detected_modems_group.bind_model(
+            self.app.modem_manager.mm_instance.modems, create_mm_modem
+        )
+
+        # Build ModemManager debug SourceView
+
+        self.mm_sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
+        )
+
+        self.mm_debug_view = GtkSource.View.new_with_buffer(
+            self.mm_sourceview_buffer
+        )
+        self.mm_debug_view.set_editable(False)
+        self.mm_debug_viewport.set_child(self.mm_debug_view)
+
+        # Build USB interfaces list (depends on both
+        # nusb raw descriptors and UDev device specs)
+
+        self.usb_devices = Gio.ListStore.new(USBDevice)
+
+        self.usb_interfaces_group.bind_model(
+            self.usb_devices, create_usb_interfaces, self
+        )
+
         # Build UDev rules list
 
         self.udev_rules_selection.set_model(
@@ -246,23 +246,17 @@ class MainWindow(Adw.ApplicationWindow):
 
     def connect_actions(self):
 
-        def copy_mm_debug_info(*args):
+        def copy_nusb_debug_info(*args):
             clipboard = Gdk.Display.get_default().get_clipboard()
-            clipboard.set(self.app.mm_debug_data)
+            clipboard.set(self.app.nusb_debug_data)
 
-        self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
+        self.add_simple_action('copy-nusb-debug-info', copy_nusb_debug_info)
 
         def copy_udev_debug_info(*args):
             clipboard = Gdk.Display.get_default().get_clipboard()
             clipboard.set(self.app.udev_debug_data)
 
         self.add_simple_action('copy-udev-debug-info', copy_udev_debug_info)
-
-        def copy_nusb_debug_info(*args):
-            clipboard = Gdk.Display.get_default().get_clipboard()
-            clipboard.set(self.app.nusb_debug_data)
-
-        self.add_simple_action('copy-nusb-debug-info', copy_nusb_debug_info)
 
         def copy_tokio_serial_debug_info(*args):
             clipboard = Gdk.Display.get_default().get_clipboard()
@@ -271,6 +265,12 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_simple_action(
             'copy-tokio-serial-debug-info', copy_tokio_serial_debug_info
         )
+
+        def copy_mm_debug_info(*args):
+            clipboard = Gdk.Display.get_default().get_clipboard()
+            clipboard.set(self.app.mm_debug_data)
+
+        self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
 
     def connect_signals(self):
 
@@ -288,25 +288,13 @@ class MainWindow(Adw.ApplicationWindow):
             'notify::bus-connected', self.update_daemon_statuses
         )
 
-        # ModemMananger status
-
-        self.app.modem_manager.mm_instance.connect(
-            'notify', self.update_mm_instance
-        )
-
-        self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
-
-        self.app.modem_manager.mm_instance.modems.connect(
-            'items-changed', self.update_mm_modems
-        )
-
         # USB tab
 
-        self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
-        self.app.connect('notify::udev-debug-data', self.update_usb_devices)
         self.app.modem_manager.mm_instance.modems.connect(
             'items-changed', self.update_usb_devices
         )
+        self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
+        self.app.connect('notify::udev-debug-data', self.update_usb_devices)
 
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
@@ -329,20 +317,22 @@ class MainWindow(Adw.ApplicationWindow):
             self.update_tokio_serial_debug_data,
         )
 
+        # ModemMananger status
+
+        self.app.modem_manager.mm_instance.connect(
+            'notify', self.update_mm_instance
+        )
+
+        self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
+
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_mm_modems
+        )
+
     def reset_state(self):
         # All tabs - banner
 
         self.update_daemon_statuses()
-
-        # ModemManager tab
-
-        self.mm_status_row.set_subtitle('Fetching information...')
-        self.mm_status_label.set_label('')
-        self.mm_version_label.set_label('')
-
-        self.update_mm_modems()
-        self.update_mm_instance()
-        self.update_mm_debug_data()
 
         # USB tab
 
@@ -355,19 +345,22 @@ class MainWindow(Adw.ApplicationWindow):
         self.update_serial_modems()
         self.update_tokio_serial_debug_data()
 
+        # ModemManager tab
+
+        self.mm_status_row.set_subtitle('Fetching information...')
+        self.mm_status_label.set_label('')
+        self.mm_version_label.set_label('')
+
+        self.update_mm_modems()
+        self.update_mm_instance()
+        self.update_mm_debug_data()
+
     def update_daemon_statuses(self, *args):
         mm_running = self.app.modem_manager.mm_instance.is_running
         diagmond_running = self.app.diagmond_communicator.bus_connected
         # udev_reachable = True
         # adb_reachable = True
 
-        self.mm_link_banner.set_title(
-            'ModemManager Link: %s - diagmond status: %s'
-            % (
-                'ON' if mm_running else 'OFF',
-                'ON' if diagmond_running else 'OFF',
-            )
-        )
         self.usb_link_banner.set_title(
             'UDev status: REACHABLE - diagmond status: %s'
             % ('ON' if diagmond_running else 'OFF')
@@ -375,6 +368,13 @@ class MainWindow(Adw.ApplicationWindow):
         self.spi_link_banner.set_title(
             'UDev status: REACHABLE - diagmond status: %s'
             % ('ON' if diagmond_running else 'OFF')
+        )
+        self.mm_link_banner.set_title(
+            'ModemManager Link: %s - diagmond status: %s'
+            % (
+                'ON' if mm_running else 'OFF',
+                'ON' if diagmond_running else 'OFF',
+            )
         )
 
     def sync_sourceview_theme(self, *args):
@@ -386,9 +386,6 @@ class MainWindow(Adw.ApplicationWindow):
                 'dark' in scheme or 'oblivion' in scheme or 'cobalt' in scheme
             )
             if is_dark_mode == is_dark_theme:
-                self.mm_sourceview_buffer.set_style_scheme(
-                    color_scheme_manager.get_scheme(scheme)
-                )
                 self.udev_sourceview_buffer.set_style_scheme(
                     color_scheme_manager.get_scheme(scheme)
                 )
@@ -396,6 +393,9 @@ class MainWindow(Adw.ApplicationWindow):
                     color_scheme_manager.get_scheme(scheme)
                 )
                 self.tokio_serial_sourceview_buffer.set_style_scheme(
+                    color_scheme_manager.get_scheme(scheme)
+                )
+                self.mm_sourceview_buffer.set_style_scheme(
                     color_scheme_manager.get_scheme(scheme)
                 )
                 break

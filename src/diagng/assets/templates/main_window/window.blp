@@ -5,86 +5,6 @@ template $MainWindow: Adw.ApplicationWindow {
   content: Adw.ToolbarView {
     content: Adw.ToastOverlay {
       child: Adw.ViewStack global_stack {
-        Adw.ViewStackPage mm_tab {
-          child: Adw.PreferencesPage mm_tab_page {
-            banner: Adw.Banner mm_link_banner {
-              revealed: true;
-              title: "ModemManager Link: ON - diagmond status: OFF";
-            };
-
-            Adw.PreferencesGroup mm_status_group {
-              title: _("ModemManager system daemon");
-
-              Adw.ActionRow mm_status_row {
-                activatable: true;
-                subtitle: _("PID %d");
-                subtitle-selectable: true;
-                title: _("Daemon status");
-                title-selectable: true;
-
-                Label mm_status_label {
-                  attributes: "0 -1 weight bold";
-                  label: _("Stopped");
-                  selectable: true;
-                }
-              }
-
-              Adw.ActionRow mm_version_row {
-                title: _("Service version");
-                title-selectable: true;
-
-                Label mm_version_label {
-                  label: "1.2.24";
-                  selectable: true;
-                }
-              }
-            }
-
-            Adw.PreferencesGroup detected_modems_group {
-              title: _("Detected modems");
-              visible: false;
-
-              Adw.ExpanderRow {
-                expanded: true;
-                subtitle: "IMEI: 123456 | Firmware: REL_0.645.56";
-                title: "<b>ZTE MF667</b>";
-                title-selectable: true;
-                visible: false;
-
-                Adw.ActionRow {
-                  title: "/dev/ttyUSB0 (type: AT) - Primary";
-                  title-selectable: true;
-                }
-
-                Adw.ActionRow {
-                  title: "/dev/ttyUSB0 (type: QCDM)";
-                  title-selectable: true;
-                }
-              }
-            }
-
-            Adw.PreferencesGroup mm_debug_group {
-              header-suffix: Button {
-                action-name: "win.copy-mm-debug-info";
-                has-tooltip: true;
-                icon-name: "edit-copy-symbolic";
-                tooltip-text: _("Copy to clipboard");
-              };
-
-              title: _("DBus information");
-
-              ScrolledWindow mm_debug_viewport {
-                max-content-height: 240;
-                min-content-height: 240;
-              }
-            }
-          };
-
-          icon-name: "modem-symbolic";
-          name: "mm_tab";
-          title: "ModemManager";
-        }
-
         Adw.ViewStackPage usb_tab {
           child: Adw.PreferencesPage usb_tab_page {
             banner: Adw.Banner usb_link_banner {
@@ -93,7 +13,7 @@ template $MainWindow: Adw.ApplicationWindow {
             };
 
             Adw.PreferencesGroup usb_interfaces_group {
-              title: "Potential Qualcomm Diag USB devices (WIP)";
+              title: "Potential Qualcomm Diag USB devices";
 
               Adw.ExpanderRow {
                 expanded: true;
@@ -315,6 +235,86 @@ template $MainWindow: Adw.ApplicationWindow {
           icon-name: "network-cellular-connected-symbolic";
           name: "adb_tab";
           title: "ADB";
+        }
+
+        Adw.ViewStackPage mm_tab {
+          child: Adw.PreferencesPage mm_tab_page {
+            banner: Adw.Banner mm_link_banner {
+              revealed: true;
+              title: "ModemManager Link: ON - diagmond status: OFF";
+            };
+
+            Adw.PreferencesGroup mm_status_group {
+              title: _("ModemManager system daemon");
+
+              Adw.ActionRow mm_status_row {
+                activatable: true;
+                subtitle: _("PID %d");
+                subtitle-selectable: true;
+                title: _("Daemon status");
+                title-selectable: true;
+
+                Label mm_status_label {
+                  attributes: "0 -1 weight bold";
+                  label: _("Stopped");
+                  selectable: true;
+                }
+              }
+
+              Adw.ActionRow mm_version_row {
+                title: _("Service version");
+                title-selectable: true;
+
+                Label mm_version_label {
+                  label: "1.2.24";
+                  selectable: true;
+                }
+              }
+            }
+
+            Adw.PreferencesGroup detected_modems_group {
+              title: _("Detected modems");
+              visible: false;
+
+              Adw.ExpanderRow {
+                expanded: true;
+                subtitle: "IMEI: 123456 | Firmware: REL_0.645.56";
+                title: "<b>ZTE MF667</b>";
+                title-selectable: true;
+                visible: false;
+
+                Adw.ActionRow {
+                  title: "/dev/ttyUSB0 (type: AT) - Primary";
+                  title-selectable: true;
+                }
+
+                Adw.ActionRow {
+                  title: "/dev/ttyUSB0 (type: QCDM)";
+                  title-selectable: true;
+                }
+              }
+            }
+
+            Adw.PreferencesGroup mm_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-mm-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
+
+              title: _("DBus information");
+
+              ScrolledWindow mm_debug_viewport {
+                max-content-height: 240;
+                min-content-height: 240;
+              }
+            }
+          };
+
+          icon-name: "modem-symbolic";
+          name: "mm_tab";
+          title: "ModemManager";
         }
 
         Adw.ViewStackPage udev_tab {
