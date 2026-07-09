@@ -3,6 +3,8 @@ from collections import defaultdict
 from gi.repository import Gio
 
 from diagng.gobject.usb_interface import USBInterface
+from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.gobject.mm_port import ModemManagerPort
 from diagng.gobject.usb_device import USBDevice
 
 # WIP 2026-06-25: Import logic here from usb_modem_pyusb_devfinder.py
@@ -36,27 +38,30 @@ input_mode.add_argument(
 # items for raw USB ports, eventually.
 
 
-# This recursive function returns
-# whether a matching device was
-# found in the UDev tree
 def visit_udev_tree(
     usb_dev: USBDevice,
     out_obj: USBInterface,
     node: dict[str, object],
+    dev_path_to_mm_obj: dict[str, tuple[ModemManagerModem, ModemManagerPort]],
     target_vid_pid: str,
     target_intf_num: int,
     target_interface: str,
     found_vid_pid=False,
     found_interface=True,
-) -> bool:
+):
     if node.get('usb_vid_pid') == target_vid_pid:
         found_vid_pid = True
+
     if found_vid_pid and node.get('usb_interface') == target_interface:
         if node.get('subsystem') == 'usb' and node.get('name', '').split(
             '.'
         ).pop() != str(target_intf_num):
-            return False
-        found_interface = True
+            return
+            # Good interface endpoints signature
+            # but wrong interface ID, stop
+            # propagating
+        else:
+            found_interface = True
 
     if found_vid_pid:
         if node.get('vendor_alt') and not usb_dev.alt_vendor_name:
@@ -68,32 +73,46 @@ def visit_udev_tree(
         if found_interface and node.get('subsystem') == 'tty':
             out_obj.udev_tty_device_path = node.get('name')
             out_obj.udev_tty_kernel_name = node.get('kernel_name')
-            # ⚠️ TODO add data bindings from ModemManager data ⚠️
+
+            if out_obj.udev_tty_device_path in dev_path_to_mm_obj:
+                usb_dev.mm_obj, out_obj.mm_obj = dev_path_to_mm_obj[
+                    out_obj.udev_tty_device_path
+                ]
 
     if node.get('children'):
         for child in node['children']:
-            found = visit_udev_tree(
+            visit_udev_tree(
                 usb_dev,
                 out_obj,
                 child,
+                dev_path_to_mm_obj,
                 target_vid_pid,
                 target_intf_num,
                 target_interface,
                 found_vid_pid,
                 found_interface,
             )
-            if found:
-                return True
-
-    return False
 
 
 def detect_diag_usb_ports(
     udev_device_tree: list[dict],
     nusb_device_tree: list[dict],
     gobjs_out: Gio.ListStore[USBDevice],
+    modems: Gio.ListStore[ModemManagerModem],
 ):
     vid_pid_to_usb_device: dict[str, USBDevice] = defaultdict(USBDevice)
+
+    dev_path_to_mm_obj: dict[
+        str, tuple[ModemManagerModem, ModemManagerPort]
+    ] = {}
+
+    for pos in range(modems.get_n_items()):
+        modem = modems.get_item(pos)
+
+        for pos in range(modem.ports.get_n_items()):
+            port = modem.ports.get_item(pos)
+
+            dev_path_to_mm_obj[port.device_path] = (modem, port)
 
     with gobjs_out.freeze_notify():
         gobjs_out.remove_all()
@@ -165,20 +184,26 @@ def detect_diag_usb_ports(
                                 # Do UDev device matching:
                                 if udev_device_tree:
                                     for node in udev_device_tree:
-                                        found = visit_udev_tree(
+                                        visit_udev_tree(
                                             usb_dev,
                                             out_obj,
                                             node,
+                                            dev_path_to_mm_obj,
                                             target_vid_pid=usb_dev.vid_pid,
                                             target_intf_num=intf_num,
                                             target_interface=text_interface,
                                             found_vid_pid=False,
                                             found_interface=False,
                                         )
-                                        if found:
-                                            break
 
-                                usb_dev.interfaces.append(out_obj)
+                                if (
+                                    out_obj.mm_obj
+                                    and out_obj.mm_obj.port_type == 'AT'
+                                ):
+                                    continue
+                                    # False positive
+                                else:
+                                    usb_dev.interfaces.append(out_obj)
 
     for usb_device in vid_pid_to_usb_device.values():
         if usb_device.interfaces.get_n_items():

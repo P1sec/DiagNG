@@ -56,6 +56,9 @@ def create_usb_interfaces(
         if item.udev_tty_device_path:
             intf_subtitle += ', dev=%s' % item.udev_tty_device_path
 
+            if item.mm_obj:
+                intf_subtitle += ', type=%s' % item.mm_obj.port_type
+
         intf_row = Adw.ActionRow.new()
         intf_row.set_title_selectable(True)
         intf_row.set_subtitle_selectable(True)

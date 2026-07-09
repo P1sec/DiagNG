@@ -288,7 +288,7 @@ class MainWindow(Adw.ApplicationWindow):
             'notify::bus-connected', self.update_daemon_statuses
         )
 
-        # ModemMaanger status
+        # ModemMananger status
 
         self.app.modem_manager.mm_instance.connect(
             'notify', self.update_mm_instance
@@ -304,6 +304,9 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
         self.app.connect('notify::udev-debug-data', self.update_usb_devices)
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_usb_devices
+        )
 
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
@@ -428,6 +431,7 @@ class MainWindow(Adw.ApplicationWindow):
             loads(self.app.udev_debug_data or 'null'),
             loads(self.app.nusb_debug_data or 'null'),
             self.usb_devices,
+            self.app.modem_manager.mm_instance.modems,
         )
 
     def update_nusb_debug_data(self, *args):
