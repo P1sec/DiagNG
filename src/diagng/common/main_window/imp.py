@@ -128,11 +128,29 @@ class MainWindow(Adw.ApplicationWindow):
             )
         )
 
-        # Build UDev rules list
+        # Build nusb debug SourceView
 
-        self.udev_rules_selection.set_model(
-            self.app.diagmond_communicator.udev_rules_model
+        self.nusb_sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
         )
+
+        self.nusb_debug_view = GtkSource.View.new_with_buffer(
+            self.nusb_sourceview_buffer
+        )
+        self.nusb_debug_view.set_editable(False)
+        self.nusb_debug_viewport.set_child(self.nusb_debug_view)
+
+        # Build UDev debug SourceView
+
+        self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('json')
+        )
+
+        self.udev_debug_view = GtkSource.View.new_with_buffer(
+            self.udev_sourceview_buffer
+        )
+        self.udev_debug_view.set_editable(False)
+        self.udev_debug_viewport.set_child(self.udev_debug_view)
 
         # Build serial models list (depends on both
         # UDev serial ports and ModemManager modems)
@@ -154,30 +172,6 @@ class MainWindow(Adw.ApplicationWindow):
             )
         )
 
-        # Build UDev debug SourceView
-
-        self.udev_sourceview_buffer = GtkSource.Buffer.new_with_language(
-            lang_manager.get_language('json')
-        )
-
-        self.udev_debug_view = GtkSource.View.new_with_buffer(
-            self.udev_sourceview_buffer
-        )
-        self.udev_debug_view.set_editable(False)
-        self.udev_debug_viewport.set_child(self.udev_debug_view)
-
-        # Build nusb debug SourceView
-
-        self.nusb_sourceview_buffer = GtkSource.Buffer.new_with_language(
-            lang_manager.get_language('json')
-        )
-
-        self.nusb_debug_view = GtkSource.View.new_with_buffer(
-            self.nusb_sourceview_buffer
-        )
-        self.nusb_debug_view.set_editable(False)
-        self.nusb_debug_viewport.set_child(self.nusb_debug_view)
-
         # Build tokio-serial debug SourceView
 
         self.tokio_serial_sourceview_buffer = (
@@ -194,6 +188,12 @@ class MainWindow(Adw.ApplicationWindow):
             self.tokio_serial_debug_view
         )
 
+        # Build UDev rules list
+
+        self.udev_rules_selection.set_model(
+            self.app.diagmond_communicator.udev_rules_model
+        )
+
         # Monitor for dark mode changes
 
         self.adw_style_manager = Adw.StyleManager.get_default()
@@ -206,59 +206,11 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Connect signals
 
-        # self.connect('close-request', self.on_quit)
-        self.app.connect('shutdown', self.on_quit)
-
-        self.app.modem_manager.mm_instance.connect(
-            'notify::is-running', self.update_daemon_statuses
-        )
-        self.app.diagmond_communicator.connect(
-            'notify::bus-connected', self.update_daemon_statuses
-        )
-
-        self.app.modem_manager.mm_instance.connect(
-            'notify', self.update_mm_instance
-        )
-
-        self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
-
-        self.app.modem_manager.mm_instance.modems.connect(
-            'items-changed', self.update_mm_modems
-        )
-
-        self.app.connect(
-            'notify::udev-debug-data', self.update_udev_debug_data
-        )
-        self.app.connect(
-            'notify::nusb-debug-data', self.update_nusb_debug_data
-        )
-
-        self.app.device_scanner.spi_devices.connect(
-            'items-changed', self.update_serial_modems
-        )
-        self.app.modem_manager.mm_instance.modems.connect(
-            'items-changed', self.update_serial_modems
-        )
-
-        self.app.connect(
-            'notify::tokio-serial-debug-data',
-            self.update_tokio_serial_debug_data,
-        )
+        self.connect_signals()
 
         # Reset the default UI state
 
-        self.mm_status_row.set_subtitle('Fetching information...')
-        self.mm_status_label.set_label('')
-        self.mm_version_label.set_label('')
-
-        self.update_daemon_statuses()
-        self.update_serial_modems()
-        self.update_mm_modems()
-        self.update_mm_instance()
-        self.update_mm_debug_data()
-        self.update_udev_debug_data()
-        self.update_nusb_debug_data()
-        self.update_tokio_serial_debug_data()
+        self.reset_state()
 
     def add_simple_action(
         self, name, callback, param_type: Optional[GLib.VariantType] = None
@@ -295,6 +247,82 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_simple_action(
             'copy-tokio-serial-debug-info', copy_tokio_serial_debug_info
         )
+
+    def connect_signals(self):
+
+        # Application exit
+
+        # self.connect('close-request', self.on_quit)
+        self.app.connect('shutdown', self.on_quit)
+
+        # All tabs - banner
+
+        self.app.modem_manager.mm_instance.connect(
+            'notify::is-running', self.update_daemon_statuses
+        )
+        self.app.diagmond_communicator.connect(
+            'notify::bus-connected', self.update_daemon_statuses
+        )
+
+        # ModemMaanger status
+
+        self.app.modem_manager.mm_instance.connect(
+            'notify', self.update_mm_instance
+        )
+
+        self.app.connect('notify::mm-debug-data', self.update_mm_debug_data)
+
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_mm_modems
+        )
+
+        # USB tab
+
+        self.app.connect(
+            'notify::udev-debug-data', self.update_udev_debug_data
+        )
+        self.app.connect(
+            'notify::nusb-debug-data', self.update_nusb_debug_data
+        )
+
+        # SPI tab
+
+        self.app.device_scanner.spi_devices.connect(
+            'items-changed', self.update_serial_modems
+        )
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_serial_modems
+        )
+
+        self.app.connect(
+            'notify::tokio-serial-debug-data',
+            self.update_tokio_serial_debug_data,
+        )
+
+    def reset_state(self):
+        # All tabs - banner
+
+        self.update_daemon_statuses()
+
+        # ModemManager tab
+
+        self.mm_status_row.set_subtitle('Fetching information...')
+        self.mm_status_label.set_label('')
+        self.mm_version_label.set_label('')
+
+        self.update_mm_modems()
+        self.update_mm_instance()
+        self.update_mm_debug_data()
+
+        # USB tab
+
+        self.update_udev_debug_data()
+        self.update_nusb_debug_data()
+
+        # SPI tab
+
+        self.update_serial_modems()
+        self.update_tokio_serial_debug_data()
 
     def update_daemon_statuses(self, *args):
         mm_running = self.app.modem_manager.mm_instance.is_running
