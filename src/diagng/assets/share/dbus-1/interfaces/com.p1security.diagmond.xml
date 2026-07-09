@@ -73,9 +73,12 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 
         <!--
             OpenUSBInterface:
-            @vid_pid: vid:pid (2 x 4 lowercase hex digits
-              separated with a colon) of the USB device
-              on which open a bidirectional interface
+            @bus_id: Bus ID from the nusb library
+            @port_chain: Port chain from the nusb library
+            @vendor_id: VID of the USB device on which
+              to open a bidirectional interface
+            @product_id: PID of the USB device on which
+              to open a bidirectional interface
             @configuration: Configuration ID (starting
               with 1) of the interface to open
             @interface: Interface ID (stating with 0)
@@ -87,7 +90,10 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
               this operation
         -->
         <method name="OpenUSBInterface">
-            <arg type="s" name="vid_pid" direction="in" />
+            <arg type="s" name="bus_id" direction="in" />
+            <arg type="ay" name="port_chain" direction="in" />
+            <arg type="q" name="vendor_id" direction="in" />
+            <arg type="q" name="product_id" direction="in" />
             <arg type="y" name="configuration" direction="in" />
             <arg type="y" name="interface" direction="in" />
             <arg type="y" name="alt_setting" direction="in" />

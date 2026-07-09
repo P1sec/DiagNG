@@ -43,27 +43,13 @@ def visit_udev_tree(
     out_obj: USBInterface,
     node: dict[str, object],
     dev_path_to_mm_obj: dict[str, tuple[ModemManagerModem, ModemManagerPort]],
-    target_vid_pid: str,
-    target_intf_num: int,
-    target_interface: str,
-    found_vid_pid=False,
+    target_usb_name: str,
     found_interface=True,
 ):
-    if node.get('usb_vid_pid') == target_vid_pid:
-        found_vid_pid = True
+    if node.get('name') == target_usb_name:
+        found_interface = True
 
-    if found_vid_pid and node.get('usb_interface') == target_interface:
-        if node.get('subsystem') == 'usb' and node.get('name', '').split(
-            '.'
-        ).pop() != str(target_intf_num):
-            return
-            # Good interface endpoints signature
-            # but wrong interface ID, stop
-            # propagating
-        else:
-            found_interface = True
-
-    if found_vid_pid:
+    if found_interface:
         if node.get('vendor_alt') and not usb_dev.alt_vendor_name:
             usb_dev.alt_vendor_name = node.get('vendor_alt')
             usb_dev.alt_model_name = node.get('model_alt')
@@ -86,10 +72,7 @@ def visit_udev_tree(
                 out_obj,
                 child,
                 dev_path_to_mm_obj,
-                target_vid_pid,
-                target_intf_num,
-                target_interface,
-                found_vid_pid,
+                target_usb_name,
                 found_interface,
             )
 
@@ -100,7 +83,7 @@ def detect_diag_usb_ports(
     gobjs_out: Gio.ListStore[USBDevice],
     modems: Gio.ListStore[ModemManagerModem],
 ):
-    vid_pid_to_usb_device: dict[str, USBDevice] = defaultdict(USBDevice)
+    full_device_id_to_usb_device: dict[str, USBDevice] = defaultdict(USBDevice)
 
     dev_path_to_mm_obj: dict[
         str, tuple[ModemManagerModem, ModemManagerPort]
@@ -121,14 +104,17 @@ def detect_diag_usb_ports(
             for bus in nusb_device_tree['device_tree']:
                 for device in bus['devices']:
                     vid_pid = device['vendor_id'] + ':' + device['product_id']
-
-                    usb_dev = vid_pid_to_usb_device[vid_pid]
-                    usb_dev.full_device_id = '%s-%s' % (
+                    full_device_id = '%s-%s' % (
                         device['bus_string'].lstrip('0'),
                         '.'.join(
                             str(port_num) for port_num in device['port_chain']
                         ),
                     )
+
+                    usb_dev = full_device_id_to_usb_device[full_device_id]
+                    usb_dev.bus_id = device['bus_string']
+                    usb_dev.port_chain = device['port_chain']
+                    usb_dev.full_device_id = full_device_id
                     usb_dev.vid_pid = vid_pid
                     if not usb_dev.interfaces:
                         usb_dev.interfaces = Gio.ListStore.new(USBInterface)
@@ -192,9 +178,6 @@ def detect_diag_usb_ports(
                                 out_obj.usb_protocol = intf_protocol
                                 out_obj.num_endpoints = num_endpoints
 
-                                # ⚠️ TODO: Handle having multiple time the
-                                # same device model on the USB tree?
-
                                 # Do UDev device matching:
                                 if udev_device_tree:
                                     for node in udev_device_tree:
@@ -203,10 +186,7 @@ def detect_diag_usb_ports(
                                             out_obj,
                                             node,
                                             dev_path_to_mm_obj,
-                                            target_vid_pid=usb_dev.vid_pid,
-                                            target_intf_num=intf_num,
-                                            target_interface=text_interface,
-                                            found_vid_pid=False,
+                                            target_usb_name=out_obj.full_intf_id,
                                             found_interface=False,
                                         )
 
@@ -219,6 +199,6 @@ def detect_diag_usb_ports(
                                 else:
                                     usb_dev.interfaces.append(out_obj)
 
-    for usb_device in vid_pid_to_usb_device.values():
+    for usb_device in full_device_id_to_usb_device.values():
         if usb_device.interfaces.get_n_items():
             gobjs_out.append(usb_device)

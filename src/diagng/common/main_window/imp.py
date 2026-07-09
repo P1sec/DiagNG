@@ -544,8 +544,11 @@ class MainWindow(Adw.ApplicationWindow):
             self.update_serial_modems()
 
             self.app.diagmond_communicator.proxy.OpenUSBInterface(
-                '(syyy)',
-                usb_dev.vid_pid,
+                '(sayqqyyy)',
+                usb_dev.bus_id,
+                usb_dev.port_chain,
+                int(usb_dev.vid_pid.split(':')[0], 16),
+                int(usb_dev.vid_pid.split(':')[1], 16),
                 usb_intf.conf_num,
                 usb_intf.intf_num,
                 usb_intf.alt_setting_num,

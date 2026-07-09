@@ -22,6 +22,9 @@ class USBInterface(GObject.Object):
     usb_subclass = GObject.Property(type=int)
     usb_protocol = GObject.Property(type=int)
 
+    bus_id = GObject.Property(type=str)
+    port_chain: list[int]
+
     has_alt_settings = GObject.Property(type=bool, default=False)
     full_intf_id = GObject.Property(type=str)
 

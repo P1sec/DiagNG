@@ -26,7 +26,10 @@ impl Diagmond {
     async fn open_usb_interface(
         &mut self,
         #[zbus(object_server)] _obj_server: &ObjectServer,
-        _vid_pid: String,
+        _bus_id: String,
+        _port_chain: Vec<u8>,
+        _vid: u16,
+        _pid: u16,
         _configuration: u8,
         _interface: u8,
         _alt_setting: u8,
