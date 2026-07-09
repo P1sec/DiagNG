@@ -251,7 +251,10 @@ impl Diagmond {
         self.serial_device_ctr += 1;
         log::debug!("Trying to register {}...", object_path);
 
-        obj_server.at(&object_path, dev).await?;
+        if let Err(err) = obj_server.at(&object_path, dev).await {
+            log::error!("Could not register ZBus secondary interface: {:?}", err);
+            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        }
         log::debug!("{} registered...", object_path);
 
         // Read port until closed
