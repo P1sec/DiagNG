@@ -123,6 +123,12 @@ def detect_diag_usb_ports(
                     vid_pid = device['vendor_id'] + ':' + device['product_id']
 
                     usb_dev = vid_pid_to_usb_device[vid_pid]
+                    usb_dev.full_device_id = '%s-%s' % (
+                        device['bus_string'].lstrip('0'),
+                        '.'.join(
+                            str(port_num) for port_num in device['port_chain']
+                        ),
+                    )
                     usb_dev.vid_pid = vid_pid
                     if not usb_dev.interfaces:
                         usb_dev.interfaces = Gio.ListStore.new(USBInterface)
@@ -168,6 +174,14 @@ def detect_diag_usb_ports(
                                     continue
 
                                 out_obj = USBInterface()
+                                out_obj.has_alt_settings = (
+                                    len(interface['alt_settings']) > 1
+                                )
+                                out_obj.full_intf_id = '%s:%d.%d' % (
+                                    usb_dev.full_device_id,
+                                    conf_num,
+                                    intf_num,
+                                )
                                 out_obj.conf_name = conf_name
                                 out_obj.intf_name = intf_name
                                 out_obj.conf_num = conf_num

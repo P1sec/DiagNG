@@ -4,8 +4,11 @@ from logging import debug, info, error
 from typing import Optional
 
 from diagng.acquisition.qualcomm.spi_input import SerialQCDMInput
+from diagng.acquisition.qualcomm.usb_input import USBQCDMInput
+from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.serial_port import SerialPort
 from diagng.common.qcdm_window import QCDMWindow
+from diagng.gobject.usb_device import USBDevice
 
 import gi
 
@@ -111,7 +114,9 @@ class DiagmondSerialDeviceOM(GObject.Object):
                 user_data=obj_path,
             )
 
-    def create_qcdm_window(self, object_path: str, serial_port: SerialPort):
+    def create_qcdm_window_spi(
+        self, object_path: str, serial_port: SerialPort
+    ):
         proxy = Gio.DBusProxy.new_sync(
             self.connection,
             Gio.DBusProxyFlags.NONE,
@@ -135,6 +140,23 @@ class DiagmondSerialDeviceOM(GObject.Object):
         #    subclassing
 
         input_obj = SerialQCDMInput(proxy, serial_port, self.main_window)
+
+        QCDMWindow(self.main_window, input_obj)
+
+    def create_qcdm_window_usb(
+        self, object_path: str, usb_dev: USBDevice, usb_intf: USBInterface
+    ):
+        proxy = Gio.DBusProxy.new_sync(
+            self.connection,
+            Gio.DBusProxyFlags.NONE,
+            self.interface_info,
+            'com.p1security.diagmond',
+            object_path,
+            'com.p1security.diagmond.SerialDevice',
+            None,
+        )
+
+        input_obj = USBQCDMInput(proxy, usb_dev, usb_intf, self.main_window)
 
         QCDMWindow(self.main_window, input_obj)
 

@@ -12,10 +12,12 @@ from diagng.common.main_window.usb_interfaces import create_usb_interfaces
 from diagng.common.main_window.spi_modems import create_spi_modem
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
 from diagng.common.main_window.mm_modems import create_mm_modem
+from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.acquisition.qualcomm import spi_input
+from diagng.acquisition.qualcomm import usb_input
 from diagng.gobject.serial_port import SerialPort
 from diagng.gobject.usb_device import USBDevice
 
@@ -400,32 +402,6 @@ class MainWindow(Adw.ApplicationWindow):
                 )
                 break
 
-    def update_mm_instance(self, *args):
-        if self.app.modem_manager.mm_instance.initialized:
-            self.mm_status_row.set_subtitle(
-                ('PID %d' % self.app.modem_manager.mm_instance.pid)
-                if self.app.modem_manager.mm_instance.is_running
-                and self.app.modem_manager.mm_instance.pid
-                else ''
-            )
-            self.mm_status_label.set_label(
-                'Started'
-                if self.app.modem_manager.mm_instance.is_running
-                else 'Stopped'
-            )
-            self.mm_version_row.set_visible(
-                self.app.modem_manager.mm_instance.is_running
-            )
-            self.mm_version_label.set_label(
-                self.app.modem_manager.mm_instance.version
-                if self.app.modem_manager.mm_instance.version
-                else ''
-            )
-
-    def update_mm_debug_data(self, *args):
-        if self.app.mm_debug_data:
-            self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
-
     def update_usb_devices(self, *args):
         detect_diag_usb_ports(
             loads(self.app.udev_debug_data or 'null'),
@@ -494,12 +470,95 @@ class MainWindow(Adw.ApplicationWindow):
             for obj in vid_pid_to_obj.values():
                 self.serial_modems.append(obj)
 
+    def update_mm_instance(self, *args):
+        if self.app.modem_manager.mm_instance.initialized:
+            self.mm_status_row.set_subtitle(
+                ('PID %d' % self.app.modem_manager.mm_instance.pid)
+                if self.app.modem_manager.mm_instance.is_running
+                and self.app.modem_manager.mm_instance.pid
+                else ''
+            )
+            self.mm_status_label.set_label(
+                'Started'
+                if self.app.modem_manager.mm_instance.is_running
+                else 'Stopped'
+            )
+            self.mm_version_row.set_visible(
+                self.app.modem_manager.mm_instance.is_running
+            )
+            self.mm_version_label.set_label(
+                self.app.modem_manager.mm_instance.version
+                if self.app.modem_manager.mm_instance.version
+                else ''
+            )
+
+    def update_mm_debug_data(self, *args):
+        if self.app.mm_debug_data:
+            self.mm_debug_view.get_buffer().set_text(self.app.mm_debug_data)
+
     def on_quit(self, *args):
         if (
             self.app.diagmond_serialdevice_om
             and self.app.diagmond_serialdevice_om.om
         ):
             self.app.diagmond_serialdevice_om.remove_dangling_objects()
+
+    def disconnect_usb_intf(
+        self, target: Gtk.Button, usb_dev: USBDevice, usb_intf: USBInterface
+    ):
+        info('disconnect_usb_intf called on %s' % usb_intf.full_intf_id)
+
+        if usb_intf.full_intf_id in usb_input._connected_ports:
+            usb_input._connected_ports[usb_intf.full_intf_id].close()
+
+    def connect_usb_intf(
+        self, target: Gtk.Button, usb_dev: USBDevice, usb_intf: USBInterface
+    ):
+        info('connect_usb_intf called on %s' % usb_intf.full_intf_id)
+
+        if self.app.diagmond_communicator.bus_connected:
+
+            def port_opened(proxy, result: Union[str, Exception], user_data):
+                usb_dev, usb_intf = user_data
+
+                if isinstance(result, Exception):
+                    dialog = Adw.AlertDialog.new(
+                        '⚠️ Failed to open port', repr(result)
+                    )
+                    error('Failed to open port: ' + repr(result))
+
+                    dialog.add_response('ok', 'Ok')
+                    dialog.choose(self, None, None)
+
+                    usb_intf.connected = False
+                    self.update_serial_modems()
+                else:
+                    object_path = result
+                    info('Got new SerialDevice object path: ' + object_path)
+
+                    self.app.diagmond_serialdevice_om.create_qcdm_window_usb(
+                        object_path, usb_dev, usb_intf
+                    )
+
+            usb_intf.connected = True
+            self.update_serial_modems()
+
+            self.app.diagmond_communicator.proxy.OpenUSBInterface(
+                '(syyy)',
+                usb_dev.vid_pid,
+                usb_intf.conf_num,
+                usb_intf.intf_num,
+                usb_intf.alt_setting_num,
+                result_handler=port_opened,
+                user_data=(usb_dev, usb_intf),
+            )
+        else:
+            dialog = Adw.AlertDialog.new(
+                "⚠️ diagmond not available, can't open interface", None
+            )
+            error("diagmond not available, can't open interface")
+            dialog.add_response('ok', 'Ok')
+            dialog.choose(self, None, None)
 
     def disconnect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('disconnect_spi_port called on %s' % serial_port.tty_device_path)
@@ -528,7 +587,7 @@ class MainWindow(Adw.ApplicationWindow):
                     object_path = result
                     info('Got new SerialDevice object path: ' + object_path)
 
-                    self.app.diagmond_serialdevice_om.create_qcdm_window(
+                    self.app.diagmond_serialdevice_om.create_qcdm_window_spi(
                         object_path, serial_port
                     )
 

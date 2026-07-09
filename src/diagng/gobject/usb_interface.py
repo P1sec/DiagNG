@@ -22,6 +22,11 @@ class USBInterface(GObject.Object):
     usb_subclass = GObject.Property(type=int)
     usb_protocol = GObject.Property(type=int)
 
+    has_alt_settings = GObject.Property(type=bool, default=False)
+    full_intf_id = GObject.Property(type=str)
+
+    connected = GObject.Property(type=bool, default=False)
+
     num_endpoints = GObject.Property(type=int)
 
     conf_name = GObject.Property(type=str)

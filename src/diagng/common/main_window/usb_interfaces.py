@@ -39,13 +39,15 @@ def create_usb_interfaces(
     for pos in range(usb_dev.interfaces.get_n_items()):
         item = usb_dev.interfaces.get_item(pos)
 
-        intf_title = 'Configuration %d%s, interface %d%s, alt setting %d' % (
+        intf_title = 'Configuration %d%s, interface %d%s' % (
             item.conf_num,
             '' if not item.conf_name else ' (%s)' % item.conf_name,
             item.intf_num,
             '' if not item.intf_name else ' (%s)' % item.intf_name,
-            item.alt_setting_num,
         )
+
+        if item.has_alt_settings:
+            intf_title += ', alt setting %d' % item.alt_setting_num
 
         intf_subtitle = 'class=%s/subclass=%s/protocol=%s' % (
             item.usb_class,
@@ -64,6 +66,28 @@ def create_usb_interfaces(
         intf_row.set_subtitle_selectable(True)
         intf_row.set_title(GLib.markup_escape_text(intf_title, -1))
         intf_row.set_subtitle(GLib.markup_escape_text(intf_subtitle, -1))
+
+        connect_btn = Gtk.Button()
+        connect_btn.set_label('Disconnect' if item.connected else 'Connect')
+        connect_btn.add_css_class('pill')
+        connect_btn.add_css_class('suggested-action')
+
+        if item.connected:
+            connect_btn.connect(
+                'clicked',
+                window.disconnect_usb_intf,
+                usb_dev,
+                item,
+            )
+        else:
+            connect_btn.connect(
+                'clicked',
+                window.connect_usb_intf,
+                usb_dev,
+                item,
+            )
+
+        intf_row.add_suffix(connect_btn)
 
         main_row.add_row(intf_row)
 

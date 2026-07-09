@@ -6,7 +6,7 @@ from diagng.gobject.mm_modem import ModemManagerModem
 
 class USBDevice(GObject.Object):
     vid_pid = GObject.Property(type=str)
-    device_id = GObject.Property(type=str)  # Unused for the moment?
+    full_device_id = GObject.Property(type=str)
 
     vendor_name = GObject.Property(type=str)
     model_name = GObject.Property(type=str)

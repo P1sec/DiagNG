@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
-from diagng.gobject.serial_port import SerialPort
+from diagng.gobject.usb_interface import USBInterface
+from diagng.gobject.usb_device import USBDevice
 
 from logging import error, warning, debug
 
@@ -11,56 +12,59 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gio, GLib, Adw
 
-_connected_ports: dict[str, 'SerialQCDMInput'] = {}
+_connected_ports: dict[str, 'USBQCDMInput'] = {}
 
 
-class SerialQCDMInput(BaseQCDMInput):
+class USBQCDMInput(BaseQCDMInput):
     dbus_serial_device: Gio.DBusProxy
-    serial_port: SerialPort
+    usb_dev: USBDevice
+    usb_intf: USBInterface
     main_window: Adw.ApplicationWindow
 
     def __init__(
         self,
         dbus_serial_device: Gio.DBusProxy,
-        serial_port: SerialPort,
+        usb_dev: USBDevice,
+        usb_intf: USBInterface,
         main_window: Adw.ApplicationWindow,
     ):
         super().__init__()
 
         self.dbus_serial_device = dbus_serial_device
-        self.serial_port = serial_port
+        self.usb_dev = usb_dev
+        self.usb_intf = usb_intf
         self.main_window = main_window
 
-        self.serial_port.connected = True
-        self.main_window.update_serial_modems()
-        _connected_ports[serial_port.tty_device_path] = self
+        self.usb_intf.connected = True
+        self.main_window.update_usb_devices()
+        _connected_ports[usb_intf.full_intf_id] = self
 
-        self.short_name = serial_port.tty_device_path
+        self.short_name = usb_intf.full_intf_id
 
         self._update_conn_state()
 
-        self.serial_port.connect('notify::connected', self._update_conn_state)
+        self.usb_intf.connect('notify::connected', self._update_conn_state)
         self.dbus_serial_device.connect('g-signal::Read', self._on_read)
         self.dbus_serial_device.connect('g-signal::Closed', self._on_closed)
 
     def _update_conn_state(self, *args):
         full_name = ''
 
-        if not self.serial_port.connected:
+        if not self.usb_intf.connected:
             full_name += '(DISCONNECTED) - '
 
-        full_name += '%s - ' % self.serial_port.tty_device_path
+        full_name += '%s - ' % self.usb_intf.full_intf_id
 
-        if self.serial_port.usb_vendor_alt:
+        if self.usb_dev.alt_vendor_name:
             full_name += '%s %s -' % (
-                self.serial_port.usb_vendor_alt or '',
-                self.serial_port.usb_product_alt or '',
+                self.usb_dev.alt_vendor_name or '',
+                self.usb_dev.alt_model_name or '',
             )
 
         full_name += '%s %s (%s)' % (
-            self.serial_port.usb_vendor or '',
-            self.serial_port.usb_product or '',
-            self.serial_port.usb_vid_pid or '',
+            self.usb_dev.vendor_name or '',
+            self.usb_dev.model_name or '',
+            self.usb_dev.vid_pid or '',
         )
 
         self.full_name = full_name
@@ -73,7 +77,7 @@ class SerialQCDMInput(BaseQCDMInput):
         parameters: GLib.Variant,
     ):
         data = bytes(parameters[0])
-        debug('Received data from serial port: %r' % data)
+        debug('Received data from USB interface: %r' % data)
         self.process_input(data)
 
     def _on_closed(
@@ -84,30 +88,30 @@ class SerialQCDMInput(BaseQCDMInput):
         parameters: GLib.Variant,
     ):
         self.closed.emit()
-        if self.serial_port.tty_device_path in _connected_ports:
-            del _connected_ports[self.serial_port.tty_device_path]
-        self.serial_port.connected = False
-        self.main_window.update_serial_modems()
+        if self.usb_intf.full_intf_id in _connected_ports:
+            del _connected_ports[self.usb_intf.full_intf_id]
+        self.usb_intf.connected = False
+        self.main_window.update_usb_devices()
 
         reason = str(parameters[0])
-        warning('Serial port closed, reason: ' + reason)
+        warning('USB interface closed, reason: ' + reason)
 
     def send_raw(self, data: bytes):
         def write_cb(proxy, result, obj_path):
             if isinstance(result, Exception):
-                error('Failed to write to serial port: %r' % result)
+                error('Failed to write to USB interface: %r' % result)
 
         self.dbus_serial_device.Write('(ay)', data, result_handler=write_cb)
 
     def close(self):
         def close_cb(proxy, result, obj_path):
             self.closed.emit()
-            if self.serial_port.tty_device_path in _connected_ports:
-                del _connected_ports[self.serial_port.tty_device_path]
-            self.serial_port.connected = False
-            self.main_window.update_serial_modems()
+            if self.usb_intf.full_intf_id in _connected_ports:
+                del _connected_ports[self.usb_intf.full_intf_id]
+            self.usb_intf.connected = False
+            self.main_window.update_usb_devices()
 
             if isinstance(result, Exception):
-                error('Failed to close serial port: %r' % result)
+                error('Failed to close USB interface: %r' % result)
 
         self.dbus_serial_device.Close('()', result_handler=close_cb)

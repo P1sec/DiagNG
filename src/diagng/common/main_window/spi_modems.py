@@ -77,6 +77,8 @@ def create_spi_modem(
                 port,
             )
 
+        port_row.add_suffix(connect_btn)
+
         # Annotate devices with USB interface
 
         subtitle = 'Interface: %s' % port.usb_interface
@@ -87,8 +89,6 @@ def create_spi_modem(
             subtitle += ' | Type: %s' % port.mm_obj.port_type
 
         port_row.set_subtitle(GLib.markup_escape_text(subtitle, -1))
-
-        port_row.add_suffix(connect_btn)
 
         main_row.add_row(port_row)
 
