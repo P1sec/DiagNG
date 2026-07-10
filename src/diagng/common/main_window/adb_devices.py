@@ -32,6 +32,8 @@ def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
 
     # TODO: Handle unauthorized state
 
+    # TODO: Add TCP connection feature
+
     # TODO handle Connect button
     # TODO check root state (+ handle escalation, add dedicated ops?)
     # TODO handle transferring ARM bin to Android (incl. 64 variant?)
