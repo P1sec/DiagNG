@@ -2,6 +2,8 @@ use nusb::descriptors::TransferType;
 use nusb::io::{EndpointRead, EndpointWrite};
 use nusb::list_devices;
 use nusb::transfer::{Bulk, Direction, In, Out};
+use std::sync::Arc;
+use std::sync::Mutex;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::sync::mpsc::unbounded_channel;
 use tokio_serial::SerialPortBuilderExt;
@@ -16,7 +18,7 @@ pub struct Diagmond {
     pub usb_data_pretty: String,
     pub udev_rules: String,
     pub tokio_serial_data: String,
-    pub serial_device_ctr: u64,
+    pub serial_device_ctr: Mutex<u64>,
 }
 
 // WIP 2026-06-22
@@ -28,7 +30,7 @@ pub struct Diagmond {
 impl Diagmond {
     #[zbus(name = "OpenUSBInterface")]
     async fn open_usb_interface(
-        &mut self,
+        &self,
         #[zbus(object_server)] _obj_server: &ObjectServer,
         device_path: String,
         kernel_path: String,
@@ -181,7 +183,7 @@ impl Diagmond {
 
     #[zbus(name = "OpenSerialPort")]
     async fn open_serial_port(
-        &mut self,
+        &self,
         #[zbus(object_server)] obj_server: &ObjectServer,
         device_path: String,
         kernel_path: String,
@@ -245,10 +247,13 @@ impl Diagmond {
 
         let object_path = ObjectPath::try_from(format!(
             "/com/p1security/diagmond/SerialDevices/{}",
-            self.serial_device_ctr
+            self.serial_device_ctr.lock().unwrap()
         ))
         .unwrap();
-        self.serial_device_ctr += 1;
+        {
+            let mut guard = self.serial_device_ctr.lock().unwrap();
+            *guard += 1;
+        }
         log::debug!("Trying to register {}...", object_path);
 
         if let Err(err) = obj_server.at(&object_path, dev).await {

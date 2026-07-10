@@ -23,6 +23,8 @@ use crate::system::usb_devices_pretty::{UsbDeviceTreePretty, device_tree_to_pret
 use std::os::unix::process::CommandExt;
 
 use futures_util::StreamExt;
+use std::sync::Arc;
+use std::sync::Mutex;
 use tokio_serial::SerialPortInfo;
 use zbus::connection::Builder;
 use zbus::fdo::{ObjectManager, RequestNameFlags};
@@ -47,7 +49,7 @@ async fn main() -> zbus::Result<()> {
         usb_data_pretty: "null".to_string(),
         udev_rules: serde_json::to_string_pretty(&udev_rules).unwrap(), // WIP
         tokio_serial_data: "null".to_string(),
-        serial_device_ctr: 1,
+        serial_device_ctr: Mutex::new(1),
     };
 
     let connection = Builder::system()?
