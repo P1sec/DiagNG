@@ -13,13 +13,13 @@ def create_mm_modem(item: ModemManagerModem) -> Adw.ExpanderRow:
     main_row.set_expanded(True)
     main_row.set_title_selectable(True)
     main_row.set_title(
-        '<b>%s</b>' % GLib.markup_escape_text(item.modem_name or '', -1)
+        '<b>%s</b>' % GLib.markup_escape_text(item.modem_name or '??', -1)
     )
     main_row.set_subtitle(
         'IMEI: %s | Firmware: %s'
         % (
-            GLib.markup_escape_text(item.modem_imei or '', -1),
-            GLib.markup_escape_text(item.modem_firmware or '', -1),
+            GLib.markup_escape_text(item.modem_imei or '??', -1),
+            GLib.markup_escape_text(item.modem_firmware or '??', -1),
         )
     )
     for pos in range(item.ports.get_n_items()):

@@ -100,6 +100,12 @@ class USBQCDMInput(BaseQCDMInput):
         def write_cb(proxy, result, obj_path):
             if isinstance(result, Exception):
                 error('Failed to write to USB interface: %r' % result)
+                dialog = Adw.AlertDialog.new(
+                    '⚠️ Failed to write to USB interface', repr(result)
+                )
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self.main_window, None, None)
+                self.close()
 
         self.dbus_serial_device.Write('(ay)', data, result_handler=write_cb)
 

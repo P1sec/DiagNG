@@ -42,8 +42,8 @@ def create_spi_modem(
         main_row.set_subtitle(
             'IMEI: %s | Firmware: %s'
             % (
-                GLib.markup_escape_text(mm_modem.modem_imei or '', -1),
-                GLib.markup_escape_text(mm_modem.modem_firmware or '', -1),
+                GLib.markup_escape_text(mm_modem.modem_imei or '??', -1),
+                GLib.markup_escape_text(mm_modem.modem_firmware or '??', -1),
             )
         )
 

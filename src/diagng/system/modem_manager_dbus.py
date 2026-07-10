@@ -501,8 +501,8 @@ class ModemManagerIntf(GObject.Object):
 
                     modem = ModemManagerModem()
                     modem.modem_name = (
-                        f'{mm_modem.get_manufacturer()} {mm_modem.get_model()}'
-                    )
+                        f'{mm_modem.get_manufacturer() or ""} {mm_modem.get_model() or ""}'
+                    ).strip() or '??'
                     modem.modem_imei = mm_modem.get_equipment_identifier()
                     modem.modem_firmware = mm_modem.get_revision()
                     modem.modem_device_id = mm_modem.get_device()
