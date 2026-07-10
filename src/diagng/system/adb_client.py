@@ -47,6 +47,15 @@ class ADBClient(GObject.Object):
             for device in devices:
                 # print('=====> WIP ⚠️ PROCESS', device)
 
+                # TODO: Use some kind of message queue
+                # in order to read commands from the
+                # main thread instead of polling
+                # the device whenever some
+                # order gets received here?
+                #
+                # (with a 2 sec. timeout to keep
+                # polling the devices list still?)
+
                 obj = ADBDevice()
                 obj.serial_str = device.serial
                 obj.transport_id = device.tags.get('transport_id')
