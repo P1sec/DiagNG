@@ -279,6 +279,20 @@ impl Diagmond {
                 );
             }
 
+            // Disconnect USB interface
+
+            log::debug!("Shutting down USB interface...");
+
+            if let Err(err) = out_writer.shutdown().await {
+                log::warn!("Could not shutdown writer: {:?}", err);
+            };
+
+            if let Err(err) = device.attach_kernel_driver(interface_id) {
+                log::warn!("Could not reattach kernel drivers: {:?}", err);
+            };
+
+            // Notify clients of close operation
+
             if let Some(reason) = reason_closed {
                 log::error!("{}", reason);
 
@@ -306,18 +320,6 @@ impl Diagmond {
                     );
                 }
             }
-
-            // Disconnect USB interface
-
-            log::debug!("Shutting down USB interface...");
-
-            if let Err(err) = out_writer.shutdown().await {
-                log::warn!("Could not shutdown writer: {:?}", err);
-            };
-
-            if let Err(err) = device.attach_kernel_driver(interface_id) {
-                log::warn!("Could not reattach kernel drivers: {:?}", err);
-            };
 
             // Unregister from DBus
 
@@ -490,6 +492,14 @@ impl Diagmond {
                 );
             }
 
+            // Disconnect serial port
+
+            log::debug!("Shutting down serial port...");
+
+            serial_dev.shutdown().await.ok();
+
+            // Notify clients of close operation
+
             if let Some(reason) = reason_closed {
                 log::error!("{}", reason);
 
@@ -517,12 +527,6 @@ impl Diagmond {
                     );
                 }
             }
-
-            // Disconnect serial port
-
-            log::debug!("Shutting down serial port...");
-
-            serial_dev.shutdown().await.ok();
 
             // Unregister from DBus
 

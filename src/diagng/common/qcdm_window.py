@@ -81,5 +81,5 @@ class QCDMWindow(Adw.Window):
             self.device_info_buffer.set_text(pretty_info)
 
         self.input_obj.send_recv(
-            diag_request, req_cb, accept_error=True, retry=True
+            diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
         )

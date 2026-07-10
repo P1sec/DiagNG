@@ -83,6 +83,8 @@ async fn main() -> zbus::Result<()> {
 
         let mut iface = iface_ref.get_mut().await;
         iface.udev_rules = udev_rules.clone();
+
+        iface_ref.udev_rules_updated(&udev_rules).await?;
     }
 
     // Spawn inotify watch over /run/udev/rules.d

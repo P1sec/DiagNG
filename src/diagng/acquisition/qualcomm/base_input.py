@@ -93,6 +93,7 @@ class BaseQCDMInput(GObject.Object):
         callback: Callable[[DiagResponse], None],
         accept_error: bool = True,
         retry: bool = True,
+        retry_delay: int = 4,
     ):
         def temp_callback(
             self, diag_response: DiagResponse, raw_response: bytes
@@ -120,7 +121,6 @@ class BaseQCDMInput(GObject.Object):
                 callback(diag_response)
 
         if retry:
-            TIMER_INTERVAL = 4
 
             def on_timeout():
                 nonlocal timeout_id
@@ -138,7 +138,7 @@ class BaseQCDMInput(GObject.Object):
 
                 return GLib.SOURCE_CONTINUE
 
-            timeout_id = GLib.timeout_add_seconds(TIMER_INTERVAL, on_timeout)
+            timeout_id = GLib.timeout_add_seconds(retry_delay, on_timeout)
 
         else:
             timeout_id = None
