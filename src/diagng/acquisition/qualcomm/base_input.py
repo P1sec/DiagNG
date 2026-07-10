@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from logging import warning, debug, info
+from logging import warning, debug, error, info
+from gi.repository import GObject, GLib
 from kaitaistruct import KaitaiStream
 from collections.abc import Callable
-from gi.repository import GObject
 from traceback import format_exc
 from abc import abstractmethod
 from io import BytesIO
@@ -81,18 +81,24 @@ class BaseQCDMInput(GObject.Object):
 
         self.frame_sent.emit(request, buf.getvalue())
 
-        self.send_raw(hdlc_encode(buf.getvalue()))
+        hdlc_data = hdlc_encode(buf.getvalue())
+
+        debug('Trying to send diag frame: %r' % hdlc_data)
+
+        self.send_raw(hdlc_data)
 
     def send_recv(
         self,
         request: DiagRequest,
         callback: Callable[[DiagResponse], None],
-        accept_error: bool = False,
+        accept_error: bool = True,
+        retry: bool = True,
     ):
         def temp_callback(
             self, diag_response: DiagResponse, raw_response: bytes
         ):
             nonlocal handler_id
+            nonlocal timeout_id
 
             OPCODE_ERRORS = [
                 DiagCmd.bad_cmd_f,
@@ -107,10 +113,35 @@ class BaseQCDMInput(GObject.Object):
             if diag_response.cmd_code == request.cmd_code or (
                 accept_error and diag_response.cmd_code in OPCODE_ERRORS
             ):
-                callback(diag_response)
+                if timeout_id is not None:
+                    GLib.source_remove(timeout_id)
                 self.frame_received.disconnect(handler_id)
 
-        # TODO handle some kind of timeout here?
+                callback(diag_response)
+
+        if retry:
+            TIMER_INTERVAL = 4
+
+            def on_timeout():
+                nonlocal timeout_id
+
+                try:
+                    warning(
+                        'Receiving a response timed out, trying to re-send frame...'
+                    )
+                    self.send(request)
+
+                except Exception as err:
+                    error('Could not try to resend frame: ' + format_exc(err))
+                    timeout_id = None
+                    return GLib.SOURCE_REMOVE
+
+                return GLib.SOURCE_CONTINUE
+
+            timeout_id = GLib.timeout_add_seconds(TIMER_INTERVAL, on_timeout)
+
+        else:
+            timeout_id = None
 
         handler_id = self.frame_received.connect(temp_callback)
         self.send(request)
