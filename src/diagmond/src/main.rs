@@ -23,7 +23,6 @@ use crate::system::usb_devices_pretty::{UsbDeviceTreePretty, device_tree_to_pret
 use std::os::unix::process::CommandExt;
 
 use futures_util::StreamExt;
-use std::sync::Arc;
 use std::sync::Mutex;
 use tokio_serial::SerialPortInfo;
 use zbus::connection::Builder;

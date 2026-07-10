@@ -1,8 +1,6 @@
 use nusb::descriptors::TransferType;
-use nusb::io::{EndpointRead, EndpointWrite};
 use nusb::list_devices;
 use nusb::transfer::{Bulk, Direction, In, Out};
-use std::sync::Arc;
 use std::sync::Mutex;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::sync::mpsc::unbounded_channel;
@@ -31,7 +29,7 @@ impl Diagmond {
     #[zbus(name = "OpenUSBInterface")]
     async fn open_usb_interface(
         &self,
-        #[zbus(object_server)] _obj_server: &ObjectServer,
+        #[zbus(object_server)] obj_server: &ObjectServer,
         device_path: String,
         kernel_path: String,
         bus_id: String,
@@ -91,10 +89,18 @@ impl Diagmond {
 
         device.detach_kernel_driver(interface_id).ok();
 
-        if let Err(err) = device.set_configuration(configuration_id).await {
-            log::error!("Could not set USB device configuration: {:?}", err);
-            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
-        };
+        let mut is_configured: bool = false;
+        if let Ok(configuration) = device.active_configuration() {
+            if configuration.configuration_value() == configuration_id {
+                is_configured = true;
+            }
+        }
+        if !is_configured {
+            if let Err(err) = device.set_configuration(configuration_id).await {
+                log::error!("Could not set USB device configuration: {:?}", err);
+                return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+            };
+        }
 
         let interface = match device.claim_interface(interface_id).await {
             Ok(obj) => obj,
@@ -164,21 +170,164 @@ impl Diagmond {
 
         let mut out_writer = out_endpoint.writer(4096);
 
-        let in_reader = in_endpoint.reader(4096);
+        let mut in_reader = in_endpoint.reader(4096);
 
-        if let Err(err) = out_writer.shutdown().await {
-            log::error!("Could not shutdown writer: {:?}", err);
-            return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
+        let (serial_cmd_tx, mut serial_cmd_rx) = unbounded_channel::<SerialCommand>();
+
+        let dev = SerialDevice {
+            serial_cmd_tx: serial_cmd_tx,
         };
 
-        if let Err(err) = device.attach_kernel_driver(interface_id) {
-            log::error!("Could not reattach kernel drivers: {:?}", err);
+        log::debug!("Reading /com/p1security/diagmond properties...");
+
+        let object_path = ObjectPath::try_from(format!(
+            "/com/p1security/diagmond/SerialDevices/{}",
+            self.serial_device_ctr.lock().unwrap()
+        ))
+        .unwrap();
+        {
+            let mut guard = self.serial_device_ctr.lock().unwrap();
+            *guard += 1;
+        }
+        log::debug!("Trying to register {}...", object_path);
+
+        if let Err(err) = obj_server.at(&object_path, dev).await {
+            log::error!("Could not register ZBus secondary interface: {:?}", err);
             return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
-        };
+        }
+        log::debug!("{} registered...", object_path);
 
-        log::error!("Not implemented yet: OpenUSBInterface");
+        // Read port until closed
 
-        Err(zbus::fdo::Error::Failed("Not implemented yet".to_string()))
+        let object_path_clone = object_path.clone();
+        let obj_server = obj_server.clone();
+        tokio::spawn(async move {
+            let mut buffer: [u8; 4096] = [0; 4096];
+            let mut reason_closed: Option<String> = None;
+            loop {
+                tokio::select!(
+                    cmd = serial_cmd_rx.recv() => match cmd {
+                        Some(operation) =>
+                        match operation {
+                            SerialCommand::Write(data) => {
+                                // Cf. https://docs.rs/tokio/1.52.3/tokio/io/trait.AsyncWriteExt.html#method.write_all
+                                if let Err(err) = out_writer.write_all(&data).await {
+                                    reason_closed = Some(format!("Writing to serial USB interface: {:?}", err));
+                                    break;
+                                }
+                                else {
+                                    out_writer.flush().await.ok();
+                                    log::debug!(
+                                        "Sent {} bytes to USB interface",
+                                        data.len()
+                                    );
+                                }
+                            },
+                            SerialCommand::Close => {
+                                log::info!("Closing USB interface on client bail-out...");
+                                break;
+                            }
+                        },
+                        None => {
+                            reason_closed = Some(format!("MPSC channel closed"));
+                            break;
+                        }
+                    },
+                    result = in_reader.read(&mut buffer) => match result {
+                        Ok(size_read) => {
+                            if size_read == 0 {
+                                reason_closed = Some("Received zero-length read result on USB interface".to_string());
+                                break;
+                            }
+                            else {
+                                log::debug!("Read {} bytes from USB interface", size_read);
+
+                                let object_path_clone = object_path_clone.clone();
+                                {
+                                    let iface_ref = match obj_server.interface::<_, SerialDevice>(object_path_clone).await {
+                                        Ok(obj) => obj,
+                                        Err(err) => {
+                                            reason_closed = Some(format!("USB interface object destroyed: {:?}", err));
+                                            break;
+                                        }
+                                    };
+
+                                    // Send Read event
+                                    if let Err(err) = iface_ref.read(buffer[..size_read].to_vec()).await {
+                                        reason_closed = Some(format!("Could not dispatch USB interface data: {:?}", err));
+                                        break;
+                                    }
+                                }
+                            }
+                        },
+                        Err(err) => {
+                            reason_closed = Some(format!("Reading from USB interface failed: {:?}", err));
+                            break;
+                        }
+                    }
+                );
+            }
+
+            if let Some(reason) = reason_closed {
+                log::error!("{}", reason);
+
+                if let Ok(iface_ref) = obj_server
+                    .interface::<_, SerialDevice>(object_path_clone.clone())
+                    .await
+                {
+                    iface_ref.closed(reason).await.ok();
+                }
+            }
+
+            // Remove UDev rule if applicable
+
+            log::debug!("Deleting UDev rule...");
+
+            if kernel_path.len() > 0 {
+                if let Err(error) =
+                    crate::system::mm_udev_lock::unlock_device(&device_path, &kernel_path).await
+                {
+                    log::error!(
+                        "Could not execute Close over USB interface {} (KERNEL=={}): {:?}",
+                        device_path,
+                        kernel_path,
+                        error
+                    );
+                }
+            }
+
+            // Disconnect USB interface
+
+            log::debug!("Shutting down USB interface...");
+
+            if let Err(err) = out_writer.shutdown().await {
+                log::warn!("Could not shutdown writer: {:?}", err);
+            };
+
+            if let Err(err) = device.attach_kernel_driver(interface_id) {
+                log::warn!("Could not reattach kernel drivers: {:?}", err);
+            };
+
+            // Unregister from DBus
+
+            let obj_server = obj_server.clone();
+
+            tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+
+            log::debug!("Unregistering from D-Bus...");
+
+            if let Err(error) = obj_server
+                .remove::<SerialDevice, ObjectPath>(object_path_clone)
+                .await
+            {
+                log::error!(
+                    "Could not unregister SerialDevice object from D-Bus tree: {:?}",
+                    error
+                )
+            }
+        });
+
+        Ok(object_path)
     }
 
     #[zbus(name = "OpenSerialPort")]
@@ -239,8 +388,6 @@ impl Diagmond {
 
         let dev = SerialDevice {
             serial_cmd_tx: serial_cmd_tx,
-            device_name: device_path.clone(),
-            kernel_name: kernel_path.clone(),
         };
 
         log::debug!("Reading /com/p1security/diagmond properties...");
@@ -282,9 +429,8 @@ impl Diagmond {
                                     }
                                     else {
                                         log::debug!(
-                                            "Sent {} bytes to serial port - {}",
-                                            data.len(),
-                                            device_path
+                                            "Sent {} bytes to serial port",
+                                            data.len()
                                         );
                                     }
                                 },
@@ -380,7 +526,7 @@ impl Diagmond {
                 .await
             {
                 log::error!(
-                    "Could not unregister SerialDevice object from D-Bus log: {:?}",
+                    "Could not unregister SerialDevice object from D-Bus tree: {:?}",
                     error
                 )
             }
