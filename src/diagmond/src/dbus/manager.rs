@@ -115,7 +115,7 @@ impl Diagmond {
             return Err(zbus::fdo::Error::Failed(format!("{:?}", err)));
         };
 
-        let mut endpoints = match interface.descriptor() {
+        let intf_descriptor = match interface.descriptor() {
             Some(obj) => obj,
             None => {
                 log::error!("Could not retrieve USB interface descriptor");
@@ -123,10 +123,18 @@ impl Diagmond {
                     "Could not retrieve USB interface descriptor".to_string(),
                 ));
             }
-        }
-        .endpoints();
+        };
 
-        let out_endpoint_addr = match endpoints.find(|endpoint| {
+        for endpoint in intf_descriptor.endpoints() {
+            log::debug!(
+                "Found descriptor on device: direction={:?}, transfer_type={:?}, mtu={:?}",
+                endpoint.direction(),
+                endpoint.transfer_type(),
+                endpoint.max_packet_size()
+            );
+        }
+
+        let out_endpoint_addr = match intf_descriptor.endpoints().find(|endpoint| {
             endpoint.direction() == Direction::Out && endpoint.transfer_type() == TransferType::Bulk
         }) {
             Some(obj) => obj,
@@ -139,7 +147,7 @@ impl Diagmond {
         }
         .address();
 
-        let in_endpoint_addr = match endpoints.find(|endpoint| {
+        let in_endpoint_addr = match intf_descriptor.endpoints().find(|endpoint| {
             endpoint.direction() == Direction::In && endpoint.transfer_type() == TransferType::Bulk
         }) {
             Some(obj) => obj,
@@ -216,7 +224,10 @@ impl Diagmond {
                                     break;
                                 }
                                 else {
-                                    out_writer.flush().await.ok();
+                                    if let Err(err) = out_writer.flush().await {
+                                        reason_closed = Some(format!("Flushing to serial USB interface: {:?}", err));
+                                        break;
+                                    }
                                     log::debug!(
                                         "Sent {} bytes to USB interface",
                                         data.len()
