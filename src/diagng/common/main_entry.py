@@ -10,10 +10,10 @@ import gi
 from diagng.common.diagmond_serialdevice_om import DiagmondSerialDeviceOM
 from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
-from diagng.gobject.mm_instance import ModemManagerInstance
 from diagng.system.udev_device_scanner import DeviceScanner
 from diagng.common.main_window.imp import MainWindow
 from diagng.utils.logging import LoggingCentral
+from diagng.system.adb_client import ADBClient
 
 # Register resources
 import diagng.utils.gresources
@@ -176,6 +176,7 @@ class MainApplication(Adw.Application):
 
         self.window = MainWindow(self)
 
+        self.adb_client = ADBClient(self.window)
         self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
             self.window, self.diagmond_communicator.connection
         )
