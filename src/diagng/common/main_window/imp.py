@@ -531,7 +531,7 @@ class MainWindow(Adw.ApplicationWindow):
                     dialog.choose(self, None, None)
 
                     usb_intf.connected = False
-                    self.update_serial_modems()
+                    self.update_usb_devices()
                 else:
                     object_path = result
                     info('Got new SerialDevice object path: ' + object_path)
@@ -541,7 +541,6 @@ class MainWindow(Adw.ApplicationWindow):
                     )
 
             usb_intf.connected = True
-            self.update_serial_modems()
 
             if usb_intf.udev_tty_device_path:
                 self.app.diagmond_communicator.proxy.OpenSerialPort(

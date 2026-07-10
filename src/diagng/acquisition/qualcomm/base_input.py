@@ -19,6 +19,7 @@ DiagCmd = DiagCmdCode.DiagCmd
 class BaseQCDMInput(GObject.Object):
     short_name = GObject.Property(type=str)
     full_name = GObject.Property(type=str)
+    is_closed = GObject.Property(type=bool, default=False)
 
     buffered_data: bytes = b''
 
@@ -35,8 +36,8 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @GObject.Signal
-    def closed(self):  # Add reason arg eventually?
-        pass
+    def closed(self):
+        self.is_closed = True
 
     @abstractmethod
     def send_raw(self, data: bytes):
@@ -124,6 +125,10 @@ class BaseQCDMInput(GObject.Object):
 
             def on_timeout():
                 nonlocal timeout_id
+
+                if self.is_closed:
+                    timeout_id = None
+                    return GLib.SOURCE_REMOVE
 
                 try:
                     warning(

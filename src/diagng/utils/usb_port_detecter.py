@@ -5,6 +5,7 @@ from gi.repository import Gio
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.mm_port import ModemManagerPort
+from diagng.acquisition.qualcomm import usb_input
 from diagng.gobject.usb_device import USBDevice
 
 # WIP 2026-06-25: Import logic here from usb_modem_pyusb_devfinder.py
@@ -167,6 +168,10 @@ def detect_diag_usb_ports(
                                     usb_dev.full_device_id,
                                     conf_num,
                                     intf_num,
+                                )
+                                out_obj.connected = (
+                                    out_obj.full_intf_id
+                                    in usb_input._connected_ports
                                 )
                                 out_obj.conf_name = conf_name
                                 out_obj.intf_name = intf_name

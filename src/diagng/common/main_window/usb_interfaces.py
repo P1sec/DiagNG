@@ -68,24 +68,31 @@ def create_usb_interfaces(
         intf_row.set_subtitle(GLib.markup_escape_text(intf_subtitle, -1))
 
         connect_btn = Gtk.Button()
-        connect_btn.set_label('Disconnect' if item.connected else 'Connect')
         connect_btn.add_css_class('pill')
         connect_btn.add_css_class('suggested-action')
 
-        if item.connected:
-            connect_btn.connect(
-                'clicked',
-                window.disconnect_usb_intf,
-                usb_dev,
-                item,
+        def update_connected_state(*args):
+            connect_btn.set_label(
+                'Disconnect' if item.connected else 'Connect'
             )
-        else:
-            connect_btn.connect(
-                'clicked',
-                window.connect_usb_intf,
-                usb_dev,
-                item,
-            )
+            if item.connected:
+                connect_btn.connect(
+                    'clicked',
+                    window.disconnect_usb_intf,
+                    usb_dev,
+                    item,
+                )
+            else:
+                connect_btn.connect(
+                    'clicked',
+                    window.connect_usb_intf,
+                    usb_dev,
+                    item,
+                )
+
+        update_connected_state()
+
+        item.connect('notify::connected', update_connected_state)
 
         intf_row.add_suffix(connect_btn)
 

@@ -36,8 +36,8 @@ class USBQCDMInput(BaseQCDMInput):
         self.main_window = main_window
 
         self.usb_intf.connected = True
-        self.main_window.update_usb_devices()
         _connected_ports[usb_intf.full_intf_id] = self
+        self.main_window.update_usb_devices()
 
         self.short_name = usb_intf.full_intf_id
 

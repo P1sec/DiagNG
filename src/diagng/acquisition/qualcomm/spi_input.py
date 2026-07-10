@@ -32,8 +32,8 @@ class SerialQCDMInput(BaseQCDMInput):
         self.main_window = main_window
 
         self.serial_port.connected = True
-        self.main_window.update_serial_modems()
         _connected_ports[serial_port.tty_device_path] = self
+        self.main_window.update_serial_modems()
 
         self.short_name = serial_port.tty_device_path
 
@@ -101,6 +101,7 @@ class SerialQCDMInput(BaseQCDMInput):
                 )
                 dialog.add_response('ok', 'Ok')
                 dialog.choose(self.main_window, None, None)
+                self._on_closed(None, None, None, [repr(result)])
                 self.close()
 
         self.dbus_serial_device.Write('(ay)', data, result_handler=write_cb)
