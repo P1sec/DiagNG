@@ -246,7 +246,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </child>
                         <child>
-                          <object class="AdwPreferencesGroup">
+                          <object class="AdwPreferencesGroup" id="udev_tree_group">
                             <property name="title" translatable="yes">Detailed UDev device tree</property>
                             <child>
                               <object class="GtkScrolledWindow">
@@ -285,6 +285,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title">ADB daemon status: TODO</property>
                           </object>
                         </property>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="adb_devices_group"></object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">network-cellular-connected-symbolic</property>

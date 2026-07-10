@@ -201,7 +201,7 @@ template $MainWindow: Adw.ApplicationWindow {
               }
             }
 
-            Adw.PreferencesGroup {
+            Adw.PreferencesGroup udev_tree_group {
               title: _("Detailed UDev device tree");
 
               ScrolledWindow {
@@ -230,6 +230,8 @@ template $MainWindow: Adw.ApplicationWindow {
               revealed: true;
               title: "ADB daemon status: TODO";
             };
+
+            Adw.PreferencesGroup adb_devices_group {}
           };
 
           icon-name: "network-cellular-connected-symbolic";
