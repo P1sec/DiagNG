@@ -17,13 +17,11 @@ from gi.repository import GObject, Gio, GLib, Adw
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
-    devices = GObject.Property(type=Gio.ListStore)  # Of ADBDevice
     main_window: 'ApplicationWindow'
 
     def __init__(self, main_window):
         super().__init__()
 
-        self.devices = Gio.ListStore.new(ADBDevice)
         self.main_window = main_window
 
         thread = Thread(target=self.device_list_poll_thread)
@@ -44,13 +42,31 @@ class ADBClient(GObject.Object):
         GLib.idle_add(main_thread_cb, error_str)
 
     def process_device_list(self, devices: list[AdbDeviceInfo]):
-        with self.devices.freeze_notify():
-            self.devices.remove_all()
+        with self.main_window.adb_devices.freeze_notify():
+            self.main_window.adb_devices.remove_all()
             for device in devices:
-                print('=====> WIP ⚠️ PROCESS', device)
+                # print('=====> WIP ⚠️ PROCESS', device)
 
                 obj = ADBDevice()
-                self.devices.append(obj)
+                obj.serial_str = device.serial
+                obj.transport_id = device.tags.get('transport_id')
+                obj.model_name = device.tags.get('model')
+                obj.state = device.state
+
+                summary = 'State: %s' % {
+                    'offline': 'Offline',
+                    'bootloader': 'Bootloader',
+                    'device': 'Online',
+                }.get(obj.state)
+
+                summary += ' | ' + ', '.join(
+                    '%s=%s' % (key, value)
+                    for key, value in device.tags.items()
+                )
+
+                # obj.usb_device = XX
+                obj.text_summary = summary.strip(' |')
+                self.main_window.adb_devices.append(obj)
 
     def device_list_poll_thread(self):
 
@@ -73,6 +89,7 @@ class ADBClient(GObject.Object):
                     self.propagate_error(format_exc())
 
                 sleep(2)
+                # next(client.track_devices(), None)
 
         except Exception:
             self.propagate_error(format_exc())

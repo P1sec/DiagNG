@@ -197,7 +197,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">/dev/ttyHS0</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Connect</property>
                                         <style>
@@ -211,7 +211,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">/dev/ttyHS1</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label" translatable="yes">Connect</property>
                                         <style>
@@ -286,7 +286,25 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </property>
                         <child>
-                          <object class="AdwPreferencesGroup" id="adb_devices_group"></object>
+                          <object class="AdwPreferencesGroup" id="adb_devices_group">
+                            <property name="title">ADB devices list</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="subtitle">State: online | usb=3-1.3, product=venus_eea, model=M2011K2G, device=venus</property>
+                                <property name="title">Xiaomi Mi 11 (transport id #1, serial ID d94f4341)</property>
+                                <property name="visible">false</property>
+                                <child type="suffix">
+                                  <object class="GtkButton">
+                                    <property name="label">Connect</property>
+                                    <style>
+                                      <class name="pill"/>
+                                      <class name="suggested-action"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </property>

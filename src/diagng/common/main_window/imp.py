@@ -9,6 +9,7 @@ from json import loads
 import diagng.utils.gresources
 
 from diagng.common.main_window.usb_interfaces import create_usb_interfaces
+from diagng.common.main_window.adb_devices import create_adb_device
 from diagng.common.main_window.spi_modems import create_spi_modem
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
 from diagng.common.main_window.mm_modems import create_mm_modem
@@ -19,6 +20,7 @@ from diagng.gobject.mm_port import ModemManagerPort
 from diagng.acquisition.qualcomm import spi_input
 from diagng.acquisition.qualcomm import usb_input
 from diagng.gobject.serial_port import SerialPort
+from diagng.gobject.adb_device import ADBDevice
 from diagng.gobject.usb_device import USBDevice
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
@@ -74,6 +76,12 @@ class MainWindow(Adw.ApplicationWindow):
     tokio_serial_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
     tokio_serial_debug_view: GtkSource.View
     tokio_serial_sourceview_buffer: GtkSource.Buffer
+
+    # UI panel: ADB
+
+    adb_devices = GObject.Property(type=Gio.ListStore)  # Of ADBDevice
+
+    adb_devices_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     # UI panel: ModemManager
 
@@ -197,6 +205,14 @@ class MainWindow(Adw.ApplicationWindow):
         self.tokio_serial_debug_view.set_editable(False)
         self.tokio_serial_debug_viewport.set_child(
             self.tokio_serial_debug_view
+        )
+
+        # Build ADB devices list
+
+        self.adb_devices = Gio.ListStore.new(ADBDevice)
+
+        self.adb_devices_group.bind_model(
+            self.adb_devices, create_adb_device, self
         )
 
         # Bind ModemManager modem list
