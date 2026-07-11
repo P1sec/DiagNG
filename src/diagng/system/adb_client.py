@@ -57,14 +57,10 @@ class ADBClient(GObject.Object):
                 obj = ADBDevice()
                 obj.serial_str = device.serial
                 obj.transport_id = device.tags.get('transport_id')
-                obj.model_name = device.tags.get('model')
+                obj.model_name = device.tags.get('model') or device.serial
                 obj.state = device.state
 
-                summary = 'State: %s' % {
-                    'offline': 'Offline',
-                    'bootloader': 'Bootloader',
-                    'device': 'Online',
-                }.get(obj.state)
+                summary = 'State: %s' % obj.state.title()
 
                 summary += ' | ' + ', '.join(
                     '%s=%s' % (key, value)
