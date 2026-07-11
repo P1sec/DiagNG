@@ -343,9 +343,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="AdwExpanderRow">
                                     <property name="title">Action 2 (test root?)</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
                                         <style>
@@ -356,9 +356,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="AdwExpanderRow">
                                     <property name="title">Action 3 (switch on Xiaomi QC Diag?)</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
                                         <style>
@@ -369,9 +369,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="AdwExpanderRow">
                                     <property name="title">Action 4 (dial *#0808# for Samsung QC?)</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
                                         <style>
@@ -382,9 +382,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="AdwExpanderRow">
                                     <property name="title">Action 5 (dial *#8011# for Oneplus QC?)</property>
-                                    <child>
+                                    <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
                                         <style>

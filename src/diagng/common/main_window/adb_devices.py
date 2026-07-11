@@ -11,9 +11,9 @@ from gi.repository import Adw, Gtk, GLib
 
 def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
 
-    row = Adw.ActionRow.new()
+    row = Adw.ExpanderRow.new()
+    row.set_expanded(True)
     row.set_title_selectable(True)
-    row.set_subtitle_selectable(True)
     row.set_title(
         '<b>%s</b> (transport id #%s, serial ID %s)'
         % (
