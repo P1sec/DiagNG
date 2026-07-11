@@ -307,21 +307,53 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">Action 1 (test root?)</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Trigger</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">Action 2 (switch on Xiaomi QC Diag?)</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Trigger</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">Action 3 (dial *#0808# for Samsung QC?)</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Trigger</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">Action 4 (dial *#8011# for Oneplus QC?)</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Trigger</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
