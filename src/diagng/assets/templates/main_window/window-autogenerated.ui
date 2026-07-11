@@ -247,7 +247,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="udev_tree_group">
-                            <property name="title" translatable="yes">Detailed UDev device tree</property>
+                            <property name="title" translatable="yes">UDev tree for Diag candidates</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">

@@ -30,16 +30,16 @@ def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
     connect_btn.add_css_class('pill')
     connect_btn.add_css_class('suggested-action')
 
-    # TODO: Handle unauthorized state
+    # TODO: Handle unauthorized state
 
-    # TODO: Add TCP connection feature
+    # TODO: Add TCP connection feature
 
     # TODO handle Connect button
     # TODO check root state (+ handle escalation, add dedicated ops?)
-    # TODO handle transferring ARM bin to Android (incl. 64 variant?)
+    # TODO handle transferring ARM bin to Android (incl. 64 variant?)
     # TODO handle dial codes?
     # TODO: Handle magic APK routes (ex. the Xiaomi thing)?
-    # Cf. https://web.archive.org/web/20260308201119/https://band.radio/diag
+    # Cf. https://web.archive.org/web/20260308201119/https://band.radio/diag
     # ⚠️ http://wiki.dmz.intl.p1sec.io/index.php/Qualcomm_device_USB_bus/Xiaomi_Mi_11#Ways_to_switch_the_diag_endpoint
 
     row.add_suffix(connect_btn)

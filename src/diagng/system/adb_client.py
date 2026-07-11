@@ -4,8 +4,11 @@ from diagng.gobject.adb_device import ADBDevice
 from adbutils import AdbClient, AdbDeviceInfo
 from traceback import format_exc
 from logging import error, info
+from queue import Queue, Empty
 from threading import Thread
+from typing import Union
 from time import sleep
+from enum import Enum
 
 import gi
 
@@ -14,15 +17,33 @@ gi.require_version('Adw', '1')
 from gi.repository import GObject, Gio, GLib, Adw
 
 
+class ADBQueueItemType(Enum):
+    TryRoot = 1
+    SwitchXiaomiDiag = 2
+    SamsungQCDialCode = 3
+    OneplusQCDialCode = 4
+
+
+class ADBQueueItem:
+    item_type: ADBQueueItemType
+    item: Union[None]
+
+    def __init__(self, item_type, item=None):
+        self.item_type = item_type
+        self.item = item
+
+
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
     main_window: 'ApplicationWindow'
+    queue: Queue[ADBQueueItem]
 
     def __init__(self, main_window):
         super().__init__()
 
         self.main_window = main_window
+        self.queue = Queue()
 
         thread = Thread(target=self.device_list_poll_thread)
         thread.daemon = True
@@ -44,17 +65,9 @@ class ADBClient(GObject.Object):
     def process_device_list(self, devices: list[AdbDeviceInfo]):
         with self.main_window.adb_devices.freeze_notify():
             self.main_window.adb_devices.remove_all()
+
             for device in devices:
                 # print('=====> WIP ⚠️ PROCESS', device)
-
-                # TODO: Use some kind of message queue
-                # in order to read commands from the
-                # main thread instead of polling
-                # the device whenever some
-                # order gets received here?
-                #
-                # (with a 2 sec. timeout to keep
-                # polling the devices list still?)
 
                 obj = ADBDevice()
                 obj.serial_str = device.serial
@@ -87,7 +100,31 @@ class ADBClient(GObject.Object):
             client = AdbClient()
             info('Connection to ADB client established')
 
+            # TODO: Use some kind of message queue
+            # in order to read commands from the
+            # main thread instead of polling
+            # the device whenever some
+            # order gets received here?
+            #
+            # (with a 2 sec. timeout to keep
+            # polling the devices list still?)
+
+            WAIT_TIMEOUT = 2
+
             while True:
+                try:
+                    queue_item: ADBQueueItem = self.queue.get(
+                        True, WAIT_TIMEOUT
+                    )
+                except Empty:
+                    pass
+                else:
+                    if (
+                        queue_item.item_type
+                        == ADBQueueItemType.SwitchXiaomiDiag
+                    ):
+                        pass  # TODO process queue_item
+
                 try:
                     GLib.idle_add(
                         self.process_device_list,
@@ -97,7 +134,6 @@ class ADBClient(GObject.Object):
                 except Exception:
                     self.propagate_error(format_exc())
 
-                sleep(2)
                 # next(client.track_devices(), None)
 
         except Exception:
