@@ -4,7 +4,7 @@
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="355d19cb60496b62ffb849b37b726defb2a69e33cf27974181dc05d7bddbedb0"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="2fa7d3bcbea0a55351e5c0336e37424f5f3df2c0a8178cf7a4ee4f4ad04b9663">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="056d58704a0519dfa4e450d202ddb0f92affcc4358f250ea4ec0efa9f47bfbe9">
     <css-provider>style.css</css-provider>
   </ui>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">

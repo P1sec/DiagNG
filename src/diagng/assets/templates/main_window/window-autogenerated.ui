@@ -398,6 +398,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="adb_tcp_group">
+                            <property name="title">Active TCP connections</property>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">network-cellular-connected-symbolic</property>
@@ -599,6 +604,27 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <property name="stack">global_stack</property>
               </object>
             </property>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="menu-model">
+                  <menu>
+                    <section>
+                      <item>
+                        <attribute name="action">win.open_file</attribute>
+                        <attribute name="label">Open File...</attribute>
+                      </item>
+                    </section>
+                    <section>
+                      <item>
+                        <attribute name="action">win.show_about</attribute>
+                        <attribute name="label">About</attribute>
+                      </item>
+                    </section>
+                  </menu>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

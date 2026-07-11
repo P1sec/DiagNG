@@ -334,6 +334,10 @@ template $MainWindow: Adw.ApplicationWindow {
                 }
               }
             }
+
+            Adw.PreferencesGroup adb_tcp_group {
+              title: "Active TCP connections";
+            }
           };
 
           icon-name: "network-cellular-connected-symbolic";
@@ -485,6 +489,27 @@ template $MainWindow: Adw.ApplicationWindow {
       title-widget: Adw.ViewSwitcher view_switcher {
         stack: global_stack;
       };
+
+      [end]
+      MenuButton {
+        icon-name: "open-menu-symbolic";
+
+        menu-model: menu {
+          section {
+            item {
+              action: "win.open_file";
+              label: "Open File...";
+            }
+          }
+
+          section {
+            item {
+              action: "win.show_about";
+              label: "About";
+            }
+          }
+        };
+      }
     }
   };
 
