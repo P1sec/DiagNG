@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from diagng.system.adb_proxy import ADBProxy, ADBQueueItem, ADBQueueItemType
 from diagng.gobject.adb_device import ADBDevice
 
 from adbutils import AdbClient, AdbDeviceInfo
@@ -6,9 +7,6 @@ from traceback import format_exc
 from logging import error, info
 from queue import Queue, Empty
 from threading import Thread
-from typing import Union
-from time import sleep
-from enum import Enum
 
 import gi
 
@@ -17,33 +15,20 @@ gi.require_version('Adw', '1')
 from gi.repository import GObject, Gio, GLib, Adw
 
 
-class ADBQueueItemType(Enum):
-    TryRoot = 1
-    SwitchXiaomiDiag = 2
-    SamsungQCDialCode = 3
-    OneplusQCDialCode = 4
-
-
-class ADBQueueItem:
-    item_type: ADBQueueItemType
-    item: Union[None]
-
-    def __init__(self, item_type, item=None):
-        self.item_type = item_type
-        self.item = item
-
-
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
     main_window: 'ApplicationWindow'
     queue: Queue[ADBQueueItem]
+    proxy: ADBProxy
 
     def __init__(self, main_window):
         super().__init__()
 
         self.main_window = main_window
         self.queue = Queue()
+
+        self.proxy = ADBProxy(self.queue)
 
         thread = Thread(target=self.device_list_poll_thread)
         thread.daemon = True
