@@ -113,6 +113,15 @@ class ADBClient(GObject.Object):
 
             while True:
                 try:
+                    GLib.idle_add(
+                        self.process_device_list,
+                        list(client.list(extended=True)),
+                    )
+
+                except Exception:
+                    self.propagate_error(format_exc())
+
+                try:
                     queue_item: ADBQueueItem = self.queue.get(
                         True, WAIT_TIMEOUT
                     )
@@ -124,15 +133,6 @@ class ADBClient(GObject.Object):
                         == ADBQueueItemType.SwitchXiaomiDiag
                     ):
                         pass  # TODO process queue_item
-
-                try:
-                    GLib.idle_add(
-                        self.process_device_list,
-                        list(client.list(extended=True)),
-                    )
-
-                except Exception:
-                    self.propagate_error(format_exc())
 
                 # next(client.track_devices(), None)
 
