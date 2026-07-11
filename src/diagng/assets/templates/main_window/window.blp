@@ -233,6 +233,24 @@ template $MainWindow: Adw.ApplicationWindow {
               title: "ADB daemon status: TODO";
             };
 
+            Adw.PreferencesGroup adb_daemon_group {
+              title: "ADB daemon status";
+
+              Adw.ActionRow adb_status_row {
+                activatable: true;
+                subtitle: _("locahost:5037");
+                subtitle-selectable: true;
+                title: _("Daemon status");
+                title-selectable: true;
+
+                Label adb_status_label {
+                  attributes: "0 -1 weight bold";
+                  label: _("Connected");
+                  selectable: true;
+                }
+              }
+            }
+
             Adw.PreferencesGroup adb_devices_group {
               title: "ADB devices list";
 
@@ -243,18 +261,32 @@ template $MainWindow: Adw.ApplicationWindow {
                 title-selectable: true;
                 visible: false;
 
-                [suffix]
-                Button {
-                  label: "Connect";
+                Adw.ExpanderRow {
+                  expanded: true;
+                  title: "Action 1 (automatic diag port setup?)";
 
-                  styles [
-                    "pill",
-                    "suggested-action",
-                  ]
+                  [suffix]
+                  Button {
+                    label: "Trigger";
+
+                    styles [
+                      "pill",
+                      "suggested-action",
+                    ]
+                  }
+
+                  Adw.ActionRow {
+                    title: "Step 1";
+
+                    Label {
+                      attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
+                      label: "Failed";
+                    }
+                  }
                 }
 
                 Adw.ActionRow {
-                  title: "Action 1 (test root?)";
+                  title: "Action 2 (test root?)";
 
                   Button {
                     label: "Trigger";
@@ -266,7 +298,7 @@ template $MainWindow: Adw.ApplicationWindow {
                 }
 
                 Adw.ActionRow {
-                  title: "Action 2 (switch on Xiaomi QC Diag?)";
+                  title: "Action 3 (switch on Xiaomi QC Diag?)";
 
                   Button {
                     label: "Trigger";
@@ -278,7 +310,7 @@ template $MainWindow: Adw.ApplicationWindow {
                 }
 
                 Adw.ActionRow {
-                  title: "Action 3 (dial *#0808# for Samsung QC?)";
+                  title: "Action 4 (dial *#0808# for Samsung QC?)";
 
                   Button {
                     label: "Trigger";
@@ -290,7 +322,7 @@ template $MainWindow: Adw.ApplicationWindow {
                 }
 
                 Adw.ActionRow {
-                  title: "Action 4 (dial *#8011# for Oneplus QC?)";
+                  title: "Action 5 (dial *#8011# for Oneplus QC?)";
 
                   Button {
                     label: "Trigger";

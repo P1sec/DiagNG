@@ -286,6 +286,27 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </property>
                         <child>
+                          <object class="AdwPreferencesGroup" id="adb_daemon_group">
+                            <property name="title">ADB daemon status</property>
+                            <child>
+                              <object class="AdwActionRow" id="adb_status_row">
+                                <property name="activatable">true</property>
+                                <property name="subtitle" translatable="yes">locahost:5037</property>
+                                <property name="subtitle-selectable">true</property>
+                                <property name="title" translatable="yes">Daemon status</property>
+                                <property name="title-selectable">true</property>
+                                <child>
+                                  <object class="GtkLabel" id="adb_status_label">
+                                    <property name="attributes">0 -1 weight bold</property>
+                                    <property name="label" translatable="yes">Connected</property>
+                                    <property name="selectable">true</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwPreferencesGroup" id="adb_devices_group">
                             <property name="title">ADB devices list</property>
                             <child>
@@ -295,18 +316,35 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="title">Xiaomi Mi 11 (transport id #1, serial ID d94f4341)</property>
                                 <property name="title-selectable">true</property>
                                 <property name="visible">false</property>
-                                <child type="suffix">
-                                  <object class="GtkButton">
-                                    <property name="label">Connect</property>
-                                    <style>
-                                      <class name="pill"/>
-                                      <class name="suggested-action"/>
-                                    </style>
+                                <child>
+                                  <object class="AdwExpanderRow">
+                                    <property name="expanded">true</property>
+                                    <property name="title">Action 1 (automatic diag port setup?)</property>
+                                    <child type="suffix">
+                                      <object class="GtkButton">
+                                        <property name="label">Trigger</property>
+                                        <style>
+                                          <class name="pill"/>
+                                          <class name="suggested-action"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="AdwActionRow">
+                                        <property name="title">Step 1</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="attributes">0 -1 weight bold, 0 -1 foreground #a4a400000000</property>
+                                            <property name="label">Failed</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
-                                    <property name="title">Action 1 (test root?)</property>
+                                    <property name="title">Action 2 (test root?)</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
@@ -319,7 +357,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
-                                    <property name="title">Action 2 (switch on Xiaomi QC Diag?)</property>
+                                    <property name="title">Action 3 (switch on Xiaomi QC Diag?)</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
@@ -332,7 +370,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
-                                    <property name="title">Action 3 (dial *#0808# for Samsung QC?)</property>
+                                    <property name="title">Action 4 (dial *#0808# for Samsung QC?)</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
@@ -345,7 +383,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 </child>
                                 <child>
                                   <object class="AdwActionRow">
-                                    <property name="title">Action 4 (dial *#8011# for Oneplus QC?)</property>
+                                    <property name="title">Action 5 (dial *#8011# for Oneplus QC?)</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
