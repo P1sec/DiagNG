@@ -4,8 +4,10 @@ from diagng.gobject.adb_device import ADBDevice
 
 # from adbutils import AdbClient, AdbDeviceInfo
 from socket import SOL_SOCKET, IPPROTO_TCP
-from logging import error, warning
+from logging import error, warning, info
 from traceback import format_exc
+from shutil import which
+from os import getenv
 import socket
 # from queue import Queue, Empty
 # from threading import Thread
@@ -52,6 +54,11 @@ class ADBClient(GObject.Object):
     def __init__(self):
         super().__init__()
 
+        self.reconnect()
+
+    def reconnect(self, is_retry: bool = False):
+        # ⚠️ TODO CLOSE STALE CONNECTIONS HERE?
+
         self.adb_address = Gio.InetSocketAddress.new_from_string(
             '127.0.0.1', 5037
         )
@@ -69,12 +76,16 @@ class ADBClient(GObject.Object):
         interval, num_tries = 1, 10  # Original ADB client values
         # interval, num_tries = 10, 3 # adbutils values
 
-        if not self.try_enable_keepalive(interval, num_tries):
-            warning('Could not enable TCP keepalive on socket')
+        try:
+            self.try_enable_keepalive(interval, num_tries)
+        except Exception:
+            warning(
+                'Could not enable TCP keepalive on socket: ' + format_exc()
+            )
 
         self.raw_socket.set_timeout(3)
         self.tcp_conn.connect_async(
-            self.adb_address, None, self.on_connect, False
+            self.adb_address, None, self.on_connect, is_retry
         )
 
     """
@@ -88,44 +99,22 @@ class ADBClient(GObject.Object):
     def try_enable_keepalive(self, interval: int, num_tries: int) -> bool:
         # Enable keepalive
         if not SO_KEEPALIVE:
-            return False
-        if self.raw_socket.set_option(SOL_SOCKET, SO_KEEPALIVE, 1) != 0:
-            return False
+            raise ValueError('SO_KEEPALIVE unavailable')
+        self.raw_socket.set_option(SOL_SOCKET, SO_KEEPALIVE, 1)
 
         # Set idle time before sending the first keep-alive
         if TCP_KEEPIDLE:
-            if (
-                self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPIDLE, interval)
-                != 0
-            ):
-                return False
+            self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPIDLE, interval)
         elif TCP_KEEPALIVE:
-            if (
-                self.raw_socket.set_option(
-                    IPPROTO_TCP, TCP_KEEPALIVE, interval
-                )
-                != 0
-            ):
-                return False
+            self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPALIVE, interval)
 
         # Set keepalive interval
         if TCP_KEEPINTVL:
-            if (
-                self.raw_socket.set_option(
-                    IPPROTO_TCP, TCP_KEEPINTVL, interval
-                )
-                != 0
-            ):
-                return False
+            self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPINTVL, interval)
 
         # Set number of keepalives before timeout
         if TCP_KEEPCNT:
-            if (
-                self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPCNT, num_tries)
-                != 0
-            ):
-                return False
-        return True
+            self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPCNT, num_tries)
 
     def on_connect(
         self, obj: Gio.SocketClient, res: Gio.AsyncResult, is_retry: bool
@@ -135,8 +124,7 @@ class ADBClient(GObject.Object):
             assert self.tcp_conn.connect_finish(res)
         except Exception:
             if not is_retry:
-                error('TODO ⚠️ try to launch the daemon here')
-                self.try_launch_daemon()
+                self.daemon_launch_path()
             else:
                 error('Could not connect to ADB: ' + format_exc())
             return
@@ -149,12 +137,54 @@ class ADBClient(GObject.Object):
 
         print('ℹ️ CONNECT TO ADB OK')
 
-    def try_launch_daemon(self):
-        xx = Gio.Subprocess
+    def daemon_launch_path(self):
+        # Do we need to go through a Flatpak portal?
 
-        self.tcp_conn.connect_async(
-            self.adb_address, None, self.on_connect, True
+        if which('adb'):
+            self.spawn_daemon(False)
+
+        elif getenv('container') and which('flatpak-spawn'):
+
+            def on_which_result(obj: Gio.Subprocess, res: Gio.AsyncResult):
+                try:
+                    assert obj.wait_check_finish(res)
+                except Exception:
+                    self.daemon_unavailable()
+                else:
+                    self.spawn_daemon(True)
+
+            Gio.Subprocess.new(
+                ['flatpak-spawn', '--host', 'which', 'adb'],
+                Gio.SubprocessFlags.STDOUT_PIPE,
+            ).wait_check_async(None, on_which_result)
+
+        else:
+            self.daemon_unavailable()
+
+    def daemon_unavailable(self):
+        error('ADB not available on this sytem')
+        error(
+            '⚠️ TODO: Communicate back to the main UI (display a warning signalling through a GObject property, etc.)'
         )
+
+    def spawn_daemon(self, use_flatpak=False):
+
+        # ⚠️ Use bundled ADB daemon when available
+
+        def on_adb_result(obj: Gio.Subprocess, res: Gio.AsyncResult):
+            obj.wait_check_finish(res)
+
+            info('ADB server started successfully on localhost:5037')
+
+            self.reconnect(True)
+
+        info('ADB not running, starting server...')
+
+        Gio.Subprocess.new(
+            ([] if not use_flatpak else ['flatpak-spawn', '--host'])
+            + ['adb', 'start-server'],
+            Gio.SubprocessFlags.SEARCH_PATH_FROM_ENVP,
+        ).wait_check_async(None, on_adb_result)
 
     def shell(self, *args):
         pass  # TODO
