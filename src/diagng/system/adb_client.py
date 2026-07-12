@@ -3,8 +3,9 @@
 from diagng.gobject.adb_device import ADBDevice
 
 # from adbutils import AdbClient, AdbDeviceInfo
+from logging import error, warning, debug, info
 from socket import SOL_SOCKET, IPPROTO_TCP
-from logging import error, warning, info
+from typing import Callable, Optional
 from traceback import format_exc
 from shutil import which
 from os import getenv
@@ -40,18 +41,65 @@ TCP_KEEPCNT = getattr(socket, 'TCP_KEEPCNT', None)
 # ⚠️ https://cs.android.com/android/platform/superproject/+/android-latest-release:packages/modules/adb/sysdeps_unix.cpp;l=24?q=TCP_KEEPCNT%20adb
 
 
+class ADBResponse:
+    pass
+
+
+class ADBOkayResponse(ADBResponse):
+    def __repr__(self):
+        return 'ADBOkayResponse()'
+
+
+class ADBFailResponse(ADBResponse):
+    reason: bytes
+
+    def __repr__(self):
+        return 'ADBFailResponse(reason=%r)' % self.reason
+
+
+class ADBConnectionClosed(ADBResponse):
+    def __repr__(self):
+        return 'ADBConnectionClosed()'
+
+
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
+    @GObject.Signal(arg_types=(object,))
+    def response_received(self, resp: ADBResponse):
+        self.resp_buffer.append(resp)
+        if self.response_handler is not None:
+            self.response_handler(resp)
+            self.response_handler = None
+
+    @GObject.Signal(arg_types=(object,))
+    def payload_received(self, new_chunk: bytes):
+        pass
+
+    @GObject.Signal
+    def closed(self):
+        self.is_connected = False
+
+    @GObject.Signal
+    def failed(self):
+        self.is_failed = True
+
+    @GObject.Signal
+    def connected(self):
+        self.is_connected = True
+
     is_default_addr = GObject.Property(type=bool, default=False)
     bad_address = GObject.Property(type=bool, default=False)
-    connected = GObject.Property(
-        type=bool, default=False
-    )  # Use notify::connected
-    failed = GObject.Property(type=bool, default=False)  # Use notify::failed
+    is_connected = GObject.Property(type=bool, default=False)
+    is_failed = GObject.Property(type=bool, default=False)
 
     ip_addr = GObject.Property(type=Gio.InetAddress)
     port = GObject.Property(type=int, default=False)
+
+    response_handler: Optional[int]
+    sock_buffer: bytes
+    resp_buffer: list[ADBResponse]
+    content_buffer: bytes
 
     adb_address: Gio.InetSocketAddress
     raw_socket: Gio.Socket
@@ -64,13 +112,28 @@ class ADBClient(GObject.Object):
     def __init__(self):
         super().__init__()
 
+        self.response_handler = None
+        self.sock_buffer = b''
+        self.resp_buffer = []
+        self.content_buffer = b''
+
     def connect_from_host(self, target_host='localhost:5037'):
+        # NOTE: To be called only once,
+        # just after the signals are
+        # set up
+
+        if target_host == 'localhost:5037':
+            self.is_default_host = True
+
         try:
             addr = Gio.NetworkAddress.parse(target_host, 5037)
         except Exception:
             self.bad_address = True
-            self.failed = True
-            error('Could not resolve "%s": %s' % (target_host, format_exc()))
+            self.failed.emit()
+            error(
+                'Failed to parse hostname "%s": %s'
+                % (target_host, format_exc())
+            )
 
         self.port = addr.get_port()
 
@@ -88,7 +151,7 @@ class ADBClient(GObject.Object):
                 )
             except Exception:
                 self.bad_address = True
-                self.failed = True
+                self.failed.emit()
                 error(
                     'Could not resolve "%s": %s' % (target_host, format_exc())
                 )
@@ -172,15 +235,17 @@ class ADBClient(GObject.Object):
                 self.daemon_launch_path()
             else:
                 error('Could not connect to ADB: ' + format_exc())
-            return
-        self.socket_reader = self.tcp_conn.get_input_stream()
-        self.socket_writer = self.tcp_conn.get_output_stream()
+                self.failed.emit()
+        else:
+            self.socket_reader = self.tcp_conn.get_input_stream()
+            self.socket_writer = self.tcp_conn.get_output_stream()
 
-        self.socket_reader.read_bytes_async(
-            4096, GLib.PRIORITY_DEFAULT, None, self.on_read
-        )
+            self.socket_reader.read_bytes_async(
+                4096, GLib.PRIORITY_DEFAULT, None, self.on_read
+            )
 
-        print('ℹ️ CONNECT TO ADB OK')
+            info('Connected to ADB socket')
+            self.connected.emit()
 
     def daemon_launch_path(self):
         # Do we need to go through a Flatpak portal?
@@ -231,6 +296,37 @@ class ADBClient(GObject.Object):
             Gio.SubprocessFlags.SEARCH_PATH_FROM_ENVP,
         ).wait_check_async(None, on_adb_result)
 
+    def send_cmd(
+        self, cmd: str, callback: Optional[Callable[[ADBResponse], []]] = None
+    ):
+        def on_write(obj: Gio.OutputStream, res: Gio.AsyncResult):
+            try:
+                obj.write_all_finish(res)
+            except Exception:
+                error('Could not send ADB command: ' + format_exc())
+                self.on_close()
+
+        raw_cmd = cmd.encode('utf-8')
+        payload = b'%04x' % len(raw_cmd) + raw_cmd
+
+        info('Writing to ADB socket: %r' % payload)
+
+        if callback:
+            self.response_handler = callback
+        self.socket_writer.write_all_async(
+            payload, GLib.PRIORITY_DEFAULT, None, on_write
+        )
+
+    def version(self, callback=None):
+        self.send_cmd('host:version', callback)
+
+    def track_devices(self, callback=None):
+        # track-devices-l is available since 2017:
+        # https://cs.android.com/android/_/android/platform/packages/modules/adb/+/3212463a692c359e7dc10c788c49b5406f3c25bb
+        # = Version bump 39->40 (https://cs.android.com/android/_/android/platform/packages/modules/adb/+/ee7b44d91c809f64cbabc4ced8c05360991c29b2)
+
+        self.send_cmd('host:track-devices-l', callback)
+
     def shell(self, *args):
         pass  # TODO
 
@@ -241,21 +337,57 @@ class ADBClient(GObject.Object):
 
         try:
             data: bytes = self.socket_reader.read_bytes_finish(res).get_data()
-            assert data
         except Exception:
             error('ADB connection closed: ' + format_exc())
-            # TODO ⚠️ EMIT SIGNAL / call user callback?
             self.on_close()
+            return
+        else:
+            if not data:
+                info('ADB connection closed')
+                self.on_close()
+                return
 
-        print('⚠️ ⚠️ TODO ADB SOCKET WAS READ FROM =>', data)
+        self.sock_buffer += data
+
+        debug('Read bytes from ADB socket: %r' % data)
+
+        while len(self.sock_buffer) >= 4:
+            marker = self.sock_buffer[:4]
+
+            if marker == b'OKAY':
+                self.sock_buffer = self.sock_buffer[4:]
+                resp = ADBOkayResponse()
+                self.response_received.emit(resp)
+
+            elif marker == b'FAIL':
+                if len(self.sock_buffer) < 8:
+                    break
+                size = int(self.sock_buffer[4:8], 16)
+                if len(self.sock_buffer) < size + 8:
+                    break
+                fail_reason = self.sock_buffer[8 : size + 8]
+                self.sock_buffer = self.sock_buffer[size + 8 :]
+                resp = ADBFailResponse()
+                resp.reason = fail_reason
+                self.response_received.emit(resp)
+
+            else:
+                size = int(marker, 16)
+                if len(self.sock_buffer) < size + 4:
+                    break
+                payload = self.sock_buffer[4 : size + 4]
+                self.sock_buffer = self.sock_buffer[size + 4 :]
+                self.content_buffer += payload
+                self.payload_received.emit(payload)
 
         self.socket_reader.read_bytes_async(
             4096, GLib.PRIORITY_DEFAULT, None, self.on_read
         )
 
     def on_close(self):
-
-        print('⚠️ ⚠️ TODO ADB SOCKET WAS CLOSED, EMIT EVENT')
+        self.connected = False
+        self.closed.emit()
+        self.response_received.emit(ADBConnectionClosed())
 
     """
         self.queue = Queue()
