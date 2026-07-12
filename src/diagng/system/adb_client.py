@@ -43,6 +43,16 @@ TCP_KEEPCNT = getattr(socket, 'TCP_KEEPCNT', None)
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
+    is_default_addr = GObject.Property(type=bool, default=False)
+    bad_address = GObject.Property(type=bool, default=False)
+    connected = GObject.Property(
+        type=bool, default=False
+    )  # Use notify::connected
+    failed = GObject.Property(type=bool, default=False)  # Use notify::failed
+
+    ip_addr = GObject.Property(type=Gio.InetAddress)
+    port = GObject.Property(type=int, default=False)
+
     adb_address: Gio.InetSocketAddress
     raw_socket: Gio.Socket
     tcp_conn: Gio.TcpConnection
@@ -54,17 +64,52 @@ class ADBClient(GObject.Object):
     def __init__(self):
         super().__init__()
 
-        self.reconnect()
+    def connect_from_host(self, target_host='localhost:5037'):
+        try:
+            addr = Gio.NetworkAddress.parse(target_host, 5037)
+        except Exception:
+            self.bad_address = True
+            self.failed = True
+            error('Could not resolve "%s": %s' % (target_host, format_exc()))
+
+        self.port = addr.get_port()
+
+        def on_resolved(obj: Gio.Resolver, res: Gio.AsyncResult):
+            try:
+                addresses = obj.lookup_by_name_finish(res)
+                # Prefer IPv4
+                self.ip_addr = next(
+                    (
+                        addr
+                        for addr in addresses
+                        if addr.get_family() == Gio.SocketFamily.IPV4
+                    ),
+                    addresses[0],
+                )
+            except Exception:
+                self.bad_address = True
+                self.failed = True
+                error(
+                    'Could not resolve "%s": %s' % (target_host, format_exc())
+                )
+
+            else:
+                if self.port == 5037 and self.ip_addr.get_is_loopback():
+                    self.is_default_addr = True
+
+                self.reconnect()
+
+        resolver = Gio.Resolver.get_default()
+        hostname = addr.get_hostname()
+        resolver.lookup_by_name_async(hostname, None, on_resolved)
 
     def reconnect(self, is_retry: bool = False):
         # ⚠️ TODO CLOSE STALE CONNECTIONS HERE?
 
-        self.adb_address = Gio.InetSocketAddress.new_from_string(
-            '127.0.0.1', 5037
-        )
+        self.adb_address = Gio.InetSocketAddress.new(self.ip_addr, self.port)
 
         self.raw_socket = Gio.Socket.new(
-            Gio.SocketFamily.IPV4,
+            self.ip_addr.get_family(),
             Gio.SocketType.STREAM,
             Gio.SocketProtocol.TCP,
         )
@@ -123,7 +168,7 @@ class ADBClient(GObject.Object):
         try:
             assert self.tcp_conn.connect_finish(res)
         except Exception:
-            if not is_retry:
+            if not is_retry and self.is_default_addr:
                 self.daemon_launch_path()
             else:
                 error('Could not connect to ADB: ' + format_exc())
