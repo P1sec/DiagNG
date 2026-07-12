@@ -238,25 +238,23 @@ template $MainWindow: Adw.ApplicationWindow {
 
               Adw.ActionRow adb_status_row {
                 activatable: true;
-                subtitle: _("locahost:5037");
+                subtitle: _("Protocol version 41");
                 subtitle-selectable: true;
-                title: _("Daemon status");
+                title: _("localhost:5037");
                 title-selectable: true;
 
                 Label adb_status_label {
                   attributes: "0 -1 weight bold";
-                  label: _("Connected");
+                  label: _("Disconnected");
                   selectable: true;
                 }
               }
 
-              Adw.ActionRow adb_daemon_version {
-                title: "Daemon version";
+              Label adb_daemon_missing {
+                attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
+                label: "Failed to find ADB daemon (TODO: Link to a README section about this?)";
+                margin-top: 24;
                 visible: false;
-
-                Label {
-                  label: "34.0.5-debian";
-                }
               }
             }
 
@@ -272,7 +270,7 @@ template $MainWindow: Adw.ApplicationWindow {
 
                 Adw.ExpanderRow {
                   expanded: true;
-                  title: "Action 1 (automatic diag port setup?)";
+                  title: "Automatic diag port setup";
 
                   [suffix]
                   Button {
@@ -294,8 +292,61 @@ template $MainWindow: Adw.ApplicationWindow {
                   }
                 }
 
+                Adw.ActionRow {
+                  title: "adbd status";
+
+                  Button {
+                    label: "Restart as root";
+
+                    styles [
+                      "pill",
+                    ]
+                  }
+
+                  Button {
+                    label: "Restart as TCP/IP";
+
+                    styles [
+                      "pill",
+                    ]
+                  }
+                }
+
+                Adw.ActionRow {
+                  title: "Root availability status";
+
+                  [suffix]
+                  Label {
+                    label: "Loading...";
+                  }
+                }
+
+                Adw.ActionRow {
+                  title: "Diag availability status";
+
+                  Label {
+                    label: "Loading...";
+                  }
+                }
+
+                Adw.ActionRow {
+                  title: "Current USB mode";
+
+                  Label {
+                    label: "Loading...";
+                  }
+                }
+
+                Adw.ActionRow {
+                  title: "Suggested USB mode";
+
+                  Label {
+                    label: "Loading...";
+                  }
+                }
+
                 Adw.ExpanderRow {
-                  title: "Action 2 (test root?)";
+                  title: "Action 2 (test root using su?)";
 
                   [suffix]
                   Button {

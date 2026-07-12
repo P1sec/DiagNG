@@ -89,9 +89,6 @@ class ADBClient(GObject.Object):
     is_connected = GObject.Property(type=bool, default=False)
     is_failed = GObject.Property(type=bool, default=False)
 
-    ip_addr = GObject.Property(type=Gio.InetAddress)
-    port = GObject.Property(type=int, default=False)
-
     response_handler: Optional[int]
     sock_buffer: bytes
     resp_buffer: list[ADBResponse]

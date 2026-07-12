@@ -291,28 +291,25 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <child>
                               <object class="AdwActionRow" id="adb_status_row">
                                 <property name="activatable">true</property>
-                                <property name="subtitle" translatable="yes">locahost:5037</property>
+                                <property name="subtitle" translatable="yes">Protocol version 41</property>
                                 <property name="subtitle-selectable">true</property>
-                                <property name="title" translatable="yes">Daemon status</property>
+                                <property name="title" translatable="yes">localhost:5037</property>
                                 <property name="title-selectable">true</property>
                                 <child>
                                   <object class="GtkLabel" id="adb_status_label">
                                     <property name="attributes">0 -1 weight bold</property>
-                                    <property name="label" translatable="yes">Connected</property>
+                                    <property name="label" translatable="yes">Disconnected</property>
                                     <property name="selectable">true</property>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child>
-                              <object class="AdwActionRow" id="adb_daemon_version">
-                                <property name="title">Daemon version</property>
+                              <object class="GtkLabel" id="adb_daemon_missing">
+                                <property name="attributes">0 -1 weight bold, 0 -1 foreground #a4a400000000</property>
+                                <property name="label">Failed to find ADB daemon (TODO: Link to a README section about this?)</property>
+                                <property name="margin-top">24</property>
                                 <property name="visible">false</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label">34.0.5-debian</property>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -330,7 +327,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwExpanderRow">
                                     <property name="expanded">true</property>
-                                    <property name="title">Action 1 (automatic diag port setup?)</property>
+                                    <property name="title">Automatic diag port setup</property>
                                     <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
@@ -354,8 +351,69 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                   </object>
                                 </child>
                                 <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">adbd status</property>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Restart as root</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="label">Restart as TCP/IP</property>
+                                        <style>
+                                          <class name="pill"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">Root availability status</property>
+                                    <child type="suffix">
+                                      <object class="GtkLabel">
+                                        <property name="label">Loading...</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">Diag availability status</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Loading...</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">Current USB mode</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Loading...</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">Suggested USB mode</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">Loading...</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="AdwExpanderRow">
-                                    <property name="title">Action 2 (test root?)</property>
+                                    <property name="title">Action 2 (test root using su?)</property>
                                     <child type="suffix">
                                       <object class="GtkButton">
                                         <property name="label">Trigger</property>
