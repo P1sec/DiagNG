@@ -10,16 +10,15 @@ from logging import info, error
 
 
 class ADBWatcher(GObject.Object):
-    target_host = GObject.Property(type=str)
     version = GObject.Property(type=int)
+
     is_failed = GObject.Property(type=bool, default=False)
-    bad_address = GObject.Property(type=bool, default=False)
+    adb_bin_unavailable = GObject.Property(type=bool, default=False)
     is_connected = GObject.Property(type=bool, default=False)
     devices = GObject.Property(type=Gio.ListStore)
 
     def __init__(self):
         super().__init__()
-        self.target_host = 'localhost:5037'
         self.devices = Gio.ListStore.new(ADBDevice)
 
         self.try_obtain_version()
@@ -29,13 +28,13 @@ class ADBWatcher(GObject.Object):
 
         def on_conn_error(*args):
             self.is_failed = True
-            self.bad_address = client.bad_address
+            self.adb_bin_unavailable = client.adb_bin_unavailable
             self.is_connected = False
             error('Could not connect to ADB')
 
         def on_connect(*args):
             self.is_failed = False
-            self.bad_address = False
+            self.adb_bin_unavailable = False
             self.is_connected = True
 
             def on_version(resp: ADBResponse):
@@ -61,20 +60,20 @@ class ADBWatcher(GObject.Object):
         client.connected.connect(on_connect)
         client.closed.connect(on_normal_close)
 
-        client.connect_from_host(self.target_host)
+        client.connect_server()
 
     def watch_for_devices(self):
         client = ADBClient()
 
         def on_conn_error(*args):
             self.is_failed = True
-            self.bad_address = client.bad_address
+            self.adb_bin_unavailable = client.adb_bin_unavailable
             self.is_connected = False
             error('Could not connect to ADB')
 
         def on_connect(*args):
             self.is_failed = False
-            self.bad_address = False
+            self.adb_bin_unavailable = False
             self.is_connected = True
 
             def on_status(resp: ADBResponse):
@@ -128,4 +127,4 @@ class ADBWatcher(GObject.Object):
         client.payload_received.connect(on_payload)
         client.closed.connect(on_normal_close)
 
-        client.connect_from_host(self.target_host)
+        client.connect_server()

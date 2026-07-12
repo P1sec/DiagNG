@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-# from diagng.system.adb_proxy import ADBProxy, ADBQueueItem, ADBQueueItemType
-from diagng.gobject.adb_device import ADBDevice
 
-# from adbutils import AdbClient, AdbDeviceInfo
 from logging import error, warning, debug, info
 from socket import SOL_SOCKET, IPPROTO_TCP
 from typing import Callable, Optional
@@ -10,8 +7,6 @@ from traceback import format_exc
 from shutil import which
 from os import getenv
 import socket
-# from queue import Queue, Empty
-# from threading import Thread
 
 import gi
 
@@ -25,7 +20,9 @@ TCP_KEEPALIVE = getattr(socket, 'TCP_KEEPALIVE', None)
 TCP_KEEPINTVL = getattr(socket, 'TCP_KEEPINTVL', None)
 TCP_KEEPCNT = getattr(socket, 'TCP_KEEPCNT', None)
 
-# TODO: Use own impl?
+# We use our own implementation of the ADB server protocol
+# in order to integrate smoothly with the GLib event loop
+
 # https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/services.md
 # strace -s999999 adb exec-out "id ; sleep 2 ; id"
 # strace -s999999 adb devices -l
@@ -88,8 +85,7 @@ class ADBClient(GObject.Object):
     def connected(self):
         self.is_connected = True
 
-    is_default_addr = GObject.Property(type=bool, default=False)
-    bad_address = GObject.Property(type=bool, default=False)
+    adb_bin_unavailable = GObject.Property(type=bool, default=False)
     is_connected = GObject.Property(type=bool, default=False)
     is_failed = GObject.Property(type=bool, default=False)
 
@@ -106,8 +102,6 @@ class ADBClient(GObject.Object):
     tcp_conn: Gio.TcpConnection
     socket_reader: Gio.InputStream
     socket_writer: Gio.OutputStream
-    # queue: Queue[ADBQueueItem]
-    # proxy: ADBProxy
 
     def __init__(self):
         super().__init__()
@@ -117,62 +111,22 @@ class ADBClient(GObject.Object):
         self.resp_buffer = []
         self.content_buffer = b''
 
-    def connect_from_host(self, target_host='localhost:5037'):
+    def connect_server(self):
         # NOTE: To be called only once,
         # just after the signals are
         # set up
 
-        if target_host == 'localhost:5037':
-            self.is_default_host = True
-
-        try:
-            addr = Gio.NetworkAddress.parse(target_host, 5037)
-        except Exception:
-            self.bad_address = True
-            self.failed.emit()
-            error(
-                'Failed to parse hostname "%s": %s'
-                % (target_host, format_exc())
-            )
-
-        self.port = addr.get_port()
-
-        def on_resolved(obj: Gio.Resolver, res: Gio.AsyncResult):
-            try:
-                addresses = obj.lookup_by_name_finish(res)
-                # Prefer IPv4
-                self.ip_addr = next(
-                    (
-                        addr
-                        for addr in addresses
-                        if addr.get_family() == Gio.SocketFamily.IPV4
-                    ),
-                    addresses[0],
-                )
-            except Exception:
-                self.bad_address = True
-                self.failed.emit()
-                error(
-                    'Could not resolve "%s": %s' % (target_host, format_exc())
-                )
-
-            else:
-                if self.port == 5037 and self.ip_addr.get_is_loopback():
-                    self.is_default_addr = True
-
-                self.reconnect()
-
-        resolver = Gio.Resolver.get_default()
-        hostname = addr.get_hostname()
-        resolver.lookup_by_name_async(hostname, None, on_resolved)
+        self.reconnect()
 
     def reconnect(self, is_retry: bool = False):
         # ⚠️ TODO CLOSE STALE CONNECTIONS HERE?
 
-        self.adb_address = Gio.InetSocketAddress.new(self.ip_addr, self.port)
+        self.adb_address = Gio.InetSocketAddress.new_from_string(
+            '127.0.0.1', 5037
+        )
 
         self.raw_socket = Gio.Socket.new(
-            self.ip_addr.get_family(),
+            Gio.SocketFamily.IPV4,
             Gio.SocketType.STREAM,
             Gio.SocketProtocol.TCP,
         )
@@ -231,7 +185,7 @@ class ADBClient(GObject.Object):
         try:
             assert self.tcp_conn.connect_finish(res)
         except Exception:
-            if not is_retry and self.is_default_addr:
+            if not is_retry:
                 self.daemon_launch_path()
             else:
                 error('Could not connect to ADB: ' + format_exc())
@@ -273,16 +227,19 @@ class ADBClient(GObject.Object):
 
     def daemon_unavailable(self):
         error('ADB not available on this sytem')
-        error(
-            '⚠️ TODO: Communicate back to the main UI (display a warning signalling through a GObject property, etc.)'
-        )
+        self.adb_bin_unavailable = True
+        self.failed.emit()
 
     def spawn_daemon(self, use_flatpak=False):
 
-        # ⚠️ Use bundled ADB daemon when available
+        # ⚠️ TODO: Eventually use bundled ADB binary?
 
         def on_adb_result(obj: Gio.Subprocess, res: Gio.AsyncResult):
-            obj.wait_check_finish(res)
+            try:
+                obj.wait_check_finish(res)
+            except Exception:
+                self.failed.emit()
+                raise
 
             info('ADB server started successfully on localhost:5037')
 
@@ -388,101 +345,3 @@ class ADBClient(GObject.Object):
         self.connected = False
         self.closed.emit()
         self.response_received.emit(ADBConnectionClosed())
-
-    """
-        self.queue = Queue()
-
-        self.proxy = ADBProxy(self.queue)
-
-        thread = Thread(target=self.device_list_poll_thread)
-        thread.daemon = True
-        thread.start()
-
-    def propagate_error(self, error_str):
-
-        def main_thread_cb(error_str):
-            error('Error in the ADB thread: ' + error_str)
-
-            dialog = Adw.AlertDialog.new(
-                '⚠️ Error in the ADB thread', repr(error_str)
-            )
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self.main_window, None, None)
-
-        GLib.idle_add(main_thread_cb, error_str)
-
-    def process_device_list(self, devices: list[AdbDeviceInfo]):
-        with self.main_window.adb_devices.freeze_notify():
-            self.main_window.adb_devices.remove_all()
-
-            for device in devices:
-                # print('=====> WIP ⚠️ PROCESS', device)
-
-                obj = ADBDevice()
-                obj.serial_str = device.serial
-                obj.transport_id = device.tags.get('transport_id')
-                obj.model_name = device.tags.get('model') or device.serial
-                obj.state = device.state
-
-                summary = 'State: %s' % obj.state.title()
-
-                summary += ' | ' + ', '.join(
-                    '%s=%s' % (key, value)
-                    for key, value in device.tags.items()
-                )
-
-                # obj.usb_device = XX
-                obj.text_summary = summary.strip(' |')
-                self.main_window.adb_devices.append(obj)
-
-    def device_list_poll_thread(self):
-
-        # TODO: Eventually allow to
-        # customize the connection target
-        # from the man UI (e.g use TCP, etc.)
-        try:
-            info('Trying to connect to ADB client...')
-            client = AdbClient()
-            info('Connection to ADB client established')
-
-            # TODO: Use some kind of message queue
-            # in order to read commands from the
-            # main thread instead of polling
-            # the device whenever some
-            # order gets received here?
-            #
-            # (with a 2 sec. timeout to keep
-            # polling the devices list still?)
-
-            WAIT_TIMEOUT = 2
-
-            while True:
-                try:
-                    GLib.idle_add(
-                        self.process_device_list,
-                        list(client.list(extended=True)),
-                    )
-
-                except Exception:
-                    self.propagate_error(format_exc())
-
-                try:
-                    queue_item: ADBQueueItem = self.queue.get(
-                        True, WAIT_TIMEOUT
-                    )
-                except Empty:
-                    pass
-                else:
-                    if (
-                        queue_item.item_type
-                        == ADBQueueItemType.SwitchXiaomiDiag
-                    ):
-                        pass  # TODO process queue_item
-
-                # next(client.track_devices(), None)
-
-        except Exception:
-            self.propagate_error(format_exc())
-
-        # WIP: See https://github.com/openatx/adbutils#connect-adb-server
-    """

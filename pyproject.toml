@@ -28,7 +28,6 @@ classifiers = [
     "Environment :: X11 Applications :: Gnome"
 ]
 dependencies = [
-    "adbutils>=2.12.0",
     "crcmod>=1.7",
     "kaitaistruct>=0.11",
     "pygobject>=3.56.2",
