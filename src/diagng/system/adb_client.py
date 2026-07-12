@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
-from diagng.system.adb_proxy import ADBProxy, ADBQueueItem, ADBQueueItemType
+# from diagng.system.adb_proxy import ADBProxy, ADBQueueItem, ADBQueueItemType
 from diagng.gobject.adb_device import ADBDevice
 
-from adbutils import AdbClient, AdbDeviceInfo
+# from adbutils import AdbClient, AdbDeviceInfo
+from socket import SOL_SOCKET, IPPROTO_TCP
+from logging import error, warning
 from traceback import format_exc
-from logging import error, info
-from queue import Queue, Empty
-from threading import Thread
+import socket
+# from queue import Queue, Empty
+# from threading import Thread
 
 import gi
 
 gi.require_version('Adw', '1')
 
 from gi.repository import GObject, Gio, GLib, Adw
+
+SO_KEEPALIVE = getattr(socket, 'SO_KEEPALIVE', None)
+TCP_KEEPIDLE = getattr(socket, 'TCP_KEEPIDLE', None)
+TCP_KEEPALIVE = getattr(socket, 'TCP_KEEPALIVE', None)
+TCP_KEEPINTVL = getattr(socket, 'TCP_KEEPINTVL', None)
+TCP_KEEPCNT = getattr(socket, 'TCP_KEEPCNT', None)
 
 # TODO: Use own impl?
 # https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/services.md
@@ -25,19 +33,156 @@ from gi.repository import GObject, Gio, GLib, Adw
 # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketClient.html
 # https://man7.org/linux/man-pages/man1/flatpak-spawn.1.html
 # ⚠️ ⚠️ ⚠️ => Improve global app logging?
-# ⚠️ ⚠️ => Découplet les classes GObject de la partie GUI, utiliser des signaux à la place?
+# ⚠️ ⚠️ => Découpler les classes GObject de la partie GUI, utiliser des signaux à la place?
+
+# ⚠️ https://cs.android.com/android/platform/superproject/+/android-latest-release:packages/modules/adb/sysdeps_unix.cpp;l=24?q=TCP_KEEPCNT%20adb
+
 
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
 
-    main_window: 'ApplicationWindow'
-    queue: Queue[ADBQueueItem]
-    proxy: ADBProxy
+    adb_address: Gio.InetSocketAddress
+    raw_socket: Gio.Socket
+    tcp_conn: Gio.TcpConnection
+    socket_reader: Gio.InputStream
+    socket_writer: Gio.OutputStream
+    # queue: Queue[ADBQueueItem]
+    # proxy: ADBProxy
 
-    def __init__(self, main_window):
+    def __init__(self):
         super().__init__()
 
-        self.main_window = main_window
+        self.adb_address = Gio.InetSocketAddress.new_from_string(
+            '127.0.0.1', 5037
+        )
+
+        self.raw_socket = Gio.Socket.new(
+            Gio.SocketFamily.IPV4,
+            Gio.SocketType.STREAM,
+            Gio.SocketProtocol.TCP,
+        )
+
+        self.tcp_conn = self.raw_socket.connection_factory_create_connection()
+
+        assert self.tcp_conn.get_socket() == self.raw_socket
+
+        interval, num_tries = 1, 10  # Original ADB client values
+        # interval, num_tries = 10, 3 # adbutils values
+
+        if not self.try_enable_keepalive(interval, num_tries):
+            warning('Could not enable TCP keepalive on socket')
+
+        self.raw_socket.set_timeout(3)
+        self.tcp_conn.connect_async(
+            self.adb_address, None, self.on_connect, False
+        )
+
+    """
+        Based on:
+        https://cs.android.com/android/platform/superproject/+/aml_adb_331113120:packages/modules/adb/sysdeps_unix.cpp
+
+        @returns Whether the TCP keepalive was successfully set
+          on the passed socket
+    """
+
+    def try_enable_keepalive(self, interval: int, num_tries: int) -> bool:
+        # Enable keepalive
+        if not SO_KEEPALIVE:
+            return False
+        if self.raw_socket.set_option(SOL_SOCKET, SO_KEEPALIVE, 1) != 0:
+            return False
+
+        # Set idle time before sending the first keep-alive
+        if TCP_KEEPIDLE:
+            if (
+                self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPIDLE, interval)
+                != 0
+            ):
+                return False
+        elif TCP_KEEPALIVE:
+            if (
+                self.raw_socket.set_option(
+                    IPPROTO_TCP, TCP_KEEPALIVE, interval
+                )
+                != 0
+            ):
+                return False
+
+        # Set keepalive interval
+        if TCP_KEEPINTVL:
+            if (
+                self.raw_socket.set_option(
+                    IPPROTO_TCP, TCP_KEEPINTVL, interval
+                )
+                != 0
+            ):
+                return False
+
+        # Set number of keepalives before timeout
+        if TCP_KEEPCNT:
+            if (
+                self.raw_socket.set_option(IPPROTO_TCP, TCP_KEEPCNT, num_tries)
+                != 0
+            ):
+                return False
+        return True
+
+    def on_connect(
+        self, obj: Gio.SocketClient, res: Gio.AsyncResult, is_retry: bool
+    ):
+        self.raw_socket.set_timeout(0)
+        try:
+            assert self.tcp_conn.connect_finish(res)
+        except Exception:
+            if not is_retry:
+                error('TODO ⚠️ try to launch the daemon here')
+                self.try_launch_daemon()
+            else:
+                error('Could not connect to ADB: ' + format_exc())
+            return
+        self.socket_reader = self.tcp_conn.get_input_stream()
+        self.socket_writer = self.tcp_conn.get_output_stream()
+
+        self.socket_reader.read_bytes_async(
+            4096, GLib.PRIORITY_DEFAULT, None, self.on_read
+        )
+
+        print('ℹ️ CONNECT TO ADB OK')
+
+    def try_launch_daemon(self):
+        xx = Gio.Subprocess
+
+        self.tcp_conn.connect_async(
+            self.adb_address, None, self.on_connect, True
+        )
+
+    def shell(self, *args):
+        pass  # TODO
+
+    def push(self, *args):
+        pass  # TODO
+
+    def on_read(self, obj: Gio.InputStream, res: Gio.AsyncResult):
+
+        try:
+            data: bytes = self.socket_reader.read_bytes_finish(res).get_data()
+            assert data
+        except Exception:
+            error('ADB connection closed: ' + format_exc())
+            # TODO ⚠️ EMIT SIGNAL / call user callback?
+            self.on_close()
+
+        print('⚠️ ⚠️ TODO ADB SOCKET WAS READ FROM =>', data)
+
+        self.socket_reader.read_bytes_async(
+            4096, GLib.PRIORITY_DEFAULT, None, self.on_read
+        )
+
+    def on_close(self):
+
+        print('⚠️ ⚠️ TODO ADB SOCKET WAS CLOSED, EMIT EVENT')
+
+    """
         self.queue = Queue()
 
         self.proxy = ADBProxy(self.queue)
@@ -133,3 +278,4 @@ class ADBClient(GObject.Object):
             self.propagate_error(format_exc())
 
         # WIP: See https://github.com/openatx/adbutils#connect-adb-server
+    """
