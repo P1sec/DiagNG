@@ -10,21 +10,19 @@
         "--socket=fallback-x11",
         "--socket=wayland",
         "--device=all",
-        "--own-name=com.p1security.diagmond",
-        "--own-name=com.p1security.diagmetad",
         "--own-name=com.p1security.diagng",
+        "--talk-name=org.freedesktop.Flatpak",
+        "--system-talk-name=com.p1security.diagmond",
         "--system-talk-name=org.freedesktop.ModemManager1"
     ],
     "modules": [
         {
             "name": "libmm-glib",
-            "config-opts": [
-                "--libdir=/app/lib",
-                "--buildtype=release"
-            ],
             "buildsystem": "meson",
             "builddir": true,
             "config-opts": [
+                "--libdir=/app/lib",
+                "--buildtype=release",
                 "-Dudev=false",
                 "-Dmbim=false",
                 "-Dqmi=false",

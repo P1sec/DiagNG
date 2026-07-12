@@ -12,8 +12,8 @@ from diagng.common.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.system.udev_device_scanner import DeviceScanner
 from diagng.common.main_window.imp import MainWindow
+from diagng.system.adb_watcher import ADBWatcher
 from diagng.utils.logging import LoggingCentral
-from diagng.system.adb_client import ADBClient
 
 # Register resources
 import diagng.utils.gresources
@@ -42,6 +42,7 @@ class MainApplication(Adw.Application):
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
+    adb_watcher: ADBWatcher
     modem_manager: ModemManagerIntf = None
     device_scanner: DeviceScanner = None
 
@@ -173,13 +174,17 @@ class MainApplication(Adw.Application):
 
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
+        self.adb_watcher = ADBWatcher()
 
         self.window = MainWindow(self)
 
-        self.adb_client = ADBClient(self.window)
         self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
             self.window, self.diagmond_communicator.connection
         )
+
+        # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
+        # main_window using a CUSTOM LOGGING HANDLER
+        # when the GUI IS ENABLED?
 
         # Application will close once it has no longer has active
         # windows attached to it

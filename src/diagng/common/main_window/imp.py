@@ -79,8 +79,6 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: ADB
 
-    adb_devices = GObject.Property(type=Gio.ListStore)  # Of ADBDevice
-
     adb_devices_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     # UI panel: ModemManager
@@ -209,10 +207,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Build ADB devices list
 
-        self.adb_devices = Gio.ListStore.new(ADBDevice)
-
         self.adb_devices_group.bind_model(
-            self.adb_devices, create_adb_device, self
+            self.app.adb_watcher.devices, create_adb_device, self
         )
 
         # Bind ModemManager modem list
