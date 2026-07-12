@@ -1,26 +1,12 @@
 #!/usr/bin/env python3
 from diagng.system.adb_client import ADBClient, ADBResponse
+from diagng.gobject.adb_device import ADBDevice
 
 from gi.repository import GObject, Gio
 from logging import info, error
 
-# WIP 2026-07-11
-
 # See: https://cs.android.com/android/platform/superproject/main/+/main:/packages/modules/adb/docs/dev/protocol.md
 # See: https://cs.android.com/android/platform/superproject/main/+/main:/packages/modules/adb/docs/dev/services.md
-
-
-class ADBDevice(GObject.Object):
-    name = GObject.Property(type=str)
-    state = GObject.Property(type=str)
-    tags: dict[str, str]
-
-    def __repr__(self):
-        return 'ADBDevice(name=%r, state=%r, tags=%r)' % (
-            self.name,
-            self.state,
-            self.tags,
-        )
 
 
 class ADBWatcher(GObject.Object):
@@ -106,12 +92,27 @@ class ADBWatcher(GObject.Object):
                     fields = line.split()
 
                     device = ADBDevice()
-                    device.name = fields.pop(0)
+                    device.serial_str = fields.pop(0)
                     device.state = fields.pop(0)
                     device.tags = {
                         field.split(':', 1)[0]: field.split(':', 1)[1]
                         for field in fields
                     }
+                    device.transport_id = device.tags.pop('transport_id', None)
+                    device.model_name = (
+                        device.tags.pop('model', None) or device.serial_str
+                    )
+
+                    summary = 'State: %s' % device.state.title().replace(
+                        'Device', 'Online'
+                    )
+                    summary += ' | ' + ', '.join(
+                        '%s=%s' % (key, value)
+                        for key, value in device.tags.items()
+                    )
+
+                    # device.usb_device = XX
+                    device.text_summary = summary.strip(' |')
                     self.devices.append(device)
 
                     info('ADB device: %r' % device)

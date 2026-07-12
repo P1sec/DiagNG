@@ -42,6 +42,7 @@ class MainApplication(Adw.Application):
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
+    adb_watcher: ADBWatcher
     modem_manager: ModemManagerIntf = None
     device_scanner: DeviceScanner = None
 
@@ -173,10 +174,10 @@ class MainApplication(Adw.Application):
 
         self.modem_manager = ModemManagerIntf(self)
         self.device_scanner = DeviceScanner(self)
+        self.adb_watcher = ADBWatcher()
 
         self.window = MainWindow(self)
 
-        self.adb_client = ADBWatcher()
         self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
             self.window, self.diagmond_communicator.connection
         )
