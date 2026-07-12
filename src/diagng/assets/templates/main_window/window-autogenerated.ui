@@ -304,6 +304,16 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 </child>
                               </object>
                             </child>
+                            <child>
+                              <object class="AdwActionRow" id="adb_daemon_version">
+                                <property name="title">Daemon version</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">34.0.5-debian</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>

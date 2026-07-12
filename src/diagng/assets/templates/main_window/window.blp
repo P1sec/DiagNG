@@ -249,6 +249,14 @@ template $MainWindow: Adw.ApplicationWindow {
                   selectable: true;
                 }
               }
+
+              Adw.ActionRow adb_daemon_version {
+                title: "Daemon version";
+
+                Label {
+                  label: "34.0.5-debian";
+                }
+              }
             }
 
             Adw.PreferencesGroup adb_devices_group {

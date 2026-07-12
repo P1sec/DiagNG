@@ -14,6 +14,18 @@ gi.require_version('Adw', '1')
 
 from gi.repository import GObject, Gio, GLib, Adw
 
+# TODO: Use own impl?
+# https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/services.md
+# strace -s999999 adb exec-out "id ; sleep 2 ; id"
+# strace -s999999 adb devices -l
+# id > /tmp/id; strace -s999999 adb push /tmp/id /data/local/tmp/id
+# https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/sync.md
+# ⚠️ https://lazka.github.io/pgi-docs/Gio-2.0/classes/Socket.html#Gio.Socket.set_option
+# => https://lazka.github.io/pgi-docs/Gio-2.0/classes/TcpConnection.html#Gio.TcpConnection
+# https://lazka.github.io/pgi-docs/Gio-2.0/classes/SocketClient.html
+# https://man7.org/linux/man-pages/man1/flatpak-spawn.1.html
+# ⚠️ ⚠️ ⚠️ => Improve global app logging?
+# ⚠️ ⚠️ => Découplet les classes GObject de la partie GUI, utiliser des signaux à la place?
 
 class ADBClient(GObject.Object):
     __gtype_name__ = 'ADBClient'
