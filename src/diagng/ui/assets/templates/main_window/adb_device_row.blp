@@ -6,7 +6,6 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   title-selectable: true;
 
   Adw.ExpanderRow {
-    expanded: true;
     title: "Automatic diag port setup";
 
     [suffix]
@@ -21,11 +20,16 @@ template $ADBDeviceRow: Adw.ExpanderRow {
 
     Adw.ActionRow {
       title: "Step 1";
+      visible: false;
 
-      Label {
+      [suffix]
+      Label failed_label {
         attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
         label: "Failed";
+        visible: false;
       }
+
+      Adw.Spinner {}
     }
   }
 

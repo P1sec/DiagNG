@@ -78,6 +78,10 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: ADB
 
+    adb_status_row: Adw.ActionRow = Gtk.Template.Child()
+    adb_status_label: Gtk.Label = Gtk.Template.Child()
+    adb_daemon_missing: Gtk.Label = Gtk.Template.Child()
+
     adb_devices_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     # UI panel: ModemManager
@@ -205,6 +209,32 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
         # Build ADB devices list
+
+        def got_version(*args):
+            self.adb_status_row.set_subtitle(
+                'Protocol version %d' % self.app.adb_watcher.version
+                if self.app.adb_watcher.version
+                else ''
+            )
+
+        self.app.adb_watcher.connect('notify::version', got_version)
+        got_version()
+
+        def got_connect_status(*args):
+            self.adb_status_label.set_label(
+                'Connected'
+                if self.app.adb_watcher.is_connected
+                else 'Disconnected'
+            )
+
+        self.app.adb_watcher.connect(
+            'notify::is-connected', got_connect_status
+        )
+        got_connect_status()
+
+        self.app.adb_watcher.bind_property(
+            'is-failed', self.adb_daemon_missing, 'visible'
+        )
 
         self.adb_devices_group.bind_model(
             self.app.adb_watcher.devices, create_adb_device, self

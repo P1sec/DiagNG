@@ -25,5 +25,5 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
-  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="df66e79cb226215b312a0347a945650882d708af951ced8a6a59a6de2cfbe196"/>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="f5db42c7d35bffde23d9f533cb83c5b32ac3d6f248876cadf92bddfd5151af4b"/>
 </cambalache-project>
