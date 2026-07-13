@@ -14,7 +14,7 @@ class InformationGathering:
     # WIP: ➡️ ➡️ Check for exec-out being functional?
 
     def check_exec_out(self):
-        pass # WIP
+        pass  # WIP
 
     # WIP
     # Cf.:
