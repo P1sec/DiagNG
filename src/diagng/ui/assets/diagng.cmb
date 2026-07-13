@@ -4,10 +4,7 @@
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="6ace0b7269acc3fa4a0c3882bf7716e6fa1995cb4f0f39d32afb69e232127d54"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="77a716406963e6cbca5f1aa047ee8efdd363e856d72d1ec5daa263a5f6790db2">
-    <requires>ADBDeviceRow</requires>
-    <css-provider>style.css</css-provider>
-  </ui>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="f5db42c7d35bffde23d9f533cb83c5b32ac3d6f248876cadf92bddfd5151af4b"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
     <property id="accessible-description" type-id="gchararray"/>
     <property id="accessible-label" type-id="gchararray" translatable="1"/>
@@ -25,5 +22,8 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
-  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="f5db42c7d35bffde23d9f533cb83c5b32ac3d6f248876cadf92bddfd5151af4b"/>
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="9538f9791113b96dd5b5445f5f927bb48b3ac54027bd13b61d5829afe2979f8e">
+    <requires>ADBDeviceRow</requires>
+    <css-provider>style.css</css-provider>
+  </ui>
 </cambalache-project>

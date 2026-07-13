@@ -19,12 +19,12 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
     device = GObject.Property(type=ADBDevice)
 
-    def __init__(self, dev):
+    def __init__(self, dev=None):
         super().__init__()
 
         self.device = dev
-
-        InformationGathering(lambda: 'xx')
+        if self.device:
+            InformationGathering(lambda: 'xx')
 
     def on_device_update(self, dev: ADBDevice, *args):
         self.set_title(
