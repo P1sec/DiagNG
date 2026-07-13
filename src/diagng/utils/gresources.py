@@ -30,6 +30,7 @@ if not exists(RESOURCES_PATH) or (
     for blueprint_name in [
         'templates/main_window/udev_serial_tree_factory',
         'templates/main_window/nusb_tree_factory',
+        'templates/main_window/adb_device_row',
         'templates/main_window/window',
         'templates/qcdm_window/window',
     ]:

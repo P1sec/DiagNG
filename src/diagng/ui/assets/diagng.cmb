@@ -2,9 +2,10 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="355d19cb60496b62ffb849b37b726defb2a69e33cf27974181dc05d7bddbedb0"/>
+  <gresources filename="diagng.gresource.xml" sha256="6ace0b7269acc3fa4a0c3882bf7716e6fa1995cb4f0f39d32afb69e232127d54"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="605c90d1b9039dc0d7f9a84df0474b97cb2c6ece2422af1aa0674784cb619dbf">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="77a716406963e6cbca5f1aa047ee8efdd363e856d72d1ec5daa263a5f6790db2">
+    <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
@@ -24,4 +25,5 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="df66e79cb226215b312a0347a945650882d708af951ced8a6a59a6de2cfbe196"/>
 </cambalache-project>
