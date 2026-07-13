@@ -8,19 +8,18 @@ from json import loads
 # Register resources
 import diagng.utils.gresources
 
-from diagng.common.main_window.usb_interfaces import create_usb_interfaces
-from diagng.common.main_window.adb_devices import create_adb_device
-from diagng.common.main_window.spi_modems import create_spi_modem
+from diagng.ui.main_window.models.usb_interfaces import create_usb_interfaces
+from diagng.ui.main_window.models.adb_devices import create_adb_device
+from diagng.ui.main_window.models.spi_modems import create_spi_modem
+from diagng.ui.main_window.models.mm_modems import create_mm_modem
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
-from diagng.common.main_window.mm_modems import create_mm_modem
+from diagng.system.acquisition.qualcomm import spi_input
+from diagng.system.acquisition.qualcomm import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
-from diagng.acquisition.qualcomm import spi_input
-from diagng.acquisition.qualcomm import usb_input
 from diagng.gobject.serial_port import SerialPort
-from diagng.gobject.adb_device import ADBDevice
 from diagng.gobject.usb_device import USBDevice
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer

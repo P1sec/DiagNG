@@ -4,10 +4,10 @@
 import diagng.utils.gresources
 
 from diagng.parsing.struct.qualcomm.diag_verno_f_req import DiagVernoFReq
+from diagng.system.acquisition.qualcomm.base_input import BaseQCDMInput
 from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
 from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
 from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
-from diagng.acquisition.qualcomm.base_input import BaseQCDMInput
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from logging import info

@@ -7,12 +7,12 @@ from json import dumps
 import sys
 import gi
 
-from diagng.common.diagmond_serialdevice_om import DiagmondSerialDeviceOM
-from diagng.common.diagmond_communicator import DiagmondCommunicator
+from diagng.system.diagmond_serialdevice_om import DiagmondSerialDeviceOM
+from diagng.system.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.system.udev_device_scanner import DeviceScanner
-from diagng.common.main_window.imp import MainWindow
-from diagng.system.adb_watcher import ADBWatcher
+from diagng.system.adb.adb_watcher import ADBWatcher
+from diagng.ui.main_window.imp import MainWindow
 from diagng.utils.logging import LoggingCentral
 
 # Register resources

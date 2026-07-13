@@ -14,16 +14,21 @@ def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
     row = Adw.ExpanderRow.new()
     row.set_expanded(True)
     row.set_title_selectable(True)
-    row.set_title(
-        '<b>%s</b> (transport id #%s, serial ID %s)'
-        % (
-            GLib.markup_escape_text(dev.model_name or '', -1),
-            # ^ TODO gather extra info from UDev?
-            GLib.markup_escape_text(dev.transport_id or '', -1),
-            GLib.markup_escape_text(dev.serial_str or '', -1),
+
+    def on_row_change(*args):
+        row.set_title(
+            '<b>%s</b> (transport id #%s, serial ID %s)'
+            % (
+                GLib.markup_escape_text(dev.model_name or '', -1),
+                # ^ TODO gather extra info from UDev?
+                GLib.markup_escape_text(dev.transport_id or '', -1),
+                GLib.markup_escape_text(dev.serial_str or '', -1),
+            )
         )
-    )
-    row.set_subtitle(GLib.markup_escape_text(dev.text_summary or '', -1))
+        row.set_subtitle(GLib.markup_escape_text(dev.text_summary or '', -1))
+
+    row.connect('notify', on_row_change)
+    on_row_change()
 
     if dev.state == 'device':
         connect_btn = Gtk.Button()
@@ -44,5 +49,7 @@ def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
         # ⚠️ http://wiki.dmz.intl.p1sec.io/index.php/Qualcomm_device_USB_bus/Xiaomi_Mi_11#Ways_to_switch_the_diag_endpoint
 
         row.add_suffix(connect_btn)
+
+    # ⚠️  ^ TODO: Use bind_property instead?
 
     return row

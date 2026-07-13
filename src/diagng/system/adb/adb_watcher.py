@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from diagng.system.adb_client import ADBClient, ADBResponse
+from diagng.system.adb.adb_client import ADBClient, ADBResponse
 from diagng.gobject.adb_device import ADBDevice
 
 from gi.repository import GObject, Gio
@@ -85,36 +85,63 @@ class ADBWatcher(GObject.Object):
             info('Async response to "host:track-devices-l" call: %r' % chunk)
 
             data = chunk.decode('utf-8').strip()
-            with self.devices.freeze_notify():
-                self.devices.remove_all()
-                for line in data.splitlines():
-                    fields = line.split()
 
-                    device = ADBDevice()
-                    device.serial_str = fields.pop(0)
-                    device.state = fields.pop(0)
-                    device.tags = {
-                        field.split(':', 1)[0]: field.split(':', 1)[1]
-                        for field in fields
-                    }
-                    device.transport_id = device.tags.pop('transport_id', None)
-                    device.model_name = (
-                        device.tags.pop('model', None) or device.serial_str
-                    )
+            known_serial_to_obj: dict[str, ADBDevice] = {}
+            up_to_date_serials: set[str] = set()
 
-                    summary = 'State: %s' % device.state.title().replace(
-                        'Device', 'Online'
-                    )
-                    summary += ' | ' + ', '.join(
-                        '%s=%s' % (key, value)
-                        for key, value in device.tags.items()
-                    )
+            for pos in range(self.devices.get_n_items()):
+                item = self.devices.get_item(pos)
 
-                    # device.usb_device = XX
-                    device.text_summary = summary.strip(' |')
+                known_serial_to_obj[item.serial_str] = item
+
+            for line in data.splitlines():
+                fields = line.split()
+
+                device = ADBDevice()
+                device.serial_str = fields.pop(0)
+
+                if device.serial_str in known_serial_to_obj:
+                    device = known_serial_to_obj[device.serial_str]
+
+                device.state = fields.pop(0)
+                device.tags = {
+                    field.split(':', 1)[0]: field.split(':', 1)[1]
+                    for field in fields
+                }
+                device.transport_id = device.tags.pop('transport_id', None)
+                device.model_name = (
+                    device.tags.pop('model', None) or device.serial_str
+                )
+
+                summary = 'State: %s' % device.state.title().replace(
+                    'Device', 'Online'
+                )
+                summary += ' | ' + ', '.join(
+                    '%s=%s' % (key, value)
+                    for key, value in device.tags.items()
+                )
+
+                # device.usb_device = XX
+                device.text_summary = summary.strip(' |')
+
+                if device.serial_str not in known_serial_to_obj:
                     self.devices.append(device)
+                    known_serial_to_obj[device.serial_str] = device
 
-                    info('ADB device: %r' % device)
+                up_to_date_serials.add(device.serial_str)
+
+                info('ADB device: %r' % device)
+
+            with self.devices.freeze_notify():
+                while True:
+                    for pos in range(self.devices.get_n_items()):
+                        item = self.devices.get_item(pos)
+
+                        if item.serial_str not in up_to_date_serials:
+                            self.devices.remove(pos)
+                            break
+                    else:
+                        break
 
         def on_normal_close(*args):
             self.is_connected = False

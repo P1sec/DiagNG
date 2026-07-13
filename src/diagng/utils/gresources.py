@@ -8,7 +8,8 @@ from gi.repository import Gio
 
 SCRIPT_DIR = dirname(realpath(__file__))
 MODULE_DIR = dirname(realpath(SCRIPT_DIR))
-ASSETS_DIR = realpath(join(MODULE_DIR, 'assets'))
+UI_DIR = realpath(join(MODULE_DIR, 'ui'))
+ASSETS_DIR = realpath(join(UI_DIR, 'assets'))
 RESOURCES_PATH = realpath(join(ASSETS_DIR, 'diagng.gresource'))
 
 

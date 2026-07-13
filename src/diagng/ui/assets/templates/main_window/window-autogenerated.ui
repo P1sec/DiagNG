@@ -374,10 +374,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child>
                                   <object class="AdwActionRow">
                                     <property name="title">Root availability status</property>
-                                    <child type="suffix">
-                                      <object class="GtkLabel">
-                                        <property name="label">Loading...</property>
-                                      </object>
+                                    <child>
+                                      <object class="AdwSpinner"></object>
                                     </child>
                                   </object>
                                 </child>

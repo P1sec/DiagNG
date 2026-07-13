@@ -2,10 +2,10 @@
 from collections import defaultdict
 from gi.repository import Gio
 
+from diagng.system.acquisition.qualcomm import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.mm_port import ModemManagerPort
-from diagng.acquisition.qualcomm import usb_input
 from diagng.gobject.usb_device import USBDevice
 
 # WIP 2026-06-25: Import logic here from usb_modem_pyusb_devfinder.py
