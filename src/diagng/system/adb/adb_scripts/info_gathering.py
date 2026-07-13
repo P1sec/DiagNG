@@ -11,6 +11,15 @@ class InformationGathering:
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
 
+    # WIP: ➡️ ➡️ Check for exec-out being functional?
+
+    def check_exec_out(self):
+        pass # WIP
+
+    # WIP
+    # Cf.:
+    # ====> ; https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/services.md
+
     # TODO: Gather: getprop sys.usb.config diag,adb => current USB configuration
 
     # TODO: Gather: id => check root status
