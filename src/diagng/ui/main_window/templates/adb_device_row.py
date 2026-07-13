@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
+from diagng.system.adb.adb_scripts.base_script import BaseScript
 from diagng.gobject.adb_device import ADBDevice
 
 import gi
@@ -18,13 +19,25 @@ class ADBDeviceRow(Adw.ExpanderRow):
     __gtype_name__ = 'ADBDeviceRow'
 
     device = GObject.Property(type=ADBDevice)
+    current_script = GObject.Property(type=BaseScript)
 
     def __init__(self, dev=None):
         super().__init__()
 
-        self.device = dev
-        if self.device:
-            InformationGathering(lambda: 'xx')
+        if dev:
+            self.device = dev
+
+            self.device.connect('notify', self.on_device_update)
+            self.on_device_update(self.device)
+
+            self.current_script = InformationGathering(self.device)
+            self.current_script.connect('finished', self.on_script_finished)
+            self.current_script.launch()
+
+    def on_script_finished(self, *args):
+        print('WIP XX', args)
+
+        self.current_script = None
 
     def on_device_update(self, dev: ADBDevice, *args):
         self.set_title(

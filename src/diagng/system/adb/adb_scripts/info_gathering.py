@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
+from diagng.system.adb.adb_scripts.base_script import BaseScript
 
 from logging import warning
 
 # NEXT WIP : ➡️ ➡️ write a single Info Gathering script
 
 
-class InformationGathering:
-    def __init__(self, ok_callback):
+class InformationGathering(BaseScript):
+    __gtype_name__ = 'InformationGathering'
+
+    def __init__(self, dev):
+        super().__init__(dev)
 
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
 
     # WIP: ➡️ ➡️ Check for exec-out being functional?
 
-    def check_exec_out(self):
-        pass  # WIP
+    def launch(self):
+        super().launch()
+        # WIP XX
 
     # WIP
     # Cf.:

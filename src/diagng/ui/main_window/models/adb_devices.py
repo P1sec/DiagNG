@@ -14,9 +14,6 @@ def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
 
     row = ADBDeviceRow(dev)
 
-    dev.connect('notify', row.on_device_update)
-    row.on_device_update(dev)
-
     # ⚠️  ^ TODO: Use bind_property instead?
 
     # TODO: Handle unauthorized state

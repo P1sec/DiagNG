@@ -25,21 +25,28 @@ class ConnectionState(Enum):
 
 
 class BaseScript(GObject.Object):
+    __gtype_name__ = 'BaseScript'
+
     device = GObject.Property(type=ADBDevice)
     client = GObject.Property(type=ADBClient)
-    state = GObject.Property(type=str, default=ConnectionState.Unstarted)
+    state = GObject.Property(type=str, default=str(ConnectionState.Unstarted))
     text_output = GObject.Property(type=str)
 
     @GObject.Signal
-    def XX(self):
+    def finished(self):
         pass
 
     def __init__(self, device):
+        super().__init__()
+
         self.device = device
 
         pass  # WIP
 
-    def new_connection(self):
+    def launch(self):
         self.client = ADBClient()
 
+        pass  # WIP
+
+    def check_exec_out(self):
         pass  # WIP
