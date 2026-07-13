@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
+from diagng.gobject.adb_device import ADBDevice
 
 import gi
 
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GObject, GLib
 
 # Register resources
 import diagng.utils.gresources
@@ -14,3 +16,24 @@ import diagng.utils.gresources
 )
 class ADBDeviceRow(Adw.ExpanderRow):
     __gtype_name__ = 'ADBDeviceRow'
+
+    device = GObject.Property(type=ADBDevice)
+
+    def __init__(self, dev):
+        super().__init__()
+
+        self.device = dev
+
+        InformationGathering(lambda: 'xx')
+
+    def on_device_update(self, dev: ADBDevice, *args):
+        self.set_title(
+            '<b>%s</b> (transport id #%s, serial ID %s)'
+            % (
+                GLib.markup_escape_text(dev.model_name or '', -1),
+                # ^ TODO gather extra info from UDev?
+                GLib.markup_escape_text(dev.transport_id or '', -1),
+                GLib.markup_escape_text(dev.serial_str or '', -1),
+            )
+        )
+        self.set_subtitle(GLib.markup_escape_text(dev.text_summary or '', -1))

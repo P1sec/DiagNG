@@ -12,22 +12,10 @@ from gi.repository import Adw, Gtk, GLib
 
 def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
 
-    row = ADBDeviceRow()
+    row = ADBDeviceRow(dev)
 
-    def on_row_change(*args):
-        row.set_title(
-            '<b>%s</b> (transport id #%s, serial ID %s)'
-            % (
-                GLib.markup_escape_text(dev.model_name or '', -1),
-                # ^ TODO gather extra info from UDev?
-                GLib.markup_escape_text(dev.transport_id or '', -1),
-                GLib.markup_escape_text(dev.serial_str or '', -1),
-            )
-        )
-        row.set_subtitle(GLib.markup_escape_text(dev.text_summary or '', -1))
-
-    dev.connect('notify', on_row_change)
-    on_row_change()
+    dev.connect('notify', row.on_device_update)
+    row.on_device_update(dev)
 
     # ⚠️  ^ TODO: Use bind_property instead?
 
