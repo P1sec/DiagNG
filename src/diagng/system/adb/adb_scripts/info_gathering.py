@@ -15,8 +15,6 @@ class InformationGathering(BaseScript):
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
 
-    # WIP: ➡️ ➡️ Check for exec-out being functional?
-
     def launch(self):
         super().launch()
         # WIP XX

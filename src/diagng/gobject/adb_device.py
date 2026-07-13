@@ -15,6 +15,8 @@ class ADBDevice(GObject.Object):
     model_name = GObject.Property(type=str)
     connected = GObject.Property(type=bool, default=False)
     usb_device = GObject.Property(type=USBDevice)
+    checked_exec_out = GObject.Property(type=bool, default=False)
+    prefer_exec_out = GObject.Property(type=bool, default=True)
     text_summary = GObject.Property(type=str)
 
     def __repr__(self):

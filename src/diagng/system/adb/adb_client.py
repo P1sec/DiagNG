@@ -281,8 +281,15 @@ class ADBClient(GObject.Object):
 
         self.send_cmd('host:track-devices-l', callback)
 
+    def set_device(self, *args):
+        pass  # TODO
+
     def shell(self, *args):
         pass  # TODO
+        # ----->  SET ⚠️ checked_exec_out + prefer_exec_out if not set?
+        # For this, launch a secondary client for testing purpose
+        # before actually launch the requested command?
+        # WIP: ➡️ ➡️ Check for exec-out being functional?
 
     def push(self, *args):
         pass  # TODO
