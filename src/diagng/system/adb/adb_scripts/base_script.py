@@ -52,35 +52,33 @@ class BaseScript(GObject.Object):
     def launch(self):
         self.client = ADBClient()
 
-        def on_connect(*args):
-            def on_device_set(resp: ADBResponse):
-                if isinstance(resp, ADBOkayResponse):
-                    info('Device set to %r in script %r' % (self.device, self))
-                else:
-                    error(
-                        'Could not set device in ADB client session: %r' % resp
-                    )
-                    self.state = ScriptState.FailedProtocolError
-
-                self.launch_script_for_device()
-
-            self.client.set_device(self.device, on_device_set)
-
-        def on_close(*args):
-            if (
-                self.client.state != ConnectionState.ClosedNormal
-                or self.client.response_handler
-            ):
-                warning(
-                    'Connection closed, reason: %r'
-                    % ConnectionState(self.client.state)
-                )
-                self.state = ScriptState.Failed
-
-        self.client.connected.connect(on_connect)
-        self.client.closed.connect(on_close)
+        self.client.connected.connect(self.on_connect)
+        self.client.closed.connect(self.on_close)
         self.state = ScriptState.Processing
         self.client.connect_server()
+
+    def on_connect(self, *args):
+        def on_device_set(resp: ADBResponse):
+            if isinstance(resp, ADBOkayResponse):
+                info('Device set to %r in script %r' % (self.device, self))
+            else:
+                error('Could not set device in ADB client session: %r' % resp)
+                self.state = ScriptState.Failed
+
+            self.launch_script_for_device()
+
+        self.client.set_device(self.device, on_device_set)
+
+    def on_close(self, *args):
+        if (
+            self.client.state != ConnectionState.ClosedNormal
+            or self.client.response_handler
+        ):
+            warning(
+                'Connection closed, reason: %r'
+                % ConnectionState(self.client.state)
+            )
+            self.state = ScriptState.Failed
 
     @abstractmethod
     def launch_script_for_device(self):

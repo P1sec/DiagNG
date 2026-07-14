@@ -61,17 +61,30 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
+      <object class="AdwExpanderRow" id="system_info_expander">
+        <property name="title">General system information</property>
+        <child type="suffix">
+          <object class="AdwSpinner"></object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="system_info"></object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="AdwActionRow">
         <property name="title">Root availability status</property>
-        <child>
-          <object class="AdwSpinner"></object>
+        <child type="suffix">
+          <object class="GtkLabel">
+            <property name="label">Loading...</property>
+          </object>
         </child>
       </object>
     </child>
     <child>
       <object class="AdwActionRow">
         <property name="title">Diag availability status</property>
-        <child>
+        <child type="suffix">
           <object class="GtkLabel">
             <property name="label">Loading...</property>
           </object>
@@ -81,7 +94,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <child>
       <object class="AdwActionRow">
         <property name="title">Current USB mode</property>
-        <child>
+        <child type="suffix">
           <object class="GtkLabel">
             <property name="label">Loading...</property>
           </object>
@@ -91,7 +104,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <child>
       <object class="AdwActionRow">
         <property name="title">Suggested USB mode</property>
-        <child>
+        <child type="suffix">
           <object class="GtkLabel">
             <property name="label">Loading...</property>
           </object>

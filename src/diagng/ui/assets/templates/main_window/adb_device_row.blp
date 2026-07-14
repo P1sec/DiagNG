@@ -53,15 +53,28 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
+  Adw.ExpanderRow system_info_expander {
+    title: "General system information";
+
+    [suffix]
+    Adw.Spinner {}
+
+    ListBox system_info {}
+  }
+
   Adw.ActionRow {
     title: "Root availability status";
 
-    Adw.Spinner {}
+    [suffix]
+    Label {
+      label: "Loading...";
+    }
   }
 
   Adw.ActionRow {
     title: "Diag availability status";
 
+    [suffix]
     Label {
       label: "Loading...";
     }
@@ -70,6 +83,7 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   Adw.ActionRow {
     title: "Current USB mode";
 
+    [suffix]
     Label {
       label: "Loading...";
     }
@@ -78,6 +92,7 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   Adw.ActionRow {
     title: "Suggested USB mode";
 
+    [suffix]
     Label {
       label: "Loading...";
     }

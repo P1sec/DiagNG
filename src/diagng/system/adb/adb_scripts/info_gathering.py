@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from diagng.system.adb.adb_scripts.base_script import BaseScript
+from diagng.system.adb.adb_scripts.base_script import BaseScript, ScriptState
 from diagng.system.adb.adb_client import ADBResponse
 from re import finditer, MULTILINE
 
@@ -35,7 +35,6 @@ class InformationGathering(BaseScript):
         def callback(resp: ADBResponse):
             debug('Shell ADB command result: %r', resp)
 
-        self.client.closed.connect(self.on_close)
         self.client.shell_run(
             'echo SU_PATH=$(which su || echo NOT_FOUND); '
             + 'echo DIAG_WRITEABLE=$(test -w /dev/diag && echo Y || echo N); '
@@ -77,25 +76,34 @@ class InformationGathering(BaseScript):
         )
 
     def on_close(self, *args):
-        data = self.client.content_buffer.decode('utf-8')
-        debug('Shell ADB command result: %r', data)
+        super().on_close(*args)
 
-        # => ℹ️ Parse command results into a kind of array or object
+        if self.state == ScriptState.Processing:
+            data = self.client.content_buffer.decode('utf-8')
+            debug('Shell ADB command result: %r', data)
 
-        with self.read_keys_store.freeze_notify():
-            self.read_keys_store.remove_all()
-            self.read_keys_dict = {}
+            # => ℹ️ Parse command results into a kind of array or object
 
-            for match in finditer(r'^([A-Z_]+)=(.*?)$', data, flags=MULTILINE):
-                key = match.group(1)
-                value = match.group(2)
+            with self.read_keys_store.freeze_notify():
+                self.read_keys_store.remove_all()
+                self.read_keys_dict = {}
 
-                obj = IGKeyValue()
-                obj.key = key
-                obj.value = value
+                for match in finditer(
+                    r'^([A-Z_]+)=(.*?)$', data, flags=MULTILINE
+                ):
+                    key = match.group(1)
+                    value = match.group(2)
 
-                self.read_keys_dict[key] = value
-                self.read_keys_store.append(obj)
+                    if value:
+                        obj = IGKeyValue()
+                        obj.key = key
+                        obj.value = value
+
+                        self.read_keys_dict[key] = value
+                        self.read_keys_store.append(obj)
+
+            self.state = ScriptState.Success
+            self.finished.emit()
 
         # => ℹ️ TODO: (Display in some child of the ADBDeviceRow ExpanderRow)
         # => ℹ️ TODO: Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)

@@ -10,7 +10,7 @@ gi.require_version('Adw', '1')
 from gi.repository import Adw, Gtk, GLib
 
 
-def create_adb_device(dev: ADBDevice, window: 'MainWindow') -> Adw.ActionRow:
+def create_adb_device(dev: ADBDevice) -> Adw.ActionRow:
 
     row = ADBDeviceRow(dev)
 
