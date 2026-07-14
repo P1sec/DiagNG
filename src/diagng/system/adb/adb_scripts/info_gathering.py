@@ -51,7 +51,7 @@ class InformationGathering(BaseScript):
             + 'echo ANDROID_SDK=$(getprop ro.build.version.sdk); '
             + 'echo OTA_VERSION=$(getprop ro.build.version.incremental); '
             + 'echo FIRMWARE_STRING=$(getprop ro.build.fingerprint); '
-            + 'echo SU_LOCATION=$(which su || echo NOTFOUND)',
+            + 'echo SU_LOCATION=$(which su || echo NOTFOUND)',
             callback,
         )
 
