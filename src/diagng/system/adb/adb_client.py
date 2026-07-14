@@ -279,6 +279,7 @@ class ADBClient(GObject.Object):
 
         if callback:
             self.response_handler = callback
+        self.socket_writer.clear_pending()
         self.socket_writer.write_all_async(
             payload, GLib.PRIORITY_DEFAULT, None, on_write
         )
