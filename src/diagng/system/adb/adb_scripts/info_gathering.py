@@ -24,8 +24,12 @@ class InformationGathering(BaseScript):
 
         self.client.closed.connect(self.on_close)
         self.client.shell_run(
-            'echo SUPATH=$(which su 2>&1); '
-            + 'echo USBCONFIG=$(getprop sys.usb.config 2>&1); '
+            'echo SU_PATH=$(which su || echo NOTFOUND); '
+            + 'echo DIAG_WRITEABLE=$(test -w /dev/diag && echo Y || echo N); '
+            + 'echo DIAG_EXISTS=$(test -e /dev/diag && echo Y || echo N); '
+            + 'echo DEV_READABLE=$(test -r /dev && echo Y || echo N); '
+            + 'echo FFS_DIAG_EXISTS=$(test -e /dev/ffs-diag && echo Y || echo N); '
+            + 'echo USB_CONFIG=$(getprop sys.usb.config 2>&1); '
             + 'echo KERNEL=$(uname -a); '
             + 'echo CPU_ABI=$(getprop ro.product.cpu.abi); '
             + 'echo CPU_ABILIST=$(getprop ro.product.cpu.abilist); '
@@ -55,12 +59,7 @@ class InformationGathering(BaseScript):
             + 'echo ANDROID_VERSION=$(getprop ro.build.version.release); '
             + 'echo ANDROID_SDK=$(getprop ro.build.version.sdk); '
             + 'echo OTA_VERSION=$(getprop ro.build.version.incremental); '
-            + 'echo FIRMWARE_STRING=$(getprop ro.build.fingerprint); '
-            + 'echo SU_LOCATION=$(which su || echo NOTFOUND); '
-            + 'echo DIAG_WRITEABLE=$(test -w /dev/diag && echo Y || echo N); '
-            + 'echo DIAG_EXISTS=$(test -e /dev/diag && echo Y || echo N); '
-            + 'echo DEV_READABLE=$(test -r /dev && echo Y || echo N); '
-            + 'echo FFS_DIAG_EXISTS=$(test -e /dev/ffs-diag && echo Y || echo N); ',
+            + 'echo FIRMWARE_STRING=$(getprop ro.build.fingerprint); ',
             callback,
         )
 
