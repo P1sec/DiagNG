@@ -78,8 +78,9 @@ class ADBClient(GObject.Object):
     def response_received(self, resp: ADBResponse):
         self.resp_buffer.append(resp)
         if self.response_handler is not None:
-            self.response_handler(resp)
+            callback = self.response_handler
             self.response_handler = None
+            callback(resp)
 
     @GObject.Signal(arg_types=(object,))
     def payload_received(self, new_chunk: bytes):
@@ -94,8 +95,8 @@ class ADBClient(GObject.Object):
         pass
 
     state = GObject.Property(type=int, default=ConnectionState.Unstarted)
-    # BYE: is_connected = GObject.Property(type=bool, default=False)
-    # BYE: is_failed = GObject.Property(type=bool, default=False)
+    device = GObject.Property(type=ADBDevice)
+    streaming_mode = GObject.Property(type=bool, default=False)
 
     response_handler: Optional[int]
     sock_buffer: bytes
@@ -293,10 +294,50 @@ class ADBClient(GObject.Object):
         self.send_cmd('host:track-devices-l', callback)
 
     def set_device(self, device: ADBDevice, callback=None):
+        self.device = device
         self.send_cmd(f'host:transport:{device.serial_str}', callback)
 
-    def shell(self, *args):
-        pass  # TODO
+    def shell_run(self, command: str, callback=None):
+        can_use_exec_out = True
+        if self.device:
+            if not self.device.checked_exec_out:
+                self.device.prefer_exec_out = False
+                client_2 = ADBClient()
+
+                def on_connect(*args):
+                    def callback_2(resp: ADBResponse):
+                        if isinstance(resp, ADBOkayResponse):
+
+                            def callback_3(resp: ADBResponse):
+                                client_2.streaming_mode = True
+                                if isinstance(resp, ADBOkayResponse):
+                                    self.device.prefer_exec_out = True
+
+                            client_2.send_cmd('exec:id', callback_3)
+
+                    client_2.set_device(self.device, callback_2)
+
+                def on_close(*args):
+                    self.device.checked_exec_out = True
+                    self.shell_run(command, callback)
+
+                client_2.connected.connect(on_connect)
+                client_2.closed.connect(on_close)
+                client_2.connect_server()
+                return
+
+            else:
+                can_use_exec_out = self.device.prefer_exec_out
+
+        def callback_4(resp: ADBResponse):
+            self.streaming_mode = True
+            if callback:
+                callback(resp)
+
+        self.send_cmd(
+            ('exec' if can_use_exec_out else 'shell') + ':' + command,
+            callback_4,
+        )
         # ----->  SET ⚠️ checked_exec_out + prefer_exec_out if not set?
         # For this, launch a secondary client for testing purpose
         # before actually launch the requested command?
@@ -336,7 +377,12 @@ class ADBClient(GObject.Object):
         while len(self.sock_buffer) >= 4:
             marker = self.sock_buffer[:4]
 
-            if marker == b'OKAY':
+            if self.streaming_mode:
+                self.content_buffer += self.sock_buffer
+                self.payload_received.emit(self.sock_buffer)
+                self.sock_buffer = b''
+
+            elif marker == b'OKAY':
                 self.sock_buffer = self.sock_buffer[4:]
                 resp = ADBOkayResponse()
                 self.response_received.emit(resp)

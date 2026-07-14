@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.base_script import BaseScript
+from diagng.system.adb.adb_client import ADBResponse
 
-from logging import warning
+from logging import warning, debug
 
 # NEXT WIP : ➡️ ➡️ write a single Info Gathering script
 
@@ -17,9 +18,15 @@ class InformationGathering(BaseScript):
 
     def launch_script_for_device(self):
         warning('TODO: Launch shell commands here')
-        # WIP XX
 
-        # In implem func. : self.client.shell('XX')
+        def callback(resp: ADBResponse):
+            debug('Shell ADB command result: %r', resp)
+
+        self.client.closed.connect(self.on_close)
+        self.client.shell_run('which su', callback)
+
+    def on_close(self, *args):
+        debug('Shell ADB command result: %r', self.client.content_buffer)
 
     # WIP
     # Cf.:
