@@ -23,7 +23,37 @@ class InformationGathering(BaseScript):
             debug('Shell ADB command result: %r', resp)
 
         self.client.closed.connect(self.on_close)
-        self.client.shell_run('which su', callback)
+        self.client.shell_run(
+            'echo SUPATH=$(which su 2>&1); '
+            + 'echo USBCONFIG=$(getprop sys.usb.config 2>&1); '
+            + 'echo KERNEL=$(uname -a); '
+            + 'echo CPU_ABI=$(getprop ro.product.cpu.abi); '
+            + 'echo CPU_ABILIST=$(getprop ro.product.cpu.abilist); '
+            + 'echo BASEBAND=$(getprop ro.baseband); '
+            + 'echo BASEBAND_VERSION=$(getprop gsm.version.baseband); '
+            + 'echo BASEBAND_RIL=$(getprop gsm.version.ril-impl); '
+            + 'echo RILD=$(getprop rild.libpath); '
+            + 'echo SOC=$(getprop ro.board.platform); '
+            + 'echo MODEL=$(getprop ro.product.model); '
+            + 'echo DEVICE=$(getprop ro.product.device); '
+            + 'echo BOARD=$(getprop ro.product.board); '
+            + 'echo BRAND=$(getprop ro.product.brand); '
+            + 'echo MANUFACTURER=$(getprop ro.product.manufacturer); '
+            + 'echo SYSTEM_MODEL=$(getprop ro.product.system.model); '
+            + 'echo SYSTEM_DEVICE=$(getprop ro.product.system.device); '
+            + 'echo SYSTEM_BOARD=$(getprop ro.product.system.board); '
+            + 'echo SYSTEM_BRAND=$(getprop ro.product.system.brand); '
+            + 'echo SYSTEM_MANUFACTURER=$(getprop ro.product.system.manufacturer); '
+            + 'echo BUILD_ID=$(getprop ro.build.id); '
+            + 'echo BUILD_DATE=$(getprop ro.build.date); '
+            + 'echo BUILD_INFO=$(getprop ro.build.description); '
+            + 'echo ANDROID_VERSION=$(getprop ro.build.version.release); '
+            + 'echo ANDROID_SDK=$(getprop ro.build.version.sdk); '
+            + 'echo OTA_VERSION=$(getprop ro.build.version.incremental); '
+            + 'echo FIRMWARE_STRING=$(getprop ro.build.fingerprint); '
+            + 'echo SU_LOCATION=$(which su || echo NOTFOUND)',
+            callback,
+        )
 
     def on_close(self, *args):
         debug('Shell ADB command result: %r', self.client.content_buffer)
