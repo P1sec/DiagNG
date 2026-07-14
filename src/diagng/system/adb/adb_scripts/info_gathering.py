@@ -1,17 +1,30 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.base_script import BaseScript
 from diagng.system.adb.adb_client import ADBResponse
+from re import finditer, MULTILINE
 
+from gi.repository import Gio, GObject
 from logging import warning, debug
 
 # NEXT WIP : ➡️ ➡️ write a single Info Gathering script
 
 
+class IGKeyValue(GObject.Object):
+    key = GObject.Property(type=str)
+    value = GObject.Property(type=str)
+
+
 class InformationGathering(BaseScript):
     __gtype_name__ = 'InformationGathering'
 
+    read_keys_dict = GObject.Property(type=object)
+    read_keys_store = GObject.Property(type=Gio.ListStore)
+
     def __init__(self, dev):
         super().__init__(dev)
+
+        self.read_keys_dict = {}
+        self.read_keys_store = Gio.ListStore.new(IGKeyValue)
 
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
@@ -64,10 +77,26 @@ class InformationGathering(BaseScript):
         )
 
     def on_close(self, *args):
-        data = self.client.content_buffer
+        data = self.client.content_buffer.decode('utf-8')
         debug('Shell ADB command result: %r', data)
 
-        # => ℹ️ TODO: Parse command results into a kind of array or object
+        # => ℹ️ Parse command results into a kind of array or object
+
+        with self.read_keys_store.freeze_notify():
+            self.read_keys_store.remove_all()
+            self.read_keys_dict = {}
+
+            for match in finditer(r'^([A-Z_]+)=(.*?)$', data, flags=MULTILINE):
+                key = match.group(1)
+                value = match.group(2)
+
+                obj = IGKeyValue()
+                obj.key = key
+                obj.value = value
+
+                self.read_keys_dict[key] = value
+                self.read_keys_store.append(obj)
+
         # => ℹ️ TODO: (Display in some child of the ADBDeviceRow ExpanderRow)
         # => ℹ️ TODO: Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)
         # => ℹ️ TODO: If the popup is confirmed, run a second script that will try to access the /dev/diag device over root / possibly fetch available USB configurations
