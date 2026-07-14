@@ -56,7 +56,11 @@ class InformationGathering(BaseScript):
             + 'echo ANDROID_SDK=$(getprop ro.build.version.sdk); '
             + 'echo OTA_VERSION=$(getprop ro.build.version.incremental); '
             + 'echo FIRMWARE_STRING=$(getprop ro.build.fingerprint); '
-            + 'echo SU_LOCATION=$(which su || echo NOTFOUND)',
+            + 'echo SU_LOCATION=$(which su || echo NOTFOUND); '
+            + 'echo DIAG_WRITEABLE=$(test -w /dev/diag && echo Y || echo N); '
+            + 'echo DIAG_EXISTS=$(test -e /dev/diag && echo Y || echo N); '
+            + 'echo DEV_READABLE=$(test -r /dev && echo Y || echo N); '
+            + 'echo FFS_DIAG_EXISTS=$(test -e /dev/ffs-diag && echo Y || echo N); ',
             callback,
         )
 
