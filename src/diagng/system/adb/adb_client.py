@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+from diagng.gobject.adb_device import ADBDevice
 
 from logging import error, warning, debug, info
 from socket import SOL_SOCKET, IPPROTO_TCP
 from typing import Callable, Optional
 from traceback import format_exc
+from enum import IntEnum
 from shutil import which
 from os import getenv
 import socket
@@ -36,6 +38,16 @@ TCP_KEEPCNT = getattr(socket, 'TCP_KEEPCNT', None)
 # ⚠️ ⚠️ => Découpler les classes GObject de la partie GUI, utiliser des signaux à la place?
 
 # ⚠️ https://cs.android.com/android/platform/superproject/+/android-latest-release:packages/modules/adb/sysdeps_unix.cpp;l=24?q=TCP_KEEPCNT%20adb
+
+
+class ConnectionState(IntEnum):
+    Unstarted = 1
+    ClosedServerNotInstalled = 2
+    ClosedServerUnreachable = 3
+    Connected = 4
+    ClosedBufferUnderrun = 5
+    ClosedWriteFailed = 6
+    ClosedNormal = 7
 
 
 class ADBResponse:
@@ -75,19 +87,15 @@ class ADBClient(GObject.Object):
 
     @GObject.Signal
     def closed(self):
-        self.is_connected = False
-
-    @GObject.Signal
-    def failed(self):
-        self.is_failed = True
+        self.response_received.emit(ADBConnectionClosed())
 
     @GObject.Signal
     def connected(self):
-        self.is_connected = True
+        pass
 
-    adb_bin_unavailable = GObject.Property(type=bool, default=False)
-    is_connected = GObject.Property(type=bool, default=False)
-    is_failed = GObject.Property(type=bool, default=False)
+    state = GObject.Property(type=int, default=ConnectionState.Unstarted)
+    # BYE: is_connected = GObject.Property(type=bool, default=False)
+    # BYE: is_failed = GObject.Property(type=bool, default=False)
 
     response_handler: Optional[int]
     sock_buffer: bytes
@@ -186,7 +194,8 @@ class ADBClient(GObject.Object):
                 self.daemon_launch_path()
             else:
                 error('Could not connect to ADB: ' + format_exc())
-                self.failed.emit()
+                self.state = ConnectionState.ClosedServerUnreachable
+                self.closed.emit()
         else:
             self.socket_reader = self.tcp_conn.get_input_stream()
             self.socket_writer = self.tcp_conn.get_output_stream()
@@ -196,6 +205,7 @@ class ADBClient(GObject.Object):
             )
 
             info('Connected to ADB socket')
+            self.state = ConnectionState.Connected
             self.connected.emit()
 
     def daemon_launch_path(self):
@@ -224,8 +234,8 @@ class ADBClient(GObject.Object):
 
     def daemon_unavailable(self):
         error('ADB not available on this sytem')
-        self.adb_bin_unavailable = True
-        self.failed.emit()
+        self.state = ConnectionState.ClosedServerNotInstalled
+        self.closed.emit()
 
     def spawn_daemon(self, use_flatpak=False):
 
@@ -258,7 +268,8 @@ class ADBClient(GObject.Object):
                 obj.write_all_finish(res)
             except Exception:
                 error('Could not send ADB command: ' + format_exc())
-                self.on_close()
+                self.state = ConnectionState.ClosedWriteFailed
+                self.closed.emit()
 
         raw_cmd = cmd.encode('utf-8')
         payload = b'%04x' % len(raw_cmd) + raw_cmd
@@ -281,8 +292,8 @@ class ADBClient(GObject.Object):
 
         self.send_cmd('host:track-devices-l', callback)
 
-    def set_device(self, *args):
-        pass  # TODO
+    def set_device(self, device: ADBDevice, callback=None):
+        self.send_cmd(f'host:transport:{device.serial_str}', callback)
 
     def shell(self, *args):
         pass  # TODO
@@ -300,12 +311,22 @@ class ADBClient(GObject.Object):
             data: bytes = self.socket_reader.read_bytes_finish(res).get_data()
         except Exception:
             error('ADB connection closed: ' + format_exc())
-            self.on_close()
+            self.state = (
+                ConnectionState.ClosedBufferUnderrun
+                if self.sock_buffer
+                else ConnectionState.ClosedNormal
+            )
+            self.closed.emit()
             return
         else:
             if not data:
                 info('ADB connection closed')
-                self.on_close()
+                self.state = (
+                    ConnectionState.ClosedBufferUnderrun
+                    if self.sock_buffer
+                    else ConnectionState.ClosedNormal
+                )
+                self.closed.emit()
                 return
 
         self.sock_buffer += data
@@ -344,8 +365,3 @@ class ADBClient(GObject.Object):
         self.socket_reader.read_bytes_async(
             4096, GLib.PRIORITY_DEFAULT, None, self.on_read
         )
-
-    def on_close(self):
-        self.connected = False
-        self.closed.emit()
-        self.response_received.emit(ADBConnectionClosed())

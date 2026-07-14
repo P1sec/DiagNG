@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-from diagng.system.adb.adb_client import ADBClient, ADBResponse
+from diagng.system.adb.adb_client import (
+    ADBClient,
+    ConnectionState,
+    ADBResponse,
+)
 from diagng.gobject.adb_device import ADBDevice
 
 from gi.repository import GObject, Gio
@@ -26,12 +30,6 @@ class ADBWatcher(GObject.Object):
     def try_obtain_version(self):
         client = ADBClient()
 
-        def on_conn_error(*args):
-            self.is_failed = True
-            self.adb_bin_unavailable = client.adb_bin_unavailable
-            self.is_connected = False
-            error('Could not connect to ADB')
-
         def on_connect(*args):
             self.is_failed = False
             self.adb_bin_unavailable = False
@@ -42,7 +40,7 @@ class ADBWatcher(GObject.Object):
 
             client.version(on_version)
 
-        def on_normal_close(*args):
+        def on_close(*args):
             self.is_connected = False
 
             if client.content_buffer:
@@ -51,25 +49,21 @@ class ADBWatcher(GObject.Object):
                 )
                 info('ADB_SERVER_VERSION value received: %d' % self.version)
 
-                self.watch_for_devices()
+                self.watch_for_devices()  # <-- Chain to next step
             else:
                 error('Could receive version string')
+                self.adb_bin_unavailable = (
+                    client.state == ConnectionState.ClosedServerNotInstalled
+                )
                 self.is_failed = True
 
-        client.failed.connect(on_conn_error)
         client.connected.connect(on_connect)
-        client.closed.connect(on_normal_close)
+        client.closed.connect(on_close)
 
         client.connect_server()
 
     def watch_for_devices(self):
         client = ADBClient()
-
-        def on_conn_error(*args):
-            self.is_failed = True
-            self.adb_bin_unavailable = client.adb_bin_unavailable
-            self.is_connected = False
-            error('Could not connect to ADB')
 
         def on_connect(*args):
             self.is_failed = False
@@ -143,15 +137,17 @@ class ADBWatcher(GObject.Object):
                     else:
                         break
 
-        def on_normal_close(*args):
+        def on_close(*args):
             self.is_connected = False
+            self.adb_bin_unavailable = (
+                client.state == ConnectionState.ClosedServerNotInstalled
+            )
             self.is_failed = True
 
             error('Client watch activity interrupted')
 
-        client.failed.connect(on_conn_error)
         client.connected.connect(on_connect)
         client.payload_received.connect(on_payload)
-        client.closed.connect(on_normal_close)
+        client.closed.connect(on_close)
 
         client.connect_server()

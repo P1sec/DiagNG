@@ -15,9 +15,11 @@ class InformationGathering(BaseScript):
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
 
-    def launch(self):
-        super().launch()
+    def launch_script_for_device(self):
+        warning('TODO: Launch shell commands here')
         # WIP XX
+
+        # In implem func. : self.client.shell('XX')
 
     # WIP
     # Cf.:
