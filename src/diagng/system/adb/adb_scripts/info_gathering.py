@@ -24,7 +24,7 @@ class InformationGathering(BaseScript):
 
         self.client.closed.connect(self.on_close)
         self.client.shell_run(
-            'echo SU_PATH=$(which su || echo NOTFOUND); '
+            'echo SU_PATH=$(which su || echo NOT_FOUND); '
             + 'echo DIAG_WRITEABLE=$(test -w /dev/diag && echo Y || echo N); '
             + 'echo DIAG_EXISTS=$(test -e /dev/diag && echo Y || echo N); '
             + 'echo DEV_READABLE=$(test -r /dev && echo Y || echo N); '
@@ -64,7 +64,13 @@ class InformationGathering(BaseScript):
         )
 
     def on_close(self, *args):
-        debug('Shell ADB command result: %r', self.client.content_buffer)
+        data = self.client.content_buffer
+        debug('Shell ADB command result: %r', data)
+
+        # => ℹ️ TODO: Parse command results into a kind of array or object
+        # => ℹ️ TODO: (Display in some child of the ADBDeviceRow ExpanderRow)
+        # => ℹ️ TODO: Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)
+        # => ℹ️ TODO: If the popup is confirmed, run a second script that will try to access the /dev/diag device over root / possibly fetch available USB configurations
 
     # WIP
     # Cf.:
