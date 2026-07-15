@@ -9,7 +9,7 @@ from diagng.system.adb.adb_client import (
 from diagng.gobject.adb_device import ADBDevice
 
 from logging import info, error, warning
-from gi.repository import GObject
+from gi.repository import GObject, GLib
 from abc import abstractmethod
 from enum import IntEnum
 
@@ -56,6 +56,9 @@ class BaseScript(GObject.Object):
         self.client.closed.connect(self.on_close)
         self.state = ScriptState.Processing
         self.client.connect_server()
+
+        # If called from a timer, don't repeat
+        return GLib.SOURCE_REMOVE
 
     def on_connect(self, *args):
         def on_device_set(resp: ADBResponse):

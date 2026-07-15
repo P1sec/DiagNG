@@ -3,7 +3,7 @@ from diagng.system.adb.adb_scripts.base_script import BaseScript, ScriptState
 from diagng.system.adb.adb_client import ADBResponse
 from re import finditer, MULTILINE
 
-from gi.repository import Gio, GObject
+from gi.repository import GLib, GObject
 from logging import warning, debug
 
 # NEXT WIP : ➡️ ➡️ write a single Info Gathering script
@@ -102,8 +102,15 @@ class InformationGathering(BaseScript):
             self.read_keys_dict = out_dict
             self.read_keys_text = out_text
 
-            self.state = ScriptState.Success
-            self.finished.emit()
+            if not out_dict.get('BASEBAND_RIL'):
+                # gsm.version.* module not loaded
+                # wait after device bootup, wait a
+                # bit
+                GLib.timeout_add_seconds(3, self.launch)
+
+            else:
+                self.state = ScriptState.Success
+                self.finished.emit()
 
         # => ℹ️ TODO: (Display in some child of the ADBDeviceRow ExpanderRow)
         # => ℹ️ TODO: Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)
