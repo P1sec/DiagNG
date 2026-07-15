@@ -237,7 +237,7 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
         self.adb_devices_group.bind_model(
-            self.app.adb_watcher.devices, create_adb_device
+            self.app.adb_watcher.devices, create_adb_device, self
         )
 
         # Bind ModemManager modem list

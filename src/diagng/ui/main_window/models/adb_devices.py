@@ -10,9 +10,11 @@ gi.require_version('Adw', '1')
 from gi.repository import Adw, Gtk, GLib
 
 
-def create_adb_device(dev: ADBDevice) -> Adw.ActionRow:
+def create_adb_device(
+    dev: ADBDevice, main_window: 'MainWindow'
+) -> Adw.ActionRow:
 
-    row = ADBDeviceRow(dev)
+    row = ADBDeviceRow(dev, main_window)
 
     # ⚠️  ^ TODO: Use bind_property instead?
 

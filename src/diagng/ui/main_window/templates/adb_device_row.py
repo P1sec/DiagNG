@@ -5,6 +5,7 @@ from diagng.gobject.adb_device import ADBDevice
 
 import gi
 
+gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, GObject, GLib
 
@@ -28,11 +29,14 @@ class ADBDeviceRow(Adw.ExpanderRow):
     baseband_ril_row: Adw.ActionRow = Gtk.Template.Child()
     baseband_ril_label: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, dev=None):
+    main_window: 'MainWindow'
+
+    def __init__(self, dev=None, main_window=None):
         super().__init__()
 
         if dev:
             self.device = dev
+            self.main_window = main_window
 
             self.device.connect('notify', self.on_device_update)
             self.on_device_update(self.device)
@@ -71,10 +75,35 @@ class ADBDeviceRow(Adw.ExpanderRow):
                     )
 
             self.info_gathering.connect('notify::read-keys-dict', update_ig)
-            self.info_gathering.connect('finished', self.on_script_finished)
+            self.info_gathering.connect('finished', self.on_base_info_gathered)
             self.info_gathering.launch()
 
-    def on_script_finished(self, *args):
+    def on_base_info_gathered(self, *args):
         print('WIP XX', args)
 
         self.current_script = None
+
+        # TODO set a "suggested_action" object
+        # attribute pointing to a given script
+        # depending on the phone and vendor
+        # model? e.g launch privileged
+        # APK on xiaomi, send dial code
+        # on Samsung, etc.
+
+        """
+        def confirm_callback(
+            alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
+        ):
+
+            if alert_dialog.choose_finish(result) == 'yes':
+
+
+        dialog = Adw.AlertDialog.new(
+            "XX QUESTION",
+        )
+        dialog.add_response('yes', 'Yes')
+        dialog.add_response('no', 'No')
+        dialog.set_default_response('yes')
+        dialog.set_close_response('no')
+        dialog.choose(self.main_window, None, confirm_callback)
+        """
