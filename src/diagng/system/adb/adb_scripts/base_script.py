@@ -36,7 +36,6 @@ class BaseScript(GObject.Object):
     device = GObject.Property(type=ADBDevice)
     client = GObject.Property(type=ADBClient)
     state = GObject.Property(type=int, default=ScriptState.Unstarted)
-    text_output = GObject.Property(type=str)
 
     @GObject.Signal
     def finished(self):
@@ -46,8 +45,6 @@ class BaseScript(GObject.Object):
         super().__init__()
 
         self.device = device
-
-        pass  # WIP
 
     def launch(self):
         self.client = ADBClient()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
+from diagng.system.adb.adb_scripts.enable_diag_usb import EnableDiagUsb
 from diagng.system.adb.adb_scripts.base_script import BaseScript
 from diagng.gobject.adb_device import ADBDevice
 
@@ -22,10 +23,11 @@ class ADBDeviceRow(Adw.ExpanderRow):
     is_online = GObject.Property(type=bool, default=False)
 
     device = GObject.Property(type=ADBDevice)
-    current_script = GObject.Property(type=BaseScript)
     info_gathering = GObject.Property(type=BaseScript)
 
     system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
+    enable_diag_usb_row: Adw.ExpanderRow = Gtk.Template.Child()
+    enable_diag_usb_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_spinner: Adw.Spinner = Gtk.Template.Child()
     baseband_ril_row: Adw.ActionRow = Gtk.Template.Child()
@@ -67,7 +69,6 @@ class ADBDeviceRow(Adw.ExpanderRow):
             self.is_online = True
 
             self.info_gathering = InformationGathering(self.device)
-            self.current_script = self.info_gathering
 
             # ⚠️ TODO: Use the right model so that it works here 🪧 ⬅️ ⬅️ ⚠️
             self.info_gathering.bind_property(
@@ -116,6 +117,10 @@ class ADBDeviceRow(Adw.ExpanderRow):
                 if su_path:
                     if su_path != 'NOT_FOUND':
                         self.root_binary_label.set_label('Found at ' + su_path)
+
+                        self.enable_diag_usb_row.set_visible(
+                            'diag' not in keys_dict.get('USB_CONFIG', '')
+                        )
                     else:
                         self.root_binary_label.set_label(
                             '(No "su" binary detected, is your phone rooted?)'
@@ -141,35 +146,41 @@ class ADBDeviceRow(Adw.ExpanderRow):
                 self.diag_device_label.set_label(diag_text)
 
             self.info_gathering.connect('notify::read-keys-dict', update_ig)
-            self.info_gathering.connect('finished', self.on_base_info_gathered)
             self.info_gathering.launch()
 
-    def on_base_info_gathered(self, *args):
-        print('WIP XX', args)
+    @Gtk.Template.Callback()
+    def trigger_usb_switch(self, *args):
+        script = EnableDiagUsb(self.device)
 
-        self.current_script = None
+        def diag_enabled(*args):
+            self.enable_diag_usb_row.set_enable_expansion(True)
+            self.enable_diag_usb_row.set_expanded(True)
+            self.enable_diag_usb_buffer.set_text(script.text_output)
 
-        # TODO set a "suggested_action" object
-        # attribute pointing to a given script
-        # depending on the phone and vendor
-        # model? e.g launch privileged
-        # APK on xiaomi, send dial code
-        # on Samsung, etc.
+        script.finished.connect(diag_enabled)
+        script.launch()
 
-        """
-        def confirm_callback(
-            alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
-        ):
+    # TODO set a "suggested_action" object
+    # attribute pointing to a given script
+    # depending on the phone and vendor
+    # model? e.g launch privileged
+    # APK on xiaomi, send dial code
+    # on Samsung, etc.
 
-            if alert_dialog.choose_finish(result) == 'yes':
+    """
+    def confirm_callback(
+        alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
+    ):
+
+        if alert_dialog.choose_finish(result) == 'yes':
 
 
-        dialog = Adw.AlertDialog.new(
-            "XX QUESTION",
-        )
-        dialog.add_response('yes', 'Yes')
-        dialog.add_response('no', 'No')
-        dialog.set_default_response('yes')
-        dialog.set_close_response('no')
-        dialog.choose(self.main_window, None, confirm_callback)
-        """
+    dialog = Adw.AlertDialog.new(
+        "XX QUESTION",
+    )
+    dialog.add_response('yes', 'Yes')
+    dialog.add_response('no', 'No')
+    dialog.set_default_response('yes')
+    dialog.set_close_response('no')
+    dialog.choose(self.main_window, None, confirm_callback)
+    """

@@ -6,12 +6,7 @@ from re import finditer, MULTILINE
 from gi.repository import GLib, GObject
 from logging import warning, debug
 
-# NEXT WIP : ➡️ ➡️ write a single Info Gathering script
-
-
-class IGKeyValue(GObject.Object):
-    key = GObject.Property(type=str)
-    value = GObject.Property(type=str)
+# A single Info Gathering script
 
 
 class InformationGathering(BaseScript):
@@ -26,11 +21,7 @@ class InformationGathering(BaseScript):
         self.read_keys_dict = {}
         self.read_keys_text = ''
 
-        warning('⚠️ ⚠️ WIP: Information gathering script')
-        pass
-
     def launch_script_for_device(self):
-        warning('TODO: Launch shell commands here')
 
         def callback(resp: ADBResponse):
             debug('Shell ADB command result: %r', resp)
@@ -42,6 +33,7 @@ class InformationGathering(BaseScript):
             + 'echo DEV_READABLE=$(test -r /dev && echo Y || echo N); '
             + 'echo FFS_DIAG_EXISTS=$(test -e /dev/ffs-diag && echo Y || echo N); '
             + 'echo USB_CONFIG=$(getprop sys.usb.config 2>&1); '
+            + 'echo USER_ID=$(id); '
             + 'echo KERNEL=$(uname -a); '
             + 'echo CPU_ABI=$(getprop ro.product.cpu.abi); '
             + 'echo CPU_ABILIST=$(getprop ro.product.cpu.abilist); '
@@ -112,21 +104,21 @@ class InformationGathering(BaseScript):
                 self.state = ScriptState.Success
                 self.finished.emit()
 
-        # => ℹ️ TODO: (Display in some child of the ADBDeviceRow ExpanderRow)
-        # => ℹ️ TODO: Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)
-        # => ℹ️ TODO: If the popup is confirmed, run a second script that will try to access the /dev/diag device over root / possibly fetch available USB configurations
+        # Eventually?
+        # => (Display in some child of the ADBDeviceRow ExpanderRow)
+        # => Show a popup to ask the permission for using "su" if available (Magisk may need to show an authorization, etc.)
+        # => If the popup is confirmed, run a second script that will try to access the /dev/diag device over root / possibly fetch available USB configurations
 
-    # WIP
     # Cf.:
     # ====> ; https://cs.android.com/android/platform/superproject/main/+/main:packages/modules/adb/docs/dev/services.md
 
-    # TODO: Gather: getprop sys.usb.config diag,adb => current USB configuration
+    # Gather: getprop sys.usb.config diag,adb => current USB configuration
 
-    # TODO: Gather: id => check root status
+    # Gather: id => check root status
 
-    # TODO: Gather: root status
+    # Gather: root status
 
-    # TODO: Gather: su availability
+    # Gather: su availability
 
     # etc.
 

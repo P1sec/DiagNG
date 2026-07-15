@@ -152,23 +152,42 @@ DEF</property>
       </object>
     </child>
     <child>
-      <object class="AdwExpanderRow">
+      <object class="AdwExpanderRow" id="enable_diag_usb_row">
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: su -c "setprop sys.usb.config diag,adb"</property>
         <property name="title">Try to enable diag over USB through root</property>
         <property name="title-selectable">true</property>
         <property name="use-markup">false</property>
+        <property name="visible">false</property>
         <child type="suffix">
           <object class="GtkButton">
             <property name="label">Trigger</property>
+            <signal name="clicked" handler="trigger_usb_switch"/>
             <style>
               <class name="pill"/>
             </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vscrollbar-policy">2</property>
+            <child>
+              <object class="GtkTextView" id="enable_diag_usb_output">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="enable_diag_usb_buffer">
+                    <property name="enable-undo">false</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
     <child>
       <object class="AdwExpanderRow">
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Will upload and run: com.longcheertel.midtest</property>
         <property name="title">Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK</property>
         <property name="title-selectable">true</property>

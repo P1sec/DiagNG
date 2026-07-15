@@ -137,23 +137,39 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     title-selectable: true;
   }
 
-  Adw.ExpanderRow {
+  Adw.ExpanderRow enable_diag_usb_row {
+    enable-expansion: false;
     subtitle: "Will run: su -c \"setprop sys.usb.config diag,adb\"";
     title: "Try to enable diag over USB through root";
     title-selectable: true;
     use-markup: false;
+    visible: false;
 
     [suffix]
     Button {
       label: "Trigger";
+      clicked => $trigger_usb_switch();
 
       styles [
         "pill",
       ]
     }
+
+    ScrolledWindow {
+      vscrollbar-policy: never;
+
+      TextView enable_diag_usb_output {
+        buffer: TextBuffer enable_diag_usb_buffer {
+          enable-undo: false;
+        };
+
+        editable: false;
+      }
+    }
   }
 
   Adw.ExpanderRow {
+    enable-expansion: false;
     subtitle: "Will upload and run: com.longcheertel.midtest";
     title: "Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK";
     title-selectable: true;
