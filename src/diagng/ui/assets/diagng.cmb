@@ -4,7 +4,7 @@
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="6ace0b7269acc3fa4a0c3882bf7716e6fa1995cb4f0f39d32afb69e232127d54"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="35de8e501033fdcb1dc7437448359325e5dd0625b41f5cf6a73d1284f3fb101e"/>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="c42a3504c9a24de43e8b7885300bb353c91a2a7becefe2cade7e337880b9bbf5"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
     <property id="accessible-description" type-id="gchararray"/>
     <property id="accessible-label" type-id="gchararray" translatable="1"/>

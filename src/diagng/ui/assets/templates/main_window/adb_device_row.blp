@@ -59,7 +59,17 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     [suffix]
     Adw.Spinner {}
 
-    ListBox system_info {}
+    ScrolledWindow {
+      vscrollbar-policy: never;
+
+      TextView system_info {
+        buffer: TextBuffer system_info_buffer {
+          enable-undo: false;
+        };
+
+        editable: false;
+      }
+    }
   }
 
   Adw.ActionRow {

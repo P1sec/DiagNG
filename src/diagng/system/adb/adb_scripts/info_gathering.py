@@ -18,13 +18,13 @@ class InformationGathering(BaseScript):
     __gtype_name__ = 'InformationGathering'
 
     read_keys_dict = GObject.Property(type=object)
-    read_keys_store = GObject.Property(type=Gio.ListStore)
+    read_keys_text = GObject.Property(type=str)
 
     def __init__(self, dev):
         super().__init__(dev)
 
         self.read_keys_dict = {}
-        self.read_keys_store = Gio.ListStore.new(IGKeyValue)
+        self.read_keys_text = ''
 
         warning('⚠️ ⚠️ WIP: Information gathering script')
         pass
@@ -84,23 +84,22 @@ class InformationGathering(BaseScript):
 
             # => ℹ️ Parse command results into a kind of array or object
 
-            with self.read_keys_store.freeze_notify():
-                self.read_keys_store.remove_all()
-                self.read_keys_dict = {}
+            out_dict = {}
+            out_text = ''
 
-                for match in finditer(
-                    r'^([A-Z_]+)=(.*?)$', data, flags=MULTILINE
-                ):
-                    key = match.group(1)
-                    value = match.group(2)
+            for match in finditer(r'^([A-Z_]+)=(.*?)$', data, flags=MULTILINE):
+                key = match.group(1)
+                value = match.group(2)
 
-                    if value:
-                        obj = IGKeyValue()
-                        obj.key = key
-                        obj.value = value
+                if value:
+                    out_dict[key] = value
+                    out_text += '%s: %s\n' % (
+                        key.strip().replace('\n', ''),
+                        value.strip().replace('\n', ''),
+                    )
 
-                        self.read_keys_dict[key] = value
-                        self.read_keys_store.append(obj)
+            self.read_keys_dict = out_dict
+            self.read_keys_text = out_text
 
             self.state = ScriptState.Success
             self.finished.emit()

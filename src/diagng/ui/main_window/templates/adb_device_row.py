@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from diagng.ui.main_window.models.adb_device_info import create_adb_device_info
 from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
 from diagng.system.adb.adb_scripts.base_script import BaseScript
 from diagng.gobject.adb_device import ADBDevice
@@ -25,8 +24,7 @@ class ADBDeviceRow(Adw.ExpanderRow):
     current_script = GObject.Property(type=BaseScript)
     info_gathering = GObject.Property(type=BaseScript)
 
-    system_info: Gtk.ListBox = Gtk.Template.Child()
-    system_info_expander: Adw.ExpanderRow = Gtk.Template.Child()
+    system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     def __init__(self, dev=None):
         super().__init__()
@@ -60,8 +58,8 @@ class ADBDeviceRow(Adw.ExpanderRow):
             self.info_gathering.launch()
 
             # ⚠️ TODO: Use the right model so that it works here 🪧 ⬅️ ⬅️ ⚠️
-            self.system_info.bind_model(
-                self.info_gathering.read_keys_store, create_adb_device_info
+            self.info_gathering.bind_property(
+                'read_keys_text', self.system_info_buffer, 'text'
             )
 
     def on_script_finished(self, *args):

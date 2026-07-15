@@ -67,7 +67,19 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
           <object class="AdwSpinner"></object>
         </child>
         <child>
-          <object class="GtkListBox" id="system_info"></object>
+          <object class="GtkScrolledWindow">
+            <property name="vscrollbar-policy">2</property>
+            <child>
+              <object class="GtkTextView" id="system_info">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="system_info_buffer">
+                    <property name="enable-undo">false</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>
