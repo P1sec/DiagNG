@@ -6,7 +6,8 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   title-selectable: true;
 
   Adw.ExpanderRow {
-    title: "Automatic diag port setup";
+    subtitle: "Some of the solutions given below (using a dial code or a vendor APK) may allow to you to enable the diag port without a rooted phone.";
+    title: "Automatic diag port setup (may require root)";
 
     [suffix]
     Button {
@@ -33,31 +34,16 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
-  Adw.ActionRow {
-    title: "adbd status";
-
-    Button {
-      label: "Restart as root";
-
-      styles [
-        "pill",
-      ]
-    }
-
-    Button {
-      label: "Restart as TCP/IP";
-
-      styles [
-        "pill",
-      ]
-    }
-  }
-
-  Adw.ExpanderRow system_info_expander {
+  Adw.ExpanderRow system_info_row {
     title: "General system information";
+    title-selectable: true;
+    use-markup: false;
 
     [suffix]
-    Adw.Spinner {}
+    Adw.Spinner system_info_spinner {}
+
+    [suffix]
+    Label android_version_label {}
 
     ScrolledWindow {
       vscrollbar-policy: never;
@@ -73,93 +59,131 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ActionRow baseband_ril_row {
+    subtitle-selectable: true;
     title: "Baseband RIL";
+    title-selectable: true;
+    use-markup: false;
 
     [suffix]
-    Label baseband_ril_label {}
+    Label baseband_ril_label {
+      label: "Loading...";
+    }
+  }
+
+  Adw.ActionRow supported_arch_row {
+    subtitle-selectable: true;
+    title: "System architecture";
+    title-selectable: true;
+    use-markup: false;
+
+    [suffix]
+    Label supported_arch_label {
+      label: "Loading...";
+    }
   }
 
   Adw.ActionRow {
+    subtitle-selectable: true;
     title: "Root availability status";
+    title-selectable: true;
+    use-markup: false;
 
     [suffix]
-    Label {
+    Label root_binary_label {
       label: "Loading...";
     }
   }
 
   Adw.ActionRow {
+    subtitle-selectable: true;
     title: "Diag availability status";
+    title-selectable: true;
+    use-markup: false;
 
     [suffix]
-    Label {
+    Label diag_device_label {
       label: "Loading...";
     }
   }
 
   Adw.ActionRow {
+    subtitle-selectable: true;
     title: "Current USB mode";
+    title-selectable: true;
+    use-markup: false;
 
     [suffix]
-    Label {
+    Label current_usb_mode_label {
       label: "Loading...";
+    }
+  }
+
+  Adw.ComboRow {
+    model: StringList {
+      strings: [
+        "ABC",
+        "DEF",
+      ];
+
+      strings [
+        "123",
+        "456",
+      ]
+    };
+
+    subtitle: "Needs touch screen action. For further documentation, see docs at https://<URL>";
+    subtitle-selectable: true;
+    title: "Use a vendor-specific dial code to enable diag mode";
+    title-selectable: true;
+  }
+
+  Adw.ExpanderRow {
+    subtitle: "Will run: su -c \"setprop sys.usb.config diag,adb\"";
+    title: "Try to enable diag over USB through root";
+    title-selectable: true;
+    use-markup: false;
+
+    [suffix]
+    Button {
+      label: "Trigger";
+
+      styles [
+        "pill",
+      ]
+    }
+  }
+
+  Adw.ExpanderRow {
+    subtitle: "Will upload and run: com.longcheertel.midtest";
+    title: "Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK";
+    title-selectable: true;
+    use-markup: false;
+
+    [suffix]
+    Button {
+      label: "Trigger";
+
+      styles [
+        "pill",
+      ]
     }
   }
 
   Adw.ActionRow {
-    title: "Suggested USB mode";
+    title: "adbd status";
+    title-selectable: true;
+    use-markup: false;
 
-    [suffix]
-    Label {
-      label: "Loading...";
-    }
-  }
-
-  Adw.ExpanderRow {
-    title: "Action 2 (test root using su?)";
-
-    [suffix]
     Button {
-      label: "Trigger";
+      label: "Restart as root";
 
       styles [
         "pill",
       ]
     }
-  }
 
-  Adw.ExpanderRow {
-    title: "Action 3 (switch on Xiaomi QC Diag?)";
-
-    [suffix]
     Button {
-      label: "Trigger";
-
-      styles [
-        "pill",
-      ]
-    }
-  }
-
-  Adw.ExpanderRow {
-    title: "Action 4 (dial *#0808# for Samsung QC?)";
-
-    [suffix]
-    Button {
-      label: "Trigger";
-
-      styles [
-        "pill",
-      ]
-    }
-  }
-
-  Adw.ExpanderRow {
-    title: "Action 5 (dial *#8011# for Oneplus QC?)";
-
-    [suffix]
-    Button {
-      label: "Trigger";
+      label: "Restart as TCP/IP";
 
       styles [
         "pill",

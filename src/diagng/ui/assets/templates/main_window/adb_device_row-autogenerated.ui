@@ -11,7 +11,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <property name="title-selectable">true</property>
     <child>
       <object class="AdwExpanderRow">
-        <property name="title">Automatic diag port setup</property>
+        <property name="subtitle">Some of the solutions given below (using a dial code or a vendor APK) may allow to you to enable the diag port without a rooted phone.</property>
+        <property name="title">Automatic diag port setup (may require root)</property>
         <child type="suffix">
           <object class="GtkButton">
             <property name="label">Trigger</property>
@@ -40,31 +41,15 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
-      <object class="AdwActionRow">
-        <property name="title">adbd status</property>
-        <child>
-          <object class="GtkButton">
-            <property name="label">Restart as root</property>
-            <style>
-              <class name="pill"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="label">Restart as TCP/IP</property>
-            <style>
-              <class name="pill"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow" id="system_info_expander">
+      <object class="AdwExpanderRow" id="system_info_row">
         <property name="title">General system information</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
         <child type="suffix">
-          <object class="AdwSpinner"></object>
+          <object class="AdwSpinner" id="system_info_spinner"></object>
+        </child>
+        <child type="suffix">
+          <object class="GtkLabel" id="android_version_label"></object>
         </child>
         <child>
           <object class="GtkScrolledWindow">
@@ -85,17 +70,38 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     </child>
     <child>
       <object class="AdwActionRow" id="baseband_ril_row">
+        <property name="subtitle-selectable">true</property>
         <property name="title">Baseband RIL</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
         <child type="suffix">
-          <object class="GtkLabel" id="baseband_ril_label"></object>
+          <object class="GtkLabel" id="baseband_ril_label">
+            <property name="label">Loading...</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="supported_arch_row">
+        <property name="subtitle-selectable">true</property>
+        <property name="title">System architecture</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
+        <child type="suffix">
+          <object class="GtkLabel" id="supported_arch_label">
+            <property name="label">Loading...</property>
+          </object>
         </child>
       </object>
     </child>
     <child>
       <object class="AdwActionRow">
+        <property name="subtitle-selectable">true</property>
         <property name="title">Root availability status</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
         <child type="suffix">
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="root_binary_label">
             <property name="label">Loading...</property>
           </object>
         </child>
@@ -103,9 +109,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     </child>
     <child>
       <object class="AdwActionRow">
+        <property name="subtitle-selectable">true</property>
         <property name="title">Diag availability status</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
         <child type="suffix">
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="diag_device_label">
             <property name="label">Loading...</property>
           </object>
         </child>
@@ -113,69 +122,83 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     </child>
     <child>
       <object class="AdwActionRow">
+        <property name="subtitle-selectable">true</property>
         <property name="title">Current USB mode</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
         <child type="suffix">
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="current_usb_mode_label">
             <property name="label">Loading...</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwComboRow">
+        <property name="model">
+          <object class="GtkStringList">
+            <property name="strings">ABC
+DEF</property>
+            <items>
+              <item>123</item>
+              <item>456</item>
+            </items>
+          </object>
+        </property>
+        <property name="subtitle">Needs touch screen action. For further documentation, see docs at https://&lt;URL&gt;</property>
+        <property name="subtitle-selectable">true</property>
+        <property name="title">Use a vendor-specific dial code to enable diag mode</property>
+        <property name="title-selectable">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="AdwExpanderRow">
+        <property name="subtitle">Will run: su -c "setprop sys.usb.config diag,adb"</property>
+        <property name="title">Try to enable diag over USB through root</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
+        <child type="suffix">
+          <object class="GtkButton">
+            <property name="label">Trigger</property>
+            <style>
+              <class name="pill"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwExpanderRow">
+        <property name="subtitle">Will upload and run: com.longcheertel.midtest</property>
+        <property name="title">Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
+        <child type="suffix">
+          <object class="GtkButton">
+            <property name="label">Trigger</property>
+            <style>
+              <class name="pill"/>
+            </style>
           </object>
         </child>
       </object>
     </child>
     <child>
       <object class="AdwActionRow">
-        <property name="title">Suggested USB mode</property>
-        <child type="suffix">
-          <object class="GtkLabel">
-            <property name="label">Loading...</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow">
-        <property name="title">Action 2 (test root using su?)</property>
-        <child type="suffix">
+        <property name="title">adbd status</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
+        <child>
           <object class="GtkButton">
-            <property name="label">Trigger</property>
+            <property name="label">Restart as root</property>
             <style>
               <class name="pill"/>
             </style>
           </object>
         </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow">
-        <property name="title">Action 3 (switch on Xiaomi QC Diag?)</property>
-        <child type="suffix">
+        <child>
           <object class="GtkButton">
-            <property name="label">Trigger</property>
-            <style>
-              <class name="pill"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow">
-        <property name="title">Action 4 (dial *#0808# for Samsung QC?)</property>
-        <child type="suffix">
-          <object class="GtkButton">
-            <property name="label">Trigger</property>
-            <style>
-              <class name="pill"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwExpanderRow">
-        <property name="title">Action 5 (dial *#8011# for Oneplus QC?)</property>
-        <child type="suffix">
-          <object class="GtkButton">
-            <property name="label">Trigger</property>
+            <property name="label">Restart as TCP/IP</property>
             <style>
               <class name="pill"/>
             </style>

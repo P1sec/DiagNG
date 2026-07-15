@@ -104,7 +104,7 @@ class InformationGathering(BaseScript):
 
             if not out_dict.get('BASEBAND_RIL'):
                 # gsm.version.* module not loaded
-                # wait after device bootup, wait a
+                # right after device bootup, wait a
                 # bit
                 GLib.timeout_add_seconds(3, self.launch)
 

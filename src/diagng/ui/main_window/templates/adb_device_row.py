@@ -25,9 +25,17 @@ class ADBDeviceRow(Adw.ExpanderRow):
     current_script = GObject.Property(type=BaseScript)
     info_gathering = GObject.Property(type=BaseScript)
 
+    system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
     system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
+    system_info_spinner: Adw.Spinner = Gtk.Template.Child()
     baseband_ril_row: Adw.ActionRow = Gtk.Template.Child()
     baseband_ril_label: Gtk.Label = Gtk.Template.Child()
+    root_binary_label: Gtk.Label = Gtk.Template.Child()
+    diag_device_label: Gtk.Label = Gtk.Template.Child()
+    supported_arch_row: Adw.ActionRow = Gtk.Template.Child()
+    supported_arch_label: Gtk.Label = Gtk.Template.Child()
+    android_version_label: Gtk.Label = Gtk.Template.Child()
+    current_usb_mode_label: Gtk.Label = Gtk.Template.Child()
 
     main_window: 'MainWindow'
 
@@ -68,11 +76,69 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
             def update_ig(*args):
                 keys_dict = self.info_gathering.read_keys_dict
+
+                android_version = keys_dict.get('ANDROID_VERSION')
+                android_sdk = keys_dict.get('ANDROID_SDK')
+                if android_version and android_sdk:
+                    self.android_version_label.set_label(
+                        f'Android {android_version} (SDK {android_sdk})'
+                    )
+
+                firmware_version = keys_dict.get('BUILD_INFO')
+                firmware_date = keys_dict.get('BUILD_DATE')
+                if firmware_version and firmware_date:
+                    self.system_info_row.set_subtitle(
+                        f'{firmware_version} - Released {firmware_date}'
+                    )
+
+                abi_list = keys_dict.get('CPU_ABILIST')
+                if abi_list:
+                    self.supported_arch_label.set_label(
+                        abi_list.replace(',', ' + ')
+                    )
+
+                # kernel_version = keys_dict.get('KERNEL')
+                # if kernel_version:
+                #     self.supported_arch_row.set_subtitle(kernel_version)
+
                 ril_name = keys_dict.get('BASEBAND_RIL')
                 if ril_name:
-                    self.baseband_ril_label.set_label(
-                        GLib.markup_escape_text(ril_name)
+                    self.baseband_ril_label.set_label(ril_name)
+                    self.system_info_spinner.set_visible(False)
+
+                ril_version = keys_dict.get('BASEBAND_VERSION')
+                if ril_version:
+                    self.baseband_ril_row.set_subtitle(
+                        'Version ' + ','.join(set(ril_version.split(',')))
                     )
+
+                su_path = keys_dict.get('SU_PATH')
+                if su_path:
+                    if su_path != 'NOT_FOUND':
+                        self.root_binary_label.set_label('Found at ' + su_path)
+                    else:
+                        self.root_binary_label.set_label(
+                            '(No "su" binary detected, is your phone rooted?)'
+                        )
+
+                usb_mode = keys_dict.get('USB_CONFIG')
+                if usb_mode:
+                    self.current_usb_mode_label.set_label(usb_mode)
+
+                if keys_dict.get('DIAG_EXISTS') == 'Y':
+                    diag_text = '/dev/diag found'
+                elif keys_dict.get('FFS_DIAG_EXISTS') == 'Y':
+                    if usb_mode and 'diag' in usb_mode:
+                        diag_text = '/dev/ffs-diag found'
+                    else:
+                        diag_text = (
+                            '/dev/ffs-diag found, please change the USB mode'
+                        )
+                elif keys_dict.get('DEV_READABLE') == 'N':
+                    diag_text = "/dev can't be read in non-root mode"
+                else:
+                    diag_text = 'No /dev/diag device found, this baseband may be unsupported'
+                self.diag_device_label.set_label(diag_text)
 
             self.info_gathering.connect('notify::read-keys-dict', update_ig)
             self.info_gathering.connect('finished', self.on_base_info_gathered)
