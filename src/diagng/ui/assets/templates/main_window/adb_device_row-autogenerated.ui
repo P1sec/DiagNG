@@ -84,6 +84,14 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
+      <object class="AdwActionRow" id="baseband_ril_row">
+        <property name="title">Baseband RIL</property>
+        <child type="suffix">
+          <object class="GtkLabel" id="baseband_ril_label"></object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="AdwActionRow">
         <property name="title">Root availability status</property>
         <child type="suffix">

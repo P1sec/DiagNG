@@ -25,6 +25,8 @@ class ADBDeviceRow(Adw.ExpanderRow):
     info_gathering = GObject.Property(type=BaseScript)
 
     system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
+    baseband_ril_row: Adw.ActionRow = Gtk.Template.Child()
+    baseband_ril_label: Gtk.Label = Gtk.Template.Child()
 
     def __init__(self, dev=None):
         super().__init__()
@@ -54,13 +56,23 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
             self.info_gathering = InformationGathering(self.device)
             self.current_script = self.info_gathering
-            self.info_gathering.connect('finished', self.on_script_finished)
-            self.info_gathering.launch()
 
             # ⚠️ TODO: Use the right model so that it works here 🪧 ⬅️ ⬅️ ⚠️
             self.info_gathering.bind_property(
                 'read_keys_text', self.system_info_buffer, 'text'
             )
+
+            def update_ig(*args):
+                keys_dict = self.info_gathering.read_keys_dict
+                ril_name = keys_dict.get('BASEBAND_RIL')
+                if ril_name:
+                    self.baseband_ril_label.set_label(
+                        GLib.markup_escape_text(ril_name)
+                    )
+
+            self.info_gathering.connect('notify::read-keys-dict', update_ig)
+            self.info_gathering.connect('finished', self.on_script_finished)
+            self.info_gathering.launch()
 
     def on_script_finished(self, *args):
         print('WIP XX', args)

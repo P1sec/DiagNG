@@ -57,6 +57,7 @@ class InformationGathering(BaseScript):
             + 'echo DEVICE=$(getprop ro.product.device); '
             + 'echo BOARD=$(getprop ro.product.board); '
             + 'echo PRODUCT=$(getprop ro.product.name); '
+            + 'echo MARKETNAME=$(getprop ro.product.marketname); '
             + 'echo BRAND=$(getprop ro.product.brand); '
             + 'echo MANUFACTURER=$(getprop ro.product.manufacturer); '
             + 'echo SYSTEM_MODEL=$(getprop ro.product.system.model); '
