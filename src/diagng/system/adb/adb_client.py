@@ -430,8 +430,8 @@ class ADBClient(GObject.Object):
 
         try:
             data: bytes = self.socket_reader.read_bytes_finish(res).get_data()
-        except Exception:
-            error('ADB connection closed: ' + format_exc())
+        except Exception as err:
+            info('ADB connection closed: ' + repr(err))
             self.state = (
                 ConnectionState.ClosedBufferUnderrun
                 if self.sock_buffer

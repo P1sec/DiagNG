@@ -10,12 +10,15 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <property name="expanded">true</property>
     <property name="title-selectable">true</property>
     <child>
-      <object class="AdwExpanderRow">
+      <object class="AdwExpanderRow" id="auto_diag_setup_row">
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Some of the solutions given below (using a dial code or a vendor APK) may allow to you to enable the diag port without a rooted phone.</property>
         <property name="title">Automatic diag port setup (may require root)</property>
+        <property name="visible">false</property>
         <child type="suffix">
           <object class="GtkButton">
             <property name="label">Trigger</property>
+            <signal name="clicked" handler="trigger_auto_diag_setup"/>
             <style>
               <class name="pill"/>
               <class name="suggested-action"/>
@@ -38,6 +41,16 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="diag_port_active_row">
+        <property name="subtitle">An entry should appear in the "USB" tab if your phone model is supported by DiagNG.</property>
+        <property name="subtitle-selectable">true</property>
+        <property name="title">ℹ️ Diag port is active</property>
+        <property name="title-selectable">true</property>
+        <property name="use-markup">false</property>
+        <property name="visible">false</property>
       </object>
     </child>
     <child>
@@ -186,12 +199,13 @@ DEF</property>
       </object>
     </child>
     <child>
-      <object class="AdwExpanderRow">
+      <object class="AdwExpanderRow" id="xiaomi_trick_row">
         <property name="enable-expansion">false</property>
         <property name="subtitle">Will upload and run: com.longcheertel.midtest</property>
         <property name="title">Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK</property>
         <property name="title-selectable">true</property>
         <property name="use-markup">false</property>
+        <property name="visible">false</property>
         <child type="suffix">
           <object class="GtkButton">
             <property name="label">Trigger</property>

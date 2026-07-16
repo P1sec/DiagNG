@@ -5,13 +5,16 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   expanded: true;
   title-selectable: true;
 
-  Adw.ExpanderRow {
+  Adw.ExpanderRow auto_diag_setup_row {
+    enable-expansion: false;
     subtitle: "Some of the solutions given below (using a dial code or a vendor APK) may allow to you to enable the diag port without a rooted phone.";
     title: "Automatic diag port setup (may require root)";
+    visible: false;
 
     [suffix]
     Button {
       label: "Trigger";
+      clicked => $trigger_auto_diag_setup();
 
       styles [
         "pill",
@@ -32,6 +35,15 @@ template $ADBDeviceRow: Adw.ExpanderRow {
 
       Adw.Spinner {}
     }
+  }
+
+  Adw.ActionRow diag_port_active_row {
+    subtitle: "An entry should appear in the \"USB\" tab if your phone model is supported by DiagNG.";
+    subtitle-selectable: true;
+    title: "ℹ️ Diag port is active";
+    title-selectable: true;
+    use-markup: false;
+    visible: false;
   }
 
   Adw.ExpanderRow system_info_row {
@@ -168,12 +180,13 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
-  Adw.ExpanderRow {
+  Adw.ExpanderRow xiaomi_trick_row {
     enable-expansion: false;
     subtitle: "Will upload and run: com.longcheertel.midtest";
     title: "Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK";
     title-selectable: true;
     use-markup: false;
+    visible: false;
 
     [suffix]
     Button {

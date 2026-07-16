@@ -25,6 +25,9 @@ class ADBDeviceRow(Adw.ExpanderRow):
     device = GObject.Property(type=ADBDevice)
     info_gathering = GObject.Property(type=BaseScript)
 
+    auto_diag_setup_row: Adw.ExpanderRow = Gtk.Template.Child()
+    diag_port_active_row: Adw.ActionRow = Gtk.Template.Child()
+    xiaomi_trick_row: Adw.ExpanderRow = Gtk.Template.Child()
     system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
     enable_diag_usb_row: Adw.ExpanderRow = Gtk.Template.Child()
     enable_diag_usb_buffer: Gtk.TextBuffer = Gtk.Template.Child()
@@ -126,6 +129,18 @@ class ADBDeviceRow(Adw.ExpanderRow):
                             '(No "su" binary detected, is your phone rooted?)'
                         )
 
+                self.auto_diag_setup_row.set_visible(
+                    'diag' not in keys_dict.get('USB_CONFIG', '')
+                )
+                self.diag_port_active_row.set_visible(
+                    'diag' in keys_dict.get('USB_CONFIG', '')
+                )
+
+                self.xiaomi_trick_row.set_visible(
+                    'diag' not in keys_dict.get('USB_CONFIG', '')
+                    and 'xiaomi' in keys_dict.get('BRAND', '').lower()
+                )
+
                 usb_mode = keys_dict.get('USB_CONFIG')
                 if usb_mode:
                     self.current_usb_mode_label.set_label(usb_mode)
@@ -160,6 +175,16 @@ class ADBDeviceRow(Adw.ExpanderRow):
         script.finished.connect(diag_enabled)
         script.launch()
 
+    @Gtk.Template.Callback()
+    def trigger_auto_diag_setup(self, *args):
+        dialog = Adw.AlertDialog.new(
+            'Not implemented yet',
+        )
+        dialog.add_response('ok', 'Ok')
+        dialog.set_default_response('ok')
+        dialog.set_close_response('ok')
+        dialog.choose(self.main_window, None, None)
+
     # TODO set a "suggested_action" object
     # attribute pointing to a given script
     # depending on the phone and vendor
@@ -175,12 +200,12 @@ class ADBDeviceRow(Adw.ExpanderRow):
         if alert_dialog.choose_finish(result) == 'yes':
 
 
-    dialog = Adw.AlertDialog.new(
-        "XX QUESTION",
-    )
-    dialog.add_response('yes', 'Yes')
-    dialog.add_response('no', 'No')
-    dialog.set_default_response('yes')
-    dialog.set_close_response('no')
-    dialog.choose(self.main_window, None, confirm_callback)
+            dialog = Adw.AlertDialog.new(
+                "XX QUESTION",
+            )
+            dialog.add_response('yes', 'Yes')
+            dialog.add_response('no', 'No')
+            dialog.set_default_response('yes')
+            dialog.set_close_response('no')
+            dialog.choose(self.main_window, None, confirm_callback)
     """
