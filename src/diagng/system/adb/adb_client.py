@@ -7,6 +7,7 @@ from typing import Callable, Optional
 from traceback import format_exc
 from enum import IntEnum
 from shutil import which
+from time import time
 from os import getenv
 import socket
 
@@ -284,6 +285,28 @@ class ADBClient(GObject.Object):
             payload, GLib.PRIORITY_DEFAULT, None, on_write
         )
 
+    def send_sync_chunk(
+        self,
+        chunk: bytes,
+        callback: Optional[Callable[[ADBResponse], []]] = None,
+    ):
+        def on_write(obj: Gio.OutputStream, res: Gio.AsyncResult):
+            try:
+                obj.write_all_finish(res)
+            except Exception:
+                error('Could not send ADB command: ' + format_exc())
+                self.state = ConnectionState.ClosedWriteFailed
+                self.closed.emit()
+
+        info('Writing to ADB socket: %r' % chunk)
+
+        if callback:
+            self.response_handler = callback
+        self.socket_writer.clear_pending()
+        self.socket_writer.write_all_async(
+            chunk, GLib.PRIORITY_DEFAULT, None, on_write
+        )
+
     def version(self, callback=None):
         self.send_cmd('host:version', callback)
 
@@ -299,6 +322,10 @@ class ADBClient(GObject.Object):
         self.send_cmd(f'host:transport:{device.serial_str}', callback)
 
     def shell_run(self, command: str, callback=None):
+        # ----->  SET ⚠️ checked_exec_out + prefer_exec_out if not set
+        # For this, launch a secondary client for testing purposes
+        # before actually launch the requested command
+
         can_use_exec_out = True
         if self.device:
             if not self.device.checked_exec_out:
@@ -313,8 +340,12 @@ class ADBClient(GObject.Object):
                                 client_2.streaming_mode = True
                                 if isinstance(resp, ADBOkayResponse):
                                     self.device.prefer_exec_out = True
+                                client_2.raw_socket.close()
 
                             client_2.send_cmd('exec:id', callback_3)
+
+                        else:
+                            client_2.raw_socket.close()
 
                     client_2.set_device(self.device, callback_2)
 
@@ -339,12 +370,60 @@ class ADBClient(GObject.Object):
             ('exec' if can_use_exec_out else 'shell') + ':' + command,
             callback_4,
         )
-        # ----->  SET ⚠️ checked_exec_out + prefer_exec_out if not set?
-        # For this, launch a secondary client for testing purpose
-        # before actually launch the requested command?
-        # WIP: ➡️ ➡️ Check for exec-out being functional?
 
-    def push(self, *args):
+    def push(
+        self,
+        local_file: str,
+        remote_file: str,
+        is_executable: bool = False,
+        callback=None,
+    ):
+        def on_sync_enter(resp: ADBResponse):
+            if not isinstance(resp, ADBOkayResponse):
+                if callback:
+                    callback(resp)
+                self.raw_socket.close()
+                return
+
+            write_buffer = b''
+
+            send_payload = (
+                remote_file
+                + ','
+                + str(0o100775 if is_executable else 0o100664)
+            )
+            send_payload = send_payload.encode('utf-8')
+            write_buffer += (
+                b'SEND'
+                + len(send_payload).to_bytes(4, 'little')
+                + send_payload
+            )
+
+            with open(local_file, 'rb') as fd:
+                while True:
+                    data_payload = fd.read(64000)
+                    if not data_payload:
+                        break
+                    write_buffer += (
+                        b'DATA'
+                        + len(data_payload).to_bytes(4, 'little')
+                        + data_payload
+                    )
+
+            write_buffer += b'DONE' + int(time()).to_bytes(4, 'little')
+
+            def on_file_written(resp: ADBResponse):
+
+                self.streaming_mode = True
+                self.send_sync_chunk(b'QUIT\0\0\0\0')
+                if callback:
+                    callback(resp)
+                self.raw_socket.close()
+
+            self.send_sync_chunk(write_buffer, on_file_written)
+
+        self.send_cmd('sync:', on_sync_enter)
+
         pass  # TODO
 
     def on_read(self, obj: Gio.InputStream, res: Gio.AsyncResult):
