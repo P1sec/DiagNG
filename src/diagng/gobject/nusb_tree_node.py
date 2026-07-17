@@ -8,6 +8,7 @@ class NusbTreeNode(GObject.Object):
 
     description = GObject.Property(type=str)
     original_json = GObject.Property(type=str)
+    is_usb_interface = GObject.Property(type=bool, default=False)
     is_empty = GObject.Property(
         type=bool, default=True
     )  # Data binding used in Gtk.BuilderListItemFactory

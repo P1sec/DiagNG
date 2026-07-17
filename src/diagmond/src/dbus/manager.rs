@@ -361,6 +361,13 @@ impl Diagmond {
         //   => https://github.com/berkowski/tokio-serial/blob/master/examples/serial_println.rs
         //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialPortBuilder.html
 
+        #[cfg(target_os = "linux")]
+        if !(device_path.starts_with("/dev/ttyHS") || device_path.starts_with("/dev/ttyUSB")) {
+            let reason = format!("Invalid TTY device path: {}", device_path);
+            log::error!("{}", reason);
+            return Err(zbus::fdo::Error::Failed(reason));
+        }
+
         // Add UDev rule if ModemManager is running
 
         if kernel_path.len() > 0 {

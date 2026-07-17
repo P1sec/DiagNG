@@ -140,6 +140,12 @@ class DiagmondCommunicator(GObject.Object):
                         obj.original_json = item['original_json']
                         obj.children = Gio.ListStore.new(NusbTreeNode)
 
+                        parsed_json = loads(obj.original_json)
+                        if parsed_json.get('i_interface'):
+                            obj.is_usb_interface = True
+                            # TODO: https://github.com/P1sec/DiagNG/issues/24
+                            # TODO: + handle alt settings eventually?
+
                         for child in item['children']:
                             visit(obj.children, child)
 
