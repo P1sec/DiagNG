@@ -5,8 +5,12 @@ use std::sync::Mutex;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::sync::mpsc::unbounded_channel;
 use tokio_serial::SerialPortBuilderExt;
+use zbus::connection::Connection;
+use zbus::fdo::DBusProxy;
 use zbus::interface;
+use zbus::message::Header;
 use zbus::object_server::{ObjectServer, SignalEmitter};
+use zbus_polkit::policykit1::{AuthorityProxy, CheckAuthorizationFlags, Subject};
 use zvariant::ObjectPath;
 
 use crate::dbus::serial_device::{SerialCommand, SerialDevice, SerialDeviceSignals};
@@ -347,9 +351,92 @@ impl Diagmond {
     async fn open_serial_port(
         &self,
         #[zbus(object_server)] obj_server: &ObjectServer,
+        #[zbus(connection)] connection: &Connection,
+        #[zbus(header)] header: Header<'_>,
         device_path: String,
         kernel_path: String,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        // Check for PolKit rights
+
+        let dbus_proxy = match DBusProxy::new(connection).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not create a \"org.freedesktop.DBus\" interface proxy when trying to acquire {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        let pid = match dbus_proxy
+            .get_connection_unix_process_id((*header.sender().unwrap()).clone().into())
+            .await
+        {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not call \"org.freedesktop.DBus.GetConnectionUnixProcessID\" when trying to acquire {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        let proxy = match AuthorityProxy::new(connection).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not create a Polkit authority proxy when trying to acquire {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+        let subject = match Subject::new_for_owner(pid, None, None) {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not find info for PID {}: {:?}", pid, err);
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+        let result = match proxy
+            .check_authorization(
+                &subject,
+                "com.p1security.diagmond.capture-serial-port",
+                &std::collections::HashMap::new(),
+                CheckAuthorizationFlags::AllowUserInteraction.into(),
+                "",
+            )
+            .await
+        {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not communicate with Polkit authority proxy when trying to acquire {} (KERNEL=={}): {:?}",
+                    device_path,
+                    kernel_path,
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        if !result.is_authorized {
+            let error = format!(
+                "Could not authorize the action of acquiring {} with Polkit: {:?}",
+                device_path, result
+            );
+            log::error!("{}", error);
+            return Err(zbus::fdo::Error::Failed(error));
+        }
+
         // See:
         //   => https://docs.rs/tokio-serial/latest/tokio_serial/trait.SerialPort.html#tymethod.set_timeout
         //   => https://docs.rs/tokio-serial/latest/tokio_serial/struct.SerialStream.html#method.readable
