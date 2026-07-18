@@ -6,6 +6,11 @@ dist/
 wheels/
 *.egg-info
 
+# Build process
+.cargo/
+vendor/
+repo/
+
 # Rust
 target/
 
