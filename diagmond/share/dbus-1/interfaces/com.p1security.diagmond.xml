@@ -1,1 +1,180 @@
-../../../../src/diagng/ui/assets/share/dbus-1/interfaces/com.p1security.diagmond.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-FileCopyrightText: 2026, P1 Security SAS
+-->
+
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<node>
+    <interface name="org.freedesktop.DBus.Introspectable">
+        <method name="Introspect">
+            <arg name="data" type="s" direction="out" />
+        </method>
+    </interface>
+
+    <!--
+        com.p1security.diagmond:
+
+        The background, privileged, single-instance
+        Rust/Tokio service handling raw USB/SPI, USB,
+        Diag frag acquisition, providing IPC.
+    -->
+    <interface name="com.p1security.diagmond">
+        <!--
+            USBDataUpdated:
+
+            Triggered when nusb-related metadata is changed.
+            Contains the values of the up-to-date metadata.
+        -->
+        <signal name="USBDataUpdated">
+            <arg type="s" name="USBData" direction="out" />
+            <arg type="s" name="USBDataPretty" direction="out" />
+        </signal>
+
+        <!--
+        USBData:
+
+        Nusb status information, using the
+        JSON structure laid out in
+        #diagmond::system::usb_devices::UsbDevicesEndpointResp
+        -->
+        <property name="USBData" type="s" access="read" />
+
+        <!--
+        USBDataPretty:
+
+        Nusb status information, in a less detailed
+        and more formatted structured JSON output
+        -->
+        <property name="USBDataPretty" type="s" access="read" />
+
+        <!--
+            UDevRulesUpdated:
+
+            Triggered when runtimes rules contained in
+            /run/udev/rules.d on the host system are
+            changed.
+        -->
+        <signal name="UDevRulesUpdated">
+            <arg type="s" name="UDevRules" direction="out" />
+        </signal>
+
+        <!--
+            UDevRules:
+
+            Runtime UDev rules information, using the
+            JSON structure laid out in
+            #diagmond::system::udev_rules::UDevRuleList
+        -->
+        <property name="UDevRules" type="s" access="read" />
+
+
+        <!--
+            OpenUSBInterface:
+            @device_path: TTY device path to block
+              from ModemManager to use, if applicable
+            @kernel_path: UDev kernel name to block
+              from ModemManager to use, if applicable
+            @bus_id: Bus ID from the nusb library
+            @port_chain: Port chain from the nusb library
+            @vendor_id: VID of the USB device on which
+              to open a bidirectional interface
+            @product_id: PID of the USB device on which
+              to open a bidirectional interface
+            @configuration: Configuration ID (starting
+              with 1) of the interface to open
+            @interface: Interface ID (stating with 0)
+              of the interface to open
+            @alt_setting: Alternate setting ID (starting
+              with 0) of the interface to open
+            @object_path: New object path created under
+              #/com/p1security/diagmond/SerialDevices after
+              this operation
+        -->
+        <method name="OpenUSBInterface">
+            <arg type="s" name="device_path" direction="in" />
+            <arg type="s" name="kernel_path" direction="in" />
+            <arg type="s" name="bus_id" direction="in" />
+            <arg type="ay" name="port_chain" direction="in" />
+            <arg type="q" name="vendor_id" direction="in" />
+            <arg type="q" name="product_id" direction="in" />
+            <arg type="y" name="configuration" direction="in" />
+            <arg type="y" name="interface" direction="in" />
+            <arg type="y" name="alt_setting" direction="in" />
+            <arg type="o" name="object_path" direction="out" />
+        </method>
+
+
+        <!--
+            OpenSerialPort:
+            @device_path: The full /dev name of the serial port device to connect
+            @kernel_path: The UDev KERNEL name of the serial port device to connect.
+              Leave empty if unknown
+            @object_path: New object path created under
+              #/com/p1security/diagmond/SerialDevices after
+              this operation
+        -->
+        <method name="OpenSerialPort">
+            <arg type="s" name="device_path" direction="in" />
+            <arg type="s" name="kernel_path" direction="in" />
+            <arg type="o" name="object_path" direction="out" />
+        </method>
+
+        <!--
+            ⚠️ The functionality listed below is disabled because of
+            https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/work_items/1075
+        -->
+
+        <!--*********************************************************************-->
+        <!--method name="LockMMDeviceDBus">
+            <arg type="s" name="uid" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The hardware ID of the ModemManager
+                            device to lock - see
+                            https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/blob/mm-1-24/introspection/org.freedesktop.ModemManager1.xml#L118
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="b" name="success" direction="out">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            Result of the operation
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+        </method-->
+
+        <!--*********************************************************************-->
+        <!--method name="ReleaseMMDeviceDBus">
+            <arg type="s" name="uid" direction="in">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            The hardware ID of the ModemManager
+                            device to unlock - see
+                            https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/blob/mm-1-24/introspection/org.freedesktop.ModemManager1.xml#L118
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+            <arg type="b" name="success" direction="out">
+                <doc:doc>
+                    <doc:summary>
+                        <doc:para>
+                            Result of the operation
+                        </doc:para>
+                    </doc:summary>
+                </doc:doc>
+            </arg>
+        </method-->
+
+    </interface>
+</node>
+
