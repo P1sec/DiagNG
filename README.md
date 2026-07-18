@@ -43,14 +43,14 @@ Dependencies on Ubuntu 26.04 LTS:
 sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
     gir1.2-gtksource-5 libgtksourceview-5-dev \
-    python3-dev blueprint-compiler cargo rustc
+    python3-dev blueprint-compiler cargo rustc polkitd
 ```
 
 Dependencies on Archlinux:
 
 ```bash
 sudo pacman -S uv blueprint-compiler python-gobject \
-    gtksourceview5 libadwaita libmm-glib rust
+    gtksourceview5 libadwaita libmm-glib rust polkit
 ```
 
 Then:
