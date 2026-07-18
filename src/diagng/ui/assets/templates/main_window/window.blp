@@ -12,6 +12,27 @@ template $MainWindow: Adw.ApplicationWindow {
               title: "UDev status: REACHABLE - diagmond status: OFF";
             };
 
+            Adw.PreferencesGroup run_diagmond_popover {
+              Adw.ActionRow {
+                activatable-widget: run_diagmond_button;
+                subtitle: "If you wish to install this service separately as a system package, feel free to browse instructions at https://&lt;XX&gt;";
+                subtitle-selectable: true;
+                title: "<b>DiagNG needs to run a privileged service to allow you to connect to serial port or USB devices.</b>";
+                title-selectable: true;
+
+                [prefix]
+                Image {
+                  icon-name: "xapp-prefs-plugins-symbolic";
+                  icon-size: large;
+                }
+
+                [suffix]
+                Button run_diagmond_button {
+                  label: "Click here to proceed";
+                }
+              }
+            }
+
             Adw.PreferencesGroup usb_interfaces_group {
               title: "Potential Qualcomm Diag USB devices";
 

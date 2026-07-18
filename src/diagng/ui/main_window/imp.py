@@ -50,6 +50,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: USB
 
+    run_diagmond_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
     usb_devices: Gio.ListStore  # Of USBDevice items
 
@@ -403,6 +405,8 @@ class MainWindow(Adw.ApplicationWindow):
         diagmond_running = self.app.diagmond_communicator.bus_connected
         # udev_reachable = True
         # adb_reachable = True
+
+        self.run_diagmond_popover.set_visible(not diagmond_running)
 
         self.usb_link_banner.set_title(
             'UDev status: REACHABLE - diagmond status: %s'

@@ -24,6 +24,30 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           </object>
                         </property>
                         <child>
+                          <object class="AdwPreferencesGroup" id="run_diagmond_popover">
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="activatable-widget">run_diagmond_button</property>
+                                <property name="subtitle">If you wish to install this service separately as a system package, feel free to browse instructions at https://&amp;lt;XX&amp;gt;</property>
+                                <property name="subtitle-selectable">true</property>
+                                <property name="title">&lt;b&gt;DiagNG needs to run a privileged service to allow you to connect to serial port or USB devices.&lt;/b&gt;</property>
+                                <property name="title-selectable">true</property>
+                                <child type="prefix">
+                                  <object class="GtkImage">
+                                    <property name="icon-name">xapp-prefs-plugins-symbolic</property>
+                                    <property name="icon-size">2</property>
+                                  </object>
+                                </child>
+                                <child type="suffix">
+                                  <object class="GtkButton" id="run_diagmond_button">
+                                    <property name="label">Click here to proceed</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwPreferencesGroup" id="usb_interfaces_group">
                             <property name="title">Potential Qualcomm Diag USB devices</property>
                             <child>
