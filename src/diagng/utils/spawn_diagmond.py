@@ -5,7 +5,8 @@ from os import execlp, chdir
 UTILS_DIR = dirname(realpath(__file__))
 MODULE_DIR = dirname(realpath(UTILS_DIR))
 SRC_DIR = dirname(realpath(MODULE_DIR))
-DIAGMOND_DIR = realpath(join(SRC_DIR, 'diagmond'))
+ROOT_DIR = dirname(realpath(SRC_DIR))
+DIAGMOND_DIR = realpath(join(ROOT_DIR, 'diagmond'))
 
 
 def main():

@@ -68,11 +68,11 @@ uv sync
 # system-wide (creates a symlink to the source in "~/.local/bin")
 uv tool install -e .
 
-sudo install -Dm644 src/diagng/ui/assets/share/dbus-1/system.d/com.p1security.diagmond.conf \
+sudo install -Dm644 diagmond/share/dbus-1/system.d/com.p1security.diagmond.conf \
     /etc/dbus-1/system.d/com.p1security.diagmond.conf
 
-sudo install -Dm644 src/diagng/ui/assets/share/polkit-1/actions/com.p1security.diagmond.policy \
-    /usr/share/polkit-1/actions/com.p1security.diagmond.policy
+sudo install -Dm644 diagmond/share/polkit-1/actions/com.p1security.diagmond.policy \
+    /etc/polkit-1/actions/com.p1security.diagmond.policy
 
 install -Dm644 src/diagng/ui/assets/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg \
     ~/.local/share/icons/com.p1security.diagng.svg
