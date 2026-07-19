@@ -38,7 +38,6 @@ DBUS_SYSTEM_D_PATHS = ['/etc/dbus-1/system.d', '/usr/share/dbus-1/system.d']
 POLKIT_ACTION_FILE = 'com.p1security.diagmond.policy'
 POLKIT_ACTIONS_DIR = realpath(join(POLKIT_DIR, 'actions'))
 POLKIT_ACTION_PATHS = [
-    '/run/polkit-1/actions/',
     '/etc/polkit-1/actions/',
     '/usr/local/share/polkit-1/actions/',
     '/usr/share/polkit-1/actions/',

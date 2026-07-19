@@ -3,16 +3,13 @@ from os import (
     execlp,
     getenv,
     chdir,
-    setresgid,
-    setresuid,
-    setgroups,
-    getgrouplist,
+    geteuid,
 )
 from os.path import dirname, realpath, join, exists
 from gi.repository import Gio, GLib
 from logging import debug, info
 from typing import Callable
-from pwd import getpwuid
+from subprocess import run
 from shutil import which
 from io import StringIO
 from csv import reader
@@ -25,6 +22,9 @@ MODULE_DIR = dirname(realpath(UTILS_DIR))
 SRC_DIR = dirname(realpath(MODULE_DIR))
 ROOT_DIR = dirname(realpath(SRC_DIR))
 DIAGMOND_DIR = realpath(join(ROOT_DIR, 'diagmond'))
+TARGET_DIR = realpath(join(DIAGMOND_DIR, 'target'))
+RELEASE_DIR = realpath(join(TARGET_DIR, 'release'))
+DIAGMOND_GIT_PATH = realpath(join(RELEASE_DIR, 'diagmond-bin'))
 
 IS_GIT_TREE = exists(DIAGMOND_DIR)
 
@@ -124,27 +124,22 @@ def spawn_diagmond_as_outer_process(
 
 def main():
 
+    if (
+        len(sys.argv) == 1
+        and IS_GIT_TREE
+        and not getenv('SUDO_UID')
+        and not getenv('PKEXEC_UID')
+    ):
+        chdir(DIAGMOND_DIR)
+
+        run(['cargo', 'build', '--release'], check=True)
+
     install_dbus_and_polkit_files(__file__)
 
     if len(sys.argv) > 1:
         execlp(sys.argv[1], sys.argv[1])
     elif IS_GIT_TREE:
-        chdir(DIAGMOND_DIR)
-
-        uid, gid = (
-            getenv('PKEXEC_UID') or getenv('SUDO_UID'),
-            getenv('SUDO_GID'),
-        )
-
-        if uid:
-            uid = int(uid)
-            if gid:
-                gid = int(gid)
-                setgroups(getgrouplist(getpwuid(uid).pw_name, gid))
-                setresgid(gid, gid, -1)
-            setresuid(uid, uid, -1)
-
-        execlp('cargo', 'cargo', 'run', '--release')
+        execlp(DIAGMOND_GIT_PATH, DIAGMOND_GIT_PATH)
     elif DIAGMOND_PATH:
         execlp(DIAGMOND_PATH, DIAGMOND_PATH)
     else:
