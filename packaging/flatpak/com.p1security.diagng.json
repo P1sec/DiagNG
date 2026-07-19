@@ -103,7 +103,7 @@
             "build-commands": [
                 "cargo --offline fetch --verbose",
                 "cargo --offline build --release --verbose",
-                "install -Dm755 ./target/release/diagmond -t /app/bin/",
+                "install -Dm755 ./target/release/diagmond-bin -t /app/bin/",
                 "cp -r ./share/dbus-1 /app/share/",
                 "cp -r ./share/polkit-1 /app/share/"
             ],

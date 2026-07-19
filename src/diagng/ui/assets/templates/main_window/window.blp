@@ -29,6 +29,7 @@ template $MainWindow: Adw.ApplicationWindow {
                 [suffix]
                 Button run_diagmond_button {
                   label: "Click here to proceed";
+                  clicked => $launch_diagmond();
                 }
               }
             }

@@ -11,9 +11,9 @@ from diagng.system.diagmond_serialdevice_om import DiagmondSerialDeviceOM
 from diagng.system.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.system.udev_device_scanner import DeviceScanner
+from diagng.utils.logging_central import LoggingCentral
 from diagng.system.adb.adb_watcher import ADBWatcher
 from diagng.ui.main_window.imp import MainWindow
-from diagng.utils.logging import LoggingCentral
 
 # Register resources
 import diagng.utils.gresources

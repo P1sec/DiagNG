@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # WIP 2026-06-21
 
-# TODO use pkexec to create privileged dirs like /run/dbus-1
-# when needed +
+# Use pkexec to create privileged dirs like /run/dbus-1
+# when needed
 
 # See: https://dbus.freedesktop.org/doc/dbus-daemon.1.html +
 # https://github.com/P1sec/DiagNG/issues/1 for
@@ -10,28 +10,66 @@
 
 # => Launch the privileged subprocess directly
 # if the service is not installed/running/
-# launchable?
+# launchable
 
 #  => Install the DBus policy file in a stub
-#     after running pkexec?
+#     after running pkexec
 
 #    => Display a status banner about the
-#       privileged subprocess in the main UI?
+#       privileged subprocess in the main UI
 
-# OR, do no auto-launch until the whole
-# thing is distributable?
+from os.path import dirname, realpath, join, exists
+from os import makedirs, geteuid, execlp
+from shutil import copy2
+from sys import argv
 
-#  (Maybe later use an integrated build system
-#  like meson?)
+UTILS_DIR = dirname(realpath(__file__))
+MODULE_DIR = dirname(realpath(UTILS_DIR))
+UI_DIR = realpath(join(MODULE_DIR, 'ui'))
+ASSETS_DIR = realpath(join(UI_DIR, 'assets'))
+SHARE_DIR = realpath(join(ASSETS_DIR, 'share'))
+DBUS_DIR = realpath(join(SHARE_DIR, 'dbus-1'))
+POLKIT_DIR = realpath(join(SHARE_DIR, 'polkit-1'))
 
-SLASH_RUN_SERVICE_SPEC_DIR = '/run/dbus-1/system-services'
+DBUS_SYSTEM_D_FILE = 'com.p1security.diagmond.conf'
+DBUS_SYSTEM_D_DIR = realpath(join(DBUS_DIR, 'system-d'))
+DBUS_SYSTEM_D_PATHS = ['/etc/dbus-1/system.d', '/usr/share/dbus-1/system.d']
 
-SYSTEM_WIDE_SERVICE_SPEC_DIRS = [
-    '/etc/dbus-1/system-services',
-    '/usr/local/share/dbus-1/system-services',
-    '/usr/share/dbus-1/system-services',
+POLKIT_ACTION_FILE = 'com.p1security.diagmond.policy'
+POLKIT_ACTIONS_DIR = realpath(join(POLKIT_DIR, 'actions'))
+POLKIT_ACTION_PATHS = [
+    '/run/polkit-1/actions/',
+    '/etc/polkit-1/actions/',
+    '/usr/local/share/polkit-1/actions/',
+    '/usr/share/polkit-1/actions/',
 ]
 
 
-class DiagmondManager:
-    WIP  # xx =)
+def escalate_root(entry_point: str):
+    if geteuid() != 0:
+        execlp('pkexec', 'pkexec', 'env', 'python3', entry_point, *argv[1:])
+        exit(1)
+
+
+def install_dbus_and_polkit_files(entry_point: str):
+
+    for path in DBUS_SYSTEM_D_PATHS:
+        if exists(join(path, DBUS_SYSTEM_D_FILE)):
+            break
+    else:
+        escalate_root(entry_point)
+        makedirs(DBUS_SYSTEM_D_PATHS[0], exist_ok=True)
+        copy2(
+            join(DBUS_SYSTEM_D_DIR, DBUS_SYSTEM_D_FILE), DBUS_SYSTEM_D_PATHS[0]
+        )
+
+    for path in POLKIT_ACTION_PATHS:
+        if exists(join(path, POLKIT_ACTION_FILE)):
+            break
+    else:
+        escalate_root(entry_point)
+        makedirs(POLKIT_ACTION_PATHS[0], exist_ok=True)
+        copy2(
+            join(POLKIT_ACTIONS_DIR, POLKIT_ACTION_FILE),
+            POLKIT_ACTION_PATHS[0],
+        )

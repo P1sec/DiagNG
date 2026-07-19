@@ -9,6 +9,7 @@ from json import loads
 import diagng.utils.gresources
 
 from diagng.ui.main_window.models.usb_interfaces import create_usb_interfaces
+from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
 from diagng.ui.main_window.models.adb_devices import create_adb_device
 from diagng.ui.main_window.models.spi_modems import create_spi_modem
 from diagng.ui.main_window.models.mm_modems import create_mm_modem
@@ -124,6 +125,12 @@ class MainWindow(Adw.ApplicationWindow):
         # Reset the default UI state
 
         self.reset_state()
+
+    @Gtk.Template.Callback()
+    def launch_diagmond(self, target: Gtk.Button, *args):
+        print('(TEST launch_diagmond)')
+        target.set_sensitive(False)
+        spawn_diagmond_as_outer_process()
 
     def bind_data(self):
 
