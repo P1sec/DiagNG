@@ -33,8 +33,9 @@ template $AuthorizationDialog: Adw.Window {
     [bottom]
     ActionBar {
       [end]
-      Button {
+      Button continue_button {
         label: "Continue";
+        clicked => $on_continue();
 
         styles [
           "suggested-action",
@@ -42,14 +43,17 @@ template $AuthorizationDialog: Adw.Window {
       }
 
       [end]
-      Button {
+      Button decline_button {
         label: "Decline";
         receives-default: false;
+        clicked => $on_decline();
       }
     }
   };
 
   default-width: 600;
+  modal: true;
   title: "Authorization needed";
   width-request: 600;
+  close-request => $on_decline();
 }

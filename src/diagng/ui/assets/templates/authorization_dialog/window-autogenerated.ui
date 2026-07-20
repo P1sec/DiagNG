@@ -54,17 +54,19 @@ If you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (
         <child type="bottom">
           <object class="GtkActionBar">
             <child type="end">
-              <object class="GtkButton">
+              <object class="GtkButton" id="continue_button">
                 <property name="label">Continue</property>
+                <signal name="clicked" handler="on_continue"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
               </object>
             </child>
             <child type="end">
-              <object class="GtkButton">
+              <object class="GtkButton" id="decline_button">
                 <property name="label">Decline</property>
                 <property name="receives-default">false</property>
+                <signal name="clicked" handler="on_decline"/>
               </object>
             </child>
           </object>
@@ -72,7 +74,9 @@ If you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (
       </object>
     </property>
     <property name="default-width">600</property>
+    <property name="modal">true</property>
     <property name="title">Authorization needed</property>
     <property name="width-request">600</property>
+    <signal name="close-request" handler="on_decline"/>
   </template>
 </interface>
