@@ -8,7 +8,7 @@ from threading import Thread
 from json import dumps
 from time import time
 
-from diagng.system.acquisition.qualcomm import spi_input
+from diagng.protocol.qualcomm.acquisition import spi_input
 from diagng.gobject.udev_device import UDevDevice
 from diagng.gobject.serial_port import SerialPort
 

@@ -8,10 +8,14 @@ from traceback import format_exc
 from abc import abstractmethod
 from io import BytesIO
 
-from diagng.parsing.hdlc import hdlc_encode, hdlc_decode, TRAILER_CHAR
-from diagng.parsing.struct.qualcomm.diag_response import DiagResponse
-from diagng.parsing.struct.qualcomm.diag_cmd_code import DiagCmdCode
-from diagng.parsing.struct.qualcomm.diag_request import DiagRequest
+from diagng.protocol.qualcomm.utils.hdlc import (
+    hdlc_encode,
+    hdlc_decode,
+    TRAILER_CHAR,
+)
+from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
+from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
+from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 
 DiagCmd = DiagCmdCode.DiagCmd
 

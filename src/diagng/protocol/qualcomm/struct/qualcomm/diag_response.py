@@ -3,9 +3,9 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.parsing.struct.qualcomm import diag_verno_f_req
-from diagng.parsing.struct.qualcomm import diag_unknown
-from diagng.parsing.struct.qualcomm import diag_cmd_code
+from diagng.protocol.qualcomm.struct import diag_unknown
+from diagng.protocol.qualcomm.struct import diag_cmd_code
+from diagng.protocol.qualcomm.struct import diag_verno_f_rsp
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -15,9 +15,9 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
     )
 
 
-class DiagRequest(ReadWriteKaitaiStruct):
+class DiagResponse(ReadWriteKaitaiStruct):
     def __init__(self, _io=None, _parent=None, _root=None):
-        super(DiagRequest, self).__init__(_io)
+        super(DiagResponse, self).__init__(_io)
         self._parent = _parent
         self._root = _root or self
 
@@ -30,7 +30,7 @@ class DiagRequest(ReadWriteKaitaiStruct):
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = diag_verno_f_req.DiagVernoFReq(_io__raw_payload)
+            self.payload = diag_verno_f_rsp.DiagVernoFRsp(_io__raw_payload)
             self.payload._read()
         else:
             pass
@@ -51,7 +51,7 @@ class DiagRequest(ReadWriteKaitaiStruct):
             self.payload._fetch_instances()
 
     def _write__seq(self, io=None):
-        super(DiagRequest, self)._write__seq(io)
+        super(DiagResponse, self)._write__seq(io)
         self._io.write_u1(int(self.cmd_code))
         _on = self.cmd_code
         if _on == diag_cmd_code.DiagCmdCode.DiagCmd.verno_f:

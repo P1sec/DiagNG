@@ -15,8 +15,8 @@ from diagng.ui.main_window.models.spi_modems import create_spi_modem
 from diagng.ui.main_window.models.mm_modems import create_mm_modem
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
-from diagng.system.acquisition.qualcomm import spi_input
-from diagng.system.acquisition.qualcomm import usb_input
+from diagng.protocol.qualcomm.acquisition import spi_input
+from diagng.protocol.qualcomm.acquisition import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
@@ -415,7 +415,10 @@ class MainWindow(Adw.ApplicationWindow):
         # udev_reachable = True
         # adb_reachable = True
 
-        if not self.app.diagmond_communicator.proxy.get_name_owner() and not self.auth_dialog_showed:
+        if (
+            not self.app.diagmond_communicator.proxy.get_name_owner()
+            and not self.auth_dialog_showed
+        ):
             self.auth_dialog_showed = True
 
             auth_dialog = AuthorizationDialog(self)

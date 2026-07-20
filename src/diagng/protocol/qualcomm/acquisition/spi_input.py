@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from diagng.system.acquisition.qualcomm.base_input import BaseQCDMInput
+from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.gobject.serial_port import SerialPort
 
 from logging import error, warning, debug

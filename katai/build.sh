@@ -7,8 +7,8 @@ set -ex
 ksc \
     --target python \
     --read-write \
-    --python-package diagng.parsing.struct.qualcomm \
-    --outdir ../src/diagng/parsing/struct/qualcomm \
+    --python-package diagng.protocol.qualcomm.struct \
+    --outdir ../src/diagng/protocol/qualcomm/struct \
     qualcomm/diag/*.ksy qualcomm/diag/command/*.ksy
 
 cd ..

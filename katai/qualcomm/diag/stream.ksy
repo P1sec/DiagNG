@@ -13,7 +13,7 @@ seq:
     # + check and remove CRC-16
     # and trailer char at end at stream
     # if present and valid, else fail
-    process: diagng.parsing.hdlc.hdlc_decoder
+    process: diagng.protocol.qualcomm.utils.hdlc.hdlc_decoder
     terminator: 0x7e
     include: true
     repeat: eos

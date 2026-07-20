@@ -3,8 +3,8 @@
 from logging import debug, info, error
 from typing import Optional
 
-from diagng.system.acquisition.qualcomm.spi_input import SerialQCDMInput
-from diagng.system.acquisition.qualcomm.usb_input import USBQCDMInput
+from diagng.protocol.qualcomm.acquisition.spi_input import SerialQCDMInput
+from diagng.protocol.qualcomm.acquisition.usb_input import USBQCDMInput
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.serial_port import SerialPort
 from diagng.ui.qcdm_window.imp import QCDMWindow

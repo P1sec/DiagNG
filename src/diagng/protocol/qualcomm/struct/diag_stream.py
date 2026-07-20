@@ -3,8 +3,8 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.parsing.struct.qualcomm import diag_response
-import diagng.parsing.hdlc
+from diagng.protocol.qualcomm.struct import diag_response
+import diagng.protocol.qualcomm.utils.hdlc
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -31,7 +31,7 @@ class DiagStream(ReadWriteKaitaiStruct):
             self._raw__raw_frames.append(
                 self._io.read_bytes_term(126, True, True, True)
             )
-            _process = diagng.parsing.hdlc.HdlcDecoder()
+            _process = diagng.protocol.qualcomm.utils.hdlc.HdlcDecoder()
             self._raw_frames.append(_process.decode(self._raw__raw_frames[-1]))
             self.frames__outer_size.append(len(self._raw__raw_frames[i]))
             self.frames__inner_size.append(len(self._raw_frames[i]))
@@ -67,7 +67,7 @@ class DiagStream(ReadWriteKaitaiStruct):
             self._io.add_child_stream(_io__raw_frames)
             _pos2 = self._io.pos()
             self._io.seek(self._io.pos() + (self.frames__outer_size[i]))
-            _process_val = diagng.parsing.hdlc.HdlcDecoder()
+            _process_val = diagng.protocol.qualcomm.utils.hdlc.HdlcDecoder()
 
             def handler(
                 parent,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from diagng.system.acquisition.qualcomm.base_input import BaseQCDMInput
+from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.usb_device import USBDevice
 

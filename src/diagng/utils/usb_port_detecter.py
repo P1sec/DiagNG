@@ -2,7 +2,7 @@
 from collections import defaultdict
 from gi.repository import Gio
 
-from diagng.system.acquisition.qualcomm import usb_input
+from diagng.protocol.qualcomm.acquisition import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.mm_port import ModemManagerPort
