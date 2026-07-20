@@ -25,13 +25,25 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
               <object class="GtkLabel">
                 <property name="halign">1</property>
                 <property name="hexpand">true</property>
-                <property name="label">This application needs XXX...</property>
-                <property name="margin-bottom">8</property>
+                <property name="label">This application needs to spawn a &lt;b&gt;privileged subprocess&lt;/b&gt; in order to operate.
+
+
+This process will run under the name "diagmond-bin" and will be able to:
+
+•  Enumerate the USB devices and interfaces on your machine.
+•  After prompting for extra authorization, open and forward an USB serial device to the application when needed.
+• Open and forward a raw USB interface to the application when needed.
+
+This process will run as a D-Bus system service and use Polkit for granting the extra authorizations.
+
+If you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (Archlinux, Manjaro) system package, feel free to follow the instructions at: &lt;a href="https://github.com/P1sec/DiagNG/tree/main/packaging"&gt;https://github.com/P1sec/DiagNG/tree/main/packaging&lt;/a&gt;</property>
+                <property name="margin-bottom">16</property>
                 <property name="margin-end">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
                 <property name="use-markup">true</property>
                 <property name="valign">1</property>
+                <property name="wrap">true</property>
               </object>
             </child>
           </object>
@@ -59,6 +71,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
         </child>
       </object>
     </property>
+    <property name="default-width">600</property>
     <property name="title">Authorization needed</property>
     <property name="width-request">600</property>
   </template>

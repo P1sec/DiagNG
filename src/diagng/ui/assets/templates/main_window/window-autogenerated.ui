@@ -28,7 +28,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <child>
                               <object class="AdwActionRow">
                                 <property name="activatable-widget">run_diagmond_button</property>
-                                <property name="subtitle">If you wish to install this service separately as a system package, feel free to browse instructions at &lt;a href="https://github.com/P1sec/DiagNG/tree/main/packaging/ppa/diagmond"&gt;https://github.com/P1sec/DiagNG/tree/main/packaging/ppa/diagmond&lt;/a&gt;</property>
+                                <property name="subtitle">If you wish to install this service separately as a system package, feel free to browse instructions at &lt;a href="https://github.com/P1sec/DiagNG/tree/main/packaging"&gt;https://github.com/P1sec/DiagNG/tree/main/packaging&lt;/a&gt;</property>
                                 <property name="subtitle-selectable">true</property>
                                 <property name="title">&lt;b&gt;DiagNG needs to run a privileged service to allow you to connect to serial port or USB devices.&lt;/b&gt;</property>
                                 <property name="title-selectable">true</property>

@@ -22,8 +22,8 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
-  <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="75a691046694efbae2b6b50cfa87d462a8404f2b8a1792aeb08498ec96a7c14f"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="535153c8b1a117a7288aea87e01262d9b0160ccbd625a990c13531c199523460">
+  <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="af49353b79c901b3feb9106d12ab05976c4e89deb18db302949ebadb0e0a2fae"/>
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="234c9e75150a1c9ab0da430f01d7627cd23c07bd3d1efa66bdb907b5357ffd74">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
