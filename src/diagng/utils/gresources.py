@@ -33,6 +33,7 @@ if not exists(RESOURCES_PATH) or (
         'templates/main_window/adb_device_row',
         'templates/main_window/window',
         'templates/qcdm_window/window',
+        'templates/authorization_dialog/window',
     ]:
         run(
             [

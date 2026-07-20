@@ -1,0 +1,53 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $AuthorizationDialog: Adw.Window {
+  content: Adw.ToolbarView {
+    content: Box {
+      Image {
+        icon-name: "xapp-prefs-plugins-symbolic";
+        margin-end: 8;
+        margin-start: 16;
+        margin-top: 8;
+        pixel-size: 48;
+        valign: start;
+      }
+
+      Label {
+        halign: start;
+        hexpand: true;
+        label: "This application needs XXX...";
+        margin-bottom: 8;
+        margin-end: 8;
+        margin-start: 8;
+        margin-top: 8;
+        use-markup: true;
+        valign: start;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {}
+
+    [bottom]
+    ActionBar {
+      [end]
+      Button {
+        label: "Continue";
+
+        styles [
+          "suggested-action",
+        ]
+      }
+
+      [end]
+      Button {
+        label: "Decline";
+        receives-default: false;
+      }
+    }
+  };
+
+  title: "Authorization needed";
+  width-request: 600;
+}

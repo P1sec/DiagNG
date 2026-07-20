@@ -2,7 +2,7 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="6ace0b7269acc3fa4a0c3882bf7716e6fa1995cb4f0f39d32afb69e232127d54"/>
+  <gresources filename="diagng.gresource.xml" sha256="0ae35fd3cba55339143dc08f8a1e80ab967d15202f51814ea42c59ce204c06f6"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
   <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="e7a6f3f50d00dd15cac596513602d549f43e941cdc203d37f8a27bcd7b37a71a"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
@@ -22,6 +22,7 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
+  <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="75a691046694efbae2b6b50cfa87d462a8404f2b8a1792aeb08498ec96a7c14f"/>
   <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="535153c8b1a117a7288aea87e01262d9b0160ccbd625a990c13531c199523460">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
