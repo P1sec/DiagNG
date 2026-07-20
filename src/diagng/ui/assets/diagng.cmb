@@ -22,7 +22,7 @@
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="6a27b56abc54bbf8cd64d3c3e50f958fcd6885d97218352ee442653dcca41dcb"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="077a9c8d05ebe68d9e4a65cca27d95ec9dabed4c3a3a6ca7802c0ea8a1301dbd">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="535153c8b1a117a7288aea87e01262d9b0160ccbd625a990c13531c199523460">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>

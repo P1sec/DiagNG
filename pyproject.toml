@@ -61,7 +61,7 @@ where = ["src"]
 ]
 "*" = [
     "com.p1security.diagmond.conf",
-    "com.p1security.diagmond.policy"
+    "com.p1security.diagmond*.policy"
 ]
 
 [tool.ruff]

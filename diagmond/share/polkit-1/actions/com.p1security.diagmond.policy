@@ -15,13 +15,4 @@
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/diagmond</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
-  <action id="com.p1security.diagmond.capture-serial-port">
-    <description>Open a raw serial port connection</description>
-    <message>Authentication is required to open a raw serial port connection.</message>
-    <defaults>
-      <allow_any>no</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin</allow_active>
-    </defaults>
-  </action>
 </policyconfig>

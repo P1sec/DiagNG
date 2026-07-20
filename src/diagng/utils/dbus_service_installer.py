@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # WIP 2026-06-21
 
-# Use pkexec to create privileged dirs like /run/dbus-1
+# Use pkexec to create privileged dirs like /etc/dbus-1
 # when needed
 
 # See: https://dbus.freedesktop.org/doc/dbus-daemon.1.html +
@@ -35,7 +35,10 @@ DBUS_SYSTEM_D_FILE = 'com.p1security.diagmond.conf'
 DBUS_SYSTEM_D_DIR = realpath(join(DBUS_DIR, 'system-d'))
 DBUS_SYSTEM_D_PATHS = ['/etc/dbus-1/system.d', '/usr/share/dbus-1/system.d']
 
-POLKIT_ACTION_FILE = 'com.p1security.diagmond.policy'
+POLKIT_ACTION_FILES = [
+    'com.p1security.diagmond.policy',
+    'com.p1security.diagmond.capture-serial-port.policy',
+]
 POLKIT_ACTIONS_DIR = realpath(join(POLKIT_DIR, 'actions'))
 POLKIT_ACTION_PATHS = [
     '/etc/polkit-1/actions/',
@@ -62,13 +65,14 @@ def install_dbus_and_polkit_files(entry_point: str):
             join(DBUS_SYSTEM_D_DIR, DBUS_SYSTEM_D_FILE), DBUS_SYSTEM_D_PATHS[0]
         )
 
-    for path in POLKIT_ACTION_PATHS:
-        if exists(join(path, POLKIT_ACTION_FILE)):
-            break
-    else:
-        escalate_root(entry_point)
-        makedirs(POLKIT_ACTION_PATHS[0], exist_ok=True)
-        copy2(
-            join(POLKIT_ACTIONS_DIR, POLKIT_ACTION_FILE),
-            POLKIT_ACTION_PATHS[0],
-        )
+    for file_name in POLKIT_ACTION_FILES:
+        for path in POLKIT_ACTION_PATHS:
+            if exists(join(path, file_name)):
+                break
+        else:
+            escalate_root(entry_point)
+            makedirs(POLKIT_ACTION_PATHS[0], exist_ok=True)
+            copy2(
+                join(POLKIT_ACTIONS_DIR, file_name),
+                POLKIT_ACTION_PATHS[0],
+            )
