@@ -1,9 +1,11 @@
 TODO
 
-## `DIAG_LOG_F`
+## `diag_cmd.log_config_f` / `diag_cmd.log_f`
 
 TODO
 
-## `DIAG_LOGMASK_F`
+WIP: See https://github.com/osmocom/osmo-qcdiag/blob/master/src/protocol/protocol.h
+
+## `diag_cmd.logmask_f` / `diag_cmd.ext_logmask_f` (old/deprecated?)
 
 TODO
