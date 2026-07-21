@@ -9,7 +9,8 @@ ksc \
     --read-write \
     --python-package diagng.protocol.qualcomm.struct \
     --outdir ../src/diagng/protocol/qualcomm/struct \
-    qualcomm/diag/*.ksy qualcomm/diag/command/*.ksy
+    qualcomm/diag/*.ksy qualcomm/diag/command/*.ksy \
+    qualcomm/diag/log/*.ksy
 
 cd ..
 ruff format
