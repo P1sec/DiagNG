@@ -2,12 +2,43 @@
 
 from diagng.protocol.qualcomm.acquisition.input import BaseInput
 
+from gi.repository import GObject, Gio
+
 # TODO 2026-07-20
 
 
-class LogManager:
+class LogRange(GObject.Object):
+    min_value: GObject.Property(type=int)
+    max_value: GObject.Property(type=int)
+
+    def __init__(self, min_value: int, max_value: int):
+        super().__init__()
+
+        self.min_value = min_value
+        self.max_value = max_value
+
+
+class LogMask(GObject.Object):
+    items = GObject.Property(type=Gio.ListStore)
+    ranges = GObject.Property(type=Gio.ListStore)
+
+    def __init__(self):
+        super().__init__()
+
+        self.items = Gio.ListStore.new(int)
+        self.ranges = Gio.ListStore.new(LogRange)
+
+    def to_bytes(self) -> bytes:
+        pass  # TODO
+
+
+class LogManager(GObject.Object):
     # See https://github.com/P1sec/QCSuper/pull/149
     #     => Supports DIAG_QSR4_EXT_MSG_TERSE_F
+
+    current_mask = GObject.Property(type=LogMask)
+
+    source: BaseInput
 
     # See protocol docs ?
 
@@ -45,14 +76,16 @@ class LogManager:
     #    shortest circuit to having to a having OTA messages
     #    encapsulated into a PCAP file, etc.?
 
-    source: BaseInput
-
     def __init__(self, source: BaseInput):
+        self.log_mask = LogMask()
         self.source = source
         pass  # TODO
 
-    def register_logs(self, log_mask):
+    def get_supported_log_ranges(self, callback):
         pass  # TODO
 
-    def unregister_logs(self, log_mask):
+    def register_logs(self, log_codes: LogMask, callback):
+        pass  # TODO
+
+    def unregister_logs(self, log_codes: LogMask, callback):
         pass  # TODO
