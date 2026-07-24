@@ -3,7 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.protocol.qualcomm.struct import diag_logging
+from diagng.protocol.qualcomm.struct import diag_log_config_f_req
 from enum import IntEnum
 
 
@@ -14,62 +14,74 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
     )
 
 
-class DiagLogConfigFReq(ReadWriteKaitaiStruct):
-    class Operation(IntEnum):
-        disable_op = 0
-        retrieve_id_ranges_op = 1
-        retrieve_valid_mask_op = 2
-        set_mask_op = 3
-        get_mask_op = 4
+class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
+    class Status(IntEnum):
+        success = 0
 
     def __init__(self, _io=None, _parent=None, _root=None):
-        super(DiagLogConfigFReq, self).__init__(_io)
+        super(DiagLogConfigFRsp, self).__init__(_io)
         self._parent = _parent
         self._root = _root or self
 
     def _read(self):
         self.padding = self._io.read_bytes(3)
         self.operation = KaitaiStream.resolve_enum(
-            DiagLogConfigFReq.Operation, self._io.read_u4le()
+            diag_log_config_f_req.DiagLogConfigFReq.Operation,
+            self._io.read_u4le(),
+        )
+        self.status = KaitaiStream.resolve_enum(
+            DiagLogConfigFRsp.Status, self._io.read_u4le()
         )
         _on = self.operation
-        if _on == DiagLogConfigFReq.Operation.disable_op:
+        if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = DiagLogConfigFReq.Disable(
+            self.payload = DiagLogConfigFRsp.Disable(
                 _io__raw_payload, self, self._root
             )
             self.payload._read()
-        elif _on == DiagLogConfigFReq.Operation.get_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
+        ):
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = DiagLogConfigFReq.GetMask(
+            self.payload = DiagLogConfigFRsp.GetMask(
                 _io__raw_payload, self, self._root
             )
             self.payload._read()
-        elif _on == DiagLogConfigFReq.Operation.retrieve_id_ranges_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
+        ):
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = DiagLogConfigFReq.RetrieveIdRanges(
+            self.payload = DiagLogConfigFRsp.RetrieveIdRanges(
                 _io__raw_payload, self, self._root
             )
             self.payload._read()
-        elif _on == DiagLogConfigFReq.Operation.retrieve_valid_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_valid_mask_op
+        ):
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = DiagLogConfigFReq.RetrieveValidMask(
+            self.payload = DiagLogConfigFRsp.RetrieveValidMask(
                 _io__raw_payload, self, self._root
             )
             self.payload._read()
-        elif _on == DiagLogConfigFReq.Operation.set_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
+        ):
             pass
             self._raw_payload = self._io.read_bytes_full()
             _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = DiagLogConfigFReq.SetMask(
+            self.payload = DiagLogConfigFRsp.SetMask(
                 _io__raw_payload, self, self._root
             )
             self.payload._read()
@@ -81,30 +93,43 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
     def _fetch_instances(self):
         pass
         _on = self.operation
-        if _on == DiagLogConfigFReq.Operation.disable_op:
+        if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
             self.payload._fetch_instances()
-        elif _on == DiagLogConfigFReq.Operation.get_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
+        ):
             pass
             self.payload._fetch_instances()
-        elif _on == DiagLogConfigFReq.Operation.retrieve_id_ranges_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
+        ):
             pass
             self.payload._fetch_instances()
-        elif _on == DiagLogConfigFReq.Operation.retrieve_valid_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_valid_mask_op
+        ):
             pass
             self.payload._fetch_instances()
-        elif _on == DiagLogConfigFReq.Operation.set_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
+        ):
             pass
             self.payload._fetch_instances()
         else:
             pass
 
     def _write__seq(self, io=None):
-        super(DiagLogConfigFReq, self)._write__seq(io)
+        super(DiagLogConfigFRsp, self)._write__seq(io)
         self._io.write_bytes(self.padding)
         self._io.write_u4le(int(self.operation))
+        self._io.write_u4le(int(self.status))
         _on = self.operation
-        if _on == DiagLogConfigFReq.Operation.disable_op:
+        if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
             _io__raw_payload = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
@@ -125,7 +150,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 KaitaiStream.WriteBackHandler(_pos2, handler)
             )
             self.payload._write__seq(_io__raw_payload)
-        elif _on == DiagLogConfigFReq.Operation.get_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
+        ):
             pass
             _io__raw_payload = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
@@ -146,7 +174,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 KaitaiStream.WriteBackHandler(_pos2, handler)
             )
             self.payload._write__seq(_io__raw_payload)
-        elif _on == DiagLogConfigFReq.Operation.retrieve_id_ranges_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
+        ):
             pass
             _io__raw_payload = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
@@ -167,7 +198,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 KaitaiStream.WriteBackHandler(_pos2, handler)
             )
             self.payload._write__seq(_io__raw_payload)
-        elif _on == DiagLogConfigFReq.Operation.retrieve_valid_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_valid_mask_op
+        ):
             pass
             _io__raw_payload = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
@@ -188,7 +222,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 KaitaiStream.WriteBackHandler(_pos2, handler)
             )
             self.payload._write__seq(_io__raw_payload)
-        elif _on == DiagLogConfigFReq.Operation.set_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
+        ):
             pass
             _io__raw_payload = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
@@ -223,7 +260,7 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 'padding', 3, len(self.padding)
             )
         _on = self.operation
-        if _on == DiagLogConfigFReq.Operation.disable_op:
+        if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
             if self.payload._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -233,7 +270,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 raise kaitaistruct.ConsistencyError(
                     'payload', self, self.payload._parent
                 )
-        elif _on == DiagLogConfigFReq.Operation.get_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
+        ):
             pass
             if self.payload._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -243,7 +283,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 raise kaitaistruct.ConsistencyError(
                     'payload', self, self.payload._parent
                 )
-        elif _on == DiagLogConfigFReq.Operation.retrieve_id_ranges_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
+        ):
             pass
             if self.payload._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -253,7 +296,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 raise kaitaistruct.ConsistencyError(
                     'payload', self, self.payload._parent
                 )
-        elif _on == DiagLogConfigFReq.Operation.retrieve_valid_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_valid_mask_op
+        ):
             pass
             if self.payload._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -263,7 +309,10 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
                 raise kaitaistruct.ConsistencyError(
                     'payload', self, self.payload._parent
                 )
-        elif _on == DiagLogConfigFReq.Operation.set_mask_op:
+        elif (
+            _on
+            == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
+        ):
             pass
             if self.payload._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -279,7 +328,7 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
 
     class Disable(ReadWriteKaitaiStruct):
         def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.Disable, self).__init__(_io)
+            super(DiagLogConfigFRsp.Disable, self).__init__(_io)
             self._parent = _parent
             self._root = _root
 
@@ -291,125 +340,20 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
             pass
 
         def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.Disable, self)._write__seq(io)
+            super(DiagLogConfigFRsp.Disable, self)._write__seq(io)
 
         def _check(self):
             self._dirty = False
 
     class GetMask(ReadWriteKaitaiStruct):
         def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.GetMask, self).__init__(_io)
+            super(DiagLogConfigFRsp.GetMask, self).__init__(_io)
             self._parent = _parent
             self._root = _root
 
         def _read(self):
-            self.equipment_id = KaitaiStream.resolve_enum(
-                diag_logging.DiagLogging.EquipmentId, self._io.read_u4le()
-            )
-            self._dirty = False
-
-        def _fetch_instances(self):
-            pass
-
-        def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.GetMask, self)._write__seq(io)
-            self._io.write_u4le(int(self.equipment_id))
-
-        def _check(self):
-            self._dirty = False
-
-    class LogMask(ReadWriteKaitaiStruct):
-        def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.LogMask, self).__init__(_io)
-            self._parent = _parent
-            self._root = _root
-
-        def _read(self):
-            self.equipment_id = KaitaiStream.resolve_enum(
-                diag_logging.DiagLogging.EquipmentId, self._io.read_u4le()
-            )
-            self.num_logs_on_bitfield = self._io.read_u4le()
-            self.logs_on_bitfield = []
-            for i in range(self.num_logs_on_bitfield):
-                self.logs_on_bitfield.append(self._io.read_bits_int_le(1) != 0)
-
-            self._dirty = False
-
-        def _fetch_instances(self):
-            pass
-            for i in range(len(self.logs_on_bitfield)):
-                pass
-
-        def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.LogMask, self)._write__seq(io)
-            self._io.write_u4le(int(self.equipment_id))
-            self._io.write_u4le(self.num_logs_on_bitfield)
-            for i in range(len(self.logs_on_bitfield)):
-                pass
-                self._io.write_bits_int_le(1, int(self.logs_on_bitfield[i]))
-
-        def _check(self):
-            if len(self.logs_on_bitfield) != self.num_logs_on_bitfield:
-                raise kaitaistruct.ConsistencyError(
-                    'logs_on_bitfield',
-                    self.num_logs_on_bitfield,
-                    len(self.logs_on_bitfield),
-                )
-            for i in range(len(self.logs_on_bitfield)):
-                pass
-
-            self._dirty = False
-
-    class RetrieveIdRanges(ReadWriteKaitaiStruct):
-        def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.RetrieveIdRanges, self).__init__(_io)
-            self._parent = _parent
-            self._root = _root
-
-        def _read(self):
-            pass
-            self._dirty = False
-
-        def _fetch_instances(self):
-            pass
-
-        def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.RetrieveIdRanges, self)._write__seq(io)
-
-        def _check(self):
-            self._dirty = False
-
-    class RetrieveValidMask(ReadWriteKaitaiStruct):
-        def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.RetrieveValidMask, self).__init__(_io)
-            self._parent = _parent
-            self._root = _root
-
-        def _read(self):
-            self.equipment_id = KaitaiStream.resolve_enum(
-                diag_logging.DiagLogging.EquipmentId, self._io.read_u4le()
-            )
-            self._dirty = False
-
-        def _fetch_instances(self):
-            pass
-
-        def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.RetrieveValidMask, self)._write__seq(io)
-            self._io.write_u4le(int(self.equipment_id))
-
-        def _check(self):
-            self._dirty = False
-
-    class SetMask(ReadWriteKaitaiStruct):
-        def __init__(self, _io=None, _parent=None, _root=None):
-            super(DiagLogConfigFReq.SetMask, self).__init__(_io)
-            self._parent = _parent
-            self._root = _root
-
-        def _read(self):
-            self.log_mask = DiagLogConfigFReq.LogMask(
-                self._io, self, self._root
+            self.log_mask = diag_log_config_f_req.DiagLogConfigFReq.LogMask(
+                self._io
             )
             self.log_mask._read()
             self._dirty = False
@@ -419,16 +363,90 @@ class DiagLogConfigFReq(ReadWriteKaitaiStruct):
             self.log_mask._fetch_instances()
 
         def _write__seq(self, io=None):
-            super(DiagLogConfigFReq.SetMask, self)._write__seq(io)
+            super(DiagLogConfigFRsp.GetMask, self)._write__seq(io)
             self.log_mask._write__seq(self._io)
 
         def _check(self):
-            if self.log_mask._root != self._root:
+            self._dirty = False
+
+    class RetrieveIdRanges(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(DiagLogConfigFRsp.RetrieveIdRanges, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.last_item = []
+            for i in range(4):
+                self.last_item.append(self._io.read_u2le())
+
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+            for i in range(len(self.last_item)):
+                pass
+
+        def _write__seq(self, io=None):
+            super(DiagLogConfigFRsp.RetrieveIdRanges, self)._write__seq(io)
+            for i in range(len(self.last_item)):
+                pass
+                self._io.write_u2le(self.last_item[i])
+
+        def _check(self):
+            if len(self.last_item) != 4:
                 raise kaitaistruct.ConsistencyError(
-                    'log_mask', self._root, self.log_mask._root
+                    'last_item', 4, len(self.last_item)
                 )
-            if self.log_mask._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'log_mask', self, self.log_mask._parent
-                )
+            for i in range(len(self.last_item)):
+                pass
+
+            self._dirty = False
+
+    class RetrieveValidMask(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(DiagLogConfigFRsp.RetrieveValidMask, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.log_mask = diag_log_config_f_req.DiagLogConfigFReq.LogMask(
+                self._io
+            )
+            self.log_mask._read()
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+            self.log_mask._fetch_instances()
+
+        def _write__seq(self, io=None):
+            super(DiagLogConfigFRsp.RetrieveValidMask, self)._write__seq(io)
+            self.log_mask._write__seq(self._io)
+
+        def _check(self):
+            self._dirty = False
+
+    class SetMask(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(DiagLogConfigFRsp.SetMask, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.log_mask = diag_log_config_f_req.DiagLogConfigFReq.LogMask(
+                self._io
+            )
+            self.log_mask._read()
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+            self.log_mask._fetch_instances()
+
+        def _write__seq(self, io=None):
+            super(DiagLogConfigFRsp.SetMask, self)._write__seq(io)
+            self.log_mask._write__seq(self._io)
+
+        def _check(self):
             self._dirty = False
