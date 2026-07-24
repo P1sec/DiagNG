@@ -4,6 +4,7 @@ meta:
   imports:
     - cmd_code
     - command/diag_verno_f_req
+    - command/diag_log_config_f_req
     - command/diag_unknown
 
 seq:
@@ -15,6 +16,7 @@ seq:
       switch-on: cmd_code
       cases:
         'diag_cmd_code::diag_cmd::verno_f': diag_verno_f_req
+        'diag_cmd_code::diag_cmd::log_config_f': diag_log_config_f_req
         _: diag_unknown
     size-eos: true
 

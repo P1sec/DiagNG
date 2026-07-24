@@ -26,7 +26,33 @@ template $QCDMWindow: Adw.Window {
         }
 
         Adw.ViewStackPage pcap_page {
-          child: Adw.PreferencesPage {};
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              title: "Air interface capture";
+
+              Adw.ActionRow {
+                title: "Capture into a new Wireshark instance";
+
+                [suffix]
+                Button {
+                  label: "Start capture";
+
+                  styles [
+                    "suggested-action",
+                  ]
+                }
+              }
+
+              Adw.ActionRow {
+                title: "Capture to a new PCAP file";
+
+                [suffix]
+                Button {
+                  label: "Pick file...";
+                }
+              }
+            }
+          };
 
           icon-name: "notes-app-symbolic";
           name: "pcap_page";
@@ -34,8 +60,12 @@ template $QCDMWindow: Adw.Window {
         }
 
         Adw.ViewStackPage logs_page {
-          child: Label {
-            label: "Empty Page";
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              title: "Device log selection status";
+
+              ColumnView {}
+            }
           };
 
           icon-name: "xsi-search-symbolic";

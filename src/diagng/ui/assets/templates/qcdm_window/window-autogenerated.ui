@@ -42,7 +42,36 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="pcap_page">
                     <property name="child">
-                      <object class="AdwPreferencesPage"></object>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Air interface capture</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">Capture into a new Wireshark instance</property>
+                                <child type="suffix">
+                                  <object class="GtkButton">
+                                    <property name="label">Start capture</property>
+                                    <style>
+                                      <class name="suggested-action"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">Capture to a new PCAP file</property>
+                                <child type="suffix">
+                                  <object class="GtkButton">
+                                    <property name="label">Pick file...</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
                     </property>
                     <property name="icon-name">notes-app-symbolic</property>
                     <property name="name">pcap_page</property>
@@ -52,8 +81,15 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="logs_page">
                     <property name="child">
-                      <object class="GtkLabel">
-                        <property name="label">Empty Page</property>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Device log selection status</property>
+                            <child>
+                              <object class="GtkColumnView"></object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">xsi-search-symbolic</property>
