@@ -14,6 +14,19 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
 
 
 class DiagLogging(ReadWriteKaitaiStruct):
+    class EquipmentId(IntEnum):
+        log_1x = 1
+        log_wcdma = 4
+        log_gsm = 5
+        log_lbs = 6
+        log_umts = 7
+        log_tdma = 8
+        log_dtv = 10
+        log_lte_wimax_nr = 11
+        log_dsp = 12
+        log_tdscdma = 13
+        log_tools = 15
+
     class Log1x(IntEnum):
         data_protocol_logging_c = 4587
         data_protocol_logging_network_ip_rm_tx_80_bytes_c = 5490
@@ -51,9 +64,13 @@ class DiagLogging(ReadWriteKaitaiStruct):
         nas_emm_ota_in_msg_log_c = 45292
         nas_emm_ota_out_msg_log_c = 45293
 
-    class LogMasks(IntEnum):
-        log_category_mask = 61440
-        log_category_mask_extended = 64512
+    class LogMasksQcdm(IntEnum):
+        item_id_mask = 4095
+        equipment_id_mask = 61440
+
+    class LogMasksReadable(IntEnum):
+        category_log_mask = 61440
+        category_log_mask_extended = 64512
 
     class LogNr(IntEnum):
         nr_rrc_ota_msg_log_c = 47137

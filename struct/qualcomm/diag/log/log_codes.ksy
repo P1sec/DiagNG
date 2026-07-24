@@ -4,11 +4,28 @@ meta:
 # From https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/protocol/log_types.py
 
 enums:
-  log_masks:
-    0xf000: log_category_mask
+  log_masks_readable:
+    0xf000: category_log_mask
     # if (log_type & log_category_mask == 0xb000
     #  or log_type & log_category_mask == 0xd000)
-    0xfc00: log_category_mask_extended
+    0xfc00: category_log_mask_extended
+
+  log_masks_qcdm:
+    0xf000: equipment_id_mask
+    0x0fff: item_id_mask
+
+  equipment_id:
+    0x1: log_1x
+    0x4: log_wcdma
+    0x5: log_gsm
+    0x6: log_lbs
+    0x7: log_umts
+    0x8: log_tdma
+    0xa: log_dtv
+    0xb: log_lte_wimax_nr
+    0xc: log_dsp
+    0xd: log_tdscdma
+    0xf: log_tools
 
   log_category:
     0x1000: log_1x
