@@ -8,6 +8,7 @@ from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.protocol.qualcomm.modules.log_manager import LogManager
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from logging import info
@@ -39,6 +40,11 @@ class QCDMWindow(Adw.Window):
 
         self.input_obj = input_obj
         self.parent = parent
+
+        self.log_manager = LogManager(input_obj)
+
+        # ==> TODO ⚠️ initialize logging when buttons
+        # in the PCAP tab are clicked
 
         self.set_transient_for(parent)
         self.set_title(self.input_obj.full_name)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from diagng.protocol.qualcomm.acquisition.input import BaseInput
+from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 
 from gi.repository import GObject, Gio
 
@@ -18,7 +18,7 @@ class LogRange(GObject.Object):
         self.max_value = max_value
 
 
-class LogMask(GObject.Object):
+class FullLogMask(GObject.Object):
     items = GObject.Property(type=Gio.ListStore)
     ranges = GObject.Property(type=Gio.ListStore)
 
@@ -32,13 +32,25 @@ class LogMask(GObject.Object):
         pass  # TODO
 
 
+"""
+    For now this class will support only
+    single-stream logging configuration
+    (configured via diag_cmd.log_config_f).
+
+    Dual-stream logging configuration
+    (via ext_log_config_req), F3/messages
+    and event processing configuration
+    should be implemented later.
+"""
+
+
 class LogManager(GObject.Object):
     # See https://github.com/P1sec/QCSuper/pull/149
     #     => Supports DIAG_QSR4_EXT_MSG_TERSE_F
 
-    current_mask = GObject.Property(type=LogMask)
+    current_mask = GObject.Property(type=FullLogMask)
 
-    source: BaseInput
+    source: BaseQCDMInput
 
     # See protocol docs ?
 
@@ -76,16 +88,16 @@ class LogManager(GObject.Object):
     #    shortest circuit to having to a having OTA messages
     #    encapsulated into a PCAP file, etc.?
 
-    def __init__(self, source: BaseInput):
-        self.log_mask = LogMask()
+    def __init__(self, source: BaseQCDMInput):
+        self.log_mask = FullLogMask()
         self.source = source
         pass  # TODO
 
     def get_supported_log_ranges(self, callback):
         pass  # TODO
 
-    def register_logs(self, log_codes: LogMask, callback):
+    def register_logs(self, log_codes: FullLogMask, callback):
         pass  # TODO
 
-    def unregister_logs(self, log_codes: LogMask, callback):
+    def unregister_logs(self, log_codes: FullLogMask, callback):
         pass  # TODO
