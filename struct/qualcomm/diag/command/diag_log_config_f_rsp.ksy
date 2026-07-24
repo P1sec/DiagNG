@@ -38,7 +38,7 @@ types:
       - id: last_item
         type: u2
         repeat: expr
-        repeat-expr: 4
+        repeat-expr: 16
   retrieve_valid_mask:
     seq:
       - id: log_mask

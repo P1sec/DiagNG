@@ -377,7 +377,7 @@ class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.last_item = []
-            for i in range(4):
+            for i in range(16):
                 self.last_item.append(self._io.read_u2le())
 
             self._dirty = False
@@ -394,9 +394,9 @@ class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
                 self._io.write_u2le(self.last_item[i])
 
         def _check(self):
-            if len(self.last_item) != 4:
+            if len(self.last_item) != 16:
                 raise kaitaistruct.ConsistencyError(
-                    'last_item', 4, len(self.last_item)
+                    'last_item', 16, len(self.last_item)
                 )
             for i in range(len(self.last_item)):
                 pass
