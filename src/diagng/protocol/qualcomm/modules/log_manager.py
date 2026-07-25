@@ -2,7 +2,9 @@
 
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 
+from diagng.system.adb.adb_client import ADBResponse
 from gi.repository import GObject, Gio
+from typing import Callable, Optional
 
 # TODO 2026-07-20
 
@@ -93,11 +95,25 @@ class LogManager(GObject.Object):
         self.source = source
         pass  # TODO
 
-    def get_supported_log_ranges(self, callback):
+    def get_supported_log_ranges(
+        self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
+    ):
+        pass  # ⚠️ NEXT TODO
+
+    def register_logs(
+        self, log_codes: FullLogMask, callback: Callable[[ADBResponse], None]
+    ):
         pass  # TODO
 
-    def register_logs(self, log_codes: FullLogMask, callback):
+    def unregister_logs(
+        self, log_codes: FullLogMask, callback: Callable[[ADBResponse], None]
+    ):
         pass  # TODO
 
-    def unregister_logs(self, log_codes: FullLogMask, callback):
+    def get_full_log_mask(
+        self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
+    ):
+        pass  # TODO
+
+    def disable_logs(self, callback: Callable[[ADBResponse], None]):
         pass  # TODO
