@@ -86,3 +86,9 @@ diagmond
 # In another tab:
 diagng
 ```
+
+## Run project tests
+
+```bash
+uv run pytest
+```

@@ -8,6 +8,7 @@ meta:
 seq:
   - id: padding
     size: 3
+    pad-right: 0x00
   - id: operation
     type: u4
     enum: diag_log_config_f_req::operation

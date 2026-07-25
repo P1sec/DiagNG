@@ -18,6 +18,7 @@ from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 
 DiagCmd = DiagCmdCode.DiagCmd
+KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
 
 
 class BaseQCDMInput(GObject.Object):
@@ -81,7 +82,6 @@ class BaseQCDMInput(GObject.Object):
     def send(self, request: DiagRequest):
         buf = BytesIO()
         stream = KaitaiStream(buf)
-        stream._ensure_bytes_left_to_write = lambda *args: True
         request._write(stream)
 
         self.frame_sent.emit(request, buf.getvalue())

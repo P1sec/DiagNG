@@ -3,14 +3,18 @@
 # Register resources
 import diagng.utils.gresources
 
+from diagng.protocol.qualcomm.modules.log_manager import (
+    LogManager,
+    FullLogMask,
+)
 from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
-from diagng.protocol.qualcomm.modules.log_manager import LogManager
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
+from typing import Optional
 from logging import info
 
 import gi
@@ -30,6 +34,7 @@ class QCDMWindow(Adw.Window):
     __gtype_name__ = 'QCDMWindow'
 
     input_obj: BaseQCDMInput
+    log_manager: LogManager
     parent: Adw.ApplicationWindow
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
@@ -65,6 +70,13 @@ class QCDMWindow(Adw.Window):
     def on_quit(self, *args):
         self.input_obj.close()
 
+    def get_log_support_info(self):
+        def req_cb(response: DiagResponse, log_mask: Optional[FullLogMask]):
+            pass
+            # ⚠️ TODO ➡️ Add due error HANDLING Here?
+
+        self.log_manager.get_supported_log_ranges(req_cb)
+
     def gather_device_info(self):
         # Use self.input_obj to display Diag-related
         # info in the first tab of QCDMWindow
@@ -83,8 +95,13 @@ class QCDMWindow(Adw.Window):
         def req_cb(response: DiagResponse):
             info('DiagResponse received for DiagCmd.verno_f: %r' % response)
 
+            # ⚠️ TODO ➡️ Add due error HANDLING Here?
+
             pretty_info = pretty_print_struct(response)
             self.device_info_buffer.set_text(pretty_info)
+
+            # => ℹ️ Next step:
+            self.get_log_support_info()
 
         self.input_obj.send_recv(
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2

@@ -24,7 +24,9 @@ class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
         self._root = _root or self
 
     def _read(self):
-        self.padding = self._io.read_bytes(3)
+        self.padding = KaitaiStream.bytes_strip_right(
+            self._io.read_bytes(3), 0
+        )
         self.operation = KaitaiStream.resolve_enum(
             diag_log_config_f_req.DiagLogConfigFReq.Operation,
             self._io.read_u4le(),
@@ -125,7 +127,7 @@ class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
 
     def _write__seq(self, io=None):
         super(DiagLogConfigFRsp, self)._write__seq(io)
-        self._io.write_bytes(self.padding)
+        self._io.write_bytes_limit(self.padding, 3, 0, 0)
         self._io.write_u4le(int(self.operation))
         self._io.write_u4le(int(self.status))
         _on = self.operation
@@ -255,9 +257,15 @@ class DiagLogConfigFRsp(ReadWriteKaitaiStruct):
                 )
 
     def _check(self):
-        if len(self.padding) != 3:
+        if len(self.padding) > 3:
             raise kaitaistruct.ConsistencyError(
                 'padding', 3, len(self.padding)
+            )
+        if (len(self.padding) != 0) and (
+            KaitaiStream.byte_array_index(self.padding, -1) == 0
+        ):
+            raise kaitaistruct.ConsistencyError(
+                'padding', 0, KaitaiStream.byte_array_index(self.padding, -1)
             )
         _on = self.operation
         if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:

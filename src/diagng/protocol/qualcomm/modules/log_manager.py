@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
 
+from diagng.protocol.qualcomm.struct.diag_log_config_f_req import (
+    DiagLogConfigFReq,
+)
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
-
+from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
+from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
+from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.system.adb.adb_client import ADBResponse
+
 from gi.repository import GObject, Gio
 from typing import Callable, Optional
+from logging import info
+
+DiagCmd = DiagCmdCode.DiagCmd
 
 # TODO 2026-07-20
 
@@ -91,14 +101,49 @@ class LogManager(GObject.Object):
     #    encapsulated into a PCAP file, etc.?
 
     def __init__(self, source: BaseQCDMInput):
-        self.log_mask = FullLogMask()
+        self.current_mask = FullLogMask()
         self.source = source
         pass  # TODO
 
     def get_supported_log_ranges(
         self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
     ):
-        pass  # ⚠️ NEXT TODO
+        # TODO
+        # 1. Send: ➡️ diag_log_config_f_req + retrieve_id_ranges_op
+        # 2. Handle value into internal callback
+        # 3. Pass [ADBResponse, Optional[FullLogMask]] value to internal callback
+
+        payload = DiagLogConfigFReq()
+        payload.padding = b''
+        payload.operation = DiagLogConfigFReq.Operation.retrieve_id_ranges_op
+
+        payload.payload = DiagLogConfigFReq.RetrieveIdRanges()
+        payload.payload._root = payload._root
+        payload.payload._parent = payload
+
+        payload.payload._check()
+        payload._check()
+
+        diag_request = DiagRequest()
+        diag_request.cmd_code = DiagCmd.log_config_f
+        diag_request.payload = payload
+        diag_request._check()
+
+        def req_cb(response: DiagResponse):
+            info(
+                'DiagResponse received for DiagCmd.log_config_f: %r' % response
+            )
+
+            # ⚠️ TODO ➡️ Add due error HANDLING Here?
+
+            pretty_info = pretty_print_struct(response)
+            self.device_info_buffer.set_text(pretty_info)
+
+        self.input_obj.send_recv(
+            diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
+        )
+
+        pass  # ⚠️ == ➡️ ➡️ CURRENT WIP ⬅️ ⬅️ ==
 
     def register_logs(
         self, log_codes: FullLogMask, callback: Callable[[ADBResponse], None]
