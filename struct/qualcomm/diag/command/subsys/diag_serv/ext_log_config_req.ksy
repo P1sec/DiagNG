@@ -71,7 +71,7 @@ types:
     seq:
       - id: id
         type:
-          switch-on: cmd_version
+          switch-on: _root.cmd_version
           cases:
             1: stream_id
             2: preset_id
