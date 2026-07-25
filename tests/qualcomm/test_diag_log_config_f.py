@@ -38,7 +38,7 @@ def test__retrieve_id_ranges_op():
 
     hdlc_data = hdlc_encode(buf.getvalue())
 
-    assert True  # TODO ➡️ ⚠️ : test payload
+    assert hdlc_data == b's\x00\x00\x00\x01\x00\x00\x00a\x9d~'
 
 
 """

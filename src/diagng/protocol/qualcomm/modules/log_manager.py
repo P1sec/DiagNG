@@ -19,6 +19,10 @@ DiagCmd = DiagCmdCode.DiagCmd
 # TODO 2026-07-20
 
 
+class LogItem(GObject.Object):
+    value = GObject.Property(type=int)
+
+
 class LogRange(GObject.Object):
     min_value: GObject.Property(type=int)
     max_value: GObject.Property(type=int)
@@ -37,7 +41,7 @@ class FullLogMask(GObject.Object):
     def __init__(self):
         super().__init__()
 
-        self.items = Gio.ListStore.new(int)
+        self.items = Gio.ListStore.new(LogItem)
         self.ranges = Gio.ListStore.new(LogRange)
 
     def to_bytes(self) -> bytes:
@@ -101,6 +105,8 @@ class LogManager(GObject.Object):
     #    encapsulated into a PCAP file, etc.?
 
     def __init__(self, source: BaseQCDMInput):
+        super().__init__()
+
         self.current_mask = FullLogMask()
         self.source = source
         pass  # TODO
@@ -135,11 +141,11 @@ class LogManager(GObject.Object):
             )
 
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
+            # ⚠️ TODO ➡️ Parse data
 
             pretty_info = pretty_print_struct(response)
-            self.device_info_buffer.set_text(pretty_info)
 
-        self.input_obj.send_recv(
+        self.source.send_recv(
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
         )
 
