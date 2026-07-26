@@ -66,6 +66,17 @@ class QCDMWindow(Adw.Window):
         # target.set_sensitive(False)
         print('⚠️ TODO: Start network capture here')
 
+        # WRITE STEPS
+
+        # (0. RESET LOGS AT APPLICATION STARTUP? BELOW ⬇️ ⬇️)
+
+        # (1. ENABLE NETWORK-RELATED LOGS)
+
+        # (2. SPAWN WIRESHARK PIPE, WITH FLATPAK-SPAWN IF NEEDED)
+
+        # (3. TRANSMIT ON-THE-FLY CONVERTED OTA RRC GSMTAP v3 PCAP -
+        #  USE ADAPTER CLASSES FOR DATA CONVERSION)
+
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)
 
