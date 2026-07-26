@@ -31,11 +31,13 @@ template $QCDMWindow: Adw.Window {
               title: "Air interface capture";
 
               Adw.ActionRow {
+                activatable-widget: start_capture_button;
                 title: "Capture into a new Wireshark instance";
 
                 [suffix]
-                Button {
+                Button start_capture_button {
                   label: "Start capture";
+                  clicked => $start_capture_clicked();
 
                   styles [
                     "suggested-action",

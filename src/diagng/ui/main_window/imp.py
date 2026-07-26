@@ -115,9 +115,9 @@ class MainWindow(Adw.ApplicationWindow):
         self.app = app
         self.set_application(app)
 
-        # self.about_dialog = Adw.AboutDialog.new_from_appdata(
-        #     '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml'
-        # )
+        # self.about_dialog = Adw.AboutDialog.new_from_appdata(
+        #     '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml'
+        # )
 
         # Perform data bindings
 

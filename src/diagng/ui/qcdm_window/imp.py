@@ -61,6 +61,11 @@ class QCDMWindow(Adw.Window):
         self.input_obj.connect('closed', self.on_input_closed)
         self.connect('close-request', self.on_quit)
 
+    @Gtk.Template.Callback()
+    def start_capture_clicked(self, target: Gtk.Button, *args):
+        # target.set_sensitive(False)
+        print('⚠️ TODO: Start network capture here')
+
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)
 

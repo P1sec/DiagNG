@@ -48,10 +48,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title">Air interface capture</property>
                             <child>
                               <object class="AdwActionRow">
+                                <property name="activatable-widget">start_capture_button</property>
                                 <property name="title">Capture into a new Wireshark instance</property>
                                 <child type="suffix">
-                                  <object class="GtkButton">
+                                  <object class="GtkButton" id="start_capture_button">
                                     <property name="label">Start capture</property>
+                                    <signal name="clicked" handler="start_capture_clicked"/>
                                     <style>
                                       <class name="suggested-action"/>
                                     </style>
