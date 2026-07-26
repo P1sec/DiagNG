@@ -38,6 +38,7 @@ DBUS_SYSTEM_D_PATHS = ['/etc/dbus-1/system.d', '/usr/share/dbus-1/system.d']
 POLKIT_ACTION_FILES = [
     'com.p1security.diagmond.policy',
     'com.p1security.diagmond.capture-serial-port.policy',
+    'com.p1security.diagmond.open-usb-interface.policy',
 ]
 POLKIT_ACTIONS_DIR = realpath(join(POLKIT_DIR, 'actions'))
 POLKIT_ACTION_PATHS = [
