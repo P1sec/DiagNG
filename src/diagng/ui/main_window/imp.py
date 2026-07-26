@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from typing import List, Dict, Tuple, Optional, Union
+from importlib.metadata import version
 from logging import info, error, debug
 from collections import defaultdict
 from traceback import format_exc
@@ -44,6 +45,7 @@ class MainWindow(Adw.ApplicationWindow):
     adw_style_manager: Adw.StyleManager
 
     auth_dialog_showed: bool = False
+    about_dialog: Adw.AboutDialog = Gtk.Template.Child()
 
     # All tabs - banner
 
@@ -112,6 +114,10 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.app = app
         self.set_application(app)
+
+        # self.about_dialog = Adw.AboutDialog.new_from_appdata(
+        #     '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml'
+        # )
 
         # Perform data bindings
 
@@ -325,6 +331,12 @@ class MainWindow(Adw.ApplicationWindow):
             clipboard.set(self.app.mm_debug_data)
 
         self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
+
+        def show_about(*args):
+            self.about_dialog.set_version(version('diagng'))
+            self.about_dialog.present(self)
+
+        self.add_simple_action('show-about', show_about)
 
     def connect_signals(self):
 

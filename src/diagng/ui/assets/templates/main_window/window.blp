@@ -460,7 +460,7 @@ template $MainWindow: Adw.ApplicationWindow {
 
           section {
             item {
-              action: "win.show_about";
+              action: "win.show-about";
               label: "About";
             }
           }
@@ -473,4 +473,18 @@ template $MainWindow: Adw.ApplicationWindow {
   default-width: 800;
   name: "DiagNG";
   title: "DiagNG";
+}
+
+Adw.AboutDialog about_dialog {
+  application-icon: "com.p1security.diagng";
+  application-name: "DiagNG";
+  copyright: "© P1 Security SAS";
+
+  developers: [
+    "Marin Moulinier - P1 Security https://www.p1sec.com/",
+  ];
+
+  issue-url: "https://github.com/P1sec/DiagNG/issues";
+  license-type: gpl_3_0;
+  website: "https://github.com/P1sec/DiagNG#readme";
 }

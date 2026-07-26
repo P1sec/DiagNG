@@ -571,7 +571,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                     </section>
                     <section>
                       <item>
-                        <attribute name="action">win.show_about</attribute>
+                        <attribute name="action">win.show-about</attribute>
                         <attribute name="label">About</attribute>
                       </item>
                     </section>
@@ -588,4 +588,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <property name="name">DiagNG</property>
     <property name="title">DiagNG</property>
   </template>
+  <object class="AdwAboutDialog" id="about_dialog">
+    <property name="application-icon">com.p1security.diagng</property>
+    <property name="application-name">DiagNG</property>
+    <property name="copyright">© P1 Security SAS</property>
+    <property name="developers">Marin Moulinier - P1 Security https://www.p1sec.com/</property>
+    <property name="issue-url">https://github.com/P1sec/DiagNG/issues</property>
+    <property name="license-type">3</property>
+    <property name="website">https://github.com/P1sec/DiagNG#readme</property>
+  </object>
 </interface>

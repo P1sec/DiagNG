@@ -2,7 +2,7 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="0ae35fd3cba55339143dc08f8a1e80ab967d15202f51814ea42c59ce204c06f6"/>
+  <gresources filename="diagng.gresource.xml" sha256="b192d49e703cedae74721d11cf7d6dbc2b265d0cfcce271ad220961eceed410e"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
   <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="e7a6f3f50d00dd15cac596513602d549f43e941cdc203d37f8a27bcd7b37a71a"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
@@ -23,7 +23,7 @@
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="9d772467e69e1759d128846f113440c84a94ed9b1228cec0bd39bb5ac5e788be"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="9377bcddabd24a81576acf35073bcd68b30ab1760488c37ac1d1dbf63459bce2"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="234c9e75150a1c9ab0da430f01d7627cd23c07bd3d1efa66bdb907b5357ffd74">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="7c703b36f6672e5da949fdc541a3075ee9962e3570271d28109118168c673a45">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
