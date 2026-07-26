@@ -9,7 +9,7 @@ This software contains a work-in-progress intended sequel (v3) for [QCSuper](htt
 It is meant to be split into two components:
 
 * `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
-* WIP: `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
+* `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
   * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
 * Diag frame decoding itself should be done somewhere?
 
@@ -19,21 +19,13 @@ It shares code with `citsued`.
 
 Next tasks are being tracked here: https://github.com/P1sec/DiagNG/issues
 
-=> **Put the parsed information in a GObject model and display it using a simple Adwaita UI?**
+We are putting the parsed information in a GObject model and display it using a simple Adwaita UI.
 
-MAYBE DO LATER: Emulate the behavior of `psutil`/`fuser`, scanning `/proc/*/fd` for symlinks to `/dev/ttyUSB*` and `/dev/ttyHS*` (QCSuper already does this: https://github.com/P1sec/QCSuper/blob/2.1.1/src/qcsuper/inputs/usb_modem_pyserial.py#L106) - Maybe using a regular timeout/background task + root escalation of a forked subprocess? (use PIPE for communication?)
-
-Then, try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
-
-Double check about the ModemManager `InhibitDevice` API (https://www.freedesktop.org/software/ModemManager/api/latest/gdbus-org.freedesktop.ModemManager1.html#gdbus-method-org-freedesktop-ModemManager1.InhibitDevice) + device list + whether any lock mechanism was implemented since we last checked about it (https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/merge_requests/6)?
-
-+ the part interacting with `udev` rules?
+We should maybe eventually try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
 
 Cf. **https://modemmanager.org/docs/modemmanager/port-and-device-detection/**
 
 Cf. https://manpages.debian.org/unstable/modemmanager/mmcli.1.en.html
-
-Use the subprocess spawning process to do privileged stuff? etc.
 
 ## Current setup for running the prototype
 
@@ -79,7 +71,7 @@ install -Dm644 src/diagng/ui/assets/share/icons/hicolor/scalable/apps/com.p1secu
 install -Dm644 src/diagng/ui/assets/share/applications/com.p1security.diagng.desktop \
     ~/.local/share/applications/com.p1security.diagng.desktop
 
-# In one tab:
+# In one tab:
 diagmond
 
 # In another tab:
