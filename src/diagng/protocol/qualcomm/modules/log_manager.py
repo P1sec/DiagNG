@@ -11,9 +11,9 @@ from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.system.adb.adb_client import ADBResponse
 
+from logging import info, debug, warning
 from gi.repository import GObject, Gio
 from typing import Callable, Optional
-from logging import info, debug
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -148,8 +148,23 @@ class LogManager(GObject.Object):
                 pretty_print_struct(response),
             )
 
+            for equip_id_raw, max_item in enumerate(
+                response.payload.payload.last_item
+            ):
+                if not max_item:
+                    continue
+                try:
+                    equip_id = DiagLogging.EquipmentId(equip_id_raw)
+                except Exception:
+                    warning('Unknown equipment ID: %d', equip_id_raw)
+                else:
+                    info(
+                        'Max item for %s (0x%x) = %03x'
+                        % (equip_id.name, equip_id.value, max_item)
+                    )
+
             debug(
-                'XX: %r / %r',
+                'All received max items: %r / %r',
                 list(DiagLogging.EquipmentId),
                 response.payload.payload.last_item,
             )
