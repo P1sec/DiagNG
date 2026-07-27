@@ -49,6 +49,32 @@ class FullLogMask(GObject.Object):
         pass  # TODO
 
 
+TYPES_FOR_RAW_PACKET_LOGGING = [
+    # Layer 2:
+    DiagLogging.LogGsm.gprs_mac_signaling_message_c,  # 0x5226
+    # Layer 3:
+    DiagLogging.LogGsm.gsm_rr_signaling_message_c,  # 0x512f
+    DiagLogging.LogWcdma.signalling_message,  # 0x412f
+    DiagLogging.LogLte.rrc_ota_msg_log_c,  # 0xb0c0
+    DiagLogging.LogNr.nr_rrc_ota_msg_log_c,  # 0xb821
+    # NAS:
+    DiagLogging.LogUmts.nas_ota_message_log_packet_c,  # 0x713a
+    DiagLogging.LogLte.nas_esm_ota_in_msg_log_c,  # 0xb0e2
+    DiagLogging.LogLte.nas_esm_ota_out_msg_log_c,  # 0xb0e3
+    DiagLogging.LogLte.nas_emm_ota_in_msg_log_c,  # 0xb0ec
+    DiagLogging.LogLte.nas_emm_ota_out_msg_log_c,  # 0xb0ed
+]
+
+# User IP traffic (DPL):
+# Data arrives on 0x11EB, but registering the extended Network IP codes
+# is required to trigger DPL delivery on some basebands.
+TYPES_FOR_IP_TRAFFIC_LOGGING = [
+    DiagLogging.Log1x.data_protocol_logging_c,  # 0x11eb
+    DiagLogging.Log1x.data_protocol_logging_network_ip_rm_tx_full_c,  # 0x1574
+    DiagLogging.Log1x.data_protocol_logging_network_ip_rm_rx_full_c,  # 0x1575
+]
+
+
 """
     For now this class will support only
     single-stream logging configuration
@@ -216,6 +242,9 @@ class LogManager(GObject.Object):
     def register_ota_related_logs(
         self, callback: Callable[[ADBResponse], None]
     ):
+        # See TYPES_FOR_RAW_PACKET_LOGGING = [
+        #  https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/_enable_log_mixin.py#L48
+
         pass  # ⚠️ == ➡️ ➡️ NEXT WIP ⬅️ ⬅️ ==
 
     def register_logs(
