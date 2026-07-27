@@ -112,6 +112,39 @@ class LogManager(GObject.Object):
         self.source = source
         pass  # TODO
 
+    def disable_logs(self, callback: Callable[[ADBResponse], None]):
+        payload = DiagLogConfigFReq()
+        payload.padding = b''
+        payload.operation = DiagLogConfigFReq.Operation.disable_op
+
+        payload.payload = DiagLogConfigFReq.Disable()
+        payload.payload._root = payload._root
+        payload.payload._parent = payload
+
+        payload.payload._check()
+        payload._check()
+
+        diag_request = DiagRequest()
+        diag_request.cmd_code = DiagCmd.log_config_f
+        diag_request.payload = payload
+        diag_request._check()
+
+        def req_cb(response: DiagResponse):
+            info(
+                'DiagResponse received for DiagCmd.log_config_f: %r' % response
+            )
+
+            debug(
+                'Parsed DiagCmd.log_config_f response: %s',
+                pretty_print_struct(response),
+            )
+
+            callback(response)
+
+        self.source.send_recv(
+            diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
+        )
+
     def get_supported_log_ranges(
         self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
     ):
@@ -195,7 +228,4 @@ class LogManager(GObject.Object):
     def get_full_log_mask(
         self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
     ):
-        pass  # TODO
-
-    def disable_logs(self, callback: Callable[[ADBResponse], None]):
         pass  # TODO

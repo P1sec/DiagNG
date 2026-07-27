@@ -103,6 +103,14 @@ class QCDMWindow(Adw.Window):
 
         self.log_manager.get_supported_log_ranges(req_cb)
 
+    def disable_logs(self):
+        def req_cb(response: DiagResponse):
+            pass
+            self.get_log_support_info()
+            # ⚠️ TODO ➡️ Add due error HANDLING Here?
+
+        self.log_manager.disable_logs(req_cb)  # => ⚠️ WIP XX
+
     def gather_device_info(self):
         # Use self.input_obj to display Diag-related
         # info in the first tab of QCDMWindow
@@ -129,7 +137,7 @@ class QCDMWindow(Adw.Window):
             # => ℹ️ Next step:
             # ⚠️ TODO: Clear all logs before getting log support info? (https://github.com/P1sec/DiagNG/issues/29)
 
-            self.get_log_support_info()
+            self.disable_logs()
 
         self.input_obj.send_recv(
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
