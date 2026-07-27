@@ -6,6 +6,7 @@ from kaitaistruct import KaitaiStream
 from collections.abc import Callable
 from traceback import format_exc
 from abc import abstractmethod
+from enum import IntEnum
 from io import BytesIO
 
 from diagng.protocol.qualcomm.utils.hdlc import (
@@ -21,10 +22,16 @@ DiagCmd = DiagCmdCode.DiagCmd
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
 
 
+class InputState(IntEnum):
+    Initializing = 1
+    Processing = 2
+    Closed = 3
+
+
 class BaseQCDMInput(GObject.Object):
     short_name = GObject.Property(type=str)
     full_name = GObject.Property(type=str)
-    is_closed = GObject.Property(type=bool, default=False)
+    state = GObject.Property(type=int, default=InputState.Initializing)
 
     buffered_data: bytes = b''
 
@@ -41,8 +48,13 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @GObject.Signal
+    def initialized(self):
+        if self.state == InputState.Initializing:
+            self.state = InputState.Processing
+
+    @GObject.Signal
     def closed(self):
-        self.is_closed = True
+        self.state = InputState.Closed
 
     @abstractmethod
     def send_raw(self, data: bytes):
@@ -130,7 +142,7 @@ class BaseQCDMInput(GObject.Object):
             def on_timeout():
                 nonlocal timeout_id
 
-                if self.is_closed:
+                if self.state == InputState.Closed:
                     timeout_id = None
                     return GLib.SOURCE_REMOVE
 

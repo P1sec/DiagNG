@@ -12,7 +12,7 @@ from diagng.system.adb.adb_client import ADBResponse
 
 from gi.repository import GObject, Gio
 from typing import Callable, Optional
-from logging import info
+from logging import info, debug
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -141,9 +141,15 @@ class LogManager(GObject.Object):
             )
 
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
-            # ⚠️ TODO ➡️ Parse data
 
-            pretty_info = pretty_print_struct(response)
+            debug(
+                'Parsed DiagCmd.log_config_f response: %s',
+                pretty_print_struct(response),
+            )
+
+            log_mask_todo = None  # XX
+
+            callback(response, log_mask_todo)
 
         self.source.send_recv(
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2

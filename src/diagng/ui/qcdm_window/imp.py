@@ -7,8 +7,11 @@ from diagng.protocol.qualcomm.modules.log_manager import (
     LogManager,
     FullLogMask,
 )
+from diagng.protocol.qualcomm.acquisition.base_input import (
+    BaseQCDMInput,
+    InputState,
+)
 from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
-from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
@@ -36,6 +39,7 @@ class QCDMWindow(Adw.Window):
     input_obj: BaseQCDMInput
     log_manager: LogManager
     parent: Adw.ApplicationWindow
+    qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     def __init__(
@@ -54,11 +58,12 @@ class QCDMWindow(Adw.Window):
         self.set_transient_for(parent)
         self.set_title(self.input_obj.full_name)
         self.input_obj.connect('notify::full-name', self.on_title_change)
+        self.input_obj.connect('notify::state', self.on_state_change)
         self.present()
 
+        self.on_state_change()
         self.gather_device_info()
 
-        self.input_obj.connect('closed', self.on_input_closed)
         self.connect('close-request', self.on_quit)
 
     @Gtk.Template.Callback()
@@ -80,7 +85,11 @@ class QCDMWindow(Adw.Window):
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)
 
-    def on_input_closed(self, *args):
+    def on_state_change(self, *args):
+        self.qcdm_stack.set_sensitive(
+            self.input_obj.state == InputState.Processing
+        )
+
         self.parent.update_serial_modems()
 
     def on_quit(self, *args):
@@ -89,6 +98,7 @@ class QCDMWindow(Adw.Window):
     def get_log_support_info(self):
         def req_cb(response: DiagResponse, log_mask: Optional[FullLogMask]):
             pass
+            self.input_obj.state = InputState.Processing
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
 
         self.log_manager.get_supported_log_ranges(req_cb)
