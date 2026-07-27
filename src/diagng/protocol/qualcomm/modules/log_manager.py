@@ -6,6 +6,7 @@ from diagng.protocol.qualcomm.struct.diag_log_config_f_req import (
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
+from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.system.adb.adb_client import ADBResponse
@@ -147,7 +148,16 @@ class LogManager(GObject.Object):
                 pretty_print_struct(response),
             )
 
+            debug(
+                'XX: %r / %r',
+                list(DiagLogging.EquipmentId),
+                response.payload.payload.last_item,
+            )
+
             log_mask_todo = None  # XX
+
+            # =+> TODO add retrieve_valid_mask_op
+            # queries here? ⚠️
 
             callback(response, log_mask_todo)
 

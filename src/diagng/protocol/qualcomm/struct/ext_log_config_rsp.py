@@ -346,7 +346,7 @@ class ExtLogConfigRsp(ReadWriteKaitaiStruct):
             self.reserved = self._io.read_u8le()
             self.last_item = []
             for i in range(16):
-                self.last_item.append(self._io.read_u2le())
+                self.last_item.append(self._io.read_u4le())
 
             self._dirty = False
 
@@ -361,7 +361,7 @@ class ExtLogConfigRsp(ReadWriteKaitaiStruct):
             self._io.write_u8le(self.reserved)
             for i in range(len(self.last_item)):
                 pass
-                self._io.write_u2le(self.last_item[i])
+                self._io.write_u4le(self.last_item[i])
 
         def _check(self):
             if len(self.last_item) != 16:

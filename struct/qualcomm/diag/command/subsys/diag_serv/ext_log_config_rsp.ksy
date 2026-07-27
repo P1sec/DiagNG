@@ -39,7 +39,7 @@ types:
       - id: reserved
         type: u8
       - id: last_item
-        type: u2
+        type: u4
         repeat: expr
         repeat-expr: 16
   retrieve_valid_mask:
