@@ -3,10 +3,7 @@
 # Register resources
 import diagng.utils.gresources
 
-from diagng.protocol.qualcomm.modules.log_manager import (
-    LogManager,
-    FullLogMask,
-)
+from diagng.protocol.qualcomm.modules.log_manager import LogManager
 from diagng.protocol.qualcomm.acquisition.base_input import (
     BaseQCDMInput,
     InputState,
@@ -17,8 +14,8 @@ from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
+from logging import info, debug
 from typing import Optional
-from logging import info
 
 import gi
 
@@ -71,16 +68,16 @@ class QCDMWindow(Adw.Window):
         # target.set_sensitive(False)
         print('⚠️ TODO: Start network capture here')
 
-        # WRITE STEPS
+        # 1. Enable network-related logs
 
-        # (0. RESET LOGS AT APPLICATION STARTUP? BELOW ⬇️ ⬇️)
+        def callback(resp: DiagResponse):
+            debug('TODO: Spawn Wireshark pipe over collected logs')
+            # (2. SPAWN WIRESHARK PIPE, WITH FLATPAK-SPAWN IF NEEDED)
 
-        # (1. ENABLE NETWORK-RELATED LOGS)
+            # (3. TRANSMIT ON-THE-FLY CONVERTED OTA RRC GSMTAP v3 PCAP -
+            #  USE ADAPTER CLASSES FOR DATA CONVERSION)
 
-        # (2. SPAWN WIRESHARK PIPE, WITH FLATPAK-SPAWN IF NEEDED)
-
-        # (3. TRANSMIT ON-THE-FLY CONVERTED OTA RRC GSMTAP v3 PCAP -
-        #  USE ADAPTER CLASSES FOR DATA CONVERSION)
+        self.log_manager.register_ota_related_logs(callback)
 
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)
@@ -96,7 +93,9 @@ class QCDMWindow(Adw.Window):
         self.input_obj.close()
 
     def get_log_support_info(self):
-        def req_cb(response: DiagResponse, log_mask: Optional[FullLogMask]):
+        def req_cb(
+            response: DiagResponse,
+        ):  # , log_mask: Optional[FullLogMask]
             pass
             self.input_obj.state = InputState.Processing
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
@@ -109,7 +108,7 @@ class QCDMWindow(Adw.Window):
             self.get_log_support_info()
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
 
-        self.log_manager.disable_logs(req_cb)  # => ⚠️ WIP XX
+        self.log_manager.disable_logs(req_cb)
 
     def gather_device_info(self):
         # Use self.input_obj to display Diag-related
@@ -134,8 +133,8 @@ class QCDMWindow(Adw.Window):
             pretty_info = pretty_print_struct(response)
             self.device_info_buffer.set_text(pretty_info)
 
-            # => ℹ️ Next step:
-            # ⚠️ TODO: Clear all logs before getting log support info? (https://github.com/P1sec/DiagNG/issues/29)
+            # => Next step:
+            #   Clear all logs before getting log support info
 
             self.disable_logs()
 

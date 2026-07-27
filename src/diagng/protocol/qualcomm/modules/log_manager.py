@@ -14,12 +14,14 @@ from diagng.system.adb.adb_client import ADBResponse
 from logging import info, debug, warning
 from gi.repository import GObject, Gio
 from typing import Callable, Optional
+from collections import defaultdict
 
 DiagCmd = DiagCmdCode.DiagCmd
 
 # TODO 2026-07-20
 
 
+"""
 class LogItem(GObject.Object):
     value = GObject.Property(type=int)
 
@@ -47,6 +49,7 @@ class FullLogMask(GObject.Object):
 
     def to_bytes(self) -> bytes:
         pass  # TODO
+"""
 
 
 TYPES_FOR_RAW_PACKET_LOGGING = [
@@ -91,7 +94,7 @@ class LogManager(GObject.Object):
     # See https://github.com/P1sec/QCSuper/pull/149
     #     => Supports DIAG_QSR4_EXT_MSG_TERSE_F
 
-    current_mask = GObject.Property(type=FullLogMask)
+    # current_mask = GObject.Property(type=FullLogMask)
 
     source: BaseQCDMInput
 
@@ -134,7 +137,7 @@ class LogManager(GObject.Object):
     def __init__(self, source: BaseQCDMInput):
         super().__init__()
 
-        self.current_mask = FullLogMask()
+        # self.current_mask = FullLogMask()
         self.source = source
         pass  # TODO
 
@@ -172,7 +175,8 @@ class LogManager(GObject.Object):
         )
 
     def get_supported_log_ranges(
-        self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
+        self,
+        callback: Callable[[ADBResponse], None],  # , Optional[FullLogMask]
     ):
         # TODO
         # 1. Send: ➡️ diag_log_config_f_req + retrieve_id_ranges_op
@@ -228,12 +232,12 @@ class LogManager(GObject.Object):
                 response.payload.payload.last_item,
             )
 
-            log_mask_todo = None  # XX
+            # log_mask_todo = None  # XX
 
             # =+> TODO add retrieve_valid_mask_op
             # queries here? ⚠️
 
-            callback(response, log_mask_todo)
+            callback(response)  # , log_mask_todo
 
         self.source.send_recv(
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
@@ -245,8 +249,98 @@ class LogManager(GObject.Object):
         # See TYPES_FOR_RAW_PACKET_LOGGING = [
         #  https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/_enable_log_mixin.py#L48
 
+        # log_mask = FullLogMask()
+
+        all_log_codes = set(
+            map(
+                int,
+                TYPES_FOR_RAW_PACKET_LOGGING + TYPES_FOR_IP_TRAFFIC_LOGGING,
+            )
+        )
+
+        self.register_logs(all_log_codes, callback)
+
+    def register_logs(
+        self, log_codes: set[int], callback: Callable[[ADBResponse], None]
+    ):
+        sheduled_diag_requests: list[DiagRequest] = []
+
+        last_diag_response: Optional[ADBResponse] = None
+
+        equip_id_to_log_codes: dict[int, list[int]] = defaultdict(list)
+        for log_code in sorted(log_codes):
+            equip_id_to_log_codes[log_code >> 12].append(log_code)
+
+        for equip_id, log_codes in sorted(equip_id_to_log_codes.items()):
+            bit_field: list[bool] = [False] * ((max(log_codes) & 0x0FFF) + 1)
+            for log_code in log_codes:
+                bit_field[log_code & 0x0FFF] = True
+
+            payload = DiagLogConfigFReq()
+            payload.padding = b''
+            payload.operation = DiagLogConfigFReq.Operation.set_mask_op
+
+            payload.payload = DiagLogConfigFReq.SetMask()
+            payload.payload._root = payload._root
+            payload.payload._parent = payload
+
+            payload.payload.log_mask = DiagLogConfigFReq.LogMask()
+            payload.payload.log_mask._root = payload._root
+            payload.payload.log_mask._parent = payload.payload
+
+            payload.payload.log_mask.equipment_id = equip_id
+            payload.payload.log_mask.logs_on_bitfield = bit_field
+            payload.payload.log_mask.num_logs_on_bitfield = len(bit_field)
+
+            payload.payload.log_mask._check()
+            payload.payload._check()
+            payload._check()
+
+            diag_request = DiagRequest()
+            diag_request.cmd_code = DiagCmd.log_config_f
+            diag_request.payload = payload
+            diag_request._check()
+
+            sheduled_diag_requests.append(diag_request)
+
+        def process_next_request():
+            if not sheduled_diag_requests:
+                callback(last_diag_response)
+                return
+
+            next_request = sheduled_diag_requests.pop(0)
+
+            def req_cb(response: DiagResponse):
+                info(
+                    'DiagResponse received for DiagCmd.log_config_f: %r'
+                    % response
+                )
+
+                # ⚠️ TODO Handle error
+
+                debug(
+                    'Parsed DiagCmd.log_config_f response: %s',
+                    pretty_print_struct(response),
+                )
+
+                nonlocal last_diag_response
+                last_diag_response = response
+
+                process_next_request()
+
+            self.source.send_recv(
+                next_request,
+                req_cb,
+                accept_error=True,
+                retry=True,
+                retry_delay=2,
+            )
+
+        process_next_request()
+
         pass  # ⚠️ == ➡️ ➡️ NEXT WIP ⬅️ ⬅️ ==
 
+    """
     def register_logs(
         self, log_codes: FullLogMask, callback: Callable[[ADBResponse], None]
     ):
@@ -261,3 +355,4 @@ class LogManager(GObject.Object):
         self, callback: Callable[[ADBResponse, Optional[FullLogMask]], None]
     ):
         pass  # TODO
+    """
