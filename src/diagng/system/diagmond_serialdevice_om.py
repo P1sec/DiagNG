@@ -84,6 +84,8 @@ class DiagmondSerialDeviceOM(GObject.Object):
         self.remove_dangling_objects()
 
     def remove_dangling_objects(self):
+        # ⚠️ TODO: Clear all logs here? (https://github.com/P1sec/DiagNG/issues/29)
+
         for obj in self.om.get_objects():
             debug('Cleaning up dangling SerialDevice object: %r' % obj)
 

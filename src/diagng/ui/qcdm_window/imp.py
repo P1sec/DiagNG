@@ -117,6 +117,8 @@ class QCDMWindow(Adw.Window):
             self.device_info_buffer.set_text(pretty_info)
 
             # => ℹ️ Next step:
+            # ⚠️ TODO: Clear all logs before getting log support info? (https://github.com/P1sec/DiagNG/issues/29)
+
             self.get_log_support_info()
 
         self.input_obj.send_recv(
