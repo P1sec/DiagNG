@@ -213,7 +213,10 @@ class LogManager(GObject.Object):
             diag_request, req_cb, accept_error=True, retry=True, retry_delay=2
         )
 
-        pass  # ⚠️ == ➡️ ➡️ CURRENT WIP ⬅️ ⬅️ ==
+    def register_ota_related_logs(
+        self, callback: Callable[[ADBResponse], None]
+    ):
+        pass  # ⚠️ == ➡️ ➡️ NEXT WIP ⬅️ ⬅️ ==
 
     def register_logs(
         self, log_codes: FullLogMask, callback: Callable[[ADBResponse], None]
