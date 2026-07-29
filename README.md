@@ -86,6 +86,18 @@ diagng
 uv run pytest
 ```
 
+## Test decoder using KSV
+
+Example command for using [`kaitai_struct_visualizer`](https://github.com/kaitai-io/kaitai_struct_visualizer):
+
+```bash
+sudo gem install kaitai-struct-visualizer
+
+ksv \
+  ~/qcsuper-dlf-samples/sample_name.dlf \
+  ~/diagng/struct/qualcomm/diag/dlf/dlf_file.ksy
+```
+
 ## Technical architecture
 
 DiagNG is meant to be split into two components:
