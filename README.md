@@ -2,32 +2,34 @@
 <img src="https://github.com/P1sec/DiagNG/blob/main/docs/project_banner.png" alt="Landing illustration">
 </p>
 
-# DiagNG 🍕 🎧 The next-generation baseband Diag-collecting software (2G/3G/4G)
+# DiagNG 🎧 The next-generation baseband Diag client software (2G/3G/4G/5G)
+
+DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands. It should eventually
 
 This software contains a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
 
-It is meant to be split into two components:
+-> [TODO: Screenshot] <-
 
-* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
-* `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
-  * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
-* Diag frame decoding itself should be done somewhere?
+-> [TODO: Flathub download badge] <-
 
-This draft repository (previously called `qcsuper-gui`/QCSuper v3) hence intends to produce a modular GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too) allowing to control and manage interferences with the serial Diag port system wide.
+Feature list:
 
-It shares code with `citsued`.
+* TODO
 
-Next tasks are being tracked here: https://github.com/P1sec/DiagNG/issues
+## Legal
 
-We are putting the parsed information in a GObject model and display it using a simple Adwaita UI.
+DiagNG is released under the GPL v3 license.
 
-We should maybe eventually try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
+DiagNG is developed in the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as way of conducting security research.
 
-Cf. **https://modemmanager.org/docs/modemmanager/port-and-device-detection/**
+P1 Security being based in France, read the following extra mentions for more detailed context on the purpose of this software:
 
-Cf. https://manpages.debian.org/unstable/modemmanager/mmcli.1.en.html
+DiagNG est un logiciel développé à des fins de sécurité informatique et de recherche, au titre de l'article L122-6-1 du Code de la propriété intellectuelle modifié par l'article 25 de la Loi n° 2013-1168 du 18 décembre 2013 relative à la programmation militaire pour les années 2014 à 2019 et portant diverses dispositions concernant la défense et la sécurité nationale.
 
-## Current setup for running the prototype
+DiagNG est également développé en connaissance de l'avis du Conseil d'État, 10ème et 9ème sous-sections réunies, 16/07/2008, 301843, rendu sur saisine de l'APRIL, qui stipule que l'article L122-6-1 du Code de la propriété intellectuelle instaure bien une exception de décompilation destinée à permettre le développement de logiciels libres.
+
+
+## Development environment setup
 
 Dependencies on Ubuntu 26.04 LTS:
 
@@ -83,3 +85,27 @@ diagng
 ```bash
 uv run pytest
 ```
+
+## Technical architecture
+
+DiagNG is meant to be split into two components:
+
+* `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
+* `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
+  * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
+* Diag frame decoding itself should be done somewhere?
+
+This draft repository (previously called `qcsuper-gui`/QCSuper v3) hence intends to produce a modular GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too) allowing to control and manage interferences with the serial Diag port system wide.
+
+It shares code with `citsued`.
+
+Next tasks are being tracked here: https://github.com/P1sec/DiagNG/issues
+
+We are putting the parsed information in a GObject model and display it using a simple Adwaita UI.
+
+We should maybe eventually try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
+
+Cf. **https://modemmanager.org/docs/modemmanager/port-and-device-detection/**
+
+Cf. https://manpages.debian.org/unstable/modemmanager/mmcli.1.en.html
+
