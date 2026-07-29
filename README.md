@@ -4,9 +4,9 @@
 
 # DiagNG 🎧 The next-generation baseband Diag client software (2G/3G/4G/5G)
 
-DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands. It should eventually
+DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands. It should eventually support other basebands such as Samsung Exynos processors.
 
-This software contains a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
+This software is a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
 
 -> [TODO: Screenshot] <-
 
@@ -20,7 +20,7 @@ Feature list:
 
 DiagNG is released under the GPL v3 license.
 
-DiagNG is developed in the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as way of conducting security research.
+DiagNG is developed with the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as way of conducting security research.
 
 P1 Security being based in France, read the following extra mentions for more detailed context on the purpose of this software:
 
