@@ -8,9 +8,9 @@ DiagNG is a general purpose client purpose for the diagnostic interface of the Q
 
 This software is a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
 
--> [TODO: Screenshot] <-
+<center>[TODO: Screenshot]</center>
 
--> [TODO: Flathub download badge] <-
+<center>[TODO: Flathub download badge]</center>
 
 Feature list:
 

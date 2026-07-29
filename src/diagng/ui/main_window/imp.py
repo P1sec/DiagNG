@@ -437,7 +437,7 @@ class MainWindow(Adw.ApplicationWindow):
             auth_dialog.set_transient_for(self)
             auth_dialog.present()
 
-        self.run_diagmond_popover.set_visible(not diagmond_running)
+        # self.run_diagmond_popover.set_visible(not diagmond_running)
 
         self.usb_link_banner.set_title(
             'UDev status: REACHABLE - diagmond status: %s'

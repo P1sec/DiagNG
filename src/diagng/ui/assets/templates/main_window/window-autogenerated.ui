@@ -25,6 +25,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </property>
                         <child>
                           <object class="AdwPreferencesGroup" id="run_diagmond_popover">
+                            <property name="visible">false</property>
                             <child>
                               <object class="AdwActionRow">
                                 <property name="activatable-widget">run_diagmond_button</property>
