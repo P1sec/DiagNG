@@ -19,7 +19,7 @@ class DiagUnknown(ReadWriteKaitaiStruct):
         self._root = _root or self
 
     def _read(self):
-        pass
+        self.payload = self._io.read_bytes_full()
         self._dirty = False
 
     def _fetch_instances(self):
@@ -27,6 +27,11 @@ class DiagUnknown(ReadWriteKaitaiStruct):
 
     def _write__seq(self, io=None):
         super(DiagUnknown, self)._write__seq(io)
+        self._io.write_bytes(self.payload)
+        if not self._io.is_eof():
+            raise kaitaistruct.ConsistencyError(
+                'payload', 0, self._io.size() - self._io.pos()
+            )
 
     def _check(self):
         self._dirty = False

@@ -14,6 +14,7 @@ ksc \
     qualcomm/diag/*.ksy \
     qualcomm/diag/command/*.ksy \
     qualcomm/diag/log/*.ksy \
+    qualcomm/diag/dlf/*.ksy \
     qualcomm/diag/command/subsys/diag_serv/*.ksy
 
 cd ..
