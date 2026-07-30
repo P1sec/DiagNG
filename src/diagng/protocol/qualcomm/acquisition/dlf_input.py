@@ -2,5 +2,6 @@
 
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 
+
 class DLFInput(BaseQCDMInput):
-    pass # TODO
+    pass  # TODO

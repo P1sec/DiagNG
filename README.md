@@ -95,7 +95,7 @@ sudo gem install kaitai-struct-visualizer
 
 ksv \
   ~/qcsuper-dlf-samples/sample_name.dlf \
-  ~/diagng/struct/qualcomm/diag/dlf/dlf_file.ksy
+  ~/diagng/struct/qualcomm/dlf/dlf_file.ksy
 ```
 
 ## Technical architecture

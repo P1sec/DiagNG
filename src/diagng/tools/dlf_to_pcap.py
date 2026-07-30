@@ -4,8 +4,10 @@ from diagng.protocol.qualcomm.struct.dlf_file import DlfFile
 
 from argparse import ArgumentParser
 
+
 def main():
-    pass # TODO
+    pass  # TODO
+
 
 if __name__ == '__main__':
     main()

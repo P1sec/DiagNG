@@ -3,7 +3,7 @@ meta:
   id: dlf_file
   endian: le
   imports:
-    - ../command/diag_log_f
+    - ../diag/command/diag_log_f
 
 seq:
   - id: logs

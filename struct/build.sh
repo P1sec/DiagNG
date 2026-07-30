@@ -11,10 +11,10 @@ ksc \
     --read-write \
     --python-package diagng.protocol.qualcomm.struct \
     --outdir ../src/diagng/protocol/qualcomm/struct \
+    qualcomm/dlf/*.ksy \
     qualcomm/diag/*.ksy \
     qualcomm/diag/command/*.ksy \
     qualcomm/diag/log/*.ksy \
-    qualcomm/diag/dlf/*.ksy \
     qualcomm/diag/command/subsys/diag_serv/*.ksy
 
 cd ..
