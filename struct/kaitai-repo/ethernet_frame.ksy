@@ -7,8 +7,8 @@ meta:
   license: CC0-1.0
   ks-version: 0.8
   imports:
-    - /network/ipv4_packet
-    - /network/ipv6_packet
+    - ipv4_packet
+    # - ipv6_packet
 doc: |
   Ethernet frame is a OSI data link layer (layer 2) protocol data unit
   for Ethernet networks. In practice, many other networks and/or
@@ -38,7 +38,7 @@ seq:
       switch-on: ether_type
       cases:
         'ether_type_enum::ipv4': ipv4_packet
-        'ether_type_enum::ipv6': ipv6_packet
+        # 'ether_type_enum::ipv6': ipv6_packet # Disabled - not used with GSMTAP
 instances:
   ether_type:
     value: |

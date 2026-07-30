@@ -5,6 +5,14 @@ cd "$(dirname "$0")"
 set -ex
 
 rm -rf ../src/diagng/protocol/qualcomm/struct/* || :
+rm -rf ../src/diagng/protocol/qualcomm/network/* || :
+
+ksc \
+    --target python \
+    --read-write \
+    --python-package diagng.protocol.network \
+    --outdir ../src/diagng/protocol/network \
+    kaitai-repo/*.ksy
 
 ksc \
     --target python \

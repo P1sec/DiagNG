@@ -7,7 +7,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.8
   imports:
-    - /network/protocol_body
+    - protocol_body
 seq:
   - id: b1
     type: u1

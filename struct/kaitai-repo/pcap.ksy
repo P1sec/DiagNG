@@ -11,8 +11,8 @@ meta:
   license: CC0-1.0
   ks-version: '0.11'
   imports:
-    - /network/ethernet_frame
-    - /network/packet_ppi
+    - ethernet_frame
+    # - /network/packet_ppi
 doc: |
   PCAP (named after libpcap / winpcap) is a popular format for saving
   network traffic grabbed by network sniffers. It is typically
@@ -107,7 +107,7 @@ types:
         type:
           switch-on: _root.hdr.network
           cases:
-            'linktype::ppi': packet_ppi
+            # 'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
