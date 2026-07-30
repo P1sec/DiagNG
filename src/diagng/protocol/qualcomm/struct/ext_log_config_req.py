@@ -3,8 +3,8 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.protocol.qualcomm.struct import diag_logging
 from diagng.protocol.qualcomm.struct import diag_log_config_f_req
+from diagng.protocol.qualcomm.struct import diag_logging
 from enum import IntEnum
 
 
