@@ -37,6 +37,7 @@ dependencies = [
 [project.scripts]
 diagng = "diagng.ui.main_entry:main"
 diagmond = "diagng.utils.spawn_diagmond:main"
+dlf-to-pcap = "diagng.tools.dlf_to_pcap:main"
 
 [project.urls]
 Homepage = "https://github.com/P1sec/DiagNG"
