@@ -54,27 +54,27 @@ class FullLogMask(GObject.Object):
 
 TYPES_FOR_RAW_PACKET_LOGGING = [
     # Layer 2:
-    DiagLogging.gprs_mac_signaling_message_c,  # 0x5226
+    DiagLogging.LogCode.gprs_mac_signaling_message,  # 0x5226
     # Layer 3:
-    DiagLogging.gsm_rr_signaling_message,  # 0x512f
-    DiagLogging.wcdma_signaling_messages,  # 0x412f
-    DiagLogging.lte_rrc_ota_packet,  # 0xb0c0
-    DiagLogging.nr5g_rrc_ota_packet,  # 0xb821
+    DiagLogging.LogCode.gsm_rr_signaling_message,  # 0x512f
+    DiagLogging.LogCode.wcdma_signaling_messages,  # 0x412f
+    DiagLogging.LogCode.lte_rrc_ota_packet,  # 0xb0c0
+    DiagLogging.LogCode.nr5g_rrc_ota_packet,  # 0xb821
     # NAS:
-    DiagLogging.umts_ue_ota,  # 0x713a
-    DiagLogging.lte_nas_esm_plain_ota_incoming_message,  # 0xb0e2
-    DiagLogging.lte_nas_esm_plain_ota_outgoing_message,  # 0xb0e3
-    DiagLogging.lte_nas_emm_plain_ota_incoming_message,  # 0xb0ec
-    DiagLogging.lte_nas_emm_plain_ota_outgoing_message,  # 0xb0ed
+    DiagLogging.LogCode.umts_ue_ota,  # 0x713a
+    DiagLogging.LogCode.lte_nas_esm_plain_ota_incoming_message,  # 0xb0e2
+    DiagLogging.LogCode.lte_nas_esm_plain_ota_outgoing_message,  # 0xb0e3
+    DiagLogging.LogCode.lte_nas_emm_plain_ota_incoming_message,  # 0xb0ec
+    DiagLogging.LogCode.lte_nas_emm_plain_ota_outgoing_message,  # 0xb0ed
 ]
 
 # User IP traffic (DPL):
 # Data arrives on 0x11EB, but registering the extended Network IP codes
 # is required to trigger DPL delivery on some basebands.
 TYPES_FOR_IP_TRAFFIC_LOGGING = [
-    DiagLogging.data_protocol_logging,  # 0x11eb
-    DiagLogging.data_protocol_logging_network_ip_rm_tx_full,  # 0x1574
-    DiagLogging.data_protocol_logging_network_ip_rm_rx_full,  # 0x1575
+    DiagLogging.LogCode.data_protocol_logging,  # 0x11eb
+    DiagLogging.LogCode.data_protocol_logging_network_ip_rm_tx_full,  # 0x1574
+    DiagLogging.LogCode.data_protocol_logging_network_ip_rm_rx_full,  # 0x1575
 ]
 
 
