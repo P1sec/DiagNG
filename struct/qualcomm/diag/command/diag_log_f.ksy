@@ -32,14 +32,18 @@ types:
           (log_time > 946681200 and
            log_time < 4102441200) ?
           log_time :
-           315961200 +
-           (log_time >> 20) / 50 +
-           ((log_time & 0xfffff) / 0x100000)
+           315964800 +
+           (log_time >> 16) / 800 +
+           ((log_time & 0xffff) / 0xC000 / 800)
 
     enums:
       ref_ts:
-        315961200: epoch_1980 # 1980-01-06
-        946681200: min_ts_unix # 2000-01-01
-        4102441200: max_ts_unix # 2100-01-01
+        315964800: epoch_1980 # 1980-01-06 from 1970-01-01, in seconds
+        946681200: min_ts_unix # 2000-01-01 from 1970-01-01, in seconds
+        4102441200: max_ts_unix # 2100-01-01 from 1970-01-01, in seconds
+        33067703992320000: min_ts_16bitmantissa # 2000-01-01 from 1980-01-06, in 1/800s ticks, 16 bit matissa
+        198520413880320000: max_ts_16bitmantissa # 2100-01-01 from 1980-01-06, in 1/800s ticks, 16 bit matissa
+        # 33067703992320000: min_ts_20bitmantissa # 2000-01-01 from 1980-01-06, in 1/50s ticks, 20 bit matissa
+        # 198520413880320000: max_ts_20bitmantissa # 2100-01-01 from 1980-01-06, in 1/50s ticks, 20 bit matissa
 
 # WIP XX

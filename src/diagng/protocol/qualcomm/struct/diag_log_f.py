@@ -50,9 +50,11 @@ class DiagLogF(ReadWriteKaitaiStruct):
 
     class InnerLog(ReadWriteKaitaiStruct):
         class RefTs(IntEnum):
-            epoch_1980 = 315961200
+            epoch_1980 = 315964800
             min_ts_unix = 946681200
             max_ts_unix = 4102441200
+            min_ts_16bitmantissa = 33067703992320000
+            max_ts_16bitmantissa = 198520413880320000
 
         def __init__(self, _io=None, _parent=None, _root=None):
             super(DiagLogF.InnerLog, self).__init__(_io)
@@ -96,8 +98,8 @@ class DiagLogF(ReadWriteKaitaiStruct):
                     (self.log_time > 946681200)
                     and (self.log_time < 4102441200)
                 )
-                else (315961200 + (self.log_time >> 20) // 50)
-                + (self.log_time & 1048575) // 1048576
+                else (315964800 + (self.log_time >> 16) // 800)
+                + ((self.log_time & 65535) // 49152) // 800
             )
             return getattr(self, '_m_unix_ts', None)
 
