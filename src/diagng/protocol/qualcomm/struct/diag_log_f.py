@@ -3,6 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
+from diagng.protocol.qualcomm.struct import wcdma_signaling_message
 from diagng.protocol.qualcomm.struct import diag_logging
 from enum import IntEnum
 
@@ -67,24 +68,76 @@ class DiagLogF(ReadWriteKaitaiStruct):
                 diag_logging.DiagLogging.LogCode, self._io.read_u2le()
             )
             self.log_time = self._io.read_u8le()
-            self.payload = self._io.read_bytes(self.log_inner_length - 12)
+            _on = self.log_code
+            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+                pass
+                self._raw_content = self._io.read_bytes(
+                    self.log_inner_length - 12
+                )
+                _io__raw_content = KaitaiStream(BytesIO(self._raw_content))
+                self.content = wcdma_signaling_message.WcdmaSignalingMessage(
+                    _io__raw_content
+                )
+                self.content._read()
+            else:
+                pass
+                self.content = self._io.read_bytes(self.log_inner_length - 12)
             self._dirty = False
 
         def _fetch_instances(self):
             pass
+            _on = self.log_code
+            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+                pass
+                self.content._fetch_instances()
+            else:
+                pass
 
         def _write__seq(self, io=None):
             super(DiagLogF.InnerLog, self)._write__seq(io)
             self._io.write_u2le(self.log_inner_length)
             self._io.write_u2le(int(self.log_code))
             self._io.write_u8le(self.log_time)
-            self._io.write_bytes(self.payload)
+            _on = self.log_code
+            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+                pass
+                _io__raw_content = KaitaiStream(
+                    BytesIO(bytearray(self.log_inner_length - 12))
+                )
+                self._io.add_child_stream(_io__raw_content)
+                _pos2 = self._io.pos()
+                self._io.seek(self._io.pos() + (self.log_inner_length - 12))
+
+                def handler(parent, _io__raw_content=_io__raw_content):
+                    self._raw_content = _io__raw_content.to_byte_array()
+                    if len(self._raw_content) != self.log_inner_length - 12:
+                        raise kaitaistruct.ConsistencyError(
+                            'raw(content)',
+                            self.log_inner_length - 12,
+                            len(self._raw_content),
+                        )
+                    parent.write_bytes(self._raw_content)
+
+                _io__raw_content.write_back_handler = (
+                    KaitaiStream.WriteBackHandler(_pos2, handler)
+                )
+                self.content._write__seq(_io__raw_content)
+            else:
+                pass
+                self._io.write_bytes(self.content)
 
         def _check(self):
-            if len(self.payload) != self.log_inner_length - 12:
-                raise kaitaistruct.ConsistencyError(
-                    'payload', self.log_inner_length - 12, len(self.payload)
-                )
+            _on = self.log_code
+            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+                pass
+            else:
+                pass
+                if len(self.content) != self.log_inner_length - 12:
+                    raise kaitaistruct.ConsistencyError(
+                        'content',
+                        self.log_inner_length - 12,
+                        len(self.content),
+                    )
             self._dirty = False
 
         @property

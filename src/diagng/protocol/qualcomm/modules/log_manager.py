@@ -57,7 +57,7 @@ TYPES_FOR_RAW_PACKET_LOGGING = [
     DiagLogging.LogCode.gprs_mac_signaling_message,  # 0x5226
     # Layer 3:
     DiagLogging.LogCode.gsm_rr_signaling_message,  # 0x512f
-    DiagLogging.LogCode.wcdma_signaling_messages,  # 0x412f
+    DiagLogging.LogCode.wcdma_signaling_message,  # 0x412f
     DiagLogging.LogCode.lte_rrc_ota_packet,  # 0xb0c0
     DiagLogging.LogCode.nr5g_rrc_ota_packet,  # 0xb821
     # NAS:

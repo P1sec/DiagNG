@@ -2117,7 +2117,7 @@ class DiagLogging(ReadWriteKaitaiStruct):
         wcdma_csg_finger_print_info = 16682
         wcdma_sib = 16683
         wcdma_cmac_dl_r99 = 16684
-        wcdma_signaling_messages = 16687
+        wcdma_signaling_message = 16687
         wcdma_rlc_dl_am_2 = 16690
         wcdma_rlc_ul_am_2 = 16691
         wcdma_rlc_dl_am_pdu = 16692

@@ -3,6 +3,7 @@ meta:
   endian: le
   imports:
     - ../log/log_codes
+    - ../log/wcdma_signaling_message
 
 # From _base_input.py in QCSuper
 
@@ -24,8 +25,13 @@ types:
         enum: diag_logging::log_code
       - id: log_time # <== Post-process this in code? See dlf_read.py
         type: u8
-      - id: payload
+      - id: content
         size: log_inner_length - 12
+        type:
+          switch-on: log_code
+          cases:
+            'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f - WIP ..
+            # TODO all all supported by QCSuper in "pcap_dump.py"
     instances:
       unix_ts:
         value: |

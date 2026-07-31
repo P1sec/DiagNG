@@ -2120,7 +2120,7 @@ enums:
     0x412a: wcdma_csg_finger_print_info
     0x412b: wcdma_sib
     0x412c: wcdma_cmac_dl_r99
-    0x412f: wcdma_signaling_messages
+    0x412f: wcdma_signaling_message
     0x4132: wcdma_rlc_dl_am_2
     0x4133: wcdma_rlc_ul_am_2
     0x4134: wcdma_rlc_dl_am_pdu
