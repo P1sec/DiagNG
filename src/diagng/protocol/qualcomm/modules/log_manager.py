@@ -214,7 +214,7 @@ class LogManager(GObject.Object):
             )
 
             for equip_id_raw, max_item in enumerate(
-                response.payload.payload.last_item
+                response.payload.action.last_item
             ):
                 if not max_item:
                     continue
@@ -231,7 +231,7 @@ class LogManager(GObject.Object):
             debug(
                 'All received max items: %r / %r',
                 list(DiagLogging.EquipmentId),
-                response.payload.payload.last_item,
+                response.payload.action.last_item,
             )
 
             # log_mask_todo = None  # XX
