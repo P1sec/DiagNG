@@ -20,11 +20,10 @@ def test__retrieve_id_ranges_op():
     payload.padding = b''
     payload.operation = DiagLogConfigFReq.Operation.retrieve_id_ranges_op
 
-    payload.payload = DiagLogConfigFReq.RetrieveIdRanges()
-    payload.payload._root = payload._root
-    payload.payload._parent = payload
+    action = DiagLogConfigFReq.RetrieveIdRanges(None, payload, payload._root)
+    action._check()
 
-    payload.payload._check()
+    payload.action = action
     payload._check()
 
     diag_request = DiagRequest()

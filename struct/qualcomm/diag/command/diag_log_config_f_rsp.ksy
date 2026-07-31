@@ -15,7 +15,7 @@ seq:
   - id: status
     type: u4
     enum: status
-  - id: payload
+  - id: action
     type:
       switch-on: operation
       cases:

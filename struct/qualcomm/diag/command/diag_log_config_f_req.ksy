@@ -12,7 +12,7 @@ seq:
   - id: operation
     type: u4
     enum: operation
-  - id: payload
+  - id: action
     type:
       switch-on: operation
       cases:

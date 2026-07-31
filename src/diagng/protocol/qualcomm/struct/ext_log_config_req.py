@@ -46,48 +46,48 @@ class ExtLogConfigReq(ReadWriteKaitaiStruct):
         _on = self.operation
         if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
-            self._raw_payload = self._io.read_bytes_full()
-            _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = ExtLogConfigReq.Disable(
-                _io__raw_payload, self, self._root
+            self._raw_action = self._io.read_bytes_full()
+            _io__raw_action = KaitaiStream(BytesIO(self._raw_action))
+            self.action = ExtLogConfigReq.Disable(
+                _io__raw_action, self, self._root
             )
-            self.payload._read()
+            self.action._read()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
         ):
             pass
-            self._raw_payload = self._io.read_bytes_full()
-            _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = ExtLogConfigReq.GetMask(
-                _io__raw_payload, self, self._root
+            self._raw_action = self._io.read_bytes_full()
+            _io__raw_action = KaitaiStream(BytesIO(self._raw_action))
+            self.action = ExtLogConfigReq.GetMask(
+                _io__raw_action, self, self._root
             )
-            self.payload._read()
+            self.action._read()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
         ):
             pass
-            self._raw_payload = self._io.read_bytes_full()
-            _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = ExtLogConfigReq.RetrieveIdRanges(
-                _io__raw_payload, self, self._root
+            self._raw_action = self._io.read_bytes_full()
+            _io__raw_action = KaitaiStream(BytesIO(self._raw_action))
+            self.action = ExtLogConfigReq.RetrieveIdRanges(
+                _io__raw_action, self, self._root
             )
-            self.payload._read()
+            self.action._read()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
         ):
             pass
-            self._raw_payload = self._io.read_bytes_full()
-            _io__raw_payload = KaitaiStream(BytesIO(self._raw_payload))
-            self.payload = ExtLogConfigReq.SetMask(
-                _io__raw_payload, self, self._root
+            self._raw_action = self._io.read_bytes_full()
+            _io__raw_action = KaitaiStream(BytesIO(self._raw_action))
+            self.action = ExtLogConfigReq.SetMask(
+                _io__raw_action, self, self._root
             )
-            self.payload._read()
+            self.action._read()
         else:
             pass
-            self.payload = self._io.read_bytes_full()
+            self.action = self._io.read_bytes_full()
         self._dirty = False
 
     def _fetch_instances(self):
@@ -95,25 +95,25 @@ class ExtLogConfigReq(ReadWriteKaitaiStruct):
         _on = self.operation
         if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
-            self.payload._fetch_instances()
+            self.action._fetch_instances()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
         ):
             pass
-            self.payload._fetch_instances()
+            self.action._fetch_instances()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
         ):
             pass
-            self.payload._fetch_instances()
+            self.action._fetch_instances()
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
         ):
             pass
-            self.payload._fetch_instances()
+            self.action._fetch_instances()
         else:
             pass
 
@@ -124,103 +124,103 @@ class ExtLogConfigReq(ReadWriteKaitaiStruct):
         _on = self.operation
         if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
-            _io__raw_payload = KaitaiStream(
+            _io__raw_action = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
             )
-            self._io.add_child_stream(_io__raw_payload)
+            self._io.add_child_stream(_io__raw_action)
             _pos2 = self._io.pos()
             self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
 
-            def handler(parent, _io__raw_payload=_io__raw_payload):
-                self._raw_payload = _io__raw_payload.to_byte_array()
-                parent.write_bytes(self._raw_payload)
+            def handler(parent, _io__raw_action=_io__raw_action):
+                self._raw_action = _io__raw_action.to_byte_array()
+                parent.write_bytes(self._raw_action)
                 if not parent.is_eof():
                     raise kaitaistruct.ConsistencyError(
-                        'raw(payload)', 0, parent.size() - parent.pos()
+                        'raw(action)', 0, parent.size() - parent.pos()
                     )
 
-            _io__raw_payload.write_back_handler = (
-                KaitaiStream.WriteBackHandler(_pos2, handler)
+            _io__raw_action.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
             )
-            self.payload._write__seq(_io__raw_payload)
+            self.action._write__seq(_io__raw_action)
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
         ):
             pass
-            _io__raw_payload = KaitaiStream(
+            _io__raw_action = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
             )
-            self._io.add_child_stream(_io__raw_payload)
+            self._io.add_child_stream(_io__raw_action)
             _pos2 = self._io.pos()
             self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
 
-            def handler(parent, _io__raw_payload=_io__raw_payload):
-                self._raw_payload = _io__raw_payload.to_byte_array()
-                parent.write_bytes(self._raw_payload)
+            def handler(parent, _io__raw_action=_io__raw_action):
+                self._raw_action = _io__raw_action.to_byte_array()
+                parent.write_bytes(self._raw_action)
                 if not parent.is_eof():
                     raise kaitaistruct.ConsistencyError(
-                        'raw(payload)', 0, parent.size() - parent.pos()
+                        'raw(action)', 0, parent.size() - parent.pos()
                     )
 
-            _io__raw_payload.write_back_handler = (
-                KaitaiStream.WriteBackHandler(_pos2, handler)
+            _io__raw_action.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
             )
-            self.payload._write__seq(_io__raw_payload)
+            self.action._write__seq(_io__raw_action)
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
         ):
             pass
-            _io__raw_payload = KaitaiStream(
+            _io__raw_action = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
             )
-            self._io.add_child_stream(_io__raw_payload)
+            self._io.add_child_stream(_io__raw_action)
             _pos2 = self._io.pos()
             self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
 
-            def handler(parent, _io__raw_payload=_io__raw_payload):
-                self._raw_payload = _io__raw_payload.to_byte_array()
-                parent.write_bytes(self._raw_payload)
+            def handler(parent, _io__raw_action=_io__raw_action):
+                self._raw_action = _io__raw_action.to_byte_array()
+                parent.write_bytes(self._raw_action)
                 if not parent.is_eof():
                     raise kaitaistruct.ConsistencyError(
-                        'raw(payload)', 0, parent.size() - parent.pos()
+                        'raw(action)', 0, parent.size() - parent.pos()
                     )
 
-            _io__raw_payload.write_back_handler = (
-                KaitaiStream.WriteBackHandler(_pos2, handler)
+            _io__raw_action.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
             )
-            self.payload._write__seq(_io__raw_payload)
+            self.action._write__seq(_io__raw_action)
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
         ):
             pass
-            _io__raw_payload = KaitaiStream(
+            _io__raw_action = KaitaiStream(
                 BytesIO(bytearray(self._io.size() - self._io.pos()))
             )
-            self._io.add_child_stream(_io__raw_payload)
+            self._io.add_child_stream(_io__raw_action)
             _pos2 = self._io.pos()
             self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
 
-            def handler(parent, _io__raw_payload=_io__raw_payload):
-                self._raw_payload = _io__raw_payload.to_byte_array()
-                parent.write_bytes(self._raw_payload)
+            def handler(parent, _io__raw_action=_io__raw_action):
+                self._raw_action = _io__raw_action.to_byte_array()
+                parent.write_bytes(self._raw_action)
                 if not parent.is_eof():
                     raise kaitaistruct.ConsistencyError(
-                        'raw(payload)', 0, parent.size() - parent.pos()
+                        'raw(action)', 0, parent.size() - parent.pos()
                     )
 
-            _io__raw_payload.write_back_handler = (
-                KaitaiStream.WriteBackHandler(_pos2, handler)
+            _io__raw_action.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
             )
-            self.payload._write__seq(_io__raw_payload)
+            self.action._write__seq(_io__raw_action)
         else:
             pass
-            self._io.write_bytes(self.payload)
+            self._io.write_bytes(self.action)
             if not self._io.is_eof():
                 raise kaitaistruct.ConsistencyError(
-                    'payload', 0, self._io.size() - self._io.pos()
+                    'action', 0, self._io.size() - self._io.pos()
                 )
 
     def _check(self):
@@ -235,52 +235,52 @@ class ExtLogConfigReq(ReadWriteKaitaiStruct):
         _on = self.operation
         if _on == diag_log_config_f_req.DiagLogConfigFReq.Operation.disable_op:
             pass
-            if self.payload._root != self._root:
+            if self.action._root != self._root:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self._root, self.payload._root
+                    'action', self._root, self.action._root
                 )
-            if self.payload._parent != self:
+            if self.action._parent != self:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self, self.payload._parent
+                    'action', self, self.action._parent
                 )
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.get_mask_op
         ):
             pass
-            if self.payload._root != self._root:
+            if self.action._root != self._root:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self._root, self.payload._root
+                    'action', self._root, self.action._root
                 )
-            if self.payload._parent != self:
+            if self.action._parent != self:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self, self.payload._parent
+                    'action', self, self.action._parent
                 )
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.retrieve_id_ranges_op
         ):
             pass
-            if self.payload._root != self._root:
+            if self.action._root != self._root:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self._root, self.payload._root
+                    'action', self._root, self.action._root
                 )
-            if self.payload._parent != self:
+            if self.action._parent != self:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self, self.payload._parent
+                    'action', self, self.action._parent
                 )
         elif (
             _on
             == diag_log_config_f_req.DiagLogConfigFReq.Operation.set_mask_op
         ):
             pass
-            if self.payload._root != self._root:
+            if self.action._root != self._root:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self._root, self.payload._root
+                    'action', self._root, self.action._root
                 )
-            if self.payload._parent != self:
+            if self.action._parent != self:
                 raise kaitaistruct.ConsistencyError(
-                    'payload', self, self.payload._parent
+                    'action', self, self.action._parent
                 )
         else:
             pass

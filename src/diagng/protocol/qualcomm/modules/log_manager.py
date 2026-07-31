@@ -146,11 +146,12 @@ class LogManager(GObject.Object):
         payload.padding = b''
         payload.operation = DiagLogConfigFReq.Operation.disable_op
 
-        payload.payload = DiagLogConfigFReq.Disable()
-        payload.payload._root = payload._root
-        payload.payload._parent = payload
+        action = DiagLogConfigFReq.Disable(None, payload, payload._root)
+        action._root = payload._root
+        action._parent = payload
+        action._check()
 
-        payload.payload._check()
+        payload.action = action
         payload._check()
 
         diag_request = DiagRequest()
@@ -187,11 +188,12 @@ class LogManager(GObject.Object):
         payload.padding = b''
         payload.operation = DiagLogConfigFReq.Operation.retrieve_id_ranges_op
 
-        payload.payload = DiagLogConfigFReq.RetrieveIdRanges()
-        payload.payload._root = payload._root
-        payload.payload._parent = payload
+        action = DiagLogConfigFReq.RetrieveIdRanges(
+            None, payload, payload._root
+        )
+        action._check()
 
-        payload.payload._check()
+        payload.action = action
         payload._check()
 
         diag_request = DiagRequest()
@@ -280,20 +282,18 @@ class LogManager(GObject.Object):
             payload.padding = b''
             payload.operation = DiagLogConfigFReq.Operation.set_mask_op
 
-            payload.payload = DiagLogConfigFReq.SetMask()
-            payload.payload._root = payload._root
-            payload.payload._parent = payload
+            action = DiagLogConfigFReq.SetMask(None, payload, payload._root)
 
-            payload.payload.log_mask = DiagLogConfigFReq.LogMask()
-            payload.payload.log_mask._root = payload._root
-            payload.payload.log_mask._parent = payload.payload
+            log_mask = DiagLogConfigFReq.LogMask(None, action, action._root)
+            log_mask.equipment_id = equip_id
+            log_mask.logs_on_bitfield = bit_field
+            log_mask.num_logs_on_bitfield = len(bit_field)
+            log_mask._check()
 
-            payload.payload.log_mask.equipment_id = equip_id
-            payload.payload.log_mask.logs_on_bitfield = bit_field
-            payload.payload.log_mask.num_logs_on_bitfield = len(bit_field)
+            action.log_mask = log_mask
+            action._check()
 
-            payload.payload.log_mask._check()
-            payload.payload._check()
+            payload.action = action
             payload._check()
 
             diag_request = DiagRequest()

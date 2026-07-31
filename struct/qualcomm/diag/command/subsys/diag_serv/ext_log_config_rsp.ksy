@@ -14,7 +14,7 @@ seq:
   - id: operation
     type: u1
     enum: diag_log_config_f_req::operation
-  - id: payload
+  - id: action
     type:
       switch-on: operation
       cases:
