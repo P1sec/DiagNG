@@ -12,7 +12,8 @@ ksc \
     --read-write \
     --python-package diagng.protocol.network \
     --outdir ../src/diagng/protocol/network \
-    kaitai-repo/*.ksy
+    kaitai-repo/*.ksy \
+    gsmtap/*.ksy
 
 ksc \
     --target python \

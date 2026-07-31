@@ -1,4 +1,4 @@
-# TODO
+# GSMTAP Kaitai definitions
 
 See: https://gitea.osmocom.org/peremen/gsmtapv3/src/branch/master/GSMTAPv3.md (GSMTAP v3 draft, not implemented in Wireshark)
 

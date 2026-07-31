@@ -3,8 +3,8 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.protocol.network import ipv4_packet
 from diagng.protocol.network import udp_datagram
+from diagng.protocol.network import ipv4_packet
 from enum import IntEnum
 
 

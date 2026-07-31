@@ -3,6 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
+from diagng.protocol.network import gsmtap_v2
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -29,11 +30,26 @@ class UdpDatagram(ReadWriteKaitaiStruct):
         self.dst_port = self._io.read_u2be()
         self.length = self._io.read_u2be()
         self.checksum = self._io.read_u2be()
-        self.body = self._io.read_bytes(self.length - 8)
+        _on = self.dst_port
+        if _on == 4729:
+            pass
+            self._raw_body = self._io.read_bytes(self.length - 8)
+            _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
+            self.body = gsmtap_v2.GsmtapV2(_io__raw_body)
+            self.body._read()
+        else:
+            pass
+            self.body = self._io.read_bytes(self.length - 8)
         self._dirty = False
 
     def _fetch_instances(self):
         pass
+        _on = self.dst_port
+        if _on == 4729:
+            pass
+            self.body._fetch_instances()
+        else:
+            pass
 
     def _write__seq(self, io=None):
         super(UdpDatagram, self)._write__seq(io)
@@ -41,11 +57,38 @@ class UdpDatagram(ReadWriteKaitaiStruct):
         self._io.write_u2be(self.dst_port)
         self._io.write_u2be(self.length)
         self._io.write_u2be(self.checksum)
-        self._io.write_bytes(self.body)
+        _on = self.dst_port
+        if _on == 4729:
+            pass
+            _io__raw_body = KaitaiStream(BytesIO(bytearray(self.length - 8)))
+            self._io.add_child_stream(_io__raw_body)
+            _pos2 = self._io.pos()
+            self._io.seek(self._io.pos() + (self.length - 8))
+
+            def handler(parent, _io__raw_body=_io__raw_body):
+                self._raw_body = _io__raw_body.to_byte_array()
+                if len(self._raw_body) != self.length - 8:
+                    raise kaitaistruct.ConsistencyError(
+                        'raw(body)', self.length - 8, len(self._raw_body)
+                    )
+                parent.write_bytes(self._raw_body)
+
+            _io__raw_body.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
+            )
+            self.body._write__seq(_io__raw_body)
+        else:
+            pass
+            self._io.write_bytes(self.body)
 
     def _check(self):
-        if len(self.body) != self.length - 8:
-            raise kaitaistruct.ConsistencyError(
-                'body', self.length - 8, len(self.body)
-            )
+        _on = self.dst_port
+        if _on == 4729:
+            pass
+        else:
+            pass
+            if len(self.body) != self.length - 8:
+                raise kaitaistruct.ConsistencyError(
+                    'body', self.length - 8, len(self.body)
+                )
         self._dirty = False
