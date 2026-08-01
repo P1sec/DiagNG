@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from diagng.protocol.qualcomm.struct.gsm_rr_signaling_message import (
+    GsmRrSignalingMessage,
+)
 from diagng.protocol.qualcomm.struct.wcdma_signaling_message import (
     WcdmaSignalingMessage,
 )
@@ -36,6 +39,7 @@ class OTADecoder:
         packet_type: GsmtapV2.PacketType,
         sub_type: ReadWriteKaitaiStruct,
         data: bytes,
+        is_uplink: bool = False,
         arfcn: Optional[int] = 0,
     ):
         packet = GsmtapV2()
@@ -44,6 +48,8 @@ class OTADecoder:
         packet.type = packet_type
         packet.timeslot = 0
 
+        packet.pcs_band = False
+        packet.is_uplink = is_uplink
         packet.arfcn = arfcn
         packet.signal_dbm = 0
         packet.snr_db = 0
@@ -65,7 +71,7 @@ class OTADecoder:
 
         code: DiagLogging.LogCode = log.log_code
 
-        if code == DiagLogging.LogCode.wcdma_signaling_message:
+        if code == DiagLogging.LogCode.wcdma_signaling_message:  # 0x412f
             msg: WcdmaSignalingMessage = log.content
 
             PacketType = WcdmaSignalingMessage.PacketType
@@ -95,13 +101,34 @@ class OTADecoder:
                 sub_type._check()
 
                 if msg.packet_type == PacketType.explicit_arfcn_psc:
-                    arfcn = msg.uarfcn
+                    arfcn = msg.uarfcn & 0x3F
                 else:
                     arfcn = 0
 
                 self.write_gsmtap_packet(
-                    GsmtapV2.PacketType.umts_rrc, sub_type, msg.message, arfcn
+                    GsmtapV2.PacketType.umts_rrc,
+                    sub_type,
+                    msg.message,
+                    msg.is_uplink,
+                    arfcn,
                 )
+
+        elif code == DiagLogging.LogCode.gsm_rr_signaling_message:  # 0x512f
+            msg: GsmRrSignalingMessage = log.content
+
+            self.current_rat = RATType.RAT_2G
+
+            sub_type = {}.get(msg.channel_type)
+
+            if not sub_type:
+                raise 'xx'
+
+            self.write_gsmtap_packet(
+                GsmtapV2.PacketType.um,
+                sub_type,
+                msg.message,
+                not msg.is_downlink,
+            )
 
         elif XX:
             pass  # TODO

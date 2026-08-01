@@ -3,6 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
+from diagng.protocol.qualcomm.struct import gsm_rr_signaling_message
 from diagng.protocol.qualcomm.struct import wcdma_signaling_message
 from diagng.protocol.qualcomm.struct import diag_logging
 from enum import IntEnum
@@ -69,7 +70,22 @@ class DiagLogF(ReadWriteKaitaiStruct):
             )
             self.log_time = self._io.read_u8le()
             _on = self.log_code
-            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+            if (
+                _on
+                == diag_logging.DiagLogging.LogCode.gsm_rr_signaling_message
+            ):
+                pass
+                self._raw_content = self._io.read_bytes(
+                    self.log_inner_length - 12
+                )
+                _io__raw_content = KaitaiStream(BytesIO(self._raw_content))
+                self.content = gsm_rr_signaling_message.GsmRrSignalingMessage(
+                    _io__raw_content
+                )
+                self.content._read()
+            elif (
+                _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
+            ):
                 pass
                 self._raw_content = self._io.read_bytes(
                     self.log_inner_length - 12
@@ -87,7 +103,15 @@ class DiagLogF(ReadWriteKaitaiStruct):
         def _fetch_instances(self):
             pass
             _on = self.log_code
-            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+            if (
+                _on
+                == diag_logging.DiagLogging.LogCode.gsm_rr_signaling_message
+            ):
+                pass
+                self.content._fetch_instances()
+            elif (
+                _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
+            ):
                 pass
                 self.content._fetch_instances()
             else:
@@ -99,7 +123,35 @@ class DiagLogF(ReadWriteKaitaiStruct):
             self._io.write_u2le(int(self.log_code))
             self._io.write_u8le(self.log_time)
             _on = self.log_code
-            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+            if (
+                _on
+                == diag_logging.DiagLogging.LogCode.gsm_rr_signaling_message
+            ):
+                pass
+                _io__raw_content = KaitaiStream(
+                    BytesIO(bytearray(self.log_inner_length - 12))
+                )
+                self._io.add_child_stream(_io__raw_content)
+                _pos2 = self._io.pos()
+                self._io.seek(self._io.pos() + (self.log_inner_length - 12))
+
+                def handler(parent, _io__raw_content=_io__raw_content):
+                    self._raw_content = _io__raw_content.to_byte_array()
+                    if len(self._raw_content) != self.log_inner_length - 12:
+                        raise kaitaistruct.ConsistencyError(
+                            'raw(content)',
+                            self.log_inner_length - 12,
+                            len(self._raw_content),
+                        )
+                    parent.write_bytes(self._raw_content)
+
+                _io__raw_content.write_back_handler = (
+                    KaitaiStream.WriteBackHandler(_pos2, handler)
+                )
+                self.content._write__seq(_io__raw_content)
+            elif (
+                _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
+            ):
                 pass
                 _io__raw_content = KaitaiStream(
                     BytesIO(bytearray(self.log_inner_length - 12))
@@ -128,7 +180,14 @@ class DiagLogF(ReadWriteKaitaiStruct):
 
         def _check(self):
             _on = self.log_code
-            if _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message:
+            if (
+                _on
+                == diag_logging.DiagLogging.LogCode.gsm_rr_signaling_message
+            ):
+                pass
+            elif (
+                _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
+            ):
                 pass
             else:
                 pass

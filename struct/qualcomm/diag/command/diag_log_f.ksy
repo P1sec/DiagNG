@@ -4,6 +4,7 @@ meta:
   imports:
     - ../log/log_codes
     - ../log/wcdma_signaling_message
+    - ../log/gsm_rr_signaling_message
 
 # From _base_input.py in QCSuper
 
@@ -30,7 +31,8 @@ types:
         type:
           switch-on: log_code
           cases:
-            'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f - WIP ..
+            'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f
+            'diag_logging::log_code::gsm_rr_signaling_message': gsm_rr_signaling_message # 0x512f
             # TODO process all types supported by QCSuper in "pcap_dump.py"
     instances:
       unix_ts:

@@ -2,6 +2,10 @@
 meta:
   id: gsmtap_v2
   endian: be
+  bit-endian: be
+  imports:
+    - ../qualcomm/diag/request
+    - ../qualcomm/diag/response
 
 # From: https://github.com/osmocom/libosmocore/blob/master/include/osmocom/core/gsmtap.h
 
@@ -23,8 +27,14 @@ seq:
     type: u1
     doc: 0..7 on Um
 
+  - id: pcs_band
+    type: b1
+    doc: PCS band indicator
+  - id: is_uplink
+    type: b1
+    doc: Uplink or downlink
   - id: arfcn
-    type: u2
+    type: b14
     doc: ARFCN (frequency)
   - id: signal_dbm
     type: s1
@@ -56,8 +66,25 @@ seq:
 
   - id: data
     size-eos: true
+    type:
+      switch-on: type
+      cases:
+        # See: https://github.com/wireshark/wireshark/blob/3c7615d/epan/dissectors/packet-qcdiag.c#L1809
+        'packet_type::qc_diag': diag_payload(is_uplink)
 
 types:
+  diag_payload:
+    params:
+      - id: is_uplink
+        type: b1
+    seq:
+      - id: frame
+        type:
+          switch-on: is_uplink
+          cases:
+            true: diag_request
+            false: diag_response
+
   umts_rrc_subtype_field:
     seq:
       - id: umts_rrc_subtype

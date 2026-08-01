@@ -3,6 +3,8 @@ meta:
   endian: le
   bit-endian: be
 
+# See also: ➡️ https://github.com/wireshark/wireshark/blob/60851bf/epan/dissectors/packet-qcdiag_log.c#L2894
+
 seq:
   - id: packet_type
     type: b4

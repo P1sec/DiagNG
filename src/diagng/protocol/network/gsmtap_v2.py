@@ -3,6 +3,8 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
+from diagng.protocol.qualcomm.struct import diag_response
+from diagng.protocol.qualcomm.struct import diag_request
 from enum import IntEnum
 
 
@@ -120,7 +122,9 @@ class GsmtapV2(ReadWriteKaitaiStruct):
             GsmtapV2.PacketType, self._io.read_u1()
         )
         self.timeslot = self._io.read_u1()
-        self.arfcn = self._io.read_u2be()
+        self.pcs_band = self._io.read_bits_int_be(1) != 0
+        self.is_uplink = self._io.read_bits_int_be(1) != 0
+        self.arfcn = self._io.read_bits_int_be(14)
         self.signal_dbm = self._io.read_s1()
         self.snr_db = self._io.read_s1()
         self.frame_number = self._io.read_u4be()
@@ -137,7 +141,18 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self.antenna_nr = self._io.read_u1()
         self.sub_slot = self._io.read_u1()
         self.res = self._io.read_u1()
-        self.data = self._io.read_bytes_full()
+        _on = self.type
+        if _on == GsmtapV2.PacketType.qc_diag:
+            pass
+            self._raw_data = self._io.read_bytes_full()
+            _io__raw_data = KaitaiStream(BytesIO(self._raw_data))
+            self.data = GsmtapV2.DiagPayload(
+                self.is_uplink, _io__raw_data, self, self._root
+            )
+            self.data._read()
+        else:
+            pass
+            self.data = self._io.read_bytes_full()
         self._dirty = False
 
     def _fetch_instances(self):
@@ -148,6 +163,12 @@ class GsmtapV2(ReadWriteKaitaiStruct):
             self.sub_type._fetch_instances()
         else:
             pass
+        _on = self.type
+        if _on == GsmtapV2.PacketType.qc_diag:
+            pass
+            self.data._fetch_instances()
+        else:
+            pass
 
     def _write__seq(self, io=None):
         super(GsmtapV2, self)._write__seq(io)
@@ -155,7 +176,9 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self._io.write_u1(self.header_len)
         self._io.write_u1(int(self.type))
         self._io.write_u1(self.timeslot)
-        self._io.write_u2be(self.arfcn)
+        self._io.write_bits_int_be(1, int(self.pcs_band))
+        self._io.write_bits_int_be(1, int(self.is_uplink))
+        self._io.write_bits_int_be(14, self.arfcn)
         self._io.write_s1(self.signal_dbm)
         self._io.write_s1(self.snr_db)
         self._io.write_u4be(self.frame_number)
@@ -169,11 +192,35 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self._io.write_u1(self.antenna_nr)
         self._io.write_u1(self.sub_slot)
         self._io.write_u1(self.res)
-        self._io.write_bytes(self.data)
-        if not self._io.is_eof():
-            raise kaitaistruct.ConsistencyError(
-                'data', 0, self._io.size() - self._io.pos()
+        _on = self.type
+        if _on == GsmtapV2.PacketType.qc_diag:
+            pass
+            _io__raw_data = KaitaiStream(
+                BytesIO(bytearray(self._io.size() - self._io.pos()))
             )
+            self._io.add_child_stream(_io__raw_data)
+            _pos2 = self._io.pos()
+            self._io.seek(self._io.pos() + (self._io.size() - self._io.pos()))
+
+            def handler(parent, _io__raw_data=_io__raw_data):
+                self._raw_data = _io__raw_data.to_byte_array()
+                parent.write_bytes(self._raw_data)
+                if not parent.is_eof():
+                    raise kaitaistruct.ConsistencyError(
+                        'raw(data)', 0, parent.size() - parent.pos()
+                    )
+
+            _io__raw_data.write_back_handler = KaitaiStream.WriteBackHandler(
+                _pos2, handler
+            )
+            self.data._write__seq(_io__raw_data)
+        else:
+            pass
+            self._io.write_bytes(self.data)
+            if not self._io.is_eof():
+                raise kaitaistruct.ConsistencyError(
+                    'data', 0, self._io.size() - self._io.pos()
+                )
 
     def _check(self):
         if not self.version == 2:
@@ -197,7 +244,71 @@ class GsmtapV2(ReadWriteKaitaiStruct):
                 )
         else:
             pass
+        _on = self.type
+        if _on == GsmtapV2.PacketType.qc_diag:
+            pass
+            if self.data._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'data', self._root, self.data._root
+                )
+            if self.data._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'data', self, self.data._parent
+                )
+            if self.data.is_uplink != self.is_uplink:
+                raise kaitaistruct.ConsistencyError(
+                    'data', self.is_uplink, self.data.is_uplink
+                )
+        else:
+            pass
         self._dirty = False
+
+    class DiagPayload(ReadWriteKaitaiStruct):
+        def __init__(self, is_uplink, _io=None, _parent=None, _root=None):
+            super(GsmtapV2.DiagPayload, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+            self.is_uplink = is_uplink
+
+        def _read(self):
+            _on = self.is_uplink
+            if _on == False:
+                pass
+                self.frame = diag_response.DiagResponse(self._io)
+                self.frame._read()
+            elif _on == True:
+                pass
+                self.frame = diag_request.DiagRequest(self._io)
+                self.frame._read()
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+            _on = self.is_uplink
+            if _on == False:
+                pass
+                self.frame._fetch_instances()
+            elif _on == True:
+                pass
+                self.frame._fetch_instances()
+
+        def _write__seq(self, io=None):
+            super(GsmtapV2.DiagPayload, self)._write__seq(io)
+            _on = self.is_uplink
+            if _on == False:
+                pass
+                self.frame._write__seq(self._io)
+            elif _on == True:
+                pass
+                self.frame._write__seq(self._io)
+
+        def _check(self):
+            _on = self.is_uplink
+            if _on == False:
+                pass
+            elif _on == True:
+                pass
+            self._dirty = False
 
     class UmtsRrcSubtypeField(ReadWriteKaitaiStruct):
         def __init__(self, _io=None, _parent=None, _root=None):
