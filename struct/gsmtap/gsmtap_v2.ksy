@@ -53,6 +53,8 @@ seq:
       switch-on: type
       cases:
         'packet_type::umts_rrc': umts_rrc_subtype_field
+        'packet_type::um': gsm_rr_subtype_field
+        'packet_type::abis': gsm_rr_subtype_field
         _: u1
   - id: antenna_nr
     type: u1
@@ -91,6 +93,12 @@ types:
         type: u1
         enum: umts_rrc_subtype
 
+  gsm_rr_subtype_field:
+    seq:
+      - id: gsm_rr_subtype
+        type: u1
+        enum: gsm_rr_subtype
+
 enums:
   packet_type:
     0x01: um
@@ -113,6 +121,37 @@ enums:
     0x12: lte_nas # LTE Non-Access Stratum
     0x13: e1t1 # E1/T1 Lines
     0x14: gsm_rlp # GSM RLP frames as per 3GPP TS 24.022
+
+  # See: gsmtap_gsm_channel_names
+  # https://github.com/osmocom/libosmocore/blob/1.14.1/src/core/gsmtap_util.c#L586
+
+  # See: GSMTAP_CHANNEL_*
+  # https://github.com/osmocom/libosmocore/blob/1.14.1/include/osmocom/core/gsmtap.h#L79
+
+  gsm_rr_subtype:
+    0x00: unknown
+    0x01: bcch
+    0x02: ccch
+    0x03: rach
+    0x04: agch
+    0x05: pch
+    0x06: sdcch
+    0x07: sdcch4
+    0x08: sdcch8
+    0x09: facch_f
+    0x0a: facch_h
+    0x0b: pacch
+    0x0c: cbch52
+    0x0d: pdch
+    0x0e: ptcch
+    0x0f: cbch51
+    0x10: voice_f # voice codec payload (FR/EFR/AMR)
+    0x11: voice_h # voice codec payload (HR/AMR)
+    0x86: lsacch
+    0x87: sacch4
+    0x88: sacch8
+    0x89: sacch_f
+    0x8a: sacch_h
 
   umts_rrc_subtype:
     0: dl_dcch_message

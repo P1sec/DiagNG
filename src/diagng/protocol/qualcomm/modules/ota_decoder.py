@@ -117,10 +117,16 @@ class OTADecoder:
             msg: GsmRrSignalingMessage = log.content
 
             # See gsm_rr_channel_type_map:
-            # https://github.com/wireshark/wireshark/blob/60851bf/epan/dissectors/packet-qcdiag_log.c#L333
+            # https://github.com/wireshark/wireshark/blob/v4.7.2/epan/dissectors/packet-qcdiag_log.c#L333
 
             # See:
             # https://github.com/fgsect/scat/blob/v2.0.0/src/scat/parsers/qualcomm/diaggsmlogparser.py#L257
+
+            # See: gsmtap_channels
+            # https://github.com/wireshark/wireshark/blob/v4.7.2/epan/dissectors/packet-gsmtap.c#L297
+
+            # See: gsmtap_gsm_channel_names
+            # https://github.com/osmocom/libosmocore/blob/1.14.1/src/core/gsmtap_util.c#L586
 
             # See:
             # https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py#L222

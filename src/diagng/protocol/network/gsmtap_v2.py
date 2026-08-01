@@ -16,6 +16,31 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
 
 
 class GsmtapV2(ReadWriteKaitaiStruct):
+    class GsmRrSubtype(IntEnum):
+        unknown = 0
+        bcch = 1
+        ccch = 2
+        rach = 3
+        agch = 4
+        pch = 5
+        sdcch = 6
+        sdcch4 = 7
+        sdcch8 = 8
+        facch_f = 9
+        facch_h = 10
+        pacch = 11
+        cbch52 = 12
+        pdch = 13
+        ptcch = 14
+        cbch51 = 15
+        voice_f = 16
+        voice_h = 17
+        lsacch = 134
+        sacch4 = 135
+        sacch8 = 136
+        sacch_f = 137
+        sacch_h = 138
+
     class PacketType(IntEnum):
         um = 1
         abis = 2
@@ -129,7 +154,19 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self.snr_db = self._io.read_s1()
         self.frame_number = self._io.read_u4be()
         _on = self.type
-        if _on == GsmtapV2.PacketType.umts_rrc:
+        if _on == GsmtapV2.PacketType.abis:
+            pass
+            self.sub_type = GsmtapV2.GsmRrSubtypeField(
+                self._io, self, self._root
+            )
+            self.sub_type._read()
+        elif _on == GsmtapV2.PacketType.um:
+            pass
+            self.sub_type = GsmtapV2.GsmRrSubtypeField(
+                self._io, self, self._root
+            )
+            self.sub_type._read()
+        elif _on == GsmtapV2.PacketType.umts_rrc:
             pass
             self.sub_type = GsmtapV2.UmtsRrcSubtypeField(
                 self._io, self, self._root
@@ -158,7 +195,13 @@ class GsmtapV2(ReadWriteKaitaiStruct):
     def _fetch_instances(self):
         pass
         _on = self.type
-        if _on == GsmtapV2.PacketType.umts_rrc:
+        if _on == GsmtapV2.PacketType.abis:
+            pass
+            self.sub_type._fetch_instances()
+        elif _on == GsmtapV2.PacketType.um:
+            pass
+            self.sub_type._fetch_instances()
+        elif _on == GsmtapV2.PacketType.umts_rrc:
             pass
             self.sub_type._fetch_instances()
         else:
@@ -183,7 +226,13 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self._io.write_s1(self.snr_db)
         self._io.write_u4be(self.frame_number)
         _on = self.type
-        if _on == GsmtapV2.PacketType.umts_rrc:
+        if _on == GsmtapV2.PacketType.abis:
+            pass
+            self.sub_type._write__seq(self._io)
+        elif _on == GsmtapV2.PacketType.um:
+            pass
+            self.sub_type._write__seq(self._io)
+        elif _on == GsmtapV2.PacketType.umts_rrc:
             pass
             self.sub_type._write__seq(self._io)
         else:
@@ -232,7 +281,27 @@ class GsmtapV2(ReadWriteKaitaiStruct):
                 4, self.header_len, None, '/seq/1'
             )
         _on = self.type
-        if _on == GsmtapV2.PacketType.umts_rrc:
+        if _on == GsmtapV2.PacketType.abis:
+            pass
+            if self.sub_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self._root, self.sub_type._root
+                )
+            if self.sub_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self, self.sub_type._parent
+                )
+        elif _on == GsmtapV2.PacketType.um:
+            pass
+            if self.sub_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self._root, self.sub_type._root
+                )
+            if self.sub_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self, self.sub_type._parent
+                )
+        elif _on == GsmtapV2.PacketType.umts_rrc:
             pass
             if self.sub_type._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -308,6 +377,28 @@ class GsmtapV2(ReadWriteKaitaiStruct):
                 pass
             elif _on == True:
                 pass
+            self._dirty = False
+
+    class GsmRrSubtypeField(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(GsmtapV2.GsmRrSubtypeField, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.gsm_rr_subtype = KaitaiStream.resolve_enum(
+                GsmtapV2.GsmRrSubtype, self._io.read_u1()
+            )
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+
+        def _write__seq(self, io=None):
+            super(GsmtapV2.GsmRrSubtypeField, self)._write__seq(io)
+            self._io.write_u1(int(self.gsm_rr_subtype))
+
+        def _check(self):
             self._dirty = False
 
     class UmtsRrcSubtypeField(ReadWriteKaitaiStruct):
