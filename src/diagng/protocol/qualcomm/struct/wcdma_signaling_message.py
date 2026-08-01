@@ -22,6 +22,8 @@ class WcdmaSignalingMessage(ReadWriteKaitaiStruct):
         rrclog_sig_dl_bcch_bch = 4
         rrclog_sig_dl_bcch_fach = 5
         rrclog_sig_dl_pcch = 6
+        rrclog_sig_dl_mcch = 7
+        rrclog_sig_dl_msch = 8
         rrclog_extension_sib = 9
         rrclog_sib_container = 10
 
@@ -43,9 +45,9 @@ class WcdmaSignalingMessage(ReadWriteKaitaiStruct):
         ctch = 44
 
     class SpecialType(IntEnum):
-        unknown_1 = 0
-        unknown_2 = 14
-        invalid_packet = 15
+        sys_information_with_arfcn = 0
+        unknown = 14
+        invalid = 15
 
     def __init__(self, _io=None, _parent=None, _root=None):
         super(WcdmaSignalingMessage, self).__init__(_io)

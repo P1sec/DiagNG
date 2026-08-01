@@ -36,6 +36,70 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         e1t1 = 19
         gsm_rlp = 20
 
+    class UmtsRrcSubtype(IntEnum):
+        dl_dcch_message = 0
+        ul_dcch_message = 1
+        dl_ccch_message = 2
+        ul_ccch_message = 3
+        pcch_message = 4
+        dl_shcch_message = 5
+        ul_shcch_message = 6
+        bcch_fach_message = 7
+        bcch_bch_message = 8
+        mcch_message = 9
+        msch_message = 10
+        handover_to_utran_command = 11
+        inter_rathandover_info = 12
+        system_information_bch = 13
+        system_information_container = 14
+        ue_radio_access_capability_info = 15
+        master_information_block = 16
+        sys_info_type1 = 17
+        sys_info_type2 = 18
+        sys_info_type3 = 19
+        sys_info_type4 = 20
+        sys_info_type5 = 21
+        sys_info_type5bis = 22
+        sys_info_type6 = 23
+        sys_info_type7 = 24
+        sys_info_type8 = 25
+        sys_info_type9 = 26
+        sys_info_type10 = 27
+        sys_info_type11 = 28
+        sys_info_type11bis = 29
+        sys_info_type12 = 30
+        sys_info_type13 = 31
+        sys_info_type13_1 = 32
+        sys_info_type13_2 = 33
+        sys_info_type13_3 = 34
+        sys_info_type13_4 = 35
+        sys_info_type14 = 36
+        sys_info_type15 = 37
+        sys_info_type15bis = 38
+        sys_info_type15_1 = 39
+        sys_info_type15_1bis = 40
+        sys_info_type15_2 = 41
+        sys_info_type15_2bis = 42
+        sys_info_type15_2ter = 43
+        sys_info_type15_3 = 44
+        sys_info_type15_3bis = 45
+        sys_info_type15_4 = 46
+        sys_info_type15_5 = 47
+        sys_info_type15_6 = 48
+        sys_info_type15_7 = 49
+        sys_info_type15_8 = 50
+        sys_info_type16 = 51
+        sys_info_type17 = 52
+        sys_info_type18 = 53
+        sys_info_type19 = 54
+        sys_info_type20 = 55
+        sys_info_type21 = 56
+        sys_info_type22 = 57
+        sys_info_type_sb1 = 58
+        sys_info_type_sb2 = 59
+        to_target_rnc_container = 60
+        target_rnc_to_source_rnc_container = 61
+
     def __init__(self, _io=None, _parent=None, _root=None):
         super(GsmtapV2, self).__init__(_io)
         self._parent = _parent
@@ -47,7 +111,7 @@ class GsmtapV2(ReadWriteKaitaiStruct):
             raise kaitaistruct.ValidationNotEqualError(
                 2, self.version, self._io, '/seq/0'
             )
-        self.header_len = self._io.read_u2be()
+        self.header_len = self._io.read_u1()
         if not self.header_len == 4:
             raise kaitaistruct.ValidationNotEqualError(
                 4, self.header_len, self._io, '/seq/1'
@@ -60,7 +124,16 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self.signal_dbm = self._io.read_s1()
         self.snr_db = self._io.read_s1()
         self.frame_number = self._io.read_u4be()
-        self.sub_type = self._io.read_u1()
+        _on = self.type
+        if _on == GsmtapV2.PacketType.umts_rrc:
+            pass
+            self.sub_type = GsmtapV2.UmtsRrcSubtypeField(
+                self._io, self, self._root
+            )
+            self.sub_type._read()
+        else:
+            pass
+            self.sub_type = self._io.read_u1()
         self.antenna_nr = self._io.read_u1()
         self.sub_slot = self._io.read_u1()
         self.res = self._io.read_u1()
@@ -69,18 +142,30 @@ class GsmtapV2(ReadWriteKaitaiStruct):
 
     def _fetch_instances(self):
         pass
+        _on = self.type
+        if _on == GsmtapV2.PacketType.umts_rrc:
+            pass
+            self.sub_type._fetch_instances()
+        else:
+            pass
 
     def _write__seq(self, io=None):
         super(GsmtapV2, self)._write__seq(io)
         self._io.write_u1(self.version)
-        self._io.write_u2be(self.header_len)
+        self._io.write_u1(self.header_len)
         self._io.write_u1(int(self.type))
         self._io.write_u1(self.timeslot)
         self._io.write_u2be(self.arfcn)
         self._io.write_s1(self.signal_dbm)
         self._io.write_s1(self.snr_db)
         self._io.write_u4be(self.frame_number)
-        self._io.write_u1(self.sub_type)
+        _on = self.type
+        if _on == GsmtapV2.PacketType.umts_rrc:
+            pass
+            self.sub_type._write__seq(self._io)
+        else:
+            pass
+            self._io.write_u1(self.sub_type)
         self._io.write_u1(self.antenna_nr)
         self._io.write_u1(self.sub_slot)
         self._io.write_u1(self.res)
@@ -99,4 +184,39 @@ class GsmtapV2(ReadWriteKaitaiStruct):
             raise kaitaistruct.ValidationNotEqualError(
                 4, self.header_len, None, '/seq/1'
             )
+        _on = self.type
+        if _on == GsmtapV2.PacketType.umts_rrc:
+            pass
+            if self.sub_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self._root, self.sub_type._root
+                )
+            if self.sub_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'sub_type', self, self.sub_type._parent
+                )
+        else:
+            pass
         self._dirty = False
+
+    class UmtsRrcSubtypeField(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(GsmtapV2.UmtsRrcSubtypeField, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.umts_rrc_subtype = KaitaiStream.resolve_enum(
+                GsmtapV2.UmtsRrcSubtype, self._io.read_u1()
+            )
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+
+        def _write__seq(self, io=None):
+            super(GsmtapV2.UmtsRrcSubtypeField, self)._write__seq(io)
+            self._io.write_u1(int(self.umts_rrc_subtype))
+
+        def _check(self):
+            self._dirty = False

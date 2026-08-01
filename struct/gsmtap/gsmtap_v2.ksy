@@ -12,7 +12,7 @@ seq:
       eq: 2
     doc: Support GSMTAP v2 here
   - id: header_len
-    type: u2
+    type: u1
     valid:
       eq: 4
     doc: This header is 4 words = 32 bytes long
@@ -39,10 +39,11 @@ seq:
 
   - id: sub_type
     doc: Type of burst/channel
-    type: u1
-    # type:
-    #  switch-on:
-    #    WIP
+    type:
+      switch-on: type
+      cases:
+        'packet_type::umts_rrc': umts_rrc_subtype_field
+        _: u1
   - id: antenna_nr
     type: u1
     doc: Antenna Number
@@ -55,6 +56,13 @@ seq:
 
   - id: data
     size-eos: true
+
+types:
+  umts_rrc_subtype_field:
+    seq:
+      - id: umts_rrc_subtype
+        type: u1
+        enum: umts_rrc_subtype
 
 enums:
   packet_type:
@@ -78,4 +86,69 @@ enums:
     0x12: lte_nas # LTE Non-Access Stratum
     0x13: e1t1 # E1/T1 Lines
     0x14: gsm_rlp # GSM RLP frames as per 3GPP TS 24.022
+
+  umts_rrc_subtype:
+    0: dl_dcch_message
+    1: ul_dcch_message
+    2: dl_ccch_message
+    3: ul_ccch_message
+    4: pcch_message
+    5: dl_shcch_message
+    6: ul_shcch_message
+    7: bcch_fach_message
+    8: bcch_bch_message
+    9: mcch_message
+    10: msch_message
+    11: handover_to_utran_command
+    12: inter_rathandover_info
+    13: system_information_bch
+    14: system_information_container
+    15: ue_radio_access_capability_info
+    16: master_information_block
+    17: sys_info_type1
+    18: sys_info_type2
+    19: sys_info_type3
+    20: sys_info_type4
+    21: sys_info_type5
+    22: sys_info_type5bis
+    23: sys_info_type6
+    24: sys_info_type7
+    25: sys_info_type8
+    26: sys_info_type9
+    27: sys_info_type10
+    28: sys_info_type11
+    29: sys_info_type11bis
+    30: sys_info_type12
+    31: sys_info_type13
+    32: sys_info_type13_1
+    33: sys_info_type13_2
+    34: sys_info_type13_3
+    35: sys_info_type13_4
+    36: sys_info_type14
+    37: sys_info_type15
+    38: sys_info_type15bis
+    39: sys_info_type15_1
+    40: sys_info_type15_1bis
+    41: sys_info_type15_2
+    42: sys_info_type15_2bis
+    43: sys_info_type15_2ter
+    44: sys_info_type15_3
+    45: sys_info_type15_3bis
+    46: sys_info_type15_4
+    47: sys_info_type15_5
+    48: sys_info_type15_6
+    49: sys_info_type15_7
+    50: sys_info_type15_8
+    51: sys_info_type16
+    52: sys_info_type17
+    53: sys_info_type18
+    54: sys_info_type19
+    55: sys_info_type20
+    56: sys_info_type21
+    57: sys_info_type22
+    58: sys_info_type_sb1
+    59: sys_info_type_sb2
+    60: to_target_rnc_container
+    61: target_rnc_to_source_rnc_container
+
 

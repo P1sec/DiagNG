@@ -5,7 +5,10 @@ from diagng.protocol.qualcomm.struct.wcdma_signaling_message import (
 )
 from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
+from diagng.protocol.qualcomm.struct.gsmtap_v2 import GsmtapV2
 
+from kaitaistruct import ReadWriteKaitaiStruct
+from typing import Optional
 from enum import IntEnum
 
 
@@ -28,19 +31,77 @@ class OTADecoder:
 
         pass  # ➡️ 🪧 WIP
 
-    def write_gsmtap_log(self, XX):
-        pass  # WIP
+    def write_gsmtap_packet(
+        self,
+        packet_type: GsmtapV2.PacketType,
+        sub_type: ReadWriteKaitaiStruct,
+        data: bytes,
+        arfcn: Optional[int] = 0,
+    ):
+        packet = GsmtapV2()
+        packet.version = 2
+        packet.header_len = 4
+        packet.type = packet_type
+        packet.timeslot = 0
+
+        packet.arfcn = arfcn
+        packet.signal_dbm = 0
+        packet.snr_db = 0
+
+        packet.frame_number = 0
+
+        packet.sub_type = sub_type
+        packet.antenna_nr = 0
+        packet.sub_slot = 0
+        packet.res = 0
+
+        packet.data = data
+
+        packet._check()
+
+        pass  # WIP 🪧 write to self.pcap_stream
 
     def handle_log(self, log: DiagLogF.InnerLog):
 
         code: DiagLogging.LogCode = log.log_code
 
         if code == DiagLogging.LogCode.wcdma_signaling_message:
-            data: WcdmaSignalingMessage = log.content
+            msg: WcdmaSignalingMessage = log.content
+
+            PacketType = WcdmaSignalingMessage.PacketType
+            ChannelType = WcdmaSignalingMessage.ChannelType
+            UmtsRrcSubtype = GsmtapV2.UmtsRrcSubtype
 
             self.current_rat = RATType.RAT_3G
 
-            # WIP
+            if (
+                msg.packet_type != PacketType.special
+                and msg.channel_type < ChannelType.rrclog_extension_sib
+            ):
+                # Frames containing only a MIB or extension SIB
+                # are already present in RRC frames, ignore them
+                sub_type = WcdmaSignalingMessage.UmtsRrcSubtypeField()
+                sub_type.umts_rrc_subtype = {
+                    ChannelType.rrclog_sig_ul_ccch: UmtsRrcSubtype.ul_ccch_message,
+                    ChannelType.rrclog_sig_ul_dcch: UmtsRrcSubtype.ul_dcch_message,
+                    ChannelType.rrclog_sig_dl_ccch: UmtsRrcSubtype.dl_ccch_message,
+                    ChannelType.rrclog_sig_dl_dcch: UmtsRrcSubtype.dl_dcch_message,
+                    ChannelType.rrclog_sig_dl_bcch_bch: UmtsRrcSubtype.bcch_bch_message,
+                    ChannelType.rrclog_sig_dl_bcch_fach: UmtsRrcSubtype.bcch_fach_message,
+                    ChannelType.rrclog_sig_dl_pcch: UmtsRrcSubtype.pcch_message,
+                    ChannelType.rrclog_sig_dl_mcch: UmtsRrcSubtype.mcch_message,
+                    ChannelType.rrclog_sig_dl_msch: UmtsRrcSubtype.msch_message,
+                }[msg.channel_type]
+                sub_type._check()
+
+                if msg.packet_type == PacketType.explicit_arfcn_psc:
+                    arfcn = msg.uarfcn
+                else:
+                    arfcn = 0
+
+                self.write_gsmtap_packet(
+                    GsmtapV2.PacketType.umts_rrc, sub_type, msg.message, arfcn
+                )
 
         elif XX:
             pass  # TODO

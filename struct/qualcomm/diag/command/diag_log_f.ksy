@@ -31,7 +31,7 @@ types:
           switch-on: log_code
           cases:
             'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f - WIP ..
-            # TODO all all supported by QCSuper in "pcap_dump.py"
+            # TODO process all types supported by QCSuper in "pcap_dump.py"
     instances:
       unix_ts:
         value: |

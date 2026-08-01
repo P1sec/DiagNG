@@ -57,13 +57,15 @@ enums:
     4: rrclog_sig_dl_bcch_bch # Downlink BCCH:BCH logical channel
     5: rrclog_sig_dl_bcch_fach # Downlink BCCH:FACH logical channel
     6: rrclog_sig_dl_pcch # Downlink PCCH logical channel
+    7: rrclog_sig_dl_mcch
+    8: rrclog_sig_dl_msch
     9: rrclog_extension_sib
     10: rrclog_sib_container
 
   special_type:
-    0x0: unknown_1
-    0xe: unknown_2
-    0xf: invalid_packet
+    0x0: sys_information_with_arfcn
+    0xe: unknown
+    0xf: invalid
 
   radio_bearer:
     0: ccch
