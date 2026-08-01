@@ -14,7 +14,6 @@ seq:
 
   - id: message_type
     type: u1
-    enum: message_type
 
   - id: len_message
     type: u1
@@ -33,5 +32,3 @@ enums:
     0x06: facch_f
     0x07: facch_h
     0x08: l2_rach_with_no_delay
-  message_type:
-    0: todo_xx # TODO

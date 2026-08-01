@@ -116,19 +116,44 @@ class OTADecoder:
         elif code == DiagLogging.LogCode.gsm_rr_signaling_message:  # 0x512f
             msg: GsmRrSignalingMessage = log.content
 
+            # See gsm_rr_channel_type_map:
+            # https://github.com/wireshark/wireshark/blob/60851bf/epan/dissectors/packet-qcdiag_log.c#L333
+
+            # See:
+            # https://github.com/fgsect/scat/blob/v2.0.0/src/scat/parsers/qualcomm/diaggsmlogparser.py#L257
+
+            # See:
+            # https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py#L222
+
             self.current_rat = RATType.RAT_2G
 
-            sub_type = {}.get(msg.channel_type)
+            sub_type = {WIP}.get(msg.channel_type)
 
             if not sub_type:
                 raise 'xx'
 
+            # Diag is delivering us L3 data, but GSMTAP will want L2 for most
+            # channels (including a LAPDm header that we don't have), the
+            # workaround for this is to set the interface type to A-bis.
+
+            # Other channels that include just a L2 pseudo length before their
+            # protocol discriminator will have it removed.
+
             self.write_gsmtap_packet(
-                GsmtapV2.PacketType.um,
+                GsmtapV2.PacketType.abis,
                 sub_type,
                 msg.message,
                 not msg.is_downlink,
             )
 
-        elif XX:
+        elif isinstance(log.content, bytes):
+            # ⚠️ This requires Wireshark 4.7 or above:
+            # https://github.com/wireshark/wireshark/blob/v4.7.0/epan/dissectors/packet-qcdiag_log.c
+
+            self.write_gsmtap_packet(
+                GsmtapV2.PacketType.qc_diag,
+                None,
+                log.content,
+                False,
+            )
             pass  # TODO

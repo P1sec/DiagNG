@@ -25,9 +25,6 @@ class GsmRrSignalingMessage(ReadWriteKaitaiStruct):
         facch_h = 7
         l2_rach_with_no_delay = 8
 
-    class MessageType(IntEnum):
-        todo_xx = 0
-
     def __init__(self, _io=None, _parent=None, _root=None):
         super(GsmRrSignalingMessage, self).__init__(_io)
         self._parent = _parent
@@ -38,9 +35,7 @@ class GsmRrSignalingMessage(ReadWriteKaitaiStruct):
         self.channel_type = KaitaiStream.resolve_enum(
             GsmRrSignalingMessage.ChannelType, self._io.read_bits_int_be(7)
         )
-        self.message_type = KaitaiStream.resolve_enum(
-            GsmRrSignalingMessage.MessageType, self._io.read_u1()
-        )
+        self.message_type = self._io.read_u1()
         self.len_message = self._io.read_u1()
         self.message = self._io.read_bytes(self.len_message)
         self._dirty = False
@@ -52,7 +47,7 @@ class GsmRrSignalingMessage(ReadWriteKaitaiStruct):
         super(GsmRrSignalingMessage, self)._write__seq(io)
         self._io.write_bits_int_be(1, int(self.is_downlink))
         self._io.write_bits_int_be(7, int(self.channel_type))
-        self._io.write_u1(int(self.message_type))
+        self._io.write_u1(self.message_type)
         self._io.write_u1(self.len_message)
         self._io.write_bytes(self.message)
 
