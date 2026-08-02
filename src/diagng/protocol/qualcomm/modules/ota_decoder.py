@@ -116,11 +116,14 @@ class OTADecoder:
         elif code == DiagLogging.LogCode.gsm_rr_signaling_message:  # 0x512f
             msg: GsmRrSignalingMessage = log.content
 
-            # See gsm_rr_channel_type_map:
-            # https://github.com/wireshark/wireshark/blob/v4.7.2/epan/dissectors/packet-qcdiag_log.c#L333
+            ChannelType = GsmRrSignalingMessage.ChannelType
+            GsmRrSubtype = GsmtapV2.GsmRrSubtype
 
             # See:
             # https://github.com/fgsect/scat/blob/v2.0.0/src/scat/parsers/qualcomm/diaggsmlogparser.py#L257
+
+            # See gsm_rr_channel_type_map:
+            # https://github.com/wireshark/wireshark/blob/v4.7.2/epan/dissectors/packet-qcdiag_log.c#L333
 
             # See: gsmtap_channels
             # https://github.com/wireshark/wireshark/blob/v4.7.2/epan/dissectors/packet-gsmtap.c#L297
@@ -133,22 +136,38 @@ class OTADecoder:
 
             self.current_rat = RATType.RAT_2G
 
-            sub_type = {WIP}.get(msg.channel_type)
-
-            if not sub_type:
-                raise 'xx'
+            sub_type = {
+                ChannelType.dcch: GsmRrSubtype.sdcch8,  # sdcch8 in SCAT and WS 4.7, sdcch in QCSuper - investigate the choice?
+                ChannelType.bcch: GsmRrSubtype.bcch,
+                ChannelType.l2_rach: GsmRrSubtype.rach,
+                ChannelType.ccch: GsmRrSubtype.ccch,
+                ChannelType.sacch: GsmRrSubtype.sacch8,  # sacch8 in SCAT and WS 4.7, lsacch in QCSuper - investigate the choice?
+                ChannelType.sdcch: GsmRrSubtype.sdcch,
+                ChannelType.facch_f: GsmRrSubtype.facch_f,  # facch_f in WS 4.7, sacch_f in QCSuper - a mistake?
+                ChannelType.facch_h: GsmRrSubtype.facch_h,  # sacch_h in QCSuper - a mistake?
+                ChannelType.l2_rach_with_no_delay: GsmRrSubtype.rach,
+            }[msg.channel_type]
 
             # Diag is delivering us L3 data, but GSMTAP will want L2 for most
             # channels (including a LAPDm header that we don't have), the
             # workaround for this is to set the interface type to A-bis.
 
+            # (NOTE: It's a hack, SCAT and WS 4.7 reconstruct a LAPDm header
+            # instead of doing this, and reassemble an ARFCN from the
+            # traffic flow, maybe that we should do the same)
+
             # Other channels that include just a L2 pseudo length before their
             # protocol discriminator will have it removed.
+
+            data = msg.message
+
+            if msg.channel_type in [ChannelType.bcch, ChannelType.ccch]:
+                data = data[1:]
 
             self.write_gsmtap_packet(
                 GsmtapV2.PacketType.abis,
                 sub_type,
-                msg.message,
+                data,
                 not msg.is_downlink,
             )
 
