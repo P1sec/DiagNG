@@ -73,6 +73,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Advanced capture options</property>
+                            <child>
+                              <object class="AdwSwitchRow">
+                                <property name="active">true</property>
+                                <property name="title">Capture extra logs as QC_DIAG GSMTAP (requires Wireshark 4.7+)</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">notes-app-symbolic</property>
@@ -86,10 +97,29 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
-                            <property name="title">Device log selection status</property>
+                            <property name="title">Log capture</property>
                             <child>
                               <object class="GtkColumnView"></object>
                             </child>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">Capture to a DLF log file</property>
+                                <child type="suffix">
+                                  <object class="GtkButton" id="start_capture_button_2">
+                                    <property name="label">Start capture</property>
+                                    <signal name="clicked" handler="start_capture_clicked"/>
+                                    <style>
+                                      <class name="suggested-action"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Log selection</property>
                           </object>
                         </child>
                       </object>
@@ -114,8 +144,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                 <child>
                   <object class="AdwViewStackPage" id="raw_page">
                     <property name="child">
-                      <object class="GtkLabel">
-                        <property name="label">Empty Page</property>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title">Logs preview</property>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">folder-documents-symbolic</property>

@@ -54,6 +54,15 @@ template $QCDMWindow: Adw.Window {
                 }
               }
             }
+
+            Adw.PreferencesGroup {
+              title: "Advanced capture options";
+
+              Adw.SwitchRow {
+                active: true;
+                title: "Capture extra logs as QC_DIAG GSMTAP (requires Wireshark 4.7+)";
+              }
+            }
           };
 
           icon-name: "notes-app-symbolic";
@@ -64,9 +73,27 @@ template $QCDMWindow: Adw.Window {
         Adw.ViewStackPage logs_page {
           child: Adw.PreferencesPage {
             Adw.PreferencesGroup {
-              title: "Device log selection status";
+              title: "Log capture";
 
               ColumnView {}
+
+              Adw.ActionRow {
+                title: "Capture to a DLF log file";
+
+                [suffix]
+                Button start_capture_button_2 {
+                  label: "Start capture";
+                  clicked => $start_capture_clicked();
+
+                  styles [
+                    "suggested-action",
+                  ]
+                }
+              }
+            }
+
+            Adw.PreferencesGroup {
+              title: "Log selection";
             }
           };
 
@@ -86,8 +113,10 @@ template $QCDMWindow: Adw.Window {
         }
 
         Adw.ViewStackPage raw_page {
-          child: Label {
-            label: "Empty Page";
+          child: Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+              title: "Logs preview";
+            }
           };
 
           icon-name: "folder-documents-symbolic";
