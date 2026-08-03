@@ -59,6 +59,21 @@ class PcapOutput:
 
     def check_wireshark_available(XX):
         XX
+
+        # ⚠️ ➡️➡️ LATER: Think to install the _5G decoding Lua plug-in_
+        #       for Wireshark somewhere?
+
+        # TODO: ℹ️ Decide between
+        #  Gio.Subprocess
+        # and
+        # GLib.spawn_async_* ?
+
+        #  => Gio.Subprocess has an object model but
+        #     GLib.spawn_async_* can have a preexec function?
+
+        #      => ⚠️ Is `setpgrp` required for an independant
+        #         process group (SIGINT handling?)
+
         # ^ ⚠️ <== THiS SHOULD EVENTUALLY PROVIDE SOME KIND OF UI FEEDBACK? ⚠️
 
     def check_wireshark_version(XX) -> str | None:
