@@ -10,8 +10,8 @@ from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.protocol.qualcomm.struct.gsmtap_v2 import GsmtapV2
 
-from kaitaistruct import ReadWriteKaitaiStruct
-from typing import Optional
+from diagng.system.pcap_output import PcapOutput
+
 from enum import IntEnum
 
 
@@ -26,46 +26,13 @@ class OTADecoder:
     # ⚠️ TODO use a GIO I/O channel to plug the PCAP GSMTAP
     # stream to either a subprocess pipe or a PCAP file?
 
-    pcap_stream: XX
+    pcap_stream: PcapOutput
     current_rat: RATType = None
 
-    def __init__(self):
-        self.pcap_stream = XX
+    def __init__(self, pcap_stream):
+        self.pcap_stream = pcap_stream
 
         pass  # ➡️ 🪧 WIP
-
-    def write_gsmtap_packet(
-        self,
-        packet_type: GsmtapV2.PacketType,
-        sub_type: ReadWriteKaitaiStruct,
-        data: bytes,
-        is_uplink: bool = False,
-        arfcn: Optional[int] = 0,
-    ):
-        packet = GsmtapV2()
-        packet.version = 2
-        packet.header_len = 4
-        packet.type = packet_type
-        packet.timeslot = 0
-
-        packet.pcs_band = False
-        packet.is_uplink = is_uplink
-        packet.arfcn = arfcn
-        packet.signal_dbm = 0
-        packet.snr_db = 0
-
-        packet.frame_number = 0
-
-        packet.sub_type = sub_type
-        packet.antenna_nr = 0
-        packet.sub_slot = 0
-        packet.res = 0
-
-        packet.data = data
-
-        packet._check()
-
-        pass  # WIP 🪧 write to self.pcap_stream
 
     def handle_log(self, log: DiagLogF.InnerLog):
 
@@ -105,7 +72,7 @@ class OTADecoder:
                 else:
                     arfcn = 0
 
-                self.write_gsmtap_packet(
+                self.pcap_stream.write_gsmtap_packet(
                     GsmtapV2.PacketType.umts_rrc,
                     sub_type,
                     msg.message,
@@ -164,7 +131,7 @@ class OTADecoder:
             if msg.channel_type in [ChannelType.bcch, ChannelType.ccch]:
                 data = data[1:]
 
-            self.write_gsmtap_packet(
+            self.pcap_stream.write_gsmtap_packet(
                 GsmtapV2.PacketType.abis,
                 sub_type,
                 data,
@@ -175,7 +142,7 @@ class OTADecoder:
             # ⚠️ This requires Wireshark 4.7 or above:
             # https://github.com/wireshark/wireshark/blob/v4.7.0/epan/dissectors/packet-qcdiag_log.c
 
-            self.write_gsmtap_packet(
+            self.pcap_stream.write_gsmtap_packet(
                 GsmtapV2.PacketType.qc_diag,
                 None,
                 log.content,
