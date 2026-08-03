@@ -7,14 +7,21 @@
     output to it, or either writing this output
     to a on-disk PCAP file.
 
-    (Should be also support writing a
+    Support for parsing an existing PCAP(ng) file for
+    reprocessing purposes
+        => Note: PCAPng is not
+        even supported by libpcap nor
+        by Kaitai and the simplest
+        way to add support seems to
+        be to use Tshark as an
+        external converted command
+
+    (Should be also support reading a
     PCAP file wrapped in a .GZ stream, like
     in QCSuper? If so, should it also
     involve a different wrapper class?)
-
-    Cf. https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py
 """
 
 
-class PcapOutput:
-    pass  # TODO (WIP)
+class PcapInput:
+    pass  # TODO
