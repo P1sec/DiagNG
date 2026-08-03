@@ -57,6 +57,13 @@ class PcapOutput:
         pass # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass # ⚠️ TODO open file with Gio async funcs? if chosen option
 
+    def check_wireshark_available(XX):
+        XX
+        # ^ ⚠️ <== THiS SHOULD EVENTUALLY PROVIDE SOME KIND OF UI FEEDBACK? ⚠️
+
+    def check_wireshark_version(XX) -> str | None:
+        XX
+
     def spawn_wireshark(XX):
         XX
 
