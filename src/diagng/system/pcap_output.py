@@ -46,10 +46,16 @@ IS_FLATPAK = getenv('container') and which('flatpak-spawn')
 
 
 class PcapOutput:
+    use_wireshark: bool
+    output_file: str | None
     XX: XX  # TODO (WIP)
 
     def __init__(self, use_wireshark=False, output_file: str | None = None):
-        self.XX = XX
+        self.use_wireshark = use_wireshark
+        self.output_file = output_file
+
+        pass # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
+        pass # ⚠️ TODO open file with Gio async funcs? if chosen option
 
     def spawn_wireshark(XX):
         XX
