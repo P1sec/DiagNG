@@ -34,8 +34,10 @@ from diagng.protocol.network.pcap import Pcap
 from kaitaistruct import ReadWriteKaitaiStruct
 from kaitaistruct import KaitaiStream
 from gi.repository import Gio, GLib
+from re import search
 
-from typing import Optional
+from typing import Optional, Callable
+from logging import debug
 from shutil import which
 from os import getenv
 
@@ -50,15 +52,40 @@ class PcapOutput:
     output_file: str | None
     XX: XX  # TODO (WIP)
 
-    def __init__(self, use_wireshark=False, output_file: str | None = None):
+    def __init__(self, use_wireshark=False, output_file: Optional[str] = None):
         self.use_wireshark = use_wireshark
         self.output_file = output_file
 
-        pass # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
-        pass # ⚠️ TODO open file with Gio async funcs? if chosen option
+        pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
+        pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
 
-    def check_wireshark_available(XX):
-        XX
+    def check_wireshark_version(callback: Callable[[Optional[str]], []]):
+
+        def on_complete(child: Gio.Subprocess, res: Gio.AsyncResult):
+            success, stdout_buf, stderr_buf = child.communicate_utf8_finish(
+                res
+            )
+
+            debug('Got output from "wireshark --version": %r', stdout_buf)
+
+            if not success:
+                callback(None)
+            ver_string = search(r'Wireshark (\d\S+)', stdout_buf)
+            if not ver_string:
+                callback(None)
+            ver_string = ver_string.group(1).strip('.')
+            callback(ver_string)
+
+        try:
+            child = Gio.Subprocess.new(
+                (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
+                + ['wireshark', '--version'],
+                Gio.SubprocessFlags.STDOUT_PIPE,
+            )
+        except Exception:
+            return None
+
+        child.communicate_utf8_async(None, None, on_complete)
 
         # ⚠️ ➡️➡️ LATER: Think to install the _5G decoding Lua plug-in_
         #       for Wireshark somewhere?
@@ -72,12 +99,9 @@ class PcapOutput:
         #     GLib.spawn_async_* can have a preexec function?
 
         #      => ⚠️ Is `setpgrp` required for an independant
-        #         process group (SIGINT handling?)
+        #         process group (SIGINT handling?)
 
         # ^ ⚠️ <== THiS SHOULD EVENTUALLY PROVIDE SOME KIND OF UI FEEDBACK? ⚠️
-
-    def check_wireshark_version(XX) -> str | None:
-        XX
 
     def spawn_wireshark(XX):
         XX
