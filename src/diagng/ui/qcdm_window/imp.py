@@ -14,6 +14,7 @@ from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
+from diagng.system.pcap_output import PcapOutput
 from logging import info, debug
 from typing import Optional
 
@@ -39,6 +40,8 @@ class QCDMWindow(Adw.Window):
     qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
+    wireshark_version_label: Gtk.Label = Gtk.Template.Child()
+
     def __init__(
         self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
     ):
@@ -60,6 +63,7 @@ class QCDMWindow(Adw.Window):
 
         self.on_state_change()
         self.gather_device_info()
+        self.gather_wireshark_info()
 
         self.connect('close-request', self.on_quit)
 
@@ -109,6 +113,16 @@ class QCDMWindow(Adw.Window):
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
 
         self.log_manager.disable_logs(req_cb)
+
+    def gather_wireshark_info(self):
+        def on_version(version: Optional[str]):
+            if not version:
+                self.wireshark_version_label.set_text('(Unavailable ⚠️)')
+                # (⚠️ Maybe display/add extra download instructions?)
+            else:
+                self.wireshark_version_label.set_text(version)
+
+        PcapOutput.check_wireshark_version(on_version)
 
     def gather_device_info(self):
         # Use self.input_obj to display Diag-related

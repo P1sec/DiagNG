@@ -34,8 +34,12 @@ template $QCDMWindow: Adw.Window {
                 title: "Wireshark version";
 
                 Label wireshark_version_label {
-                  label: "XX WIP";
+                  label: "Checking...";
                 }
+              }
+
+              Adw.ActionRow {
+                title: "<b>Version note</b>: You need Wireshark 2.6 or above to be able to decode 4G frames, 3.6 or above to be able to decode 5G frames, 4.7 or above in order to be able to decode extra log frames directly into Wireshark.";
               }
             }
 
@@ -148,7 +152,7 @@ template $QCDMWindow: Adw.Window {
     }
   };
 
-  default-height: 420;
+  default-height: 480;
   default-width: 720;
   title: "/dev/ttyUSB1 - TEST";
 }
