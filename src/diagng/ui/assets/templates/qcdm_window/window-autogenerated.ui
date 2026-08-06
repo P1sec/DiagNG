@@ -45,6 +45,21 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                       <object class="AdwPreferencesPage">
                         <child>
                           <object class="AdwPreferencesGroup">
+                            <property name="title">Compatibility checks</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">Wireshark version</property>
+                                <child>
+                                  <object class="GtkLabel" id="wireshark_version_label">
+                                    <property name="label">XX WIP</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
                             <property name="title">Air interface capture</property>
                             <child>
                               <object class="AdwActionRow">

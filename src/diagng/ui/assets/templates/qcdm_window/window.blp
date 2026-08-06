@@ -28,6 +28,18 @@ template $QCDMWindow: Adw.Window {
         Adw.ViewStackPage pcap_page {
           child: Adw.PreferencesPage {
             Adw.PreferencesGroup {
+              title: "Compatibility checks";
+
+              Adw.ActionRow {
+                title: "Wireshark version";
+
+                Label wireshark_version_label {
+                  label: "XX WIP";
+                }
+              }
+            }
+
+            Adw.PreferencesGroup {
               title: "Air interface capture";
 
               Adw.ActionRow {

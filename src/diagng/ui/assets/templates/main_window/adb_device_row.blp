@@ -55,7 +55,9 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     Adw.Spinner system_info_spinner {}
 
     [suffix]
-    Label android_version_label {}
+    Label android_version_label {
+      label: "Loading...";
+    }
 
     ScrolledWindow {
       vscrollbar-policy: never;

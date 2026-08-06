@@ -4,7 +4,7 @@
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
   <gresources filename="diagng.gresource.xml" sha256="b192d49e703cedae74721d11cf7d6dbc2b265d0cfcce271ad220961eceed410e"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="e7a6f3f50d00dd15cac596513602d549f43e941cdc203d37f8a27bcd7b37a71a"/>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="e8c54c90790ada7f592cdbd5b4b40ec68f73ccf9a18fa4faac04e3344671ee5c"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
     <property id="accessible-description" type-id="gchararray"/>
     <property id="accessible-label" type-id="gchararray" translatable="1"/>
@@ -21,7 +21,7 @@
     <property id="focusable" type-id="gboolean" default-value="True"/>
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
-  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="3bd4385ddf41ed0e6dd1041aeaa788d67354a7c46f3cab8fbb53f6a472be6a01"/>
+  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="936b3ea1881f376edb79ed5a9c1dbea9bc17a6a1d154b20c9df322e1d5fd58f3"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="9377bcddabd24a81576acf35073bcd68b30ab1760488c37ac1d1dbf63459bce2"/>
   <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="13cb80d1a1ab3423630f9984d4082a24963aeea1e20e42578fabf9edd705cd20">
     <requires>ADBDeviceRow</requires>

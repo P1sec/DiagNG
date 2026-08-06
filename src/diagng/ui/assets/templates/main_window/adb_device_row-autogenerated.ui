@@ -62,7 +62,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
           <object class="AdwSpinner" id="system_info_spinner"></object>
         </child>
         <child type="suffix">
-          <object class="GtkLabel" id="android_version_label"></object>
+          <object class="GtkLabel" id="android_version_label">
+            <property name="label">Loading...</property>
+          </object>
         </child>
         <child>
           <object class="GtkScrolledWindow">

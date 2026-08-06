@@ -61,6 +61,15 @@ class PcapOutput:
 
     def check_wireshark_version(callback: Callable[[Optional[str]], []]):
 
+        try:
+            child = Gio.Subprocess.new(
+                (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
+                + ['wireshark', '--version'],
+                Gio.SubprocessFlags.STDOUT_PIPE,
+            )
+        except Exception:
+            callback(None)
+
         def on_complete(child: Gio.Subprocess, res: Gio.AsyncResult):
             success, stdout_buf, stderr_buf = child.communicate_utf8_finish(
                 res
@@ -76,34 +85,28 @@ class PcapOutput:
             ver_string = ver_string.group(1).strip('.')
             callback(ver_string)
 
-        try:
-            child = Gio.Subprocess.new(
-                (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
-                + ['wireshark', '--version'],
-                Gio.SubprocessFlags.STDOUT_PIPE,
-            )
-        except Exception:
-            return None
-
         child.communicate_utf8_async(None, None, on_complete)
 
         # ⚠️ ➡️➡️ LATER: Think to install the _5G decoding Lua plug-in_
         #       for Wireshark somewhere?
 
-        # TODO: ℹ️ Decide between
+        # ℹ️ How do we device between
         #  Gio.Subprocess
         # and
         # GLib.spawn_async_* ?
 
         #  => Gio.Subprocess has an object model but
-        #     GLib.spawn_async_* can have a preexec function?
+        #     GLib.spawn_async_* can have a preexec function
 
         #      => ⚠️ Is `setpgrp` required for an independant
         #         process group (SIGINT handling?)
 
         # ^ ⚠️ <== THiS SHOULD EVENTUALLY PROVIDE SOME KIND OF UI FEEDBACK? ⚠️
+        # (=> CURRENT WIP 2026-08-06)
 
     def spawn_wireshark(XX):
+
+
         XX
 
     def write_gsmtap_packet(
