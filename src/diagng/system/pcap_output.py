@@ -36,9 +36,11 @@ from kaitaistruct import KaitaiStream
 from gi.repository import Gio, GLib
 from re import search
 
+from logging import error, debug, info
 from typing import Optional, Callable
-from logging import debug
+from traceback import format_exc
 from shutil import which
+from io import BytesIO
 from os import getenv
 
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
@@ -53,6 +55,7 @@ class PcapOutput:
 
     wireshark_proc: Optional[Gio.Subprocess] = None
     output_stream: Optional[Gio.OutputStream] = None
+    stream_active: bool = False
 
     def __init__(self, use_wireshark=False, output_file: Optional[str] = None):
         self.use_wireshark = use_wireshark
@@ -117,7 +120,18 @@ class PcapOutput:
 
         self.output_stream = self.wireshark_proc.get_stdin_pipe()
 
-        # self.wireshark_proc.wait_async(XX)  # Close callback (TODO)
+        def terminate_cb(*args):
+            debug(
+                'Wireshark subprocess %s terminated'
+                % self.wireshark_proc.get_identifier()
+            )
+            self.wireshark_proc = None
+            self.output_stream = None
+            self.stream_active = False
+
+        self.wireshark_proc.wait_async(
+            None, terminate_cb
+        )  # Close callback (TODO)
 
         self.write_pcap_header()
 
@@ -129,19 +143,46 @@ class PcapOutput:
         # Cf. https://ietf-opsawg-wg.github.io/draft-ietf-opsawg-pcap/draft-ietf-opsawg-pcap.html
 
         sub_header = Pcap.Header(None, header, header._root)
+        sub_header._is_le = True
         sub_header.version_major = 2
         sub_header.version_minor = 4
         sub_header.thiszone = 0
         sub_header.sigfigs = 0
         sub_header.snaplen = 65535
-        sub_header.linktype = Pcap.Linktype.raw  # IPv4/IPv6 auto-detect
+        sub_header.network = Pcap.Linktype.raw  # IPv4/IPv6 auto-detect
         sub_header._check()
 
         header.hdr = sub_header
         header.packets = []
         header._check()
 
-        self.output_stream.write_async(XX)  # PCAP header write op (TODO)
+        buf = BytesIO()
+        stream = KaitaiStream(buf)
+        header._write(stream)
+
+        data = buf.getvalue()
+
+        if self.output_stream:
+
+            def write_cb(stream: Gio.OutputStream, res: Gio.AsyncResult):
+                try:
+                    stream.write_all_finish(res)
+                except Exception:
+                    error(
+                        'Failed to write PCAP header to stream: '
+                        + format_exc()
+                    )
+                    self.wireshark_proc = None
+                    self.output_stream = None
+                    self.stream_active = False
+                    # => ⚠️ Enventually dispatch events?/Use ::notify signals over the current object?
+                else:
+                    info('Written PCAP header to stream')
+                    self.stream_active = True
+
+            self.output_stream.write_all_async(
+                data, GLib.PRIORITY_DEFAULT, None, write_cb
+            )  # PCAP header write op
 
     def write_gsmtap_packet(
         self,

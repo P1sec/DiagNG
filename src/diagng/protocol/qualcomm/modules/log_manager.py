@@ -15,6 +15,7 @@ from logging import info, debug, warning
 from gi.repository import GObject, Gio
 from typing import Callable, Optional
 from collections import defaultdict
+from re import sub
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -164,7 +165,11 @@ class LogManager(GObject.Object):
 
             debug(
                 'Parsed DiagCmd.log_config_f response: %s',
-                pretty_print_struct(response),
+                sub(
+                    r' logs_on_bitfield: .+',
+                    ' logs_on_bitfield: [...]',
+                    pretty_print_struct(response),
+                ),
             )
 
             callback(response)
@@ -208,7 +213,11 @@ class LogManager(GObject.Object):
 
             debug(
                 'Parsed DiagCmd.log_config_f response: %s',
-                pretty_print_struct(response),
+                sub(
+                    r' logs_on_bitfield: .+',
+                    ' logs_on_bitfield: [...]',
+                    pretty_print_struct(response),
+                ),
             )
 
             for equip_id_raw, max_item in enumerate(
@@ -318,7 +327,11 @@ class LogManager(GObject.Object):
 
                 debug(
                     'Parsed DiagCmd.log_config_f response: %s',
-                    pretty_print_struct(response),
+                    sub(
+                        r' logs_on_bitfield: .+',
+                        ' logs_on_bitfield: [...]',
+                        pretty_print_struct(response),
+                    ),
                 )
 
                 nonlocal last_diag_response
