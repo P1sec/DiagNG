@@ -17,6 +17,7 @@ from diagng.protocol.qualcomm.utils.hdlc import (
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 
 DiagCmd = DiagCmdCode.DiagCmd
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
@@ -45,6 +46,14 @@ class BaseQCDMInput(GObject.Object):
         arg_types=(object, object),
     )
     def frame_received(self, response: DiagResponse, raw_frame: bytes):
+        if response.cmd_code == DiagCmd.log_f:
+            self.log_received.emit(response.payload)
+
+    @GObject.Signal(
+        arg_types=(object,),
+    )
+    def log_received(self, log: DiagLogF):
+        # WIP ADD A LOG_RECEIVED SIGNAL HERE
         pass
 
     @GObject.Signal

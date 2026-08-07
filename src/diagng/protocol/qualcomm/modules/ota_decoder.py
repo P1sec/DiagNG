@@ -6,10 +6,10 @@ from diagng.protocol.qualcomm.struct.gsm_rr_signaling_message import (
 from diagng.protocol.qualcomm.struct.wcdma_signaling_message import (
     WcdmaSignalingMessage,
 )
+from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
-from diagng.protocol.qualcomm.struct.gsmtap_v2 import GsmtapV2
-
+from diagng.protocol.network.gsmtap_v2 import GsmtapV2
 from diagng.system.pcap_output import PcapOutput
 
 from enum import IntEnum
@@ -27,12 +27,17 @@ class OTADecoder:
     # stream to either a subprocess pipe or a PCAP file?
 
     pcap_stream: PcapOutput
+    input_obj: BaseQCDMInput
     current_rat: RATType = None
 
-    def __init__(self, pcap_stream):
+    def __init__(self, pcap_stream, input_obj):
         self.pcap_stream = pcap_stream
+        self.input_obj = input_obj
 
-        pass  # ➡️ 🪧 WIP
+        def on_log(*args):
+            print('WIP handle on_log =>', args)
+
+        self.input_obj.log_received.connect(on_log)
 
     def handle_log(self, log: DiagLogF.InnerLog):
 

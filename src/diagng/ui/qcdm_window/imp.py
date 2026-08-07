@@ -12,6 +12,7 @@ from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from diagng.system.pcap_output import PcapOutput
@@ -91,6 +92,7 @@ class QCDMWindow(Adw.Window):
         assert not self.wireshark_instance
         self.wireshark_instance = PcapOutput(use_wireshark=True)
         self.wireshark_instance.spawn_wireshark()
+        OTADecoder(self.wireshark_instance, self.input_obj)
         # ⚠️ WIP
 
     def on_title_change(self, *args):

@@ -115,7 +115,9 @@ class PcapOutput:
         # TODO: SEE: https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
         # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
         self.wireshark_proc = Gio.Subprocess.new(
-            ['wireshark'], flags=Gio.SubprocessFlags.STDIN_PIPE
+            (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
+            + ['wireshark', '-k', '-i', '-'],
+            flags=Gio.SubprocessFlags.STDIN_PIPE,
         )
 
         self.output_stream = self.wireshark_proc.get_stdin_pipe()
@@ -178,6 +180,7 @@ class PcapOutput:
                     # => ⚠️ Enventually dispatch events?/Use ::notify signals over the current object?
                 else:
                     info('Written PCAP header to stream')
+                    self.output_stream.flush(None)
                     self.stream_active = True
 
             self.output_stream.write_all_async(
