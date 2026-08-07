@@ -58,6 +58,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                             <child>
                               <object class="AdwActionRow">
+                                <property name="sensitive">false</property>
                                 <property name="title">&lt;b&gt;Version note&lt;/b&gt;: You need Wireshark 2.6 or above to be able to decode 4G frames, 3.6 or above to be able to decode 5G frames, 4.7 or above in order to be able to decode extra log frames directly into Wireshark.</property>
                               </object>
                             </child>

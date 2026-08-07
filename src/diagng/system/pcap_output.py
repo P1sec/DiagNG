@@ -51,6 +51,9 @@ class PcapOutput:
     use_wireshark: bool
     output_file: str | None
 
+    wireshark_proc: Optional[Gio.Subprocess] = None
+    output_stream: Optional[Gio.OutputStream] = None
+
     def __init__(self, use_wireshark=False, output_file: Optional[str] = None):
         self.use_wireshark = use_wireshark
         self.output_file = output_file
@@ -104,10 +107,41 @@ class PcapOutput:
         # ^ ⚠️ <== THiS SHOULD EVENTUALLY PROVIDE SOME KIND OF UI FEEDBACK? ⚠️
         # (=> CURRENT WIP 2026-08-06)
 
-    def spawn_wireshark(XX):
+    def spawn_wireshark(self):
 
+        # TODO: SEE: https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
+        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
+        self.wireshark_proc = Gio.Subprocess.new(
+            ['wireshark'], flags=Gio.SubprocessFlags.STDIN_PIPE
+        )
 
-        XX
+        self.output_stream = self.wireshark_proc.get_stdin_pipe()
+
+        # self.wireshark_proc.wait_async(XX)  # Close callback (TODO)
+
+        self.write_pcap_header()
+
+    def write_pcap_header(self):
+
+        header = Pcap()
+        header.magic_number = Pcap.Magic.le_microseconds
+
+        # Cf. https://ietf-opsawg-wg.github.io/draft-ietf-opsawg-pcap/draft-ietf-opsawg-pcap.html
+
+        sub_header = Pcap.Header(None, header, header._root)
+        sub_header.version_major = 2
+        sub_header.version_minor = 4
+        sub_header.thiszone = 0
+        sub_header.sigfigs = 0
+        sub_header.snaplen = 65535
+        sub_header.linktype = Pcap.Linktype.raw  # IPv4/IPv6 auto-detect
+        sub_header._check()
+
+        header.hdr = sub_header
+        header.packets = []
+        header._check()
+
+        self.output_stream.write_async(XX)  # PCAP header write op (TODO)
 
     def write_gsmtap_packet(
         self,

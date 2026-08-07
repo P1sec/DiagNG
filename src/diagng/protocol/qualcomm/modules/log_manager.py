@@ -147,8 +147,6 @@ class LogManager(GObject.Object):
         payload.operation = DiagLogConfigFReq.Operation.disable_op
 
         action = DiagLogConfigFReq.Disable(None, payload, payload._root)
-        action._root = payload._root
-        action._parent = payload
         action._check()
 
         payload.action = action

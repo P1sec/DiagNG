@@ -41,6 +41,9 @@ class QCDMWindow(Adw.Window):
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
+    start_capture_button: Gtk.Label = Gtk.Template.Child()
+
+    wireshark_instance: Optional[PcapOutput] = None
 
     def __init__(
         self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
@@ -77,11 +80,18 @@ class QCDMWindow(Adw.Window):
         def callback(resp: DiagResponse):
             debug('TODO: Spawn Wireshark pipe over collected logs')
             # (2. SPAWN WIRESHARK PIPE, WITH FLATPAK-SPAWN IF NEEDED)
+            self.create_wireshark_pipe()
 
             # (3. TRANSMIT ON-THE-FLY CONVERTED OTA RRC GSMTAP v3 PCAP -
             #  USE ADAPTER CLASSES FOR DATA CONVERSION)
 
         self.log_manager.register_ota_related_logs(callback)
+
+    def create_wireshark_pipe(self):
+        assert not self.wireshark_instance
+        self.wireshark_instance = PcapOutput(use_wireshark=True)
+        self.wireshark_instance.spawn_wireshark()
+        # ⚠️ WIP
 
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)
