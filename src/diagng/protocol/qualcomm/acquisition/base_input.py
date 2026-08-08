@@ -47,13 +47,12 @@ class BaseQCDMInput(GObject.Object):
     )
     def frame_received(self, response: DiagResponse, raw_frame: bytes):
         if response.cmd_code == DiagCmd.log_f:
-            self.log_received.emit(response.payload)
+            self.log_received.emit(response.payload.inner_log)
 
     @GObject.Signal(
         arg_types=(object,),
     )
     def log_received(self, log: DiagLogF):
-        # WIP ADD A LOG_RECEIVED SIGNAL HERE
         pass
 
     @GObject.Signal

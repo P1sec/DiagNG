@@ -90,9 +90,13 @@ class QCDMWindow(Adw.Window):
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
+
         self.wireshark_instance = PcapOutput(use_wireshark=True)
-        self.wireshark_instance.spawn_wireshark()
-        OTADecoder(self.wireshark_instance, self.input_obj)
+
+        def on_stream_available(*args):
+            OTADecoder(self.wireshark_instance, self.input_obj)
+
+        self.wireshark_instance.stream_active.connect(on_stream_available)
         # ⚠️ WIP
 
     def on_title_change(self, *args):

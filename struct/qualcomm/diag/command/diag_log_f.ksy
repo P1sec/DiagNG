@@ -15,6 +15,7 @@ seq:
     type: u2
   - id: inner_log
     type: inner_log
+    size: log_outer_length
 
 types:
   inner_log:

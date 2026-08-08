@@ -34,8 +34,8 @@ class OTADecoder:
         self.pcap_stream = pcap_stream
         self.input_obj = input_obj
 
-        def on_log(*args):
-            print('WIP handle on_log =>', args)
+        def on_log(input_obj: BaseQCDMInput, log: DiagLogF.InnerLog):
+            self.handle_log(log)
 
         self.input_obj.log_received.connect(on_log)
 
@@ -150,7 +150,7 @@ class OTADecoder:
             self.pcap_stream.write_gsmtap_packet(
                 GsmtapV2.PacketType.qc_diag,
                 None,
-                log.content,
+                log,
                 False,
             )
             pass  # TODO

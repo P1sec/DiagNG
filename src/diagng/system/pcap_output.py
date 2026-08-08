@@ -25,6 +25,10 @@ involve a different wrapper class?)
 Cf. https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py
 """
 
+from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
+from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
+from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.protocol.network.protocol_body import ProtocolBody
 from diagng.protocol.network.udp_datagram import UdpDatagram
 from diagng.protocol.network.ipv4_packet import Ipv4Packet
@@ -33,11 +37,11 @@ from diagng.protocol.network.pcap import Pcap
 
 from kaitaistruct import ReadWriteKaitaiStruct
 from kaitaistruct import KaitaiStream
-from gi.repository import Gio, GLib
+from gi.repository import Gio, GObject, GLib
 from re import search
 
+from typing import Optional, Callable, Union
 from logging import error, debug, info
-from typing import Optional, Callable
 from traceback import format_exc
 from shutil import which
 from io import BytesIO
@@ -48,18 +52,45 @@ KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
 # To use inside a Flatpak sandbox:
 IS_FLATPAK = getenv('container') and which('flatpak-spawn')
 
+DiagCmd = DiagCmdCode.DiagCmd
 
-class PcapOutput:
-    use_wireshark: bool
-    output_file: str | None
 
-    wireshark_proc: Optional[Gio.Subprocess] = None
-    output_stream: Optional[Gio.OutputStream] = None
-    stream_active: bool = False
+class StreamState(GObject.GEnum):
+    Initializing = 1
+    Available = 2
+    Closed = 3
+
+
+class PcapOutput(GObject.GObject):
+    use_wireshark = GObject.Property(type=bool, default=False)
+
+    wireshark_proc = GObject.Property(type=Gio.Subprocess)
+    output_file = GObject.Property(type=Gio.File)
+    output_stream = GObject.Property(type=Gio.OutputStream)
+
+    stream_state = GObject.Property(
+        type=StreamState, default=StreamState.Initializing
+    )  # WIP ⚠
+
+    @GObject.Signal
+    def stream_active(self):
+        self.stream_state = StreamState.Available
+
+    @GObject.Signal
+    def stream_closed(self):
+        self.stream_state = StreamState.Closed
 
     def __init__(self, use_wireshark=False, output_file: Optional[str] = None):
+        super().__init__()
+
         self.use_wireshark = use_wireshark
-        self.output_file = output_file
+
+        if use_wireshark:
+            self.spawn_wireshark()
+        else:
+            self.output_file = Gio.File.new_for_path(output_file)
+            # ⚠️ Maybe we should support appending to the file too?
+            self.create_async  #  ⚠️ ⚠️ WIP
 
         pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
@@ -129,7 +160,7 @@ class PcapOutput:
             )
             self.wireshark_proc = None
             self.output_stream = None
-            self.stream_active = False
+            self.stream_active.emit()
 
         self.wireshark_proc.wait_async(
             None, terminate_cb
@@ -176,12 +207,12 @@ class PcapOutput:
                     )
                     self.wireshark_proc = None
                     self.output_stream = None
-                    self.stream_active = False
+                    self.stream_closed.emit()
                     # => ⚠️ Enventually dispatch events?/Use ::notify signals over the current object?
                 else:
                     info('Written PCAP header to stream')
                     self.output_stream.flush(None)
-                    self.stream_active = True
+                    self.stream_active.emit()
 
             self.output_stream.write_all_async(
                 data, GLib.PRIORITY_DEFAULT, None, write_cb
@@ -191,7 +222,7 @@ class PcapOutput:
         self,
         packet_type: GsmtapV2.PacketType,
         sub_type: ReadWriteKaitaiStruct,
-        data: bytes,
+        data: Union[bytes, DiagLogF.InnerLog, DiagRequest, DiagResponse],
         is_uplink: bool = False,
         arfcn: Optional[int] = 0,
     ):
@@ -214,7 +245,48 @@ class PcapOutput:
         packet.sub_slot = 0
         packet.res = 0
 
-        packet.data = data
+        if isinstance(data, bytes):
+            packet.data = data
+        elif isinstance(data, DiagRequest):
+            diag_payload = GsmtapV2.DiagPayload(
+                True, None, packet, packet._root
+            )
+
+            diag_payload.frame = data
+            diag_payload._check()
+
+            packet.data = diag_payload
+        elif isinstance(data, DiagResponse):
+            diag_payload = GsmtapV2.DiagPayload(
+                False, None, packet, packet._root
+            )
+
+            diag_payload.frame = data
+            diag_payload._check()
+
+            packet.data = diag_payload
+        elif isinstance(data, DiagLogF.InnerLog):
+            diag_payload = GsmtapV2.DiagPayload(
+                False, None, packet, packet._root
+            )
+
+            diag_log = DiagLogF()
+            diag_log.pending_msgs = 0
+            diag_log.log_outer_length = data.log_inner_length - 4
+            diag_log.inner_log = data
+            data._parent = diag_log
+            data._root = diag_log._root
+            diag_log._check()
+
+            diag_resp = DiagResponse()
+            diag_resp.cmd_code = DiagCmd.log_f
+            diag_resp.payload = diag_log
+            diag_resp._check()
+
+            diag_payload.frame = diag_resp
+            diag_payload._check()
+
+            packet.data = diag_payload
 
         packet._check()
 
