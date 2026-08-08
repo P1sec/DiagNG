@@ -15,6 +15,9 @@ class DLFInput(BaseQCDMInput):
     def __init__(self, stream_io: BytesIO):
         super().__init__()
 
+        # ⚠️ NEXT TODO : ➡️
+        #  ⚠️ ⚠️ 🪧 SUPPORT GZIPPED INPUT HERE?
+
         self.stream = KaitaiStream(stream_io)
 
     def process_stream(self):

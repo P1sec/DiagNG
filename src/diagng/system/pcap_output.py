@@ -71,6 +71,7 @@ class PcapOutput(GObject.GObject):
     header: Optional[Pcap]
 
     wireshark_proc = GObject.Property(type=Gio.Subprocess)
+    file_path = GObject.Property(type=str)
     output_file = GObject.Property(type=Gio.File)
     output_stream = GObject.Property(type=Gio.OutputStream)
 
@@ -90,14 +91,26 @@ class PcapOutput(GObject.GObject):
         super().__init__()
 
         self.use_wireshark = use_wireshark
+        self.file_path = output_file
 
     def open_stream(self):
         if self.use_wireshark:
             self.spawn_wireshark()
         else:
-            self.output_file = Gio.File.new_for_path(output_file)
+            self.output_file = Gio.File.new_for_path(self.file_path)
             # ⚠️ Maybe we should support appending to the file too?
-            self.create_async  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
+            self.output_file.XX  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
+            #    => Use replace_readwrite_async ?
+            #       OR append_to_async / open_readwrite_async ?
+
+            # => ⚠️ SHOULD WE prompt THE USER ON
+            #  WHETHER TO REPLACE THE FILE OR
+            #  APPEND TO IT WHENEVER IT EXISTS?
+
+            #   => ⚠️ 🪧 ADD
+            #    - AN INTERACTIVE CLI PROMPT PATH
+            #    - AN EXPLICIT, NON-INTERACTIVE CLI PROMPT PATH (THROUGH ARGPARSE)
+            #    - AN INTERACTIVE GUI PROMPT PATH
 
         pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
