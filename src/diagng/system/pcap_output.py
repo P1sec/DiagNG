@@ -52,6 +52,8 @@ KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
 # To use inside a Flatpak sandbox:
 IS_FLATPAK = getenv('container') and which('flatpak-spawn')
 
+GSMTAP_PORT = 4729
+
 DiagCmd = DiagCmdCode.DiagCmd
 
 
@@ -221,7 +223,7 @@ class PcapOutput(GObject.GObject):
     def write_gsmtap_packet(
         self,
         packet_type: GsmtapV2.PacketType,
-        sub_type: ReadWriteKaitaiStruct,
+        sub_type: Union[ReadWriteKaitaiStruct, int],
         data: Union[bytes, DiagLogF.InnerLog, DiagRequest, DiagResponse],
         is_uplink: bool = False,
         arfcn: Optional[int] = 0,
@@ -276,6 +278,7 @@ class PcapOutput(GObject.GObject):
             diag_log.inner_log = data
             data._parent = diag_log
             data._root = diag_log._root
+            data._check()
             diag_log._check()
 
             diag_resp = DiagResponse()
@@ -289,6 +292,47 @@ class PcapOutput(GObject.GObject):
             packet.data = diag_payload
 
         packet._check()
+
+        # Write UDP header
+
+        buf = BytesIO()
+        stream = KaitaiStream(buf)
+        packet._write(stream)
+
+        encoded_packet = buf.getvalue()
+
+        udp = UdpDatagram()
+        udp.src_port = GSMTAP_PORT
+        udp.dst_port = GSMTAP_PORT
+        udp.length = len(encoded_packet) + 8
+        udp.checksum = 0  # TODO ?
+        udp.body = packet
+
+        # Write IPv4 header
+
+        ipv4 = Ipv4Packet()
+        ipv4.b1 = 0x45
+        ipv4.b2 = 0x00
+        ipv4.total_length = len(encoded_packet) + 8 + 4 * 5
+        ipv4.identification = 0
+        ipv4.b67 = 0
+        ipv4.ttl = 64
+        ipv4.protocol = ProtocolBody.ProtocolEnum.udp
+        ipv4.header_checksum = 0  # TODO ?
+        ipv4.src_ip_addr = bytes([127, 0, 0, 1])
+        ipv4.dst_ip_addr = bytes([127, 0, 0, 1])
+
+        options = Ipv4Packet.Ipv4Options(None, ipv4, ipv4._root)
+        options.entries = []
+        options._check()
+        ipv4.options = options
+
+        body = ProtocolBody(ipv4.protocol, None, ipv4, ipv4._root)
+        body.body = udp
+        body._check()
+        ipv4.body = body
+
+        ipv4._check()
 
         pass  # WIP 🪧 write to self.pcap_stream
 

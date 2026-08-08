@@ -149,7 +149,7 @@ class OTADecoder:
 
             self.pcap_stream.write_gsmtap_packet(
                 GsmtapV2.PacketType.qc_diag,
-                None,
+                0,
                 log,
                 False,
             )
