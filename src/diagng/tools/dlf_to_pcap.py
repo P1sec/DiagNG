@@ -13,6 +13,16 @@ from logging import info
 
 def main():
     args = ArgumentParser(description='Convert a .DLF file to a PCAP stream')
+
+    # args.add (TODO)
+    #  -d, --debug
+    #  --extract-sibs
+    #  --extract-ip-traffic
+    #  --extra-logs-as-gsmtap
+
+    # ⚠️  TODO: Add a KIND OF INPUT PROGRESS
+    #  MARKER TO STDERR?
+
     args.add_argument('input_dlf')
     args.add_argument(
         'output_pcap', nargs='?', help='Omit to open a Wireshark instance'

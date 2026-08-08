@@ -143,8 +143,9 @@ class OTADecoder:
                 not msg.is_downlink,
             )
 
+        """
         elif isinstance(log.content, bytes):
-            # ⚠️ This requires Wireshark 4.7 or above:
+            # ⚠️ This requires Wireshark 4.7 (CURRENTLY A DEV BUILD) or above:
             # https://github.com/wireshark/wireshark/blob/v4.7.0/epan/dissectors/packet-qcdiag_log.c
 
             self.pcap_stream.write_gsmtap_packet(
@@ -154,3 +155,4 @@ class OTADecoder:
                 False,
             )
             pass  # TODO
+        """

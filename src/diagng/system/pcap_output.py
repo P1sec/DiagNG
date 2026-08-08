@@ -97,7 +97,7 @@ class PcapOutput(GObject.GObject):
         else:
             self.output_file = Gio.File.new_for_path(output_file)
             # ⚠️ Maybe we should support appending to the file too?
-            self.create_async  #  ⚠️ ⚠️ WIP
+            self.create_async  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
 
         pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
