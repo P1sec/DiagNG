@@ -11,11 +11,11 @@ meta:
 seq:
   - id: pending_msgs
     type: u1
-  - id: log_outer_length
+  - id: len_inner_log
     type: u2
   - id: inner_log
     type: inner_log
-    size: log_outer_length
+    size: len_inner_log
 
 types:
   inner_log:

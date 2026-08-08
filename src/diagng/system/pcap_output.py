@@ -45,6 +45,7 @@ from logging import error, debug, info
 from traceback import format_exc
 from shutil import which
 from io import BytesIO
+from time import time
 from os import getenv
 
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
@@ -65,6 +66,8 @@ class StreamState(GObject.GEnum):
 
 class PcapOutput(GObject.GObject):
     use_wireshark = GObject.Property(type=bool, default=False)
+
+    header: Optional[Pcap]
 
     wireshark_proc = GObject.Property(type=Gio.Subprocess)
     output_file = GObject.Property(type=Gio.File)
@@ -197,6 +200,8 @@ class PcapOutput(GObject.GObject):
 
         data = buf.getvalue()
 
+        self.header = header
+
         if self.output_stream:
 
             def write_cb(stream: Gio.OutputStream, res: Gio.AsyncResult):
@@ -210,7 +215,6 @@ class PcapOutput(GObject.GObject):
                     self.wireshark_proc = None
                     self.output_stream = None
                     self.stream_closed.emit()
-                    # => ⚠️ Enventually dispatch events?/Use ::notify signals over the current object?
                 else:
                     info('Written PCAP header to stream')
                     self.output_stream.flush(None)
@@ -274,7 +278,7 @@ class PcapOutput(GObject.GObject):
 
             diag_log = DiagLogF()
             diag_log.pending_msgs = 0
-            diag_log.log_outer_length = data.log_inner_length - 4
+            diag_log.len_inner_log = data.log_inner_length
             diag_log.inner_log = data
             data._parent = diag_log
             data._root = diag_log._root
@@ -307,6 +311,7 @@ class PcapOutput(GObject.GObject):
         udp.length = len(encoded_packet) + 8
         udp.checksum = 0  # TODO ?
         udp.body = packet
+        udp._check()
 
         # Write IPv4 header
 
@@ -334,7 +339,48 @@ class PcapOutput(GObject.GObject):
 
         ipv4._check()
 
-        pass  # WIP 🪧 write to self.pcap_stream
+        self.write_ipv4_record(ipv4, time())
 
-    def write_pcap_record(XX):
-        XX
+    def write_ipv4_record(self, ipv4: Ipv4Packet, timestamp: float = 0.0):
+        packet = Pcap.Packet(None, self.header, self.header._root)
+
+        body = ProtocolBody(ProtocolBody.ProtocolEnum.ipv4)
+        body.body = ipv4
+        body._check()
+
+        packet._is_le = True
+        packet.ts_sec = int(timestamp)
+        packet.ts_usec = int((timestamp * 1_000_000) % 1_000_000)
+        packet.incl_len = ipv4.total_length
+        packet.orig_len = ipv4.total_length
+        packet.body = body
+        packet._check()
+
+        # Write PCAP to output buffer
+
+        buf = BytesIO()
+        stream = KaitaiStream(buf)
+        packet._write(stream)
+
+        encoded_packet = buf.getvalue()
+
+        if self.output_stream:
+
+            def write_cb(stream: Gio.OutputStream, res: Gio.AsyncResult):
+                try:
+                    stream.write_all_finish(res)
+                except Exception:
+                    error(
+                        'Failed to write PCAP packet to stream: '
+                        + format_exc()
+                    )
+                    self.wireshark_proc = None
+                    self.output_stream = None
+                    self.stream_closed.emit()
+                else:
+                    # DEBUG write record to stderr here?
+                    self.output_stream.flush(None)
+
+            self.output_stream.write_all_async(
+                encoded_packet, GLib.PRIORITY_DEFAULT, None, write_cb
+            )

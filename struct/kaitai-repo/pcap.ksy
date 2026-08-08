@@ -12,6 +12,7 @@ meta:
   ks-version: '0.11'
   imports:
     - ethernet_frame
+    - protocol_body
     # - /network/packet_ppi
 doc: |
   PCAP (named after libpcap / winpcap) is a popular format for saving
@@ -109,6 +110,8 @@ types:
           cases:
             # 'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
+            'linktype::raw': protocol_body(4)
+            # ⚠️ ^ TODO later: Support IPv6 here too? 🪧 🪧 ℹ️
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
   linktype:

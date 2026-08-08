@@ -4,6 +4,7 @@
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from diagng.protocol.network import ethernet_frame
+from diagng.protocol.network import protocol_body
 from enum import IntEnum
 
 
@@ -457,6 +458,18 @@ class Pcap(ReadWriteKaitaiStruct):
                 _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
                 self.body = ethernet_frame.EthernetFrame(_io__raw_body)
                 self.body._read()
+            elif _on == Pcap.Linktype.raw:
+                pass
+                self._raw_body = self._io.read_bytes(
+                    (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    )
+                )
+                _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
+                self.body = protocol_body.ProtocolBody(4, _io__raw_body)
+                self.body._read()
             else:
                 pass
                 self.body = self._io.read_bytes(
@@ -486,6 +499,18 @@ class Pcap(ReadWriteKaitaiStruct):
                 _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
                 self.body = ethernet_frame.EthernetFrame(_io__raw_body)
                 self.body._read()
+            elif _on == Pcap.Linktype.raw:
+                pass
+                self._raw_body = self._io.read_bytes(
+                    (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    )
+                )
+                _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
+                self.body = protocol_body.ProtocolBody(4, _io__raw_body)
+                self.body._read()
             else:
                 pass
                 self.body = self._io.read_bytes(
@@ -501,6 +526,9 @@ class Pcap(ReadWriteKaitaiStruct):
             pass
             _on = self._root.hdr.network
             if _on == Pcap.Linktype.ethernet:
+                pass
+                self.body._fetch_instances()
+            elif _on == Pcap.Linktype.raw:
                 pass
                 self.body._fetch_instances()
             else:
@@ -522,6 +550,52 @@ class Pcap(ReadWriteKaitaiStruct):
             self._io.write_u4le(self.orig_len)
             _on = self._root.hdr.network
             if _on == Pcap.Linktype.ethernet:
+                pass
+                _io__raw_body = KaitaiStream(
+                    BytesIO(
+                        bytearray(
+                            (
+                                self.incl_len
+                                if self.incl_len < self._root.hdr.snaplen
+                                else self._root.hdr.snaplen
+                            )
+                        )
+                    )
+                )
+                self._io.add_child_stream(_io__raw_body)
+                _pos2 = self._io.pos()
+                self._io.seek(
+                    self._io.pos()
+                    + (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    )
+                )
+
+                def handler(parent, _io__raw_body=_io__raw_body):
+                    self._raw_body = _io__raw_body.to_byte_array()
+                    if len(self._raw_body) != (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    ):
+                        raise kaitaistruct.ConsistencyError(
+                            'raw(body)',
+                            (
+                                self.incl_len
+                                if self.incl_len < self._root.hdr.snaplen
+                                else self._root.hdr.snaplen
+                            ),
+                            len(self._raw_body),
+                        )
+                    parent.write_bytes(self._raw_body)
+
+                _io__raw_body.write_back_handler = (
+                    KaitaiStream.WriteBackHandler(_pos2, handler)
+                )
+                self.body._write__seq(_io__raw_body)
+            elif _on == Pcap.Linktype.raw:
                 pass
                 _io__raw_body = KaitaiStream(
                     BytesIO(
@@ -623,6 +697,52 @@ class Pcap(ReadWriteKaitaiStruct):
                     KaitaiStream.WriteBackHandler(_pos2, handler)
                 )
                 self.body._write__seq(_io__raw_body)
+            elif _on == Pcap.Linktype.raw:
+                pass
+                _io__raw_body = KaitaiStream(
+                    BytesIO(
+                        bytearray(
+                            (
+                                self.incl_len
+                                if self.incl_len < self._root.hdr.snaplen
+                                else self._root.hdr.snaplen
+                            )
+                        )
+                    )
+                )
+                self._io.add_child_stream(_io__raw_body)
+                _pos2 = self._io.pos()
+                self._io.seek(
+                    self._io.pos()
+                    + (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    )
+                )
+
+                def handler(parent, _io__raw_body=_io__raw_body):
+                    self._raw_body = _io__raw_body.to_byte_array()
+                    if len(self._raw_body) != (
+                        self.incl_len
+                        if self.incl_len < self._root.hdr.snaplen
+                        else self._root.hdr.snaplen
+                    ):
+                        raise kaitaistruct.ConsistencyError(
+                            'raw(body)',
+                            (
+                                self.incl_len
+                                if self.incl_len < self._root.hdr.snaplen
+                                else self._root.hdr.snaplen
+                            ),
+                            len(self._raw_body),
+                        )
+                    parent.write_bytes(self._raw_body)
+
+                _io__raw_body.write_back_handler = (
+                    KaitaiStream.WriteBackHandler(_pos2, handler)
+                )
+                self.body._write__seq(_io__raw_body)
             else:
                 pass
                 self._io.write_bytes(self.body)
@@ -631,6 +751,12 @@ class Pcap(ReadWriteKaitaiStruct):
             _on = self._root.hdr.network
             if _on == Pcap.Linktype.ethernet:
                 pass
+            elif _on == Pcap.Linktype.raw:
+                pass
+                if self.body.protocol_num != 4:
+                    raise kaitaistruct.ConsistencyError(
+                        'body', 4, self.body.protocol_num
+                    )
             else:
                 pass
                 if len(self.body) != (

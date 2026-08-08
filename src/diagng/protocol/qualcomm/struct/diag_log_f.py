@@ -24,8 +24,12 @@ class DiagLogF(ReadWriteKaitaiStruct):
 
     def _read(self):
         self.pending_msgs = self._io.read_u1()
-        self.log_outer_length = self._io.read_u2le()
-        self.inner_log = DiagLogF.InnerLog(self._io, self, self._root)
+        self.len_inner_log = self._io.read_u2le()
+        self._raw_inner_log = self._io.read_bytes(self.len_inner_log)
+        _io__raw_inner_log = KaitaiStream(BytesIO(self._raw_inner_log))
+        self.inner_log = DiagLogF.InnerLog(
+            _io__raw_inner_log, self, self._root
+        )
         self.inner_log._read()
         self._dirty = False
 
@@ -36,8 +40,28 @@ class DiagLogF(ReadWriteKaitaiStruct):
     def _write__seq(self, io=None):
         super(DiagLogF, self)._write__seq(io)
         self._io.write_u1(self.pending_msgs)
-        self._io.write_u2le(self.log_outer_length)
-        self.inner_log._write__seq(self._io)
+        self._io.write_u2le(self.len_inner_log)
+        _io__raw_inner_log = KaitaiStream(
+            BytesIO(bytearray(self.len_inner_log))
+        )
+        self._io.add_child_stream(_io__raw_inner_log)
+        _pos2 = self._io.pos()
+        self._io.seek(self._io.pos() + (self.len_inner_log))
+
+        def handler(parent, _io__raw_inner_log=_io__raw_inner_log):
+            self._raw_inner_log = _io__raw_inner_log.to_byte_array()
+            if len(self._raw_inner_log) != self.len_inner_log:
+                raise kaitaistruct.ConsistencyError(
+                    'raw(inner_log)',
+                    self.len_inner_log,
+                    len(self._raw_inner_log),
+                )
+            parent.write_bytes(self._raw_inner_log)
+
+        _io__raw_inner_log.write_back_handler = KaitaiStream.WriteBackHandler(
+            _pos2, handler
+        )
+        self.inner_log._write__seq(_io__raw_inner_log)
 
     def _check(self):
         if self.inner_log._root != self._root:
