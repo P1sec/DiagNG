@@ -2,6 +2,7 @@
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
+from diagng.utils.logging_central import LoggingCentral
 from diagng.system.pcap_output import PcapOutput
 
 from argparse import ArgumentParser
@@ -19,6 +20,9 @@ def main():
 
     args = args.parse_args()
     loop = GLib.MainLoop.new(None, True)
+
+    # ⚠️ TODO ADD A CLI SWITCH TO TURN DEBUG MODE ON/OFF? ⚠️ ⚠️ 🪧
+    LoggingCentral(debug_mode=True)
 
     process_data(args.input_dlf, args.output_pcap)
 
@@ -40,6 +44,8 @@ def process_data(input_dlf: str, output_pcap: Optional[str]):
         info('All data was processed')
 
     pcap_stream.stream_active.connect(on_stream_active)
+
+    pcap_stream.open_stream()
 
 
 if __name__ == '__main__':

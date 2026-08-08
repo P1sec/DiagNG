@@ -97,6 +97,7 @@ class QCDMWindow(Adw.Window):
             OTADecoder(self.wireshark_instance, self.input_obj)
 
         self.wireshark_instance.stream_active.connect(on_stream_available)
+        self.wireshark_instance.open_stream()
         # ⚠️ WIP
 
     def on_title_change(self, *args):

@@ -28,6 +28,7 @@ Cf. https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.protocol.network.protocol_body import ProtocolBody
 from diagng.protocol.network.udp_datagram import UdpDatagram
@@ -90,7 +91,8 @@ class PcapOutput(GObject.GObject):
 
         self.use_wireshark = use_wireshark
 
-        if use_wireshark:
+    def open_stream(self):
+        if self.use_wireshark:
             self.spawn_wireshark()
         else:
             self.output_file = Gio.File.new_for_path(output_file)
@@ -165,7 +167,7 @@ class PcapOutput(GObject.GObject):
             )
             self.wireshark_proc = None
             self.output_stream = None
-            self.stream_active.emit()
+            self.stream_closed.emit()
 
         self.wireshark_proc.wait_async(
             None, terminate_cb
@@ -203,26 +205,20 @@ class PcapOutput(GObject.GObject):
         self.header = header
 
         if self.output_stream:
-
-            def write_cb(stream: Gio.OutputStream, res: Gio.AsyncResult):
-                try:
-                    stream.write_all_finish(res)
-                except Exception:
-                    error(
-                        'Failed to write PCAP header to stream: '
-                        + format_exc()
-                    )
-                    self.wireshark_proc = None
-                    self.output_stream = None
-                    self.stream_closed.emit()
-                else:
-                    info('Written PCAP header to stream')
-                    self.output_stream.flush(None)
-                    self.stream_active.emit()
-
-            self.output_stream.write_all_async(
-                data, GLib.PRIORITY_DEFAULT, None, write_cb
-            )  # PCAP header write op
+            try:
+                self.output_stream.write_all(data, None)
+            except Exception:
+                error('Failed to write PCAP header to stream: ' + format_exc())
+                self.wireshark_proc = None
+                self.output_stream = None
+                self.stream_closed.emit()
+            else:
+                self.output_stream.flush(None)
+                info(
+                    'Wrote PCAP header to stream: '
+                    + pretty_print_struct(header)
+                )
+                self.stream_active.emit()
 
     def write_gsmtap_packet(
         self,
@@ -365,22 +361,14 @@ class PcapOutput(GObject.GObject):
         encoded_packet = buf.getvalue()
 
         if self.output_stream:
-
-            def write_cb(stream: Gio.OutputStream, res: Gio.AsyncResult):
-                try:
-                    stream.write_all_finish(res)
-                except Exception:
-                    error(
-                        'Failed to write PCAP packet to stream: '
-                        + format_exc()
-                    )
-                    self.wireshark_proc = None
-                    self.output_stream = None
-                    self.stream_closed.emit()
-                else:
-                    # DEBUG write record to stderr here?
-                    self.output_stream.flush(None)
-
-            self.output_stream.write_all_async(
-                encoded_packet, GLib.PRIORITY_DEFAULT, None, write_cb
-            )
+            try:
+                self.output_stream.write_all(encoded_packet, None)
+            except Exception:
+                error('Failed to write PCAP packet to stream: ' + format_exc())
+                self.wireshark_proc = None
+                self.output_stream = None
+                self.stream_closed.emit()
+            else:
+                self.output_stream.flush(None)
+                # DEBUG write record to stderr here
+                debug('Wrote packet to PCAP: ' + pretty_print_struct(packet))

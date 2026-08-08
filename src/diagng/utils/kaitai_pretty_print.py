@@ -3,7 +3,7 @@
 from kaitaistruct import ReadWriteKaitaiStruct
 
 
-def pretty_print_struct(struct: ReadWriteKaitaiStruct, indent: int = 0):
+def pretty_print_struct(struct: ReadWriteKaitaiStruct, indent: int = 0) -> str:
     output = ''
     for key, value in vars(struct).items():
         if not key.startswith('_'):
