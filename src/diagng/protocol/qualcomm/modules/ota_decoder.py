@@ -13,6 +13,7 @@ from diagng.protocol.network.gsmtap_v2 import GsmtapV2
 from diagng.system.pcap_output import PcapOutput
 
 from enum import IntEnum
+from sys import stderr
 
 
 class RATType(IntEnum):
@@ -34,7 +35,17 @@ class OTADecoder:
         self.pcap_stream = pcap_stream
         self.input_obj = input_obj
 
-        def on_log(input_obj: BaseQCDMInput, log: DiagLogF.InnerLog):
+        def on_log(
+            input_obj: BaseQCDMInput,
+            log: DiagLogF.InnerLog,
+            num_log: int,
+            total_logs: int,
+        ):
+            if total_logs > 1:
+                stderr.write(
+                    '\r[DEBUG] Processing log %d/%d...' % (num_log, total_logs)
+                )
+                stderr.flush()
             self.handle_log(log)
 
         self.input_obj.log_received.connect(on_log)

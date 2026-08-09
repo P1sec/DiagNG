@@ -50,9 +50,11 @@ class BaseQCDMInput(GObject.Object):
             self.log_received.emit(response.payload.inner_log)
 
     @GObject.Signal(
-        arg_types=(object,),
+        arg_types=(object, int, int),
     )
-    def log_received(self, log: DiagLogF):
+    def log_received(
+        self, log: DiagLogF, num_log: int = 1, total_logs: int = 1
+    ):
         pass
 
     @GObject.Signal

@@ -55,9 +55,6 @@ def main():
         help='Force append if the file already exists rather than ask',
     )
 
-    # ⚠️  TODO: Add a KIND OF INPUT PROGRESS
-    #  MARKER TO STDERR?
-
     args.add_argument('input_dlf')
     args.add_argument(
         'output_pcap', nargs='?', help='Omit to open a Wireshark instance'
@@ -88,7 +85,7 @@ def process_data(
         bool(not args.output_pcap), mode_selector, args.output_pcap
     )
 
-    def on_stream_active(*args):
+    def on_stream_active(*arg):
         with open(args.input_dlf, 'rb') as raw_stream:
             dlf_input = DLFInput(raw_stream)
 
