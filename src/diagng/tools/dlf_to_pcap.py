@@ -92,6 +92,10 @@ def process_data(
             # Will connect dlf_input.log_received
             OTADecoder(pcap_stream, dlf_input)
 
+            def on_closed(*arg):
+                pcap_stream.close()
+
+            dlf_input.closed.connect(on_closed)
             dlf_input.process_stream()
 
         info('All data was processed')

@@ -46,6 +46,8 @@ class OTADecoder:
                     '\r[DEBUG] Processing log %d/%d...' % (num_log, total_logs)
                 )
                 stderr.flush()
+                if num_log == total_logs:
+                    print()
             self.handle_log(log)
 
         self.input_obj.log_received.connect(on_log)

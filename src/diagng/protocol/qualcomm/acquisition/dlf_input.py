@@ -29,7 +29,9 @@ class DLFInput(BaseQCDMInput):
         dlf._read()
 
         for num_log, inner_log in enumerate(dlf.logs):
-            self.log_received.emit(inner_log, num_log, len(dlf.logs))
+            self.log_received.emit(inner_log, num_log + 1, len(dlf.logs))
+
+        self.close()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')
@@ -37,3 +39,4 @@ class DLFInput(BaseQCDMInput):
     def close(self):
         if self.stream:
             self.stream = None
+        self.closed.emit()

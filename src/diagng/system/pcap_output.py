@@ -91,6 +91,12 @@ class PcapOutput(GObject.GObject):
     def stream_closed(self):
         self.stream_state = StreamState.Closed
 
+        self.wireshark_proc = None
+
+        if self.output_stream:
+            self.output_stream.close_async(GLib.PRIORITY_DEFAULT, None, None)
+            self.output_stream = None
+
     def __init__(
         self,
         use_wireshark: bool = False,
@@ -192,9 +198,7 @@ class PcapOutput(GObject.GObject):
                 'Wireshark subprocess %s terminated'
                 % self.wireshark_proc.get_identifier()
             )
-            self.wireshark_proc = None
-            self.output_stream = None
-            self.stream_closed.emit()
+            self.close()
 
         self.wireshark_proc.wait_async(
             None, terminate_cb
@@ -236,9 +240,7 @@ class PcapOutput(GObject.GObject):
                 self.output_stream.write_all(data, None)
             except Exception:
                 error('Failed to write PCAP header to stream: ' + format_exc())
-                self.wireshark_proc = None
-                self.output_stream = None
-                self.stream_closed.emit()
+                self.close()
             else:
                 self.output_stream.flush(None)
                 info(
@@ -397,10 +399,11 @@ class PcapOutput(GObject.GObject):
                 self.output_stream.write_all(encoded_packet, None)
             except Exception:
                 error('Failed to write PCAP packet to stream: ' + format_exc())
-                self.wireshark_proc = None
-                self.output_stream = None
-                self.stream_closed.emit()
+                self.close()
             else:
                 self.output_stream.flush(None)
                 # DEBUG write record to stderr here
                 debug('Wrote packet to PCAP: ' + pretty_print_struct(packet))
+
+    def close(self):
+        self.stream_closed.emit()
