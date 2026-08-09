@@ -2,6 +2,7 @@
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 
 from diagng.protocol.qualcomm.struct.dlf_file import DlfFile
+from gzip import decompress
 
 from kaitaistruct import KaitaiStream
 from io import BytesIO
@@ -15,8 +16,11 @@ class DLFInput(BaseQCDMInput):
     def __init__(self, stream_io: BytesIO):
         super().__init__()
 
-        # ⚠️ NEXT TODO : ➡️
-        #  ⚠️ ⚠️ 🪧 SUPPORT GZIPPED INPUT HERE?
+        try:
+            stream_io = BytesIO(decompress(stream_io.read()))
+        except Exception:
+            raise
+        stream_io.seek(0)
 
         self.stream = KaitaiStream(stream_io)
 
