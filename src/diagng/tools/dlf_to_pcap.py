@@ -97,6 +97,7 @@ def process_data(
                 exit(0)
 
             dlf_input.closed.connect(on_closed)
+
             dlf_input.process_stream()
 
         info('All data was processed')

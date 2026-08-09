@@ -33,6 +33,8 @@ pub async fn get_udev_rules_data(stale_rules: bool) -> zbus::Result<UDevRuleList
 
     let mut removed_rules = false;
 
+    std::fs::create_dir_all(UDEV_RULES_DIR)?;
+
     for entry in std::fs::read_dir(UDEV_RULES_DIR)? {
         let entry = entry?;
         let path = entry.path();
