@@ -269,7 +269,12 @@ class PcapOutput(GObject.GObject):
 
         packet.frame_number = 0
 
+        if isinstance(sub_type, ReadWriteKaitaiStruct):
+            sub_type._parent = packet
+            sub_type._root = packet._root
+            sub_type._check()
         packet.sub_type = sub_type
+
         packet.antenna_nr = 0
         packet.sub_slot = 0
         packet.res = 0

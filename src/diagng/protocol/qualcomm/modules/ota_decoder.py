@@ -69,7 +69,7 @@ class OTADecoder:
             ):
                 # Frames containing only a MIB or extension SIB
                 # are already present in RRC frames, ignore them
-                sub_type = WcdmaSignalingMessage.UmtsRrcSubtypeField()
+                sub_type = GsmtapV2.UmtsRrcSubtypeField()
                 sub_type.umts_rrc_subtype = {
                     ChannelType.rrclog_sig_ul_ccch: UmtsRrcSubtype.ul_ccch_message,
                     ChannelType.rrclog_sig_ul_dcch: UmtsRrcSubtype.ul_dcch_message,
@@ -81,7 +81,6 @@ class OTADecoder:
                     ChannelType.rrclog_sig_dl_mcch: UmtsRrcSubtype.mcch_message,
                     ChannelType.rrclog_sig_dl_msch: UmtsRrcSubtype.msch_message,
                 }[msg.channel_type]
-                sub_type._check()
 
                 if msg.packet_type == PacketType.explicit_arfcn_psc:
                     arfcn = msg.uarfcn & 0x3F
@@ -119,7 +118,8 @@ class OTADecoder:
 
             self.current_rat = RATType.RAT_2G
 
-            sub_type = {
+            sub_type = GsmtapV2.GsmRrSubtypeField()
+            sub_type.gsm_rr_subtype = {
                 ChannelType.dcch: GsmRrSubtype.sdcch8,  # sdcch8 in SCAT and WS 4.7, sdcch in QCSuper - investigate the choice?
                 ChannelType.bcch: GsmRrSubtype.bcch,
                 ChannelType.l2_rach: GsmRrSubtype.rach,
