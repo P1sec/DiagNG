@@ -94,6 +94,7 @@ def process_data(
 
             def on_closed(*arg):
                 pcap_stream.close()
+                exit(0)
 
             dlf_input.closed.connect(on_closed)
             dlf_input.process_stream()
