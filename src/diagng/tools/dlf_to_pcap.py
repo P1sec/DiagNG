@@ -1,7 +1,7 @@
 #!/usr/bin/env
+from diagng.gobject.abstract.file_out_mode_selector import FileOutModeSelector
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
-from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.utils.logging_central import LoggingCentral
 from diagng.system.pcap_output import PcapOutput
 
@@ -9,6 +9,12 @@ from argparse import ArgumentParser
 from gi.repository import GLib
 from typing import Optional
 from logging import info
+
+class ConstantFileOutModeSelector(FileOutModeSelector):
+    pass # WIP XX
+
+class InteractiveUIFileOutModeSelector(FileOutModeSelector):
+    pass # WIP XX
 
 
 def main():
