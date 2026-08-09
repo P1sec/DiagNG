@@ -25,6 +25,10 @@ involve a different wrapper class?)
 Cf. https://github.com/P1sec/QCSuper/blob/2.1.3/src/qcsuper/modules/pcap_dump.py
 """
 
+from diagng.gobject.abstract.file_out_mode_selector import (
+    FileOutModeSelector,
+    FileOutMode,
+)
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
@@ -87,30 +91,40 @@ class PcapOutput(GObject.GObject):
     def stream_closed(self):
         self.stream_state = StreamState.Closed
 
-    def __init__(self, use_wireshark=False, output_file: Optional[str] = None):
+    def __init__(
+        self,
+        use_wireshark: bool = False,
+        mode_selector: Optional[FileOutModeSelector] = None,
+        output_file: Optional[str] = None,
+    ):
         super().__init__()
 
         self.use_wireshark = use_wireshark
+        self.mode_selector = mode_selector
         self.file_path = output_file
 
     def open_stream(self):
         if self.use_wireshark:
             self.spawn_wireshark()
         else:
-            self.output_file = Gio.File.new_for_path(self.file_path)
-            # ⚠️ Maybe we should support appending to the file too?
-            self.output_file.XX  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
-            #    => Use replace_readwrite_async ?
-            #       OR append_to_async / open_readwrite_async ?
 
-            # => ⚠️ SHOULD WE prompt THE USER ON
-            #  WHETHER TO REPLACE THE FILE OR
-            #  APPEND TO IT WHENEVER IT EXISTS?
+            def callback(selected_mode: FileOutMode):
+                self.output_file = Gio.File.new_for_path(self.file_path)
+                # ⚠️ Maybe we should support appending to the file too?
+                self.output_file.XX  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
+                #    => Use replace_readwrite_async ?
+                #       OR append_to_async / open_readwrite_async ?
 
-            #   => ⚠️ 🪧 ADD
-            #    - AN INTERACTIVE CLI PROMPT PATH
-            #    - AN EXPLICIT, NON-INTERACTIVE CLI PROMPT PATH (THROUGH ARGPARSE)
-            #    - AN INTERACTIVE GUI PROMPT PATH
+                # => ⚠️ SHOULD WE prompt THE USER ON
+                #  WHETHER TO REPLACE THE FILE OR
+                #  APPEND TO IT WHENEVER IT EXISTS?
+
+                #   => ⚠️ 🪧 ADD
+                #    - AN INTERACTIVE CLI PROMPT PATH
+                #    - AN EXPLICIT, NON-INTERACTIVE CLI PROMPT PATH (THROUGH ARGPARSE)
+                #    - AN INTERACTIVE GUI PROMPT PATH
+
+            self.mode_selector.query_file_out_mode(callback)
 
         pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
