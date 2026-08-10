@@ -369,7 +369,10 @@ class PcapOutput(GObject.GObject):
 
         ipv4._check()
 
-        self.write_ipv4_record(ipv4, time())
+        if isinstance(data, DiagLogF.InnerLog):
+            self.write_ipv4_record(ipv4, data.unix_ts)
+        else:
+            self.write_ipv4_record(ipv4, time())
 
     def write_ipv4_record(self, ipv4: Ipv4Packet, timestamp: float = 0.0):
         packet = Pcap.Packet(None, self.header, self.header._root)

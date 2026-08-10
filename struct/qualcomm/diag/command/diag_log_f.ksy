@@ -5,6 +5,7 @@ meta:
     - ../log/log_codes
     - ../log/wcdma_signaling_message
     - ../log/gsm_rr_signaling_message
+    - ../log/lte_rrc_ota_packet
 
 # From _base_input.py in QCSuper
 
@@ -34,6 +35,7 @@ types:
           cases:
             'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f
             'diag_logging::log_code::gsm_rr_signaling_message': gsm_rr_signaling_message # 0x512f
+            'diag_logging::log_code::lte_rrc_ota_packet': lte_rrc_ota_packet # 0xb0c0
             # TODO process all types supported by QCSuper in "pcap_dump.py"
     instances:
       unix_ts:
@@ -42,8 +44,8 @@ types:
            log_time < 4102441200) ?
           log_time :
            315964800 +
-           (log_time >> 16) / 800 +
-           ((log_time & 0xffff) / 0xC000 / 800)
+           (log_time >> 16).as<f8> / 800 +
+           ((log_time & 0xffff).as<f8> / 0xC000 / 800)
 
     enums:
       ref_ts:
