@@ -156,6 +156,29 @@ class OTADecoder:
                 not msg.is_downlink,
             )
 
+        elif code == DiagLogging.LogCode.lte_rrc_ota_packet:  # 0xb0c0
+            pass  # ⚠️ TODO
+
+        elif code == DiagLogging.LogCode.nr5g_rrc_ota_packet:  # 0xb821
+            pass  # ⚠️ TODO
+
+        elif code == DiagLogging.LogCode.umts_ue_ota:  # 0x713a
+            pass  # ⚠️ TODO
+
+        elif (
+            code
+            in (
+                DiagLogging.LogCode.lte_nas_esm_plain_ota_incoming_message,  # 0xb0e2
+                DiagLogging.LogCode.lte_nas_esm_plain_ota_outgoing_message,  # 0xb0e3
+                DiagLogging.LogCode.lte_nas_emm_plain_ota_incoming_message,  # 0xb0ec
+                DiagLogging.LogCode.lte_nas_emm_plain_ota_outgoing_message,  # 0xb0ed
+            )
+        ):
+            pass  # ⚠️
+
+        elif code == DiagLogging.LogCode.data_protocol_logging:  # 0x11eb
+            pass  # ⚠️ TODO
+
         """
         elif isinstance(log.content, bytes):
             # ⚠️ This requires Wireshark 4.7 (CURRENTLY A DEV BUILD) or above:
