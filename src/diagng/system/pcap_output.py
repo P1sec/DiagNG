@@ -371,6 +371,11 @@ class PcapOutput(GObject.GObject):
 
         if isinstance(data, DiagLogF.InnerLog):
             self.write_ipv4_record(ipv4, data.unix_ts)
+        elif (
+            isinstance(data, DiagLogF.DiagResponse)
+            and data.cmd_code == DiagCmd.log_f
+        ):
+            self.write_ipv4_record(ipv4, data.payload.inner_log.unix_ts)
         else:
             self.write_ipv4_record(ipv4, time())
 
