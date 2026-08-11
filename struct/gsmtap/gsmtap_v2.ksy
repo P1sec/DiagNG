@@ -218,6 +218,7 @@ enums:
     61: target_rnc_to_source_rnc_container
 
   lte_rrc_subtype:
+    0x00: unknown
     0x01: ch_bcch
     0x02: ch_ccch
     0x03: ch_dcch

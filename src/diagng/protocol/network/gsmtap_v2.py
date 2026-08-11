@@ -42,6 +42,7 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         sacch_h = 138
 
     class LteRrcSubtype(IntEnum):
+        unknown = 0
         ch_bcch = 1
         ch_ccch = 2
         ch_dcch = 3

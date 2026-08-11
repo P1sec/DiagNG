@@ -4,6 +4,7 @@
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from enum import IntEnum
+from diagng.protocol.network import gsmtap_v2
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -47,175 +48,179 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             self.earfcn_short = self._io.read_u2le()
 
         self.sfn_subfn = self._io.read_u2le()
-        _on = self.ext_header_ver
-        if _on == 1:
+        self.is_special = self._io.read_bits_int_be(1) != 0
+        if not (self.is_special):
             pass
-            self.pdu_type = LteRrcOtaPacket.V1PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 10:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V10PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 11:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V11PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 12:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V12PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 13:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V13PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 14:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V14PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 15:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V15PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 16:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V16PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 17:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V17PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 18:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V18PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 19:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V19PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 2:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V2PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 20:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V20PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 21:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V21PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 22:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V22PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 23:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V23PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 24:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V24PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 25:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V25PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 26:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V26PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 27:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V27PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 3:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V3PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 4:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V4PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 5:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V4PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 6:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V6PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 7:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V7PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 8:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V8PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        elif _on == 9:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V9PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
-        else:
-            pass
-            self.pdu_type = LteRrcOtaPacket.V27PduType(
-                self._io, self, self._root
-            )
-            self.pdu_type._read()
+            _on = self.ext_header_ver
+            if _on == 1:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V1PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 10:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V10PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 11:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V11PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 12:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V12PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 13:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V13PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 14:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V14PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 15:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V15PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 16:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V16PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 17:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V17PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 18:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V18PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 19:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V19PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 2:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V2PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 20:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V20PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 21:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V21PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 22:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V22PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 23:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V23PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 24:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V24PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 25:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V25PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 26:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V26PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 27:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V27PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 3:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V3PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 4:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V4PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 5:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V4PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 6:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V6PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 7:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V7PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 8:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V8PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            elif _on == 9:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V9PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+            else:
+                pass
+                self.pdu_type = LteRrcOtaPacket.V27PduType(
+                    self._io, self, self._root
+                )
+                self.pdu_type._read()
+
         if self.ext_header_ver >= 5:
             pass
             self.sib_message = self._io.read_u4le()
@@ -253,91 +258,94 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         if self.ext_header_ver < 8:
             pass
 
-        _on = self.ext_header_ver
-        if _on == 1:
+        if not (self.is_special):
             pass
-            self.pdu_type._fetch_instances()
-        elif _on == 10:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 11:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 12:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 13:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 14:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 15:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 16:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 17:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 18:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 19:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 2:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 20:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 21:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 22:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 23:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 24:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 25:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 26:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 27:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 3:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 4:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 5:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 6:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 7:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 8:
-            pass
-            self.pdu_type._fetch_instances()
-        elif _on == 9:
-            pass
-            self.pdu_type._fetch_instances()
-        else:
-            pass
-            self.pdu_type._fetch_instances()
+            _on = self.ext_header_ver
+            if _on == 1:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 10:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 11:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 12:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 13:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 14:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 15:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 16:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 17:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 18:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 19:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 2:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 20:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 21:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 22:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 23:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 24:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 25:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 26:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 27:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 3:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 4:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 5:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 6:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 7:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 8:
+                pass
+                self.pdu_type._fetch_instances()
+            elif _on == 9:
+                pass
+                self.pdu_type._fetch_instances()
+            else:
+                pass
+                self.pdu_type._fetch_instances()
+
         if self.ext_header_ver >= 5:
             pass
 
@@ -379,91 +387,95 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             self._io.write_u2le(self.earfcn_short)
 
         self._io.write_u2le(self.sfn_subfn)
-        _on = self.ext_header_ver
-        if _on == 1:
+        self._io.write_bits_int_be(1, int(self.is_special))
+        if not (self.is_special):
             pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 10:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 11:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 12:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 13:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 14:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 15:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 16:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 17:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 18:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 19:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 2:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 20:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 21:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 22:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 23:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 24:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 25:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 26:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 27:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 3:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 4:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 5:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 6:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 7:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 8:
-            pass
-            self.pdu_type._write__seq(self._io)
-        elif _on == 9:
-            pass
-            self.pdu_type._write__seq(self._io)
-        else:
-            pass
-            self.pdu_type._write__seq(self._io)
+            _on = self.ext_header_ver
+            if _on == 1:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 10:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 11:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 12:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 13:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 14:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 15:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 16:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 17:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 18:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 19:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 2:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 20:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 21:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 22:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 23:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 24:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 25:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 26:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 27:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 3:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 4:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 5:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 6:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 7:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 8:
+                pass
+                self.pdu_type._write__seq(self._io)
+            elif _on == 9:
+                pass
+                self.pdu_type._write__seq(self._io)
+            else:
+                pass
+                self.pdu_type._write__seq(self._io)
+
         if self.ext_header_ver >= 5:
             pass
             self._io.write_u4le(self.sib_message)
@@ -499,287 +511,290 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         if self.ext_header_ver < 8:
             pass
 
-        _on = self.ext_header_ver
-        if _on == 1:
+        if not (self.is_special):
             pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 10:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 11:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 12:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 13:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 14:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 15:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 16:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 17:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 18:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 19:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 2:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 20:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 21:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 22:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 23:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 24:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 25:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 26:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 27:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 3:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 4:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 5:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 6:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 7:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 8:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        elif _on == 9:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
-        else:
-            pass
-            if self.pdu_type._root != self._root:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self._root, self.pdu_type._root
-                )
-            if self.pdu_type._parent != self:
-                raise kaitaistruct.ConsistencyError(
-                    'pdu_type', self, self.pdu_type._parent
-                )
+            _on = self.ext_header_ver
+            if _on == 1:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 10:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 11:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 12:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 13:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 14:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 15:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 16:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 17:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 18:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 19:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 2:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 20:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 21:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 22:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 23:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 24:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 25:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 26:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 27:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 3:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 4:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 5:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 6:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 7:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 8:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            elif _on == 9:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+            else:
+                pass
+                if self.pdu_type._root != self._root:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self._root, self.pdu_type._root
+                    )
+                if self.pdu_type._parent != self:
+                    raise kaitaistruct.ConsistencyError(
+                        'pdu_type', self, self.pdu_type._parent
+                    )
+
         if self.ext_header_ver >= 5:
             pass
 
@@ -832,7 +847,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V10PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V10PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -841,10 +857,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V10PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V10PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V10PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V10PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V10PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V10PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V10PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V10PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V10PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V10PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V10PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V11PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -890,7 +969,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V11PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V11PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -899,10 +979,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V11PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V11PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V11PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V11PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V11PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V11PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V11PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V11PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V11PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V11PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V11PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V12PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -959,7 +1102,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V12PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V12PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -968,10 +1112,95 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V12PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V12PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V12PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V12PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V12PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V12PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V12PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V12PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V12PduType.PduType.ul_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V12PduType.PduType.els_dl_ccch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V12PduType.PduType.els_dl_dcch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V12PduType.PduType.els_ul_dcch
+                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V12PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V12PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V12PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V13PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1023,7 +1252,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V13PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V13PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1032,10 +1262,95 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V13PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V13PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V13PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V13PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V13PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V13PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V13PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V13PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V13PduType.PduType.ul_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V13PduType.PduType.els_dl_ccch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V13PduType.PduType.els_dl_dcch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V13PduType.PduType.els_ul_dcch
+                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V13PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V13PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V13PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V14PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1090,7 +1405,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V14PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V14PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1099,10 +1415,100 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V14PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V14PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V14PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V14PduType.PduType.bcch_dl_sch_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V14PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V14PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V14PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V14PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V14PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V14PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V14PduType.PduType.els_dl_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V14PduType.PduType.els_dl_dcch
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V14PduType.PduType.els_ul_dcch
+                                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V14PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V14PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V14PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V15PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1166,7 +1572,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V15PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V15PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1175,10 +1582,148 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V15PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V15PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V15PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V15PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V15PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V15PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V15PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V15PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V15PduType.PduType.sc_mcch_r13
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V15PduType.PduType.bcch_bch_message_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch_message_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V15PduType.PduType.pcch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V15PduType.PduType.dl_ccch_message_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V15PduType.PduType.dl_dcch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V15PduType.PduType.els_dl_ccch
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V15PduType.PduType.els_dl_dcch
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V15PduType.PduType.els_ul_dcch
+                                                                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V15PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V15PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V15PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V16PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1240,7 +1785,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V16PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V16PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1249,10 +1795,143 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V16PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V16PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V16PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V16PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V16PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V16PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V16PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V16PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V16PduType.PduType.sc_mcch_r13
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V16PduType.PduType.bcch_bch_message_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch_message_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V16PduType.PduType.pcch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V16PduType.PduType.dl_ccch_message_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V16PduType.PduType.dl_dcch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V16PduType.PduType.els_dl_dcch
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V16PduType.PduType.els_ul_dcch
+                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V16PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V16PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V16PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V17PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1303,7 +1982,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V17PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V17PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1312,10 +1992,95 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V17PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V17PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V17PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V17PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V17PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V17PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V17PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V17PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V17PduType.PduType.ul_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V17PduType.PduType.els_dl_ccch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V17PduType.PduType.els_dl_dcch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V17PduType.PduType.els_ul_dcch
+                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V17PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V17PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V17PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V18PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1381,7 +2146,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V18PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V18PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1390,10 +2156,171 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V18PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V18PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V18PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V18PduType.PduType.pcch_message_type
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V18PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V18PduType.PduType.dl_ccch_message_type
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V18PduType.PduType.dl_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V18PduType.PduType.dl_dcch_message_type
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_message_type
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V18PduType.PduType.ul_dcch
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_message_type
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V18PduType.PduType.els_dl_ccch
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V18PduType.PduType.els_dl_dcch
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V18PduType.PduType.els_ul_dcch
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V18PduType.PduType.bcch_bch_mf
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V18PduType.PduType.bcch_dl_sch_mf
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V18PduType.PduType.pcch_mf
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V18PduType.PduType.dl_ccch_mf
+                                                                                            else (
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                if self.pdu_type
+                                                                                                == LteRrcOtaPacket.V18PduType.PduType.dl_dcch_mf
+                                                                                                else (
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                                    if self.pdu_type
+                                                                                                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_mf
+                                                                                                    else (
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        if self.pdu_type
+                                                                                                        == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_mf
+                                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_message_type
+                )
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_message_type
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.els_ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_mf
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_mf
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V19PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1461,7 +2388,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V19PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V19PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1470,10 +2398,158 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V19PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V19PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V19PduType.PduType.bcch_mbms
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_br
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_mbms
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V19PduType.PduType.mcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V19PduType.PduType.pcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V19PduType.PduType.dl_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V19PduType.PduType.dl_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V19PduType.PduType.ul_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V19PduType.PduType.ul_dcch
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_r13
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V19PduType.PduType.bcch_bch_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V19PduType.PduType.pcch_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V19PduType.PduType.dl_ccch_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V19PduType.PduType.dl_dcch_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V19PduType.PduType.ul_ccch_nb
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_nb
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V19PduType.PduType.ul_dcch_nb
+                                                                                            else (
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                if self.pdu_type
+                                                                                                == LteRrcOtaPacket.V19PduType.PduType.els_dl_dcch
+                                                                                                else (
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                    if self.pdu_type
+                                                                                                    == LteRrcOtaPacket.V19PduType.PduType.els_ul_dcch
+                                                                                                    else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V19PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V19PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V19PduType.PduType.ul_ccch_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V19PduType.PduType.ul_dcch_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V19PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V1PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1491,7 +2567,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V1PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V1PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -1500,10 +2576,63 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V1PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type
+                == LteRrcOtaPacket.V1PduType.PduType.bcch_dl_sch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                    if self.pdu_type == LteRrcOtaPacket.V1PduType.PduType.pcch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V1PduType.PduType.dl_ccch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V1PduType.PduType.dl_dcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V1PduType.PduType.ul_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V1PduType.PduType.ul_dcch
+                                    else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V1PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V1PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V20PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1580,7 +2709,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V20PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V20PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1589,10 +2719,143 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V20PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V20PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V20PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V20PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V20PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V20PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V20PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V20PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V20PduType.PduType.bcch_bch_nb
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V20PduType.PduType.pcch_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V20PduType.PduType.dl_ccch_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V20PduType.PduType.dl_dcch_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V20PduType.PduType.ul_ccch_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V20PduType.PduType.sc_mcch_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V20PduType.PduType.ul_dcch_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V20PduType.PduType.els_dl_dcch
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V20PduType.PduType.els_ul_dcch
+                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V20PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V20PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V20PduType.PduType.ul_ccch_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V20PduType.PduType.ul_dcch_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V20PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V21PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1659,7 +2922,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V21PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V21PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1668,10 +2932,171 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V21PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V21PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V21PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V21PduType.PduType.pcch_message_type
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V21PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V21PduType.PduType.dl_ccch_message_type
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V21PduType.PduType.dl_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V21PduType.PduType.dl_dcch_message_type
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_message_type
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V21PduType.PduType.ul_dcch
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_message_type
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V21PduType.PduType.els_dl_ccch
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V21PduType.PduType.els_dl_dcch
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V21PduType.PduType.els_ul_dcch
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V21PduType.PduType.bcch_bch_mf
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V21PduType.PduType.bcch_dl_sch_mf
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V21PduType.PduType.pcch_mf
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V21PduType.PduType.dl_ccch_mf
+                                                                                            else (
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                if self.pdu_type
+                                                                                                == LteRrcOtaPacket.V21PduType.PduType.dl_dcch_mf
+                                                                                                else (
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                                    if self.pdu_type
+                                                                                                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_mf
+                                                                                                    else (
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        if self.pdu_type
+                                                                                                        == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_mf
+                                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_message_type
+                )
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_message_type
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.els_ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_mf
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_mf
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V22PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1721,7 +3146,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V22PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V22PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1730,10 +3156,90 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V22PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V22PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V22PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V22PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V22PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V22PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V22PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V22PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V22PduType.PduType.ul_dcch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V22PduType.PduType.els_dl_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V22PduType.PduType.els_ul_dcch
+                                                    else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V22PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V22PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V22PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V23PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1802,7 +3308,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V23PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V23PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1811,10 +3318,143 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V23PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V23PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_message_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V23PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V23PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V23PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V23PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V23PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V23PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V23PduType.PduType.bcch_bch_message_nb
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_message_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V23PduType.PduType.pcch_message_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V23PduType.PduType.dl_ccch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V23PduType.PduType.dl_dcch_message_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V23PduType.PduType.sc_mcch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V23PduType.PduType.els_dl_dcch
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V23PduType.PduType.els_ul_dcch
+                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V23PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V23PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V23PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V24PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1884,7 +3524,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V24PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V24PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1893,10 +3534,143 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V24PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V24PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_message_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V24PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V24PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V24PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V24PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V24PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V24PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V24PduType.PduType.bcch_bch_message_nb
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_message_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V24PduType.PduType.pcch_message_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V24PduType.PduType.dl_ccch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V24PduType.PduType.dl_dcch_message_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V24PduType.PduType.sc_mcch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V24PduType.PduType.els_dl_dcch
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V24PduType.PduType.els_ul_dcch
+                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V24PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V24PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V24PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V25PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -1968,7 +3742,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V25PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V25PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -1977,10 +3752,148 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V25PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V25PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_message_br
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V25PduType.PduType.mcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V25PduType.PduType.pcch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V25PduType.PduType.dl_ccch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V25PduType.PduType.dl_dcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V25PduType.PduType.ul_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V25PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_message_nb
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_message_tdd_nb
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_message_nb
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V25PduType.PduType.pcch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V25PduType.PduType.dl_ccch_message_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V25PduType.PduType.dl_dcch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V25PduType.PduType.sc_mcch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_message_nb
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V25PduType.PduType.els_dl_dcch
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V25PduType.PduType.els_ul_dcch
+                                                                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V25PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V25PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V25PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V26PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2049,7 +3962,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V26PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V26PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -2058,10 +3972,163 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V26PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V26PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_mbms
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_br
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_mbms
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V26PduType.PduType.mcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V26PduType.PduType.pcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V26PduType.PduType.dl_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V26PduType.PduType.dl_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V26PduType.PduType.ul_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V26PduType.PduType.ul_dcch
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_message_r13
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_tdd_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V26PduType.PduType.pcch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V26PduType.PduType.dl_ccch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V26PduType.PduType.dl_dcch_message_nb
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_message_nb
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_message_nb
+                                                                                            else (
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                if self.pdu_type
+                                                                                                == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_message_nb
+                                                                                                else (
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                    if self.pdu_type
+                                                                                                    == LteRrcOtaPacket.V26PduType.PduType.els_dl_dcch
+                                                                                                    else (
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        if self.pdu_type
+                                                                                                        == LteRrcOtaPacket.V26PduType.PduType.els_ul_dcch
+                                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V26PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V26PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V26PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V27PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2134,7 +4201,8 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V27PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V27PduType.PduType,
+                self._io.read_bits_int_be(7),
             )
             self._dirty = False
 
@@ -2143,10 +4211,163 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V27PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V27PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_mbms
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_br
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_mbms
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V27PduType.PduType.mcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V27PduType.PduType.pcch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V27PduType.PduType.dl_ccch
+                                            else (
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                if self.pdu_type
+                                                == LteRrcOtaPacket.V27PduType.PduType.dl_dcch
+                                                else (
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    if self.pdu_type
+                                                    == LteRrcOtaPacket.V27PduType.PduType.ul_ccch
+                                                    else (
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        if self.pdu_type
+                                                        == LteRrcOtaPacket.V27PduType.PduType.ul_dcch
+                                                        else (
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            if self.pdu_type
+                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_message_r13
+                                                            else (
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                if self.pdu_type
+                                                                == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_nb
+                                                                else (
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    if self.pdu_type
+                                                                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_tdd_nb
+                                                                    else (
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                        if self.pdu_type
+                                                                        == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_nb
+                                                                        else (
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                            if self.pdu_type
+                                                                            == LteRrcOtaPacket.V27PduType.PduType.pcch_message_nb
+                                                                            else (
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                if self.pdu_type
+                                                                                == LteRrcOtaPacket.V27PduType.PduType.dl_ccch_message_nb
+                                                                                else (
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    if self.pdu_type
+                                                                                    == LteRrcOtaPacket.V27PduType.PduType.dl_dcch_message_nb
+                                                                                    else (
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                        if self.pdu_type
+                                                                                        == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_message_nb
+                                                                                        else (
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                            if self.pdu_type
+                                                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_message_nb
+                                                                                            else (
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                if self.pdu_type
+                                                                                                == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_message_nb
+                                                                                                else (
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                    if self.pdu_type
+                                                                                                    == LteRrcOtaPacket.V27PduType.PduType.els_dl_dcch
+                                                                                                    else (
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        if self.pdu_type
+                                                                                                        == LteRrcOtaPacket.V27PduType.PduType.els_ul_dcch
+                                                                                                        else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == LteRrcOtaPacket.V27PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type == LteRrcOtaPacket.V27PduType.PduType.ul_dcch
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_message_nb
+                )
+                or (
+                    self.pdu_type
+                    == LteRrcOtaPacket.V27PduType.PduType.els_ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V2PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2170,7 +4391,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V2PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V2PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2179,10 +4400,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V2PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V2PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V2PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V2PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V2PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V2PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V2PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V2PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V2PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V2PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V2PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V3PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2209,7 +4493,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V3PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V3PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2218,10 +4502,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V3PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V3PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V3PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V3PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V3PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V3PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V3PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V3PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V3PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V3PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V3PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V4PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2249,7 +4596,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V4PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V4PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2258,10 +4605,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V4PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V4PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V4PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V4PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V4PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V4PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V4PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V4PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V4PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V4PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V4PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V6PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2289,7 +4699,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V6PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V6PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2298,10 +4708,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V6PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V6PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V6PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V6PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V6PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V6PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V6PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V6PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V6PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V6PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V6PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V7PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2329,7 +4802,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V7PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V7PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2338,10 +4811,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V7PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V7PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V7PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V7PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V7PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V7PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V7PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V7PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V7PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V7PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V7PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V8PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2370,7 +4906,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V8PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V8PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2379,10 +4915,73 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V8PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V8PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V8PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V8PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V8PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V8PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V8PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V8PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V8PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V8PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V8PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
 
     class V9PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
@@ -2418,7 +5017,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.pdu_type = KaitaiStream.resolve_enum(
-                LteRrcOtaPacket.V9PduType.PduType, self._io.read_u1()
+                LteRrcOtaPacket.V9PduType.PduType, self._io.read_bits_int_be(7)
             )
             self._dirty = False
 
@@ -2427,7 +5026,70 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(LteRrcOtaPacket.V9PduType, self)._write__seq(io)
-            self._io.write_u1(int(self.pdu_type))
+            self._io.write_bits_int_be(7, int(self.pdu_type))
 
         def _check(self):
             self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                if self.pdu_type == LteRrcOtaPacket.V9PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    if self.pdu_type
+                    == LteRrcOtaPacket.V9PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        if self.pdu_type
+                        == LteRrcOtaPacket.V9PduType.PduType.mcch
+                        else (
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            if self.pdu_type
+                            == LteRrcOtaPacket.V9PduType.PduType.pcch
+                            else (
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                if self.pdu_type
+                                == LteRrcOtaPacket.V9PduType.PduType.dl_ccch
+                                else (
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    if self.pdu_type
+                                    == LteRrcOtaPacket.V9PduType.PduType.dl_dcch
+                                    else (
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        if self.pdu_type
+                                        == LteRrcOtaPacket.V9PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            if self.pdu_type
+                                            == LteRrcOtaPacket.V9PduType.PduType.ul_dcch
+                                            else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                self.pdu_type == LteRrcOtaPacket.V9PduType.PduType.ul_ccch
+            ) or (self.pdu_type == LteRrcOtaPacket.V9PduType.PduType.ul_dcch)
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
