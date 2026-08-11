@@ -80,6 +80,24 @@ template $QCDMWindow: Adw.Window {
                 title: "Capture extra logs as QC_DIAG GSMTAP (requires Wireshark 4.7+)";
               }
             }
+
+            Adw.PreferencesGroup {
+              description: "A Wireshark plug-in will be installed in $PATH whenever you start a new capture, if not present. See XX";
+              title: "Wireshark plug-in management";
+
+              Adw.ActionRow {
+                title: "SAMPLE_PLUGIN_PATH";
+                visible: false;
+
+                Button {
+                  label: "Open";
+                }
+
+                Button {
+                  label: "Remove";
+                }
+              }
+            }
           };
 
           icon-name: "notes-app-symbolic";

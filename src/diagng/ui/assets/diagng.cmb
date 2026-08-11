@@ -21,7 +21,7 @@
     <property id="focusable" type-id="gboolean" default-value="True"/>
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
-  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="9c5744ae9c95e66bfba00b244f0a2896aa4c32cea3e87a99cf415aed3c7874a7"/>
+  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="ff1b09f1437b5d5b1fdc48f4ea3deb8e3c92463a9b4f4e5f21b8bda9a5b67cdd"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="9377bcddabd24a81576acf35073bcd68b30ab1760488c37ac1d1dbf63459bce2"/>
   <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="13cb80d1a1ab3423630f9984d4082a24963aeea1e20e42578fabf9edd705cd20">
     <requires>ADBDeviceRow</requires>

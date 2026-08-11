@@ -105,6 +105,28 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="description">A Wireshark plug-in will be installed in $PATH whenever you start a new capture, if not present. See XX</property>
+                            <property name="title">Wireshark plug-in management</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="title">SAMPLE_PLUGIN_PATH</property>
+                                <property name="visible">false</property>
+                                <child>
+                                  <object class="GtkButton">
+                                    <property name="label">Open</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton">
+                                    <property name="label">Remove</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </property>
                     <property name="icon-name">notes-app-symbolic</property>
