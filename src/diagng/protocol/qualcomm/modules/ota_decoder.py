@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from diagng.protocol.qualcomm.struct.lte_rrc_ota_packet import (
+    LteRrcOtaPacket,
+)
 from diagng.protocol.qualcomm.struct.gsm_rr_signaling_message import (
     GsmRrSignalingMessage,
 )
@@ -157,7 +160,23 @@ class OTADecoder:
             )
 
         elif code == DiagLogging.LogCode.lte_rrc_ota_packet:  # 0xb0c0
-            pass  # ⚠️ TODO
+            msg: LteRrcOtaPacket = log.content
+
+            self.current_rat = RATType.RAT_4G
+
+            if (
+                not msg.is_special
+                and msg.pdu_type.gsmtap_subtype
+                != GsmtapV2.LteRrcSubtype.unknown
+            ):
+                # ⚠️ TODO: Implement RRC reassembly for v30+ packets?
+
+                self.pcap_stream.write_gsmtap_packet(
+                    GsmtapV2.PacketType.lte_rrc,
+                    msg.pdu_type.gsmtap_subtype,
+                    msg.message,
+                    msg.pdu_type.is_uplink,
+                )
 
         elif code == DiagLogging.LogCode.nr5g_rrc_ota_packet:  # 0xb821
             pass  # ⚠️ TODO
