@@ -4,8 +4,8 @@
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from diagng.protocol.qualcomm.struct import gsm_rr_signaling_message
-from diagng.protocol.qualcomm.struct import lte_rrc_ota_packet
 from diagng.protocol.qualcomm.struct import wcdma_signaling_message
+from diagng.protocol.qualcomm.struct import lte_rrc_ota_packet
 from diagng.protocol.qualcomm.struct import diag_logging
 from enum import IntEnum
 
