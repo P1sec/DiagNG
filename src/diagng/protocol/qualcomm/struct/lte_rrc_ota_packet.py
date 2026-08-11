@@ -868,34 +868,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V10PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V10PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V10PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V10PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V10PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V10PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V10PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V10PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -990,34 +990,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V11PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V11PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V11PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V11PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V11PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V11PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V11PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V11PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1123,46 +1123,46 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V12PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V12PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V12PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V12PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V12PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V12PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V12PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V12PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V12PduType.PduType.els_dl_ccch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V12PduType.PduType.els_dl_dcch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V12PduType.PduType.els_ul_dcch
                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1273,46 +1273,46 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V13PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V13PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V13PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V13PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V13PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V13PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V13PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V13PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V13PduType.PduType.els_dl_ccch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V13PduType.PduType.els_dl_dcch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V13PduType.PduType.els_ul_dcch
                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1426,50 +1426,50 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V14PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V14PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
                         == LteRrcOtaPacket.V14PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V14PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V14PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V14PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V14PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V14PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V14PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V14PduType.PduType.els_dl_ccch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V14PduType.PduType.els_dl_dcch
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                             if self.pdu_type
                                                             == LteRrcOtaPacket.V14PduType.PduType.els_ul_dcch
                                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1551,13 +1551,13 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             ue_eutra_cap_v10j0_ies = 37
             sl_txpoolid_r13 = 38
             var_short_mac_input = 39
-            bcch_bch_message_nb = 40
-            bcch_dl_sch_message_nb = 41
-            pcch_message_nb = 42
-            dl_ccch_message_nb = 43
-            dl_dcch_message_nb = 44
-            ul_ccch_message_nb = 45
-            ul_dcch_message_nb = 46
+            bcch_bch_nb = 40
+            bcch_dl_sch_nb = 41
+            pcch_nb = 42
+            dl_ccch_nb = 43
+            dl_dcch_nb = 44
+            ul_ccch_nb = 45
+            ul_dcch_nb = 46
             els_sib1_signature = 47
             els_sysinfo_block_type1 = 48
             nhn_plmn_identity_list = 49
@@ -1593,82 +1593,82 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V15PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
                         == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V15PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V15PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V15PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V15PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V15PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V15PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V15PduType.PduType.sc_mcch_r13
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V15PduType.PduType.bcch_bch_message_nb
+                                                        == LteRrcOtaPacket.V15PduType.PduType.bcch_bch_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch_message_nb
+                                                            == LteRrcOtaPacket.V15PduType.PduType.bcch_dl_sch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V15PduType.PduType.pcch_message_nb
+                                                                == LteRrcOtaPacket.V15PduType.PduType.pcch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V15PduType.PduType.dl_ccch_message_nb
+                                                                    == LteRrcOtaPacket.V15PduType.PduType.dl_ccch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V15PduType.PduType.dl_dcch_message_nb
+                                                                        == LteRrcOtaPacket.V15PduType.PduType.dl_dcch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_message_nb
+                                                                            == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_message_nb
+                                                                                == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V15PduType.PduType.els_dl_ccch
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V15PduType.PduType.els_dl_dcch
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                             if self.pdu_type
                                                                                             == LteRrcOtaPacket.V15PduType.PduType.els_ul_dcch
                                                                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1709,11 +1709,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V15PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V15PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -1766,13 +1766,13 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             ue_eutra_cap_v10j0_ies = 37
             sl_txpoolid_r13 = 38
             var_short_mac_input = 39
-            bcch_bch_message_nb = 40
-            bcch_dl_sch_message_nb = 41
-            pcch_message_nb = 42
-            dl_ccch_message_nb = 43
-            dl_dcch_message_nb = 44
-            ul_ccch_message_nb = 45
-            ul_dcch_message_nb = 46
+            bcch_bch_nb = 40
+            bcch_dl_sch_nb = 41
+            pcch_nb = 42
+            dl_ccch_nb = 43
+            dl_dcch_nb = 44
+            ul_ccch_nb = 45
+            ul_dcch_nb = 46
             els_sib1_signature = 47
             els_sysinfo_block_type1 = 48
             els_dl_dcch = 49
@@ -1806,78 +1806,78 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V16PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
                         == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V16PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V16PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V16PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V16PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V16PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V16PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V16PduType.PduType.sc_mcch_r13
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V16PduType.PduType.bcch_bch_message_nb
+                                                        == LteRrcOtaPacket.V16PduType.PduType.bcch_bch_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch_message_nb
+                                                            == LteRrcOtaPacket.V16PduType.PduType.bcch_dl_sch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V16PduType.PduType.pcch_message_nb
+                                                                == LteRrcOtaPacket.V16PduType.PduType.pcch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V16PduType.PduType.dl_ccch_message_nb
+                                                                    == LteRrcOtaPacket.V16PduType.PduType.dl_ccch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V16PduType.PduType.dl_dcch_message_nb
+                                                                        == LteRrcOtaPacket.V16PduType.PduType.dl_dcch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_message_nb
+                                                                            == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_message_nb
+                                                                                == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V16PduType.PduType.els_dl_dcch
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V16PduType.PduType.els_ul_dcch
                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -1917,11 +1917,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V16PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V16PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -2003,46 +2003,46 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V17PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V17PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V17PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V17PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V17PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V17PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V17PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V17PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V17PduType.PduType.els_dl_ccch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V17PduType.PduType.els_dl_dcch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V17PduType.PduType.els_ul_dcch
                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -2088,15 +2088,15 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             bcch_dl_sch = 2
             mcch = 3
             pcch = 4
-            pcch_message_type = 5
+            pcch_type = 5
             dl_ccch = 6
-            dl_ccch_message_type = 7
+            dl_ccch_type = 7
             dl_dcch = 8
-            dl_dcch_message_type = 9
+            dl_dcch_type = 9
             ul_ccch = 10
-            ul_ccch_message_type = 11
+            ul_ccch_type = 11
             ul_dcch = 12
-            ul_dcch_message_type = 13
+            ul_dcch_type = 13
             rrcconnection_reconfiguration = 14
             rrcconnection_reconfiguration_v8m0_ies = 15
             rrcconnection_reconfiguration_complete = 16
@@ -2167,94 +2167,94 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V18PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V18PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V18PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
-                                == LteRrcOtaPacket.V18PduType.PduType.pcch_message_type
+                                == LteRrcOtaPacket.V18PduType.PduType.pcch_type
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V18PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                         if self.pdu_type
-                                        == LteRrcOtaPacket.V18PduType.PduType.dl_ccch_message_type
+                                        == LteRrcOtaPacket.V18PduType.PduType.dl_ccch_type
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V18PduType.PduType.dl_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                 if self.pdu_type
-                                                == LteRrcOtaPacket.V18PduType.PduType.dl_dcch_message_type
+                                                == LteRrcOtaPacket.V18PduType.PduType.dl_dcch_type
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V18PduType.PduType.ul_ccch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_message_type
+                                                        == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_type
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                             if self.pdu_type
                                                             == LteRrcOtaPacket.V18PduType.PduType.ul_dcch
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_message_type
+                                                                == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_type
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                                     if self.pdu_type
                                                                     == LteRrcOtaPacket.V18PduType.PduType.els_dl_ccch
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                         if self.pdu_type
                                                                         == LteRrcOtaPacket.V18PduType.PduType.els_dl_dcch
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                             if self.pdu_type
                                                                             == LteRrcOtaPacket.V18PduType.PduType.els_ul_dcch
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                                                                                 if self.pdu_type
                                                                                 == LteRrcOtaPacket.V18PduType.PduType.bcch_bch_mf
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V18PduType.PduType.bcch_dl_sch_mf
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V18PduType.PduType.pcch_mf
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                                                             if self.pdu_type
                                                                                             == LteRrcOtaPacket.V18PduType.PduType.dl_ccch_mf
                                                                                             else (
-                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                                 if self.pdu_type
                                                                                                 == LteRrcOtaPacket.V18PduType.PduType.dl_dcch_mf
                                                                                                 else (
-                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                                                                     if self.pdu_type
                                                                                                     == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_mf
                                                                                                     else (
-                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                                         if self.pdu_type
                                                                                                         == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_mf
                                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -2295,14 +2295,14 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 (self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.ul_ccch)
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_message_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_ccch_type
                 )
                 or (
                     self.pdu_type == LteRrcOtaPacket.V18PduType.PduType.ul_dcch
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_message_type
+                    == LteRrcOtaPacket.V18PduType.PduType.ul_dcch_type
                 )
                 or (
                     self.pdu_type
@@ -2409,94 +2409,89 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V19PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
-                    == LteRrcOtaPacket.V19PduType.PduType.bcch_mbms
+                    == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
-                        == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch
+                        == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_mbms
                             if self.pdu_type
-                            == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_br
+                            == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_mbms
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                                 if self.pdu_type
-                                == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_mbms
+                                == LteRrcOtaPacket.V19PduType.PduType.mcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                     if self.pdu_type
-                                    == LteRrcOtaPacket.V19PduType.PduType.mcch
+                                    == LteRrcOtaPacket.V19PduType.PduType.pcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                         if self.pdu_type
-                                        == LteRrcOtaPacket.V19PduType.PduType.pcch
+                                        == LteRrcOtaPacket.V19PduType.PduType.dl_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                             if self.pdu_type
-                                            == LteRrcOtaPacket.V19PduType.PduType.dl_ccch
+                                            == LteRrcOtaPacket.V19PduType.PduType.dl_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                 if self.pdu_type
-                                                == LteRrcOtaPacket.V19PduType.PduType.dl_dcch
+                                                == LteRrcOtaPacket.V19PduType.PduType.ul_ccch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                     if self.pdu_type
-                                                    == LteRrcOtaPacket.V19PduType.PduType.ul_ccch
+                                                    == LteRrcOtaPacket.V19PduType.PduType.ul_dcch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V19PduType.PduType.ul_dcch
+                                                        == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_r13
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_r13
+                                                            == LteRrcOtaPacket.V19PduType.PduType.bcch_bch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V19PduType.PduType.bcch_bch_nb
+                                                                == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V19PduType.PduType.bcch_dl_sch_nb
+                                                                    == LteRrcOtaPacket.V19PduType.PduType.pcch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V19PduType.PduType.pcch_nb
+                                                                        == LteRrcOtaPacket.V19PduType.PduType.dl_ccch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V19PduType.PduType.dl_ccch_nb
+                                                                            == LteRrcOtaPacket.V19PduType.PduType.dl_dcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V19PduType.PduType.dl_dcch_nb
+                                                                                == LteRrcOtaPacket.V19PduType.PduType.ul_ccch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                                     if self.pdu_type
-                                                                                    == LteRrcOtaPacket.V19PduType.PduType.ul_ccch_nb
+                                                                                    == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_nb
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                         if self.pdu_type
-                                                                                        == LteRrcOtaPacket.V19PduType.PduType.sc_mcch_nb
+                                                                                        == LteRrcOtaPacket.V19PduType.PduType.ul_dcch_nb
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                             if self.pdu_type
-                                                                                            == LteRrcOtaPacket.V19PduType.PduType.ul_dcch_nb
+                                                                                            == LteRrcOtaPacket.V19PduType.PduType.els_dl_dcch
                                                                                             else (
-                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                                 if self.pdu_type
-                                                                                                == LteRrcOtaPacket.V19PduType.PduType.els_dl_dcch
-                                                                                                else (
-                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
-                                                                                                    if self.pdu_type
-                                                                                                    == LteRrcOtaPacket.V19PduType.PduType.els_ul_dcch
-                                                                                                    else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
-                                                                                                )
+                                                                                                == LteRrcOtaPacket.V19PduType.PduType.els_ul_dcch
+                                                                                                else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
                                                                                             )
                                                                                         )
                                                                                     )
@@ -2587,26 +2582,26 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                 if self.pdu_type
                 == LteRrcOtaPacket.V1PduType.PduType.bcch_dl_sch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                     if self.pdu_type == LteRrcOtaPacket.V1PduType.PduType.pcch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                         if self.pdu_type
                         == LteRrcOtaPacket.V1PduType.PduType.dl_ccch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V1PduType.PduType.dl_dcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V1PduType.PduType.ul_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V1PduType.PduType.ul_dcch
                                     else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -2730,78 +2725,78 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V20PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
                         == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V20PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V20PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V20PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V20PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V20PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V20PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V20PduType.PduType.bcch_bch_nb
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V20PduType.PduType.bcch_dl_sch_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                             if self.pdu_type
                                                             == LteRrcOtaPacket.V20PduType.PduType.pcch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                 if self.pdu_type
                                                                 == LteRrcOtaPacket.V20PduType.PduType.dl_ccch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                     if self.pdu_type
                                                                     == LteRrcOtaPacket.V20PduType.PduType.dl_dcch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                         if self.pdu_type
                                                                         == LteRrcOtaPacket.V20PduType.PduType.ul_ccch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                             if self.pdu_type
                                                                             == LteRrcOtaPacket.V20PduType.PduType.sc_mcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                 if self.pdu_type
                                                                                 == LteRrcOtaPacket.V20PduType.PduType.ul_dcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V20PduType.PduType.els_dl_dcch
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V20PduType.PduType.els_ul_dcch
                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -2863,15 +2858,15 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             bcch_dl_sch = 2
             mcch = 3
             pcch = 4
-            pcch_message_type = 5
+            pcch_type = 5
             dl_ccch = 6
-            dl_ccch_message_type = 7
+            dl_ccch_type = 7
             dl_dcch = 8
-            dl_dcch_message_type = 9
+            dl_dcch_type = 9
             ul_ccch = 10
-            ul_ccch_message_type = 11
+            ul_ccch_type = 11
             ul_dcch = 12
-            ul_dcch_message_type = 13
+            ul_dcch_type = 13
             rrcconnection_reconfiguration = 14
             rrcconnection_reconfiguration_v8m0_ies = 15
             rrcconnection_reconfiguration_complete = 16
@@ -2943,94 +2938,94 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V21PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V21PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V21PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
-                                == LteRrcOtaPacket.V21PduType.PduType.pcch_message_type
+                                == LteRrcOtaPacket.V21PduType.PduType.pcch_type
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V21PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                         if self.pdu_type
-                                        == LteRrcOtaPacket.V21PduType.PduType.dl_ccch_message_type
+                                        == LteRrcOtaPacket.V21PduType.PduType.dl_ccch_type
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V21PduType.PduType.dl_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                 if self.pdu_type
-                                                == LteRrcOtaPacket.V21PduType.PduType.dl_dcch_message_type
+                                                == LteRrcOtaPacket.V21PduType.PduType.dl_dcch_type
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V21PduType.PduType.ul_ccch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_message_type
+                                                        == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_type
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                             if self.pdu_type
                                                             == LteRrcOtaPacket.V21PduType.PduType.ul_dcch
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_message_type
+                                                                == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_type
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                                     if self.pdu_type
                                                                     == LteRrcOtaPacket.V21PduType.PduType.els_dl_ccch
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                         if self.pdu_type
                                                                         == LteRrcOtaPacket.V21PduType.PduType.els_dl_dcch
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                             if self.pdu_type
                                                                             == LteRrcOtaPacket.V21PduType.PduType.els_ul_dcch
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                                                                                 if self.pdu_type
                                                                                 == LteRrcOtaPacket.V21PduType.PduType.bcch_bch_mf
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V21PduType.PduType.bcch_dl_sch_mf
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V21PduType.PduType.pcch_mf
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                                                                             if self.pdu_type
                                                                                             == LteRrcOtaPacket.V21PduType.PduType.dl_ccch_mf
                                                                                             else (
-                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                                 if self.pdu_type
                                                                                                 == LteRrcOtaPacket.V21PduType.PduType.dl_dcch_mf
                                                                                                 else (
-                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                                                                     if self.pdu_type
                                                                                                     == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_mf
                                                                                                     else (
-                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                                         if self.pdu_type
                                                                                                         == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_mf
                                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -3071,14 +3066,14 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 (self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.ul_ccch)
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_message_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_ccch_type
                 )
                 or (
                     self.pdu_type == LteRrcOtaPacket.V21PduType.PduType.ul_dcch
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_message_type
+                    == LteRrcOtaPacket.V21PduType.PduType.ul_dcch_type
                 )
                 or (
                     self.pdu_type
@@ -3167,42 +3162,42 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V22PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V22PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V22PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V22PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V22PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V22PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V22PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V22PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V22PduType.PduType.els_dl_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V22PduType.PduType.els_ul_dcch
                                                     else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -3245,7 +3240,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
             bcch_dl_sch = 2
-            bcch_dl_sch_message_br = 3
+            bcch_dl_sch_br = 3
             mcch = 4
             pcch = 5
             dl_ccch = 6
@@ -3288,14 +3283,14 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             horizontal_velocity = 43
             polygon = 44
             measurement_reference_time = 45
-            bcch_bch_message_nb = 46
-            bcch_dl_sch_message_nb = 47
-            pcch_message_nb = 48
-            dl_ccch_message_nb = 49
-            dl_dcch_message_nb = 50
-            ul_ccch_message_nb = 51
-            sc_mcch_message_nb = 52
-            ul_dcch_message_nb = 53
+            bcch_bch_nb = 46
+            bcch_dl_sch_nb = 47
+            pcch_nb = 48
+            dl_ccch_nb = 49
+            dl_dcch_nb = 50
+            ul_ccch_nb = 51
+            sc_mcch_nb = 52
+            ul_dcch_nb = 53
             els_sib1_signature = 54
             els_system_information_block_type1 = 55
             els_dl_dcch = 56
@@ -3329,78 +3324,78 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V23PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
-                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_message_br
+                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V23PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V23PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V23PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V23PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V23PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V23PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                     if self.pdu_type
-                                                    == LteRrcOtaPacket.V23PduType.PduType.bcch_bch_message_nb
+                                                    == LteRrcOtaPacket.V23PduType.PduType.bcch_bch_nb
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_message_nb
+                                                        == LteRrcOtaPacket.V23PduType.PduType.bcch_dl_sch_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V23PduType.PduType.pcch_message_nb
+                                                            == LteRrcOtaPacket.V23PduType.PduType.pcch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V23PduType.PduType.dl_ccch_message_nb
+                                                                == LteRrcOtaPacket.V23PduType.PduType.dl_ccch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V23PduType.PduType.dl_dcch_message_nb
+                                                                    == LteRrcOtaPacket.V23PduType.PduType.dl_dcch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_message_nb
+                                                                        == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V23PduType.PduType.sc_mcch_message_nb
+                                                                            == LteRrcOtaPacket.V23PduType.PduType.sc_mcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_message_nb
+                                                                                == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V23PduType.PduType.els_dl_dcch
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V23PduType.PduType.els_ul_dcch
                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -3440,11 +3435,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V23PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V23PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -3460,7 +3455,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
             bcch_dl_sch = 2
-            bcch_dl_sch_message_br = 3
+            bcch_dl_sch_br = 3
             mcch = 4
             pcch = 5
             dl_ccch = 6
@@ -3504,14 +3499,14 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             horizontal_velocity = 44
             polygon = 45
             measurement_reference_time = 46
-            bcch_bch_message_nb = 47
-            bcch_dl_sch_message_nb = 48
-            pcch_message_nb = 49
-            dl_ccch_message_nb = 50
-            dl_dcch_message_nb = 51
-            ul_ccch_message_nb = 52
-            sc_mcch_message_nb = 53
-            ul_dcch_message_nb = 54
+            bcch_bch_nb = 47
+            bcch_dl_sch_nb = 48
+            pcch_nb = 49
+            dl_ccch_nb = 50
+            dl_dcch_nb = 51
+            ul_ccch_nb = 52
+            sc_mcch_nb = 53
+            ul_dcch_nb = 54
             els_sib1_signature = 55
             els_system_information_block_type1 = 56
             els_dl_dcch = 57
@@ -3545,78 +3540,78 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V24PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
-                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_message_br
+                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V24PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V24PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V24PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V24PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V24PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V24PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                     if self.pdu_type
-                                                    == LteRrcOtaPacket.V24PduType.PduType.bcch_bch_message_nb
+                                                    == LteRrcOtaPacket.V24PduType.PduType.bcch_bch_nb
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_message_nb
+                                                        == LteRrcOtaPacket.V24PduType.PduType.bcch_dl_sch_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V24PduType.PduType.pcch_message_nb
+                                                            == LteRrcOtaPacket.V24PduType.PduType.pcch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V24PduType.PduType.dl_ccch_message_nb
+                                                                == LteRrcOtaPacket.V24PduType.PduType.dl_ccch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V24PduType.PduType.dl_dcch_message_nb
+                                                                    == LteRrcOtaPacket.V24PduType.PduType.dl_dcch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_message_nb
+                                                                        == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V24PduType.PduType.sc_mcch_message_nb
+                                                                            == LteRrcOtaPacket.V24PduType.PduType.sc_mcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_message_nb
+                                                                                == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                     if self.pdu_type
                                                                                     == LteRrcOtaPacket.V24PduType.PduType.els_dl_dcch
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V24PduType.PduType.els_ul_dcch
                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -3656,11 +3651,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V24PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V24PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -3676,7 +3671,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
             bcch_dl_sch = 2
-            bcch_dl_sch_message_br = 3
+            bcch_dl_sch_br = 3
             mcch = 4
             pcch = 5
             dl_ccch = 6
@@ -3720,15 +3715,15 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             horizontal_velocity = 44
             polygon = 45
             measurement_reference_time = 46
-            bcch_bch_message_nb = 47
-            bcch_bch_message_tdd_nb = 48
-            bcch_dl_sch_message_nb = 49
-            pcch_message_nb = 50
-            dl_ccch_message_nb = 51
-            dl_dcch_message_nb = 52
-            ul_ccch_message_nb = 53
-            sc_mcch_message_nb = 54
-            ul_dcch_message_nb = 55
+            bcch_bch_nb = 47
+            bcch_bch_tdd_nb = 48
+            bcch_dl_sch_nb = 49
+            pcch_nb = 50
+            dl_ccch_nb = 51
+            dl_dcch_nb = 52
+            ul_ccch_nb = 53
+            sc_mcch_nb = 54
+            ul_dcch_nb = 55
             ue_capability_nb_ext_r14_ies = 56
             els_sib1_signature = 57
             els_system_information_block_type1 = 58
@@ -3763,82 +3758,82 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V25PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                         if self.pdu_type
-                        == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_message_br
+                        == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_br
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V25PduType.PduType.mcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V25PduType.PduType.pcch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V25PduType.PduType.dl_ccch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V25PduType.PduType.dl_dcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V25PduType.PduType.ul_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V25PduType.PduType.ul_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                     if self.pdu_type
-                                                    == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_message_nb
+                                                    == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_nb
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_tdd_nb
                                                         if self.pdu_type
-                                                        == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_message_tdd_nb
+                                                        == LteRrcOtaPacket.V25PduType.PduType.bcch_bch_tdd_nb
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_message_nb
+                                                            == LteRrcOtaPacket.V25PduType.PduType.bcch_dl_sch_nb
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V25PduType.PduType.pcch_message_nb
+                                                                == LteRrcOtaPacket.V25PduType.PduType.pcch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V25PduType.PduType.dl_ccch_message_nb
+                                                                    == LteRrcOtaPacket.V25PduType.PduType.dl_ccch_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V25PduType.PduType.dl_dcch_message_nb
+                                                                        == LteRrcOtaPacket.V25PduType.PduType.dl_dcch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_message_nb
+                                                                            == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V25PduType.PduType.sc_mcch_message_nb
+                                                                                == LteRrcOtaPacket.V25PduType.PduType.sc_mcch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                     if self.pdu_type
-                                                                                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_message_nb
+                                                                                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_nb
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                         if self.pdu_type
                                                                                         == LteRrcOtaPacket.V25PduType.PduType.els_dl_dcch
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                             if self.pdu_type
                                                                                             == LteRrcOtaPacket.V25PduType.PduType.els_ul_dcch
                                                                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -3879,11 +3874,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V25PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V25PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -3898,17 +3893,17 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
     class V26PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
-            bcch_bch_message_mbms = 2
+            bcch_bch_mbms = 2
             bcch_dl_sch = 3
-            bcch_dl_sch_message_br = 4
-            bcch_dl_sch_message_mbms = 5
+            bcch_dl_sch_br = 4
+            bcch_dl_sch_mbms = 5
             mcch = 6
             pcch = 7
             dl_ccch = 8
             dl_dcch = 9
             ul_ccch = 10
             ul_dcch = 11
-            sc_mcch_message_r13 = 12
+            sc_mcch_r13 = 12
             rrcconnection_reconfiguration = 13
             rrcconnection_reconfiguration_v8m0_ies = 14
             rrcconnection_reconfiguration_complete = 15
@@ -3940,15 +3935,15 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             horizontal_velocity = 41
             polygon = 42
             measurement_reference_time = 43
-            bcch_bch_message_nb = 44
-            bcch_bch_message_tdd_nb = 45
-            bcch_dl_sch_message_nb = 46
-            pcch_message_nb = 47
-            dl_ccch_message_nb = 48
-            dl_dcch_message_nb = 49
-            ul_ccch_message_nb = 50
-            sc_mcch_message_nb = 51
-            ul_dcch_message_nb = 52
+            bcch_bch_nb = 44
+            bcch_bch_tdd_nb = 45
+            bcch_dl_sch_nb = 46
+            pcch_nb = 47
+            dl_ccch_nb = 48
+            dl_dcch_nb = 49
+            ul_ccch_nb = 50
+            sc_mcch_nb = 51
+            ul_dcch_nb = 52
             ue_capability_nb_ext_r14_ies = 53
             els_sib1_signature = 54
             els_system_information_block_type1 = 55
@@ -3983,94 +3978,94 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V26PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_mbms
                     if self.pdu_type
-                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_mbms
+                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_mbms
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                         if self.pdu_type
                         == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                             if self.pdu_type
-                            == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_br
+                            == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_br
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_mbms
                                 if self.pdu_type
-                                == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_mbms
+                                == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_mbms
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V26PduType.PduType.mcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V26PduType.PduType.pcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V26PduType.PduType.dl_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V26PduType.PduType.dl_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V26PduType.PduType.ul_ccch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V26PduType.PduType.ul_dcch
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_message_r13
+                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_r13
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_nb
+                                                                == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_tdd_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_message_tdd_nb
+                                                                    == LteRrcOtaPacket.V26PduType.PduType.bcch_bch_tdd_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_message_nb
+                                                                        == LteRrcOtaPacket.V26PduType.PduType.bcch_dl_sch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V26PduType.PduType.pcch_message_nb
+                                                                            == LteRrcOtaPacket.V26PduType.PduType.pcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V26PduType.PduType.dl_ccch_message_nb
+                                                                                == LteRrcOtaPacket.V26PduType.PduType.dl_ccch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                                     if self.pdu_type
-                                                                                    == LteRrcOtaPacket.V26PduType.PduType.dl_dcch_message_nb
+                                                                                    == LteRrcOtaPacket.V26PduType.PduType.dl_dcch_nb
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                                         if self.pdu_type
-                                                                                        == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_message_nb
+                                                                                        == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_nb
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                                             if self.pdu_type
-                                                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_message_nb
+                                                                                            == LteRrcOtaPacket.V26PduType.PduType.sc_mcch_nb
                                                                                             else (
-                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                                 if self.pdu_type
-                                                                                                == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_message_nb
+                                                                                                == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_nb
                                                                                                 else (
-                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                                     if self.pdu_type
                                                                                                     == LteRrcOtaPacket.V26PduType.PduType.els_dl_dcch
                                                                                                     else (
-                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                                         if self.pdu_type
                                                                                                         == LteRrcOtaPacket.V26PduType.PduType.els_ul_dcch
                                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4114,11 +4109,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V26PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V26PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -4133,17 +4128,17 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
     class V27PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
-            bcch_bch_message_mbms = 2
+            bcch_bch_mbms = 2
             bcch_dl_sch = 3
-            bcch_dl_sch_message_br = 4
-            bcch_dl_sch_message_mbms = 5
+            bcch_dl_sch_br = 4
+            bcch_dl_sch_mbms = 5
             mcch = 6
             pcch = 7
             dl_ccch = 8
             dl_dcch = 9
             ul_ccch = 10
             ul_dcch = 11
-            sc_mcch_message_r13 = 12
+            sc_mcch_r13 = 12
             rrcconnection_reconfiguration = 13
             rrcconnection_reconfiguration_v8m0_ies = 14
             rrcconnection_reconfiguration_complete = 15
@@ -4179,15 +4174,15 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
             horizontal_velocity = 45
             polygon = 46
             measurement_reference_time = 47
-            bcch_bch_message_nb = 48
-            bcch_bch_message_tdd_nb = 49
-            bcch_dl_sch_message_nb = 50
-            pcch_message_nb = 51
-            dl_ccch_message_nb = 52
-            dl_dcch_message_nb = 53
-            ul_ccch_message_nb = 54
-            sc_mcch_message_nb = 55
-            ul_dcch_message_nb = 56
+            bcch_bch_nb = 48
+            bcch_bch_tdd_nb = 49
+            bcch_dl_sch_nb = 50
+            pcch_nb = 51
+            dl_ccch_nb = 52
+            dl_dcch_nb = 53
+            ul_ccch_nb = 54
+            sc_mcch_nb = 55
+            ul_dcch_nb = 56
             ue_capability_nb_ext_r14_ies = 57
             els_sib1_signature = 58
             els_system_information_block_type1 = 59
@@ -4222,94 +4217,94 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V27PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_mbms
                     if self.pdu_type
-                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_mbms
+                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_mbms
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                         if self.pdu_type
                         == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_br
                             if self.pdu_type
-                            == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_br
+                            == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_br
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_mbms
                                 if self.pdu_type
-                                == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_mbms
+                                == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_mbms
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V27PduType.PduType.mcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V27PduType.PduType.pcch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V27PduType.PduType.dl_ccch
                                             else (
-                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                 if self.pdu_type
                                                 == LteRrcOtaPacket.V27PduType.PduType.dl_dcch
                                                 else (
-                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                                     if self.pdu_type
                                                     == LteRrcOtaPacket.V27PduType.PduType.ul_ccch
                                                     else (
-                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                         if self.pdu_type
                                                         == LteRrcOtaPacket.V27PduType.PduType.ul_dcch
                                                         else (
-                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch
                                                             if self.pdu_type
-                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_message_r13
+                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_r13
                                                             else (
-                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_nb
                                                                 if self.pdu_type
-                                                                == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_nb
+                                                                == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_nb
                                                                 else (
-                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch_tdd_nb
                                                                     if self.pdu_type
-                                                                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_message_tdd_nb
+                                                                    == LteRrcOtaPacket.V27PduType.PduType.bcch_bch_tdd_nb
                                                                     else (
-                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch_nb
                                                                         if self.pdu_type
-                                                                        == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_message_nb
+                                                                        == LteRrcOtaPacket.V27PduType.PduType.bcch_dl_sch_nb
                                                                         else (
-                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch_nb
                                                                             if self.pdu_type
-                                                                            == LteRrcOtaPacket.V27PduType.PduType.pcch_message_nb
+                                                                            == LteRrcOtaPacket.V27PduType.PduType.pcch_nb
                                                                             else (
-                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch_nb
                                                                                 if self.pdu_type
-                                                                                == LteRrcOtaPacket.V27PduType.PduType.dl_ccch_message_nb
+                                                                                == LteRrcOtaPacket.V27PduType.PduType.dl_ccch_nb
                                                                                 else (
-                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch_nb
                                                                                     if self.pdu_type
-                                                                                    == LteRrcOtaPacket.V27PduType.PduType.dl_dcch_message_nb
+                                                                                    == LteRrcOtaPacket.V27PduType.PduType.dl_dcch_nb
                                                                                     else (
-                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch_nb
                                                                                         if self.pdu_type
-                                                                                        == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_message_nb
+                                                                                        == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_nb
                                                                                         else (
-                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                                                                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.sc_mcch_nb
                                                                                             if self.pdu_type
-                                                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_message_nb
+                                                                                            == LteRrcOtaPacket.V27PduType.PduType.sc_mcch_nb
                                                                                             else (
-                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch_nb
                                                                                                 if self.pdu_type
-                                                                                                == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_message_nb
+                                                                                                == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_nb
                                                                                                 else (
-                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                                                                                     if self.pdu_type
                                                                                                     == LteRrcOtaPacket.V27PduType.PduType.els_dl_dcch
                                                                                                     else (
-                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                                                                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                                                                                         if self.pdu_type
                                                                                                         == LteRrcOtaPacket.V27PduType.PduType.els_ul_dcch
                                                                                                         else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4353,11 +4348,11 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_message_nb
+                    == LteRrcOtaPacket.V27PduType.PduType.ul_ccch_nb
                 )
                 or (
                     self.pdu_type
-                    == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_message_nb
+                    == LteRrcOtaPacket.V27PduType.PduType.ul_dcch_nb
                 )
                 or (
                     self.pdu_type
@@ -4411,34 +4406,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V2PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V2PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V2PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V2PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V2PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V2PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V2PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V2PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4513,34 +4508,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V3PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V3PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V3PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V3PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V3PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V3PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V3PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V3PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4616,34 +4611,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V4PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V4PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V4PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V4PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V4PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V4PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V4PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V4PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4719,34 +4714,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V6PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V6PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V6PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V6PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V6PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V6PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V6PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V6PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4822,34 +4817,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V7PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V7PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V7PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V7PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V7PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V7PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V7PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V7PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -4926,34 +4921,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V8PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V8PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V8PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V8PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V8PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V8PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V8PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V8PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown
@@ -5037,34 +5032,34 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 return self._m_gsmtap_subtype
 
             self._m_gsmtap_subtype = (
-                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_bch
                 if self.pdu_type == LteRrcOtaPacket.V9PduType.PduType.bcch_bch
                 else (
-                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_bcch
+                    gsmtap_v2.GsmtapV2.LteRrcSubtype.bcch_dl_sch
                     if self.pdu_type
                     == LteRrcOtaPacket.V9PduType.PduType.bcch_dl_sch
                     else (
-                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_mcch
+                        gsmtap_v2.GsmtapV2.LteRrcSubtype.mcch
                         if self.pdu_type
                         == LteRrcOtaPacket.V9PduType.PduType.mcch
                         else (
-                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_pcch
+                            gsmtap_v2.GsmtapV2.LteRrcSubtype.pcch
                             if self.pdu_type
                             == LteRrcOtaPacket.V9PduType.PduType.pcch
                             else (
-                                gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_ccch
                                 if self.pdu_type
                                 == LteRrcOtaPacket.V9PduType.PduType.dl_ccch
                                 else (
-                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                    gsmtap_v2.GsmtapV2.LteRrcSubtype.dl_dcch
                                     if self.pdu_type
                                     == LteRrcOtaPacket.V9PduType.PduType.dl_dcch
                                     else (
-                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_ccch
+                                        gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_ccch
                                         if self.pdu_type
                                         == LteRrcOtaPacket.V9PduType.PduType.ul_ccch
                                         else (
-                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ch_dcch
+                                            gsmtap_v2.GsmtapV2.LteRrcSubtype.ul_dcch
                                             if self.pdu_type
                                             == LteRrcOtaPacket.V9PduType.PduType.ul_dcch
                                             else gsmtap_v2.GsmtapV2.LteRrcSubtype.unknown

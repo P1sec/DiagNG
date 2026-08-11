@@ -125,12 +125,12 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -162,14 +162,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -204,14 +204,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -247,14 +247,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -290,14 +290,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -333,14 +333,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -377,14 +377,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -428,14 +428,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -479,14 +479,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -540,14 +540,14 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -612,17 +612,17 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -683,17 +683,17 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -757,18 +757,18 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -824,13 +824,13 @@ types:
         37: ue_eutra_cap_v10j0_ies
         38: sl_txpoolid_r13
         39: var_short_mac_input
-        40: bcch_bch_message_nb
-        41: bcch_dl_sch_message_nb
-        42: pcch_message_nb
-        43: dl_ccch_message_nb
-        44: dl_dcch_message_nb
-        45: ul_ccch_message_nb
-        46: ul_dcch_message_nb
+        40: bcch_bch_nb
+        41: bcch_dl_sch_nb
+        42: pcch_nb
+        43: dl_ccch_nb
+        44: dl_dcch_nb
+        45: ul_ccch_nb
+        46: ul_dcch_nb
         47: els_sib1_signature
         48: els_sysinfo_block_type1
         49: nhn_plmn_identity_list
@@ -841,34 +841,34 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::sc_mcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v16_pdu_type:
@@ -918,13 +918,13 @@ types:
         37: ue_eutra_cap_v10j0_ies
         38: sl_txpoolid_r13
         39: var_short_mac_input
-        40: bcch_bch_message_nb
-        41: bcch_dl_sch_message_nb
-        42: pcch_message_nb
-        43: dl_ccch_message_nb
-        44: dl_dcch_message_nb
-        45: ul_ccch_message_nb
-        46: ul_dcch_message_nb
+        40: bcch_bch_nb
+        41: bcch_dl_sch_nb
+        42: pcch_nb
+        43: dl_ccch_nb
+        44: dl_dcch_nb
+        45: ul_ccch_nb
+        46: ul_dcch_nb
         47: els_sib1_signature
         48: els_sysinfo_block_type1
         49: els_dl_dcch
@@ -933,33 +933,33 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::sc_mcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v17_pdu_type:
@@ -1013,17 +1013,17 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -1044,15 +1044,15 @@ types:
         2: bcch_dl_sch
         3: mcch
         4: pcch
-        5: pcch_message_type
+        5: pcch_type
         6: dl_ccch
-        7: dl_ccch_message_type
+        7: dl_ccch_type
         8: dl_dcch
-        9: dl_dcch_message_type
+        9: dl_dcch_type
         10: ul_ccch
-        11: ul_ccch_message_type
+        11: ul_ccch_type
         12: ul_dcch
-        13: ul_dcch_message_type
+        13: ul_dcch_type
         14: rrcconnection_reconfiguration
         15: rrcconnection_reconfiguration_v8m0_ies
         16: rrcconnection_reconfiguration_complete
@@ -1098,37 +1098,37 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::pcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_ccch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::dl_dcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_ccch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_dcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_mf ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_mf ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::pcch_type ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_ccch_type ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::dl_dcch_type ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_ccch_type ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::ul_dcch_type ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_mf ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch_mf ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::pcch_mf ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch_mf ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch_mf ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
-          or pdu_type == pdu_type::ul_ccch_message_type
+          or pdu_type == pdu_type::ul_ccch_type
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_dcch_message_type
+          or pdu_type == pdu_type::ul_dcch_type
           or pdu_type == pdu_type::els_ul_dcch
           or pdu_type == pdu_type::ul_ccch_mf
           or pdu_type == pdu_type::ul_dcch_mf
@@ -1201,28 +1201,27 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::bcch_dl_sch_mbms ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_mbms
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::sc_mcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -1310,25 +1309,25 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -1351,15 +1350,15 @@ types:
         2: bcch_dl_sch
         3: mcch
         4: pcch
-        5: pcch_message_type
+        5: pcch_type
         6: dl_ccch
-        7: dl_ccch_message_type
+        7: dl_ccch_type
         8: dl_dcch
-        9: dl_dcch_message_type
+        9: dl_dcch_type
         10: ul_ccch
-        11: ul_ccch_message_type
+        11: ul_ccch_type
         12: ul_dcch
-        13: ul_dcch_message_type
+        13: ul_dcch_type
         14: rrcconnection_reconfiguration
         15: rrcconnection_reconfiguration_v8m0_ies
         16: rrcconnection_reconfiguration_complete
@@ -1406,37 +1405,37 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::pcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_ccch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::dl_dcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_ccch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_dcch_message_type ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_mf ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_mf ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::pcch_type ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_ccch_type ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::dl_dcch_type ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_ccch_type ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::ul_dcch_type ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_mf ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch_mf ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::pcch_mf ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch_mf ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch_mf ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch_mf ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch_mf ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
-          or pdu_type == pdu_type::ul_ccch_message_type
+          or pdu_type == pdu_type::ul_ccch_type
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_dcch_message_type
+          or pdu_type == pdu_type::ul_dcch_type
           or pdu_type == pdu_type::els_ul_dcch
           or pdu_type == pdu_type::ul_ccch_mf
           or pdu_type == pdu_type::ul_dcch_mf
@@ -1491,16 +1490,16 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
@@ -1519,7 +1518,7 @@ types:
       pdu_type:
         1: bcch_bch
         2: bcch_dl_sch
-        3: bcch_dl_sch_message_br
+        3: bcch_dl_sch_br
         4: mcch
         5: pcch
         6: dl_ccch
@@ -1562,14 +1561,14 @@ types:
         43: horizontal_velocity
         44: polygon
         45: measurement_reference_time
-        46: bcch_bch_message_nb
-        47: bcch_dl_sch_message_nb
-        48: pcch_message_nb
-        49: dl_ccch_message_nb
-        50: dl_dcch_message_nb
-        51: ul_ccch_message_nb
-        52: sc_mcch_message_nb
-        53: ul_dcch_message_nb
+        46: bcch_bch_nb
+        47: bcch_dl_sch_nb
+        48: pcch_nb
+        49: dl_ccch_nb
+        50: dl_dcch_nb
+        51: ul_ccch_nb
+        52: sc_mcch_nb
+        53: ul_dcch_nb
         54: els_sib1_signature
         55: els_system_information_block_type1
         56: els_dl_dcch
@@ -1578,33 +1577,33 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v24_pdu_type:
@@ -1617,7 +1616,7 @@ types:
       pdu_type:
         1: bcch_bch
         2: bcch_dl_sch
-        3: bcch_dl_sch_message_br
+        3: bcch_dl_sch_br
         4: mcch
         5: pcch
         6: dl_ccch
@@ -1661,14 +1660,14 @@ types:
         44: horizontal_velocity
         45: polygon
         46: measurement_reference_time
-        47: bcch_bch_message_nb
-        48: bcch_dl_sch_message_nb
-        49: pcch_message_nb
-        50: dl_ccch_message_nb
-        51: dl_dcch_message_nb
-        52: ul_ccch_message_nb
-        53: sc_mcch_message_nb
-        54: ul_dcch_message_nb
+        47: bcch_bch_nb
+        48: bcch_dl_sch_nb
+        49: pcch_nb
+        50: dl_ccch_nb
+        51: dl_dcch_nb
+        52: ul_ccch_nb
+        53: sc_mcch_nb
+        54: ul_dcch_nb
         55: els_sib1_signature
         56: els_system_information_block_type1
         57: els_dl_dcch
@@ -1677,33 +1676,33 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v25_pdu_type:
@@ -1716,7 +1715,7 @@ types:
       pdu_type:
         1: bcch_bch
         2: bcch_dl_sch
-        3: bcch_dl_sch_message_br
+        3: bcch_dl_sch_br
         4: mcch
         5: pcch
         6: dl_ccch
@@ -1760,15 +1759,15 @@ types:
         44: horizontal_velocity
         45: polygon
         46: measurement_reference_time
-        47: bcch_bch_message_nb
-        48: bcch_bch_message_tdd_nb
-        49: bcch_dl_sch_message_nb
-        50: pcch_message_nb
-        51: dl_ccch_message_nb
-        52: dl_dcch_message_nb
-        53: ul_ccch_message_nb
-        54: sc_mcch_message_nb
-        55: ul_dcch_message_nb
+        47: bcch_bch_nb
+        48: bcch_bch_tdd_nb
+        49: bcch_dl_sch_nb
+        50: pcch_nb
+        51: dl_ccch_nb
+        52: dl_dcch_nb
+        53: ul_ccch_nb
+        54: sc_mcch_nb
+        55: ul_dcch_nb
         56: ue_capability_nb_ext_r14_ies
         57: els_sib1_signature
         58: els_system_information_block_type1
@@ -1778,34 +1777,34 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_bch_message_tdd_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_bch_tdd_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_tdd_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v26_pdu_type:
@@ -1817,17 +1816,17 @@ types:
     enums:
       pdu_type:
         1: bcch_bch
-        2: bcch_bch_message_mbms
+        2: bcch_bch_mbms
         3: bcch_dl_sch
-        4: bcch_dl_sch_message_br
-        5: bcch_dl_sch_message_mbms
+        4: bcch_dl_sch_br
+        5: bcch_dl_sch_mbms
         6: mcch
         7: pcch
         8: dl_ccch
         9: dl_dcch
         10: ul_ccch
         11: ul_dcch
-        12: sc_mcch_message_r13
+        12: sc_mcch_r13
         13: rrcconnection_reconfiguration
         14: rrcconnection_reconfiguration_v8m0_ies
         15: rrcconnection_reconfiguration_complete
@@ -1859,15 +1858,15 @@ types:
         41: horizontal_velocity
         42: polygon
         43: measurement_reference_time
-        44: bcch_bch_message_nb
-        45: bcch_bch_message_tdd_nb
-        46: bcch_dl_sch_message_nb
-        47: pcch_message_nb
-        48: dl_ccch_message_nb
-        49: dl_dcch_message_nb
-        50: ul_ccch_message_nb
-        51: sc_mcch_message_nb
-        52: ul_dcch_message_nb
+        44: bcch_bch_nb
+        45: bcch_bch_tdd_nb
+        46: bcch_dl_sch_nb
+        47: pcch_nb
+        48: dl_ccch_nb
+        49: dl_dcch_nb
+        50: ul_ccch_nb
+        51: sc_mcch_nb
+        52: ul_dcch_nb
         53: ue_capability_nb_ext_r14_ies
         54: els_sib1_signature
         55: els_system_information_block_type1
@@ -1877,37 +1876,37 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_bch_message_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::sc_mcch_message_r13 ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_bch_message_tdd_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_bch_mbms ? gsmtap_v2::lte_rrc_subtype::bcch_bch_mbms
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::bcch_dl_sch_mbms ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_mbms
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::sc_mcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_bch_tdd_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_tdd_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 
   v27_pdu_type:
@@ -1919,17 +1918,17 @@ types:
     enums:
       pdu_type:
         1: bcch_bch
-        2: bcch_bch_message_mbms
+        2: bcch_bch_mbms
         3: bcch_dl_sch
-        4: bcch_dl_sch_message_br
-        5: bcch_dl_sch_message_mbms
+        4: bcch_dl_sch_br
+        5: bcch_dl_sch_mbms
         6: mcch
         7: pcch
         8: dl_ccch
         9: dl_dcch
         10: ul_ccch
         11: ul_dcch
-        12: sc_mcch_message_r13
+        12: sc_mcch_r13
         13: rrcconnection_reconfiguration
         14: rrcconnection_reconfiguration_v8m0_ies
         15: rrcconnection_reconfiguration_complete
@@ -1965,15 +1964,15 @@ types:
         45: horizontal_velocity
         46: polygon
         47: measurement_reference_time
-        48: bcch_bch_message_nb
-        49: bcch_bch_message_tdd_nb
-        50: bcch_dl_sch_message_nb
-        51: pcch_message_nb
-        52: dl_ccch_message_nb
-        53: dl_dcch_message_nb
-        54: ul_ccch_message_nb
-        55: sc_mcch_message_nb
-        56: ul_dcch_message_nb
+        48: bcch_bch_nb
+        49: bcch_bch_tdd_nb
+        50: bcch_dl_sch_nb
+        51: pcch_nb
+        52: dl_ccch_nb
+        53: dl_dcch_nb
+        54: ul_ccch_nb
+        55: sc_mcch_nb
+        56: ul_dcch_nb
         57: ue_capability_nb_ext_r14_ies
         58: els_sib1_signature
         59: els_system_information_block_type1
@@ -1983,36 +1982,36 @@ types:
     instances:
       gsmtap_subtype:
         value: |
-          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_bch_message_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_br ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_mbms ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::sc_mcch_message_r13 ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::bcch_bch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_bch_message_tdd_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::bcch_dl_sch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_bcch
-          : pdu_type == pdu_type::pcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_pcch
-          : pdu_type == pdu_type::dl_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::dl_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::ul_ccch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_ccch
-          : pdu_type == pdu_type::sc_mcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_mcch
-          : pdu_type == pdu_type::ul_dcch_message_nb ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
-          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ch_dcch
+          pdu_type == pdu_type::bcch_bch ? gsmtap_v2::lte_rrc_subtype::bcch_bch
+          : pdu_type == pdu_type::bcch_bch_mbms ? gsmtap_v2::lte_rrc_subtype::bcch_bch_mbms
+          : pdu_type == pdu_type::bcch_dl_sch ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch
+          : pdu_type == pdu_type::bcch_dl_sch_br ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_br
+          : pdu_type == pdu_type::bcch_dl_sch_mbms ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_mbms
+          : pdu_type == pdu_type::mcch ? gsmtap_v2::lte_rrc_subtype::mcch
+          : pdu_type == pdu_type::pcch ? gsmtap_v2::lte_rrc_subtype::pcch
+          : pdu_type == pdu_type::dl_ccch ? gsmtap_v2::lte_rrc_subtype::dl_ccch
+          : pdu_type == pdu_type::dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::ul_ccch ? gsmtap_v2::lte_rrc_subtype::ul_ccch
+          : pdu_type == pdu_type::ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
+          : pdu_type == pdu_type::sc_mcch_r13 ? gsmtap_v2::lte_rrc_subtype::sc_mcch
+          : pdu_type == pdu_type::bcch_bch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_nb
+          : pdu_type == pdu_type::bcch_bch_tdd_nb ? gsmtap_v2::lte_rrc_subtype::bcch_bch_tdd_nb
+          : pdu_type == pdu_type::bcch_dl_sch_nb ? gsmtap_v2::lte_rrc_subtype::bcch_dl_sch_nb
+          : pdu_type == pdu_type::pcch_nb ? gsmtap_v2::lte_rrc_subtype::pcch_nb
+          : pdu_type == pdu_type::dl_ccch_nb ? gsmtap_v2::lte_rrc_subtype::dl_ccch_nb
+          : pdu_type == pdu_type::dl_dcch_nb ? gsmtap_v2::lte_rrc_subtype::dl_dcch_nb
+          : pdu_type == pdu_type::ul_ccch_nb ? gsmtap_v2::lte_rrc_subtype::ul_ccch_nb
+          : pdu_type == pdu_type::sc_mcch_nb ? gsmtap_v2::lte_rrc_subtype::sc_mcch_nb
+          : pdu_type == pdu_type::ul_dcch_nb ? gsmtap_v2::lte_rrc_subtype::ul_dcch_nb
+          : pdu_type == pdu_type::els_dl_dcch ? gsmtap_v2::lte_rrc_subtype::dl_dcch
+          : pdu_type == pdu_type::els_ul_dcch ? gsmtap_v2::lte_rrc_subtype::ul_dcch
           : gsmtap_v2::lte_rrc_subtype::unknown
 
       is_uplink:
         value: |
           pdu_type == pdu_type::ul_ccch
           or pdu_type == pdu_type::ul_dcch
-          or pdu_type == pdu_type::ul_ccch_message_nb
-          or pdu_type == pdu_type::ul_dcch_message_nb
+          or pdu_type == pdu_type::ul_ccch_nb
+          or pdu_type == pdu_type::ul_dcch_nb
           or pdu_type == pdu_type::els_ul_dcch
 

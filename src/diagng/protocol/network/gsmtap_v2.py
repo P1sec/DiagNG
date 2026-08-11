@@ -42,14 +42,30 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         sacch_h = 138
 
     class LteRrcSubtype(IntEnum):
-        unknown = 0
-        ch_bcch = 1
-        ch_ccch = 2
-        ch_dcch = 3
-        ch_mcch = 4
-        ch_pcch = 5
-        ch_dtch = 6
-        ch_mtch = 7
+        dl_ccch = 0
+        dl_dcch = 1
+        ul_ccch = 2
+        ul_dcch = 3
+        bcch_bch = 4
+        bcch_dl_sch = 5
+        pcch = 6
+        mcch = 7
+        bcch_bch_mbms = 8
+        bcch_dl_sch_br = 9
+        bcch_dl_sch_mbms = 10
+        sc_mcch = 11
+        sbcch_sl_bch = 12
+        sbcch_sl_bch_v2_x = 13
+        dl_ccch_nb = 14
+        dl_dcch_nb = 15
+        ul_ccch_nb = 16
+        ul_dcch_nb = 17
+        bcch_bch_nb = 18
+        bcch_bch_tdd_nb = 19
+        bcch_dl_sch_nb = 20
+        pcch_nb = 21
+        sc_mcch_nb = 22
+        unknown = 255
 
     class PacketType(IntEnum):
         um = 1

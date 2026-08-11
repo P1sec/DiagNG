@@ -218,13 +218,30 @@ enums:
     61: target_rnc_to_source_rnc_container
 
   lte_rrc_subtype:
-    0x00: unknown
-    0x01: ch_bcch
-    0x02: ch_ccch
-    0x03: ch_dcch
-    0x04: ch_mcch
-    0x05: ch_pcch
-    0x06: ch_dtch
-    0x07: ch_mtch
+    0: dl_ccch
+    1: dl_dcch
+    2: ul_ccch
+    3: ul_dcch
+    4: bcch_bch
+    5: bcch_dl_sch
+    6: pcch
+    7: mcch
+    8: bcch_bch_mbms
+    9: bcch_dl_sch_br
+    10: bcch_dl_sch_mbms
+    11: sc_mcch
+    12: sbcch_sl_bch
+    13: sbcch_sl_bch_v2_x
+    14: dl_ccch_nb
+    15: dl_dcch_nb
+    16: ul_ccch_nb
+    17: ul_dcch_nb
+    18: bcch_bch_nb
+    19: bcch_bch_tdd_nb
+    20: bcch_dl_sch_nb
+    21: pcch_nb
+    22: sc_mcch_nb
+    255: unknown
+
 
 
