@@ -3,7 +3,7 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.protocol.network import gsmtap_v2
+from diagng.protocol.network import gsmtap
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
@@ -35,7 +35,7 @@ class UdpDatagram(ReadWriteKaitaiStruct):
             pass
             self._raw_body = self._io.read_bytes(self.length - 8)
             _io__raw_body = KaitaiStream(BytesIO(self._raw_body))
-            self.body = gsmtap_v2.GsmtapV2(_io__raw_body)
+            self.body = gsmtap.Gsmtap(_io__raw_body)
             self.body._read()
         else:
             pass

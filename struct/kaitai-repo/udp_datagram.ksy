@@ -7,7 +7,7 @@ meta:
   license: CC0-1.0
   endian: be
   imports:
-    - ../gsmtap/gsmtap_v2
+    - ../gsmtap/gsmtap
 doc: |
   UDP is a simple stateless transport layer (AKA OSI layer 4)
   protocol, one of the core Internet protocols. It provides source and
@@ -28,4 +28,4 @@ seq:
       switch-on: dst_port
       cases:
         # See https://osmocom.org/projects/baseband/wiki/GSMTAP
-        4729: gsmtap_v2
+        4729: gsmtap

@@ -159,15 +159,10 @@ class GsmtapV2(ReadWriteKaitaiStruct):
         self._root = _root or self
 
     def _read(self):
-        self.version = self._io.read_u1()
-        if not self.version == 2:
-            raise kaitaistruct.ValidationNotEqualError(
-                2, self.version, self._io, '/seq/0'
-            )
         self.header_len = self._io.read_u1()
         if not self.header_len == 4:
             raise kaitaistruct.ValidationNotEqualError(
-                4, self.header_len, self._io, '/seq/1'
+                4, self.header_len, self._io, '/seq/0'
             )
         self.type = KaitaiStream.resolve_enum(
             GsmtapV2.PacketType, self._io.read_u1()
@@ -241,7 +236,6 @@ class GsmtapV2(ReadWriteKaitaiStruct):
 
     def _write__seq(self, io=None):
         super(GsmtapV2, self)._write__seq(io)
-        self._io.write_u1(self.version)
         self._io.write_u1(self.header_len)
         self._io.write_u1(int(self.type))
         self._io.write_u1(self.timeslot)
@@ -298,13 +292,9 @@ class GsmtapV2(ReadWriteKaitaiStruct):
                 )
 
     def _check(self):
-        if not self.version == 2:
-            raise kaitaistruct.ValidationNotEqualError(
-                2, self.version, None, '/seq/0'
-            )
         if not self.header_len == 4:
             raise kaitaistruct.ValidationNotEqualError(
-                4, self.header_len, None, '/seq/1'
+                4, self.header_len, None, '/seq/0'
             )
         _on = self.type
         if _on == GsmtapV2.PacketType.abis:

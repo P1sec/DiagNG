@@ -38,6 +38,7 @@ from diagng.protocol.network.protocol_body import ProtocolBody
 from diagng.protocol.network.udp_datagram import UdpDatagram
 from diagng.protocol.network.ipv4_packet import Ipv4Packet
 from diagng.protocol.network.gsmtap_v2 import GsmtapV2
+from diagng.protocol.network.gsmtap import Gsmtap
 from diagng.protocol.network.pcap import Pcap
 
 from kaitaistruct import ReadWriteKaitaiStruct
@@ -257,53 +258,55 @@ class PcapOutput(GObject.GObject):
         is_uplink: bool = False,
         arfcn: Optional[int] = 0,
     ):
-        packet = GsmtapV2()
+        packet = Gsmtap()
         packet.version = 2
-        packet.header_len = 4
-        packet.type = packet_type
-        packet.timeslot = 0
 
-        packet.pcs_band = False
-        packet.is_uplink = is_uplink
-        packet.arfcn = arfcn
-        packet.signal_dbm = 0
-        packet.snr_db = 0
+        content = GsmtapV2()
+        content.header_len = 4
+        content.type = packet_type
+        content.timeslot = 0
 
-        packet.frame_number = 0
+        content.pcs_band = False
+        content.is_uplink = is_uplink
+        content.arfcn = arfcn
+        content.signal_dbm = 0
+        content.snr_db = 0
+
+        content.frame_number = 0
 
         if isinstance(sub_type, ReadWriteKaitaiStruct):
-            sub_type._parent = packet
-            sub_type._root = packet._root
+            sub_type._parent = content
+            sub_type._root = content._root
             sub_type._check()
-        packet.sub_type = sub_type
+        content.sub_type = sub_type
 
-        packet.antenna_nr = 0
-        packet.sub_slot = 0
-        packet.res = 0
+        content.antenna_nr = 0
+        content.sub_slot = 0
+        content.res = 0
 
         if isinstance(data, bytes):
-            packet.data = data
+            content.data = data
         elif isinstance(data, DiagRequest):
             diag_payload = GsmtapV2.DiagPayload(
-                True, None, packet, packet._root
+                True, None, content, content._root
             )
 
             diag_payload.frame = data
             diag_payload._check()
 
-            packet.data = diag_payload
+            content.data = diag_payload
         elif isinstance(data, DiagResponse):
             diag_payload = GsmtapV2.DiagPayload(
-                False, None, packet, packet._root
+                False, None, content, content._root
             )
 
             diag_payload.frame = data
             diag_payload._check()
 
-            packet.data = diag_payload
+            content.data = diag_payload
         elif isinstance(data, DiagLogF.InnerLog):
             diag_payload = GsmtapV2.DiagPayload(
-                False, None, packet, packet._root
+                False, None, content, content._root
             )
 
             diag_log = DiagLogF()
@@ -323,8 +326,11 @@ class PcapOutput(GObject.GObject):
             diag_payload.frame = diag_resp
             diag_payload._check()
 
-            packet.data = diag_payload
+            content.data = diag_payload
 
+        content._check()
+
+        packet.content = content
         packet._check()
 
         # Write UDP header

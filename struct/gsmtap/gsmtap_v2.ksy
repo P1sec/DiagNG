@@ -10,11 +10,6 @@ meta:
 # From: https://github.com/osmocom/libosmocore/blob/master/include/osmocom/core/gsmtap.h
 
 seq:
-  - id: version
-    type: u1
-    valid:
-      eq: 2
-    doc: Support GSMTAP v2 here
   - id: header_len
     type: u1
     valid:
