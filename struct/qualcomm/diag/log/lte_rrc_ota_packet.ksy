@@ -12,7 +12,7 @@ meta:
 # See: https://github.com/moiji-mobile/diag-parser/blob/402523f/diag_input.c#L206
 
 seq:
-  - id: ext_header_ver
+  - id: packet_version
     type: u1
 
   - id: rrc_rel
@@ -22,13 +22,13 @@ seq:
   - id: rrc_ver_minor
     type: b4
 
-  - if: ext_header_ver >= 25
+  - if: packet_version >= 25
     id: nc_rrc_rel
     type: u1
-  - if: ext_header_ver >= 25
+  - if: packet_version >= 25
     id: nc_rrc_ver_major
     type: b4
-  - if: ext_header_ver >= 25
+  - if: packet_version >= 25
     id: nc_rrc_ver_minor
     type: b4
 
@@ -38,10 +38,10 @@ seq:
   - id: phy_cellid
     type: u2
 
-  - if: ext_header_ver >= 8
+  - if: packet_version >= 8
     id: earfcn_long
     type: u4
-  - if: ext_header_ver < 8
+  - if: packet_version < 8
     id: earfcn_short
     type: u2
 
@@ -54,7 +54,7 @@ seq:
   - if: not is_special
     id: pdu_type
     type:
-      switch-on: ext_header_ver
+      switch-on: packet_version
       cases:
         1: v1_pdu_type
         2: v2_pdu_type
@@ -85,20 +85,20 @@ seq:
         27: v27_pdu_type
         _: v27_pdu_type
 
-  - if: ext_header_ver >= 5
-    id: sib_message
+  - if: packet_version >= 5
+    id: sib_mask
     type: u4
 
   - id: len_message
     type: u2
 
-  - if: ext_header_ver >= 30
+  - if: packet_version >= 30
     id: unk1
     type: u1
-  - if: ext_header_ver >= 30
+  - if: packet_version >= 30
     id: unk2
     type: u1
-  - if: ext_header_ver >= 30
+  - if: packet_version >= 30
     id: segment_id
     type: u1
 

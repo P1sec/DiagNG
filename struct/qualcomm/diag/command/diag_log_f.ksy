@@ -6,6 +6,7 @@ meta:
     - ../log/wcdma_signaling_message
     - ../log/gsm_rr_signaling_message
     - ../log/lte_rrc_ota_packet
+    - ../log/nr5g_rrc_ota_packet
 
 # From _base_input.py in QCSuper
 
@@ -36,6 +37,7 @@ types:
             'diag_logging::log_code::wcdma_signaling_message': wcdma_signaling_message # 0x412f
             'diag_logging::log_code::gsm_rr_signaling_message': gsm_rr_signaling_message # 0x512f
             'diag_logging::log_code::lte_rrc_ota_packet': lte_rrc_ota_packet # 0xb0c0
+            'diag_logging::log_code::nr5g_rrc_ota_packet': nr5g_rrc_ota_packet # 0xb821
             # TODO process all types supported by QCSuper in "pcap_dump.py"
     instances:
       unix_ts:
