@@ -31,7 +31,9 @@ class WiresharkPluginManager(GObject.Object):
 
         makedirs(PLUGIN_DIR, exist_ok=True)
 
-        # TODO BIND UI ITEM
+        # TODO BIND UI ITEM in caller class
+
+        self.list_plugins()
 
     def list_plugins(self):
         with self.current_plugins.freeze_notify():
@@ -49,12 +51,13 @@ class WiresharkPluginManager(GObject.Object):
 
     def watch_plugins(
         self, callback: Optional[Callable[[Gio.ListStore], None]] = None
-    ):
-        # TODO use Gio.File.monitor_directory
+    ) -> Gio.Cancellable:
+
+        cancellable = Gio.Cancellable()
 
         folder = Gio.File.new_for_path(PLUGIN_DIR)
         file_monitor = folder.monitor_directory(
-            Gio.FileMonitorFlags.WATCH_MOVES, None
+            Gio.FileMonitorFlags.WATCH_MOVES, cancellable
         )
 
         def on_change(*args):
@@ -64,13 +67,15 @@ class WiresharkPluginManager(GObject.Object):
 
         file_monitor.connect('changed', on_change)
 
+        return cancellable
+
     def install_plugin(self):
-        # TODO copy $ORIG_PLUGIN_PATH to $PLUGIN_PATH
+        # Copy $ORIG_PLUGIN_PATH to $PLUGIN_PATH
 
         copy2(ORIG_PLUGIN_PATH, PLUGIN_PATH)
 
     def remove_plugin(self):
-        # TODO remove $PLUGIN_PATH
+        # Remove $PLUGIN_PATH
 
         if exists(PLUGIN_PATH):
             unlink(PLUGIN_PATH)
