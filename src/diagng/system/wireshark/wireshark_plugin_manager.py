@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from os.path import expanduser, dirname, realpath, join
+from os.path import expanduser, dirname, realpath, exists, join
+from os import makedirs, unlink, scandir
 from gi.repository import GObject, Gio
-from os import makedirs, scandir
+from typing import Optional, Callable
 from datetime import datetime
+from shutil import copy2
 
 PLUGIN_DIR = expanduser('~/.local/lib/wireshark/plugins')
 PLUGIN_PATH = join(PLUGIN_DIR, 'diagng_ext.lua')
@@ -45,17 +47,30 @@ class WiresharkPluginManager(GObject.Object):
 
                 self.current_plugins.append(dir_entry)
 
-    def watch_plugins(self, callback):
+    def watch_plugins(
+        self, callback: Optional[Callable[[Gio.ListStore], None]] = None
+    ):
         # TODO use Gio.File.monitor_directory
 
-        XX
+        folder = Gio.File.new_for_path(PLUGIN_DIR)
+        file_monitor = folder.monitor_directory(
+            Gio.FileMonitorFlags.WATCH_MOVES, None
+        )
+
+        def on_change(*args):
+            self.list_plugins()
+            if callback:
+                callback(self.current_plugins)
+
+        file_monitor.connect('changed', on_change)
 
     def install_plugin(self):
         # TODO copy $ORIG_PLUGIN_PATH to $PLUGIN_PATH
 
-        XX
+        copy2(ORIG_PLUGIN_PATH, PLUGIN_PATH)
 
     def remove_plugin(self):
         # TODO remove $PLUGIN_PATH
 
-        XX
+        if exists(PLUGIN_PATH):
+            unlink(PLUGIN_PATH)
