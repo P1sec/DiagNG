@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
+from os.path import expanduser, join
 from gi.repository import GObject
 
-class WirsharkPluginState(GObject.Enum):
-    WiresharkNotFound = 1
-    PluginNotInstalled = 2
-    PluginNeedsUpdate = 3
-    PluginInstalled = 4
+PLUGIN_DIR = expanduser('~/.local/lib/wireshark/plugins')
+
+PLUGIN_PATH = join(PLUGIN_DIR, 'diagng_ext.lua')
+
+ORIG_PLUGIN_PATH = XX
 
 class WiresharkPluginManager(GObject.Object):
-    XX
+    plugin_installed = GObject.Property(type=bool, default=False)
+
+    def __init_(self):
+        XX
+
+    def list_plugins(self):
+        XX
+
+    def watch_plugins(self, callback):
+        XX
+
+    def install_plugin(self):
+        XX
+
+    def remove_plugin(self):
+        XX
