@@ -21,29 +21,29 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         self._root = _root or self
 
     def _read(self):
-        self.ext_header_ver = self._io.read_u1()
+        self.packet_version = self._io.read_u1()
         self.rrc_rel = self._io.read_u1()
         self.rrc_ver_major = self._io.read_bits_int_be(4)
         self.rrc_ver_minor = self._io.read_bits_int_be(4)
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self.nc_rrc_rel = self._io.read_u1()
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self.nc_rrc_ver_major = self._io.read_bits_int_be(4)
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self.nc_rrc_ver_minor = self._io.read_bits_int_be(4)
 
         self.bearer_id = self._io.read_u1()
         self.phy_cellid = self._io.read_u2le()
-        if self.ext_header_ver >= 8:
+        if self.packet_version >= 8:
             pass
             self.earfcn_long = self._io.read_u4le()
 
-        if self.ext_header_ver < 8:
+        if self.packet_version < 8:
             pass
             self.earfcn_short = self._io.read_u2le()
 
@@ -51,7 +51,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         self.is_special = self._io.read_bits_int_be(1) != 0
         if not (self.is_special):
             pass
-            _on = self.ext_header_ver
+            _on = self.packet_version
             if _on == 1:
                 pass
                 self.pdu_type = LteRrcOtaPacket.V1PduType(
@@ -221,20 +221,20 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 )
                 self.pdu_type._read()
 
-        if self.ext_header_ver >= 5:
+        if self.packet_version >= 5:
             pass
-            self.sib_message = self._io.read_u4le()
+            self.sib_mask = self._io.read_u4le()
 
         self.len_message = self._io.read_u2le()
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self.unk1 = self._io.read_u1()
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self.unk2 = self._io.read_u1()
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self.segment_id = self._io.read_u1()
 
@@ -243,24 +243,24 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
 
     def _fetch_instances(self):
         pass
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 8:
+        if self.packet_version >= 8:
             pass
 
-        if self.ext_header_ver < 8:
+        if self.packet_version < 8:
             pass
 
         if not (self.is_special):
             pass
-            _on = self.ext_header_ver
+            _on = self.packet_version
             if _on == 1:
                 pass
                 self.pdu_type._fetch_instances()
@@ -346,43 +346,43 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 pass
                 self.pdu_type._fetch_instances()
 
-        if self.ext_header_ver >= 5:
+        if self.packet_version >= 5:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
     def _write__seq(self, io=None):
         super(LteRrcOtaPacket, self)._write__seq(io)
-        self._io.write_u1(self.ext_header_ver)
+        self._io.write_u1(self.packet_version)
         self._io.write_u1(self.rrc_rel)
         self._io.write_bits_int_be(4, self.rrc_ver_major)
         self._io.write_bits_int_be(4, self.rrc_ver_minor)
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self._io.write_u1(self.nc_rrc_rel)
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self._io.write_bits_int_be(4, self.nc_rrc_ver_major)
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
             self._io.write_bits_int_be(4, self.nc_rrc_ver_minor)
 
         self._io.write_u1(self.bearer_id)
         self._io.write_u2le(self.phy_cellid)
-        if self.ext_header_ver >= 8:
+        if self.packet_version >= 8:
             pass
             self._io.write_u4le(self.earfcn_long)
 
-        if self.ext_header_ver < 8:
+        if self.packet_version < 8:
             pass
             self._io.write_u2le(self.earfcn_short)
 
@@ -390,7 +390,7 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
         self._io.write_bits_int_be(1, int(self.is_special))
         if not (self.is_special):
             pass
-            _on = self.ext_header_ver
+            _on = self.packet_version
             if _on == 1:
                 pass
                 self.pdu_type._write__seq(self._io)
@@ -476,44 +476,44 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                 pass
                 self.pdu_type._write__seq(self._io)
 
-        if self.ext_header_ver >= 5:
+        if self.packet_version >= 5:
             pass
-            self._io.write_u4le(self.sib_message)
+            self._io.write_u4le(self.sib_mask)
 
         self._io.write_u2le(self.len_message)
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self._io.write_u1(self.unk1)
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self._io.write_u1(self.unk2)
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
             self._io.write_u1(self.segment_id)
 
         self._io.write_bytes(self.message)
 
     def _check(self):
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 25:
+        if self.packet_version >= 25:
             pass
 
-        if self.ext_header_ver >= 8:
+        if self.packet_version >= 8:
             pass
 
-        if self.ext_header_ver < 8:
+        if self.packet_version < 8:
             pass
 
         if not (self.is_special):
             pass
-            _on = self.ext_header_ver
+            _on = self.packet_version
             if _on == 1:
                 pass
                 if self.pdu_type._root != self._root:
@@ -795,16 +795,16 @@ class LteRrcOtaPacket(ReadWriteKaitaiStruct):
                         'pdu_type', self, self.pdu_type._parent
                     )
 
-        if self.ext_header_ver >= 5:
+        if self.packet_version >= 5:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
-        if self.ext_header_ver >= 30:
+        if self.packet_version >= 30:
             pass
 
         if len(self.message) != self.len_message:

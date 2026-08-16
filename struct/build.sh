@@ -32,13 +32,18 @@ ksc \
 sed -ri 's/from diagng.protocol.qualcomm.struct import gsmtap_v2/from diagng.protocol.network import gsmtap_v2/g' \
     ../src/diagng/protocol/qualcomm/struct/lte_rrc_ota_packet.py
 
+sed -ri 's/from diagng.protocol.qualcomm.struct import gsmtap_v3/from diagng.protocol.network import gsmtap_v3/g' \
+    ../src/diagng/protocol/qualcomm/struct/nr5g_rrc_ota_packet.py
+
 for file_name in ../src/diagng/protocol/network/*; do
-    if [[ -f "../src/diagng/protocol/qualcomm/struct/$(basename "${file_name}")" && "$(basename "${file_name}")" != "gsmtap_v2.py" ]]; then
+    if [[ -f "../src/diagng/protocol/qualcomm/struct/$(basename "${file_name}")" && "$(basename "${file_name}")" != "gsmtap_v2.py" && "$(basename "${file_name}")" != "gsmtap_v3.py" ]]; then
         rm -f "${file_name}"
     fi
 done
 
 rm -rf ../src/diagng/protocol/qualcomm/struct/gsmtap_v2.py
+
+rm -rf ../src/diagng/protocol/qualcomm/struct/gsmtap_v3.py
 
 cd ..
 ruff format

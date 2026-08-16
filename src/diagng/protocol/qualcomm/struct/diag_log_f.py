@@ -4,6 +4,7 @@
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from diagng.protocol.qualcomm.struct import gsm_rr_signaling_message
+from diagng.protocol.qualcomm.struct import nr5g_rrc_ota_packet
 from diagng.protocol.qualcomm.struct import lte_rrc_ota_packet
 from diagng.protocol.qualcomm.struct import diag_logging
 from diagng.protocol.qualcomm.struct import wcdma_signaling_message
@@ -118,6 +119,16 @@ class DiagLogF(ReadWriteKaitaiStruct):
                     _io__raw_content
                 )
                 self.content._read()
+            elif _on == diag_logging.DiagLogging.LogCode.nr5g_rrc_ota_packet:
+                pass
+                self._raw_content = self._io.read_bytes(
+                    self.log_inner_length - 12
+                )
+                _io__raw_content = KaitaiStream(BytesIO(self._raw_content))
+                self.content = nr5g_rrc_ota_packet.Nr5gRrcOtaPacket(
+                    _io__raw_content
+                )
+                self.content._read()
             elif (
                 _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
             ):
@@ -145,6 +156,9 @@ class DiagLogF(ReadWriteKaitaiStruct):
                 pass
                 self.content._fetch_instances()
             elif _on == diag_logging.DiagLogging.LogCode.lte_rrc_ota_packet:
+                pass
+                self.content._fetch_instances()
+            elif _on == diag_logging.DiagLogging.LogCode.nr5g_rrc_ota_packet:
                 pass
                 self.content._fetch_instances()
             elif (
@@ -210,6 +224,29 @@ class DiagLogF(ReadWriteKaitaiStruct):
                     KaitaiStream.WriteBackHandler(_pos2, handler)
                 )
                 self.content._write__seq(_io__raw_content)
+            elif _on == diag_logging.DiagLogging.LogCode.nr5g_rrc_ota_packet:
+                pass
+                _io__raw_content = KaitaiStream(
+                    BytesIO(bytearray(self.log_inner_length - 12))
+                )
+                self._io.add_child_stream(_io__raw_content)
+                _pos2 = self._io.pos()
+                self._io.seek(self._io.pos() + (self.log_inner_length - 12))
+
+                def handler(parent, _io__raw_content=_io__raw_content):
+                    self._raw_content = _io__raw_content.to_byte_array()
+                    if len(self._raw_content) != self.log_inner_length - 12:
+                        raise kaitaistruct.ConsistencyError(
+                            'raw(content)',
+                            self.log_inner_length - 12,
+                            len(self._raw_content),
+                        )
+                    parent.write_bytes(self._raw_content)
+
+                _io__raw_content.write_back_handler = (
+                    KaitaiStream.WriteBackHandler(_pos2, handler)
+                )
+                self.content._write__seq(_io__raw_content)
             elif (
                 _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message
             ):
@@ -247,6 +284,8 @@ class DiagLogF(ReadWriteKaitaiStruct):
             ):
                 pass
             elif _on == diag_logging.DiagLogging.LogCode.lte_rrc_ota_packet:
+                pass
+            elif _on == diag_logging.DiagLogging.LogCode.nr5g_rrc_ota_packet:
                 pass
             elif (
                 _on == diag_logging.DiagLogging.LogCode.wcdma_signaling_message

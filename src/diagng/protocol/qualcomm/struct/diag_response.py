@@ -5,9 +5,9 @@ import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
 from diagng.protocol.qualcomm.struct import diag_log_config_f_rsp
 from diagng.protocol.qualcomm.struct import diag_verno_f_rsp
+from diagng.protocol.qualcomm.struct import diag_log_f
 from diagng.protocol.qualcomm.struct import diag_cmd_code
 from diagng.protocol.qualcomm.struct import diag_unknown
-from diagng.protocol.qualcomm.struct import diag_log_f
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):

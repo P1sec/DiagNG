@@ -14,6 +14,52 @@ if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
 
 
 class GsmtapV3(ReadWriteKaitaiStruct):
+    class NrRrcSubtype(IntEnum):
+        unknown = 0
+        bcch_bch = 1
+        bcch_dl_sch = 2
+        dl_ccch = 3
+        dl_dcch = 4
+        mcch = 5
+        pcch = 6
+        ul_ccch = 7
+        ul_ccch1 = 8
+        ul_dcch = 9
+        sbcch_sl_bch = 257
+        scch = 258
+        rrc_reconfiguration = 513
+        rrc_reconfiguration_complete = 514
+        ue_mrdc_capability = 515
+        ue_nr_capability = 516
+        ue_radio_access_capability_information = 517
+        ue_radio_paging_information = 518
+        sib1 = 519
+        sib2 = 520
+        sib3 = 521
+        sib4 = 522
+        sib5 = 523
+        sib6 = 524
+        sib7 = 525
+        sib8 = 526
+        sib9 = 527
+        sib10_r16 = 528
+        sib11_r16 = 529
+        sib12_r16 = 530
+        sib13_r16 = 531
+        sib14_r16 = 532
+        sib15_r17 = 533
+        sib16_r17 = 534
+        sib17_r17 = 535
+        sib18_r17 = 536
+        sib19_r17 = 537
+        sib20_r17 = 538
+        sib21_r17 = 539
+        sib22_r18 = 540
+        sib23_r18 = 541
+        sib24_r18 = 542
+        sib25_r18 = 543
+        sib17bis_r18 = 544
+
     class Type(IntEnum):
         osmocore_log = 0
         sim = 1
@@ -263,51 +309,6 @@ class GsmtapV3(ReadWriteKaitaiStruct):
             self._dirty = False
 
     class NrRrcSubtype(ReadWriteKaitaiStruct):
-        class Subtype(IntEnum):
-            bcch_bch = 1
-            bcch_dl_sch = 2
-            dl_ccch = 3
-            dl_dcch = 4
-            mcch = 5
-            pcch = 6
-            ul_ccch = 7
-            ul_ccch1 = 8
-            ul_dcch = 9
-            sbcch_sl_bch = 257
-            scch = 258
-            rrc_reconfiguration = 513
-            rrc_reconfiguration_complete = 514
-            ue_mrdc_capability = 515
-            ue_nr_capability = 516
-            ue_radio_access_capability_information = 517
-            ue_radio_paging_information = 518
-            sib1 = 519
-            sib2 = 520
-            sib3 = 521
-            sib4 = 522
-            sib5 = 523
-            sib6 = 524
-            sib7 = 525
-            sib8 = 526
-            sib9 = 527
-            sib10_r16 = 528
-            sib11_r16 = 529
-            sib12_r16 = 530
-            sib13_r16 = 531
-            sib14_r16 = 532
-            sib15_r17 = 533
-            sib16_r17 = 534
-            sib17_r17 = 535
-            sib18_r17 = 536
-            sib19_r17 = 537
-            sib20_r17 = 538
-            sib21_r17 = 539
-            sib22_r18 = 540
-            sib23_r18 = 541
-            sib24_r18 = 542
-            sib25_r18 = 543
-            sib17bis_r18 = 544
-
         def __init__(self, _io=None, _parent=None, _root=None):
             super(GsmtapV3.NrRrcSubtype, self).__init__(_io)
             self._parent = _parent
@@ -315,7 +316,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
         def _read(self):
             self._unnamed0 = KaitaiStream.resolve_enum(
-                GsmtapV3.NrRrcSubtype.Subtype, self._io.read_u2be()
+                GsmtapV3.NrRrcSubtype, self._io.read_u2be()
             )
             self._dirty = False
 

@@ -86,6 +86,59 @@ enums:
     0x0503: nr_rrc # NR RRC PDU, as per 3GPP TS 38.331
     0x0504: nas_5gs # 5GS Non-Access Stratum, as per 3GPP TS 24.501
 
+  nr_rrc_subtype:
+    0: unknown
+
+    # sub-types for TYPE_NR_RRC (0x0503)
+
+    0x0001: bcch_bch
+    0x0002: bcch_dl_sch
+    0x0003: dl_ccch
+    0x0004: dl_dcch
+    0x0005: mcch
+    0x0006: pcch
+    0x0007: ul_ccch
+    0x0008: ul_ccch1
+    0x0009: ul_dcch
+
+    0x0101: sbcch_sl_bch
+    0x0102: scch
+
+    # sub-types for individual NR RRC message
+
+    0x0201: rrc_reconfiguration
+    0x0202: rrc_reconfiguration_complete
+    0x0203: ue_mrdc_capability
+    0x0204: ue_nr_capability
+    0x0205: ue_radio_access_capability_information
+    0x0206: ue_radio_paging_information
+    0x0207: sib1
+    0x0208: sib2
+    0x0209: sib3
+    0x020a: sib4
+    0x020b: sib5
+    0x020c: sib6
+    0x020d: sib7
+    0x020e: sib8
+    0x020f: sib9
+    0x0210: sib10_r16
+    0x0211: sib11_r16
+    0x0212: sib12_r16
+    0x0213: sib13_r16
+    0x0214: sib14_r16
+    0x0215: sib15_r17
+    0x0216: sib16_r17
+    0x0217: sib17_r17
+    0x0218: sib18_r17
+    0x0219: sib19_r17
+    0x021a: sib20_r17
+    0x021b: sib21_r17
+    0x021c: sib22_r18
+    0x021d: sib23_r18
+    0x021e: sib24_r18
+    0x021f: sib25_r18
+    0x0220: sib17bis_r18
+
 types:
   metadata:
     seq:
@@ -150,58 +203,6 @@ types:
   nr_rrc_subtype:
     seq:
       - type: u2
-        enum: subtype
-
-    enums:
-      subtype:
-        # sub-types for TYPE_NR_RRC (0x0503)
-
-        0x0001: bcch_bch
-        0x0002: bcch_dl_sch
-        0x0003: dl_ccch
-        0x0004: dl_dcch
-        0x0005: mcch
-        0x0006: pcch
-        0x0007: ul_ccch
-        0x0008: ul_ccch1
-        0x0009: ul_dcch
-
-        0x0101: sbcch_sl_bch
-        0x0102: scch
-
-        # sub-types for individual NR RRC message
-
-        0x0201: rrc_reconfiguration
-        0x0202: rrc_reconfiguration_complete
-        0x0203: ue_mrdc_capability
-        0x0204: ue_nr_capability
-        0x0205: ue_radio_access_capability_information
-        0x0206: ue_radio_paging_information
-        0x0207: sib1
-        0x0208: sib2
-        0x0209: sib3
-        0x020a: sib4
-        0x020b: sib5
-        0x020c: sib6
-        0x020d: sib7
-        0x020e: sib8
-        0x020f: sib9
-        0x0210: sib10_r16
-        0x0211: sib11_r16
-        0x0212: sib12_r16
-        0x0213: sib13_r16
-        0x0214: sib14_r16
-        0x0215: sib15_r17
-        0x0216: sib16_r17
-        0x0217: sib17_r17
-        0x0218: sib18_r17
-        0x0219: sib19_r17
-        0x021a: sib20_r17
-        0x021b: sib21_r17
-        0x021c: sib22_r18
-        0x021d: sib23_r18
-        0x021e: sib24_r18
-        0x021f: sib25_r18
-        0x0220: sib17bis_r18
+        enum: nr_rrc_subtype
 
 #   (WIP)
