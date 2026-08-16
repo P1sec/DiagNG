@@ -61,6 +61,7 @@ where = ["src"]
     "com.p1security.diagng.desktop"
 ]
 "*" = [
+    "diagng_ext.lua",
     "com.p1security.diagmond.conf",
     "com.p1security.diagmond*.policy"
 ]
