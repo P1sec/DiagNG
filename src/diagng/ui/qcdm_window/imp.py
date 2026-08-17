@@ -8,6 +8,9 @@ from diagng.protocol.qualcomm.acquisition.base_input import (
     BaseQCDMInput,
     InputState,
 )
+from diagng.system.wireshark.wireshark_plugin_manager import (
+    WiresharkPluginManager,
+)
 from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
@@ -35,6 +38,9 @@ DiagCmd = DiagCmdCode.DiagCmd
 class QCDMWindow(Adw.Window):
     __gtype_name__ = 'QCDMWindow'
 
+    ws_plugin_manager: WiresharkPluginManager
+    plugin_watch_task: Gio.Cancellable
+
     input_obj: BaseQCDMInput
     log_manager: LogManager
     parent: Adw.ApplicationWindow
@@ -43,6 +49,8 @@ class QCDMWindow(Adw.Window):
 
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
     start_capture_button: Gtk.Label = Gtk.Template.Child()
+
+    wireshark_plugins: Adw.PreferencesGroup = Gtk.Template.Child()
 
     wireshark_instance: Optional[PcapOutput] = None
 
@@ -53,6 +61,9 @@ class QCDMWindow(Adw.Window):
 
         self.input_obj = input_obj
         self.parent = parent
+
+        self.ws_plugin_manager = WiresharkPluginManager()
+        self.plugin_watch_task = self.ws_plugin_manager.watch_plugins()
 
         self.log_manager = LogManager(input_obj)
 
@@ -112,6 +123,10 @@ class QCDMWindow(Adw.Window):
 
     def on_quit(self, *args):
         self.input_obj.close()
+
+        if self.plugin_watch_task:
+            self.plugin_watch_task.cancel()
+            self.plugin_watch_task = None
 
     def get_log_support_info(self):
         def req_cb(
