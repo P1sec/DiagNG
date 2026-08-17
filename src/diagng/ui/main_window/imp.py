@@ -306,6 +306,39 @@ class MainWindow(Adw.ApplicationWindow):
 
     def connect_actions(self):
 
+        def open_file(*args):
+            # WIP
+            filters = Gio.ListStore.new(Gtk.FileFilter)
+
+            file_filter = Gtk.FileFilter.new()
+            file_filter.add_suffix('dlf')
+            file_filter.add_suffix('dlf.gz')
+            file_filter.set_name('DLF File')
+            filters.append(file_filter)
+
+            dialog = Gtk.FileDialog.new()
+            dialog.set_filters(filters)
+
+            def on_open(dialog: Gtk.FileDialog, res: Gio.AsyncResult):
+                try:
+                    open_file: Gio.File = dialog.open_finish(res)
+
+                except GLib.GError as err:
+                    if err.message != 'Dismissed by user':
+                        dialog = Adw.AlertDialog.new(
+                            'Could not open file', err.message
+                        )
+                        dialog.add_response('ok', 'Ok')
+                        dialog.set_default_response('ok')
+                        dialog.set_close_response('ok')
+                        dialog.choose(self, None, None)
+                else:
+                    print('====> ⚠️ TODO handle: %r' % open_file)
+
+            dialog.open(self, None, on_open)
+
+        self.add_simple_action('open-file', open_file)
+
         def copy_nusb_debug_info(*args):
             clipboard = Gdk.Display.get_default().get_clipboard()
             clipboard.set(self.app.nusb_debug_data)

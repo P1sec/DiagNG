@@ -23,7 +23,7 @@
   </ui>
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="8d6efeb2e668cc5dee2e72ec80ad1c1803478c4c6db96cac62f8628b071e0e51"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="9377bcddabd24a81576acf35073bcd68b30ab1760488c37ac1d1dbf63459bce2"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="13cb80d1a1ab3423630f9984d4082a24963aeea1e20e42578fabf9edd705cd20">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="a5d6933882f21c97f9da5af08cdce5ead75e2e18c5fb495199ae6eee44d8ce96">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>

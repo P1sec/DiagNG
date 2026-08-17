@@ -566,7 +566,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                   <menu>
                     <section>
                       <item>
-                        <attribute name="action">win.open_file</attribute>
+                        <attribute name="action">win.open-file</attribute>
                         <attribute name="label">Open File...</attribute>
                       </item>
                     </section>
