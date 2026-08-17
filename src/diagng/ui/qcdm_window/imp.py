@@ -10,6 +10,10 @@ from diagng.protocol.qualcomm.acquisition.base_input import (
 )
 from diagng.system.wireshark.wireshark_plugin_manager import (
     WiresharkPluginManager,
+    PLUGIN_DIR,
+)
+from diagng.ui.qcdm_window.models.wireshark_plugins import (
+    create_wireshark_plugin,
 )
 from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
@@ -27,7 +31,7 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw, Gio
+from gi.repository import Gtk, Adw, GLib, Gio
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -62,8 +66,29 @@ class QCDMWindow(Adw.Window):
         self.input_obj = input_obj
         self.parent = parent
 
+        WIRESHARK_INFO_URL = 'https://github.com/P1sec/DiagNG/tree/main/src/diagng/system/wireshark'
+
+        self.wireshark_plugins.set_description(
+            (
+                'A Wireshark plug-in will be installed in <a href="file://%s">%s</a> '
+                + 'whenever you start a new capture, if not present. See <a href="%s">%s</a>'
+            )
+            % (
+                GLib.markup_escape_text(PLUGIN_DIR),
+                GLib.markup_escape_text(PLUGIN_DIR),
+                GLib.markup_escape_text(WIRESHARK_INFO_URL),
+                GLib.markup_escape_text(WIRESHARK_INFO_URL),
+            )
+        )
+
         self.ws_plugin_manager = WiresharkPluginManager()
         self.plugin_watch_task = self.ws_plugin_manager.watch_plugins()
+
+        self.wireshark_plugins.bind_model(
+            self.ws_plugin_manager.current_plugins,
+            create_wireshark_plugin,
+            self.ws_plugin_manager,
+        )
 
         self.log_manager = LogManager(input_obj)
 

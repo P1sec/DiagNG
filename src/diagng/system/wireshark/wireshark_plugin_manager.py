@@ -26,12 +26,14 @@ class WiresharkPluginManager(GObject.Object):
         type=Gio.ListStore
     )  # of ListedPlugin objects
 
-    def __init_(self):
+    def __init__(self):
         super().__init__()
 
         makedirs(PLUGIN_DIR, exist_ok=True)
 
-        # TODO BIND UI ITEM in caller class
+        self.current_plugins = Gio.ListStore.new(ListedPlugin)
+
+        # We'll bind UI item in the caller class
 
         self.list_plugins()
 
@@ -47,7 +49,7 @@ class WiresharkPluginManager(GObject.Object):
                     dir_entry.stat().st_mtime
                 ).strftime('%Y-%m-%d %H:%M:%S')
 
-                self.current_plugins.append(dir_entry)
+                self.current_plugins.append(plugin)
 
     def watch_plugins(
         self, callback: Optional[Callable[[Gio.ListStore], None]] = None

@@ -4,10 +4,9 @@ from diagng.gobject.adb_device import ADBDevice
 
 import gi
 
-gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Adw, Gtk, GLib
+from gi.repository import Adw
 
 
 def create_adb_device(

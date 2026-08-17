@@ -107,7 +107,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="wireshark_plugins">
-                            <property name="description">A Wireshark plug-in will be installed in $PATH whenever you start a new capture, if not present. See XX</property>
+                            <property name="description">A Wireshark plug-in will be installed in &lt;a href="file:///"&gt;$PATH&lt;/a&gt; whenever you start a new capture, if not present. See XX</property>
                             <property name="title">Wireshark plug-in management</property>
                             <child>
                               <object class="AdwActionRow">
