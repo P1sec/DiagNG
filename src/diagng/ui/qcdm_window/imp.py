@@ -19,6 +19,7 @@ from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
@@ -102,27 +103,25 @@ class QCDMWindow(Adw.Window):
         self.present()
 
         self.on_state_change()
-        self.gather_device_info()
+        if self.input_obj.state != InputState.Closed:
+            self.gather_device_info()
         self.gather_wireshark_info()
 
         self.connect('close-request', self.on_quit)
 
     @Gtk.Template.Callback()
     def start_capture_clicked(self, target: Gtk.Button, *args):
-        # target.set_sensitive(False)
-        print('⚠️ TODO: Start network capture here')
-
-        # 1. Enable network-related logs
+        # Enable network-related logs
 
         def callback(resp: DiagResponse):
-            debug('TODO: Spawn Wireshark pipe over collected logs')
-            # (2. SPAWN WIRESHARK PIPE, WITH FLATPAK-SPAWN IF NEEDED)
+            # Spawn wireshark pipe, with flatpak-spawn if needed
+
             self.create_wireshark_pipe()
 
-            # (3. TRANSMIT ON-THE-FLY CONVERTED OTA RRC GSMTAP v3 PCAP -
-            #  USE ADAPTER CLASSES FOR DATA CONVERSION)
-
-        self.log_manager.register_ota_related_logs(callback)
+        if self.input_obj.state != InputState.Closed:
+            self.log_manager.register_ota_related_logs(callback)
+        else:
+            self.create_wireshark_pipe()
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
@@ -130,7 +129,16 @@ class QCDMWindow(Adw.Window):
         self.wireshark_instance = PcapOutput(use_wireshark=True)
 
         def on_stream_available(*args):
+            # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
+            #   use adapter classes for data conversion
             OTADecoder(self.wireshark_instance, self.input_obj)
+
+            def on_closed(*arg):
+                self.wireshark_instance.close()
+
+            self.input_obj.closed.connect(on_closed)
+
+            self.input_obj.process_stream()
 
         self.wireshark_instance.stream_active.connect(on_stream_available)
         self.wireshark_instance.open_stream()
@@ -140,9 +148,10 @@ class QCDMWindow(Adw.Window):
         self.set_title(self.input_obj.full_name)
 
     def on_state_change(self, *args):
-        self.qcdm_stack.set_sensitive(
-            self.input_obj.state == InputState.Processing
-        )
+        if not isinstance(self.input_obj, DLFInput):
+            self.qcdm_stack.set_sensitive(
+                self.input_obj.state == InputState.Processing
+            )
 
         self.parent.update_serial_modems()
 

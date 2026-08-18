@@ -19,12 +19,14 @@ class DLFInput(BaseQCDMInput):
         try:
             stream_io = BytesIO(decompress(stream_io.read()))
         except Exception:
-            raise
+            pass
         stream_io.seek(0)
 
         self.stream = KaitaiStream(stream_io)
 
     def process_stream(self):
+        self.stream.seek(0)
+
         dlf = DlfFile(self.stream)
         dlf._read()
 
@@ -37,6 +39,4 @@ class DLFInput(BaseQCDMInput):
         raise IOError('Stream is read-only')
 
     def close(self):
-        if self.stream:
-            self.stream = None
         self.closed.emit()

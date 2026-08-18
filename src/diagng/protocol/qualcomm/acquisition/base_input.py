@@ -71,6 +71,10 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @abstractmethod
+    def process_stream(self):
+        pass
+
+    @abstractmethod
     def close(self):
         pass
 
@@ -163,7 +167,7 @@ class BaseQCDMInput(GObject.Object):
                     self.send(request)
 
                 except Exception as err:
-                    error('Could not try to resend frame: ' + format_exc(err))
+                    error('Could not try to resend frame: %r' % err)
                     timeout_id = None
                     return GLib.SOURCE_REMOVE
 

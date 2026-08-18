@@ -3,8 +3,9 @@ from typing import List, Dict, Tuple, Optional, Union
 from importlib.metadata import version
 from logging import info, error, debug
 from collections import defaultdict
-from traceback import format_exc
+from os.path import basename
 from json import loads
+from io import BytesIO
 
 # Register resources
 import diagng.utils.gresources
@@ -13,6 +14,7 @@ from diagng.ui.main_window.models.usb_interfaces import create_usb_interfaces
 from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
 from diagng.ui.main_window.models.adb_devices import create_adb_device
 from diagng.ui.main_window.models.spi_modems import create_spi_modem
+from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.ui.main_window.models.mm_modems import create_mm_modem
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
@@ -23,6 +25,7 @@ from diagng.gobject.mm_modem import ModemManagerModem
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.gobject.serial_port import SerialPort
+from diagng.ui.qcdm_window.imp import QCDMWindow
 from diagng.gobject.usb_device import USBDevice
 
 # Based on https://github.com/Taiko2k/GTK4PythonTutorial?tab=readme-ov-file#ui-from-graphical-designer
@@ -321,7 +324,7 @@ class MainWindow(Adw.ApplicationWindow):
 
             def on_open(dialog: Gtk.FileDialog, res: Gio.AsyncResult):
                 try:
-                    open_file: Gio.File = dialog.open_finish(res)
+                    file_handle: Gio.File = dialog.open_finish(res)
 
                 except GLib.GError as err:
                     if err.message != 'Dismissed by user':
@@ -333,7 +336,19 @@ class MainWindow(Adw.ApplicationWindow):
                         dialog.set_close_response('ok')
                         dialog.choose(self, None, None)
                 else:
-                    print('====> ⚠️ TODO handle: %r' % open_file)
+                    # (For now, only DLF is handled)
+
+                    stream = BytesIO(file_handle.load_contents(None)[1])
+
+                    file_path = file_handle.get_path()
+                    # if file_path.startswith('/run/user'):
+                    file_path = basename(file_path)
+
+                    input_obj = DLFInput(stream)
+                    input_obj.full_name = file_path
+                    input_obj.close()
+
+                    QCDMWindow(self, input_obj)
 
             dialog.open(self, None, on_open)
 
