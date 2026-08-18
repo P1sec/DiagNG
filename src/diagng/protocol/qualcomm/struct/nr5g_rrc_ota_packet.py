@@ -176,9 +176,57 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                 self._io, self, self._root
             )
             self.pdu_type._read()
+        elif _on == 18:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V17PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 19:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V17PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
         elif _on == 2:
             pass
             self.pdu_type = Nr5gRrcOtaPacket.V2PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 20:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V20PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 23:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V20PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 24:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V20PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 25:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V17PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 26:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V26PduType(
+                self._io, self, self._root
+            )
+            self.pdu_type._read()
+        elif _on == 28:
+            pass
+            self.pdu_type = Nr5gRrcOtaPacket.V26PduType(
                 self._io, self, self._root
             )
             self.pdu_type._read()
@@ -226,7 +274,7 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
             self.pdu_type._read()
         else:
             pass
-            self.pdu_type = Nr5gRrcOtaPacket.V17PduType(
+            self.pdu_type = Nr5gRrcOtaPacket.V20PduType(
                 self._io, self, self._root
             )
             self.pdu_type._read()
@@ -317,7 +365,31 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
         elif _on == 17:
             pass
             self.pdu_type._fetch_instances()
+        elif _on == 18:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 19:
+            pass
+            self.pdu_type._fetch_instances()
         elif _on == 2:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 20:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 23:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 24:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 25:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 26:
+            pass
+            self.pdu_type._fetch_instances()
+        elif _on == 28:
             pass
             self.pdu_type._fetch_instances()
         elif _on == 3:
@@ -431,7 +503,31 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
         elif _on == 17:
             pass
             self.pdu_type._write__seq(self._io)
+        elif _on == 18:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 19:
+            pass
+            self.pdu_type._write__seq(self._io)
         elif _on == 2:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 20:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 23:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 24:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 25:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 26:
+            pass
+            self.pdu_type._write__seq(self._io)
+        elif _on == 28:
             pass
             self.pdu_type._write__seq(self._io)
         elif _on == 3:
@@ -706,7 +802,87 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                 raise kaitaistruct.ConsistencyError(
                     'pdu_type', self, self.pdu_type._parent
                 )
+        elif _on == 18:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 19:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
         elif _on == 2:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 20:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 23:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 24:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 25:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 26:
+            pass
+            if self.pdu_type._root != self._root:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self._root, self.pdu_type._root
+                )
+            if self.pdu_type._parent != self:
+                raise kaitaistruct.ConsistencyError(
+                    'pdu_type', self, self.pdu_type._parent
+                )
+        elif _on == 28:
             pass
             if self.pdu_type._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -980,50 +1156,60 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V10PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V10PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V10PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V10PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V10PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V10PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V10PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V10PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V10PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V10PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V10PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.ue_mrdc_capability
+                                                                                    == Nr5gRrcOtaPacket.V10PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.ue_nr_capability
-                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                        == Nr5gRrcOtaPacket.V10PduType.PduType.sib9
+                                                                                        else (
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            if self.pdu_type
+                                                                                            == Nr5gRrcOtaPacket.V10PduType.PduType.ue_mrdc_capability
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V10PduType.PduType.ue_nr_capability
+                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            )
+                                                                                        )
                                                                                     )
                                                                                 )
                                                                             )
@@ -1165,54 +1351,64 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V11PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V11PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V11PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V11PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V11PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V11PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V11PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.sib12_ie_r16
+                                                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.ue_mrdc_capability
+                                                                                        == Nr5gRrcOtaPacket.V11PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.ue_nr_capability
-                                                                                            else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            == Nr5gRrcOtaPacket.V11PduType.PduType.sib12_ie_r16
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V11PduType.PduType.ue_mrdc_capability
+                                                                                                else (
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    if self.pdu_type
+                                                                                                    == Nr5gRrcOtaPacket.V11PduType.PduType.ue_nr_capability
+                                                                                                    else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                )
+                                                                                            )
                                                                                         )
                                                                                     )
                                                                                 )
@@ -1356,58 +1552,68 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V13PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V13PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V13PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.sib12_ie_r16
+                                                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.ue_mrdc_capability
+                                                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.ue_nr_capability
+                                                                                            == Nr5gRrcOtaPacket.V13PduType.PduType.sib12_ie_r16
                                                                                             else (
-                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
                                                                                                 if self.pdu_type
-                                                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.ue_nr_capability_v15c0
-                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                == Nr5gRrcOtaPacket.V13PduType.PduType.ue_mrdc_capability
+                                                                                                else (
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    if self.pdu_type
+                                                                                                    == Nr5gRrcOtaPacket.V13PduType.PduType.ue_nr_capability
+                                                                                                    else (
+                                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                        if self.pdu_type
+                                                                                                        == Nr5gRrcOtaPacket.V13PduType.PduType.ue_nr_capability_v15c0
+                                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
                                                                                             )
                                                                                         )
                                                                                     )
@@ -1553,58 +1759,68 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V14PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V14PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V14PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.sib12_ie_r16
+                                                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.ue_mrdc_capability
+                                                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.ue_nr_capability
+                                                                                            == Nr5gRrcOtaPacket.V14PduType.PduType.sib12_ie_r16
                                                                                             else (
-                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
                                                                                                 if self.pdu_type
-                                                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.ue_nr_capability_v15c0
-                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                == Nr5gRrcOtaPacket.V14PduType.PduType.ue_mrdc_capability
+                                                                                                else (
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    if self.pdu_type
+                                                                                                    == Nr5gRrcOtaPacket.V14PduType.PduType.ue_nr_capability
+                                                                                                    else (
+                                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                        if self.pdu_type
+                                                                                                        == Nr5gRrcOtaPacket.V14PduType.PduType.ue_nr_capability_v15c0
+                                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
                                                                                             )
                                                                                         )
                                                                                     )
@@ -1754,58 +1970,68 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V15PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V15PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V15PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.sib12_ie_r16
+                                                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.ue_mrdc_capability
+                                                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.ue_nr_capability
+                                                                                            == Nr5gRrcOtaPacket.V15PduType.PduType.sib12_ie_r16
                                                                                             else (
-                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
                                                                                                 if self.pdu_type
-                                                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.ue_nr_capability_v15c0
-                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                == Nr5gRrcOtaPacket.V15PduType.PduType.ue_mrdc_capability
+                                                                                                else (
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    if self.pdu_type
+                                                                                                    == Nr5gRrcOtaPacket.V15PduType.PduType.ue_nr_capability
+                                                                                                    else (
+                                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                        if self.pdu_type
+                                                                                                        == Nr5gRrcOtaPacket.V15PduType.PduType.ue_nr_capability_v15c0
+                                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
                                                                                             )
                                                                                         )
                                                                                     )
@@ -1955,58 +2181,68 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V16PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V16PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V16PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.sib12_ie_r16
+                                                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.ue_mrdc_capability
+                                                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.ue_nr_capability
+                                                                                            == Nr5gRrcOtaPacket.V16PduType.PduType.sib12_ie_r16
                                                                                             else (
-                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
                                                                                                 if self.pdu_type
-                                                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.ue_nr_capability_v15c0
-                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                == Nr5gRrcOtaPacket.V16PduType.PduType.ue_mrdc_capability
+                                                                                                else (
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    if self.pdu_type
+                                                                                                    == Nr5gRrcOtaPacket.V16PduType.PduType.ue_nr_capability
+                                                                                                    else (
+                                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                        if self.pdu_type
+                                                                                                        == Nr5gRrcOtaPacket.V16PduType.PduType.ue_nr_capability_v15c0
+                                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                    )
+                                                                                                )
                                                                                             )
                                                                                         )
                                                                                     )
@@ -2158,62 +2394,72 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V17PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V17PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib10_r16
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.sib10_r16
+                                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib12_ie_r16
+                                                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.sib9
                                                                                         else (
-                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib10_r16
                                                                                             if self.pdu_type
-                                                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.ue_mrdc_capability
+                                                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.sib10_r16
                                                                                             else (
-                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib12_r16
                                                                                                 if self.pdu_type
-                                                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.ue_nr_capability
+                                                                                                == Nr5gRrcOtaPacket.V17PduType.PduType.sib12_ie_r16
                                                                                                 else (
-                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
                                                                                                     if self.pdu_type
-                                                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.ue_nr_capability_v15c0
-                                                                                                    else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                    == Nr5gRrcOtaPacket.V17PduType.PduType.ue_mrdc_capability
+                                                                                                    else (
+                                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                        if self.pdu_type
+                                                                                                        == Nr5gRrcOtaPacket.V17PduType.PduType.ue_nr_capability
+                                                                                                        else (
+                                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                            if self.pdu_type
+                                                                                                            == Nr5gRrcOtaPacket.V17PduType.PduType.ue_nr_capability_v15c0
+                                                                                                            else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                                        )
+                                                                                                    )
                                                                                                 )
                                                                                             )
                                                                                         )
@@ -2345,6 +2591,250 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
         def _invalidate_is_uplink(self):
             del self._m_is_uplink
 
+    class V20PduType(ReadWriteKaitaiStruct):
+        class PduType(IntEnum):
+            bcch_bch = 1
+            bcch_dl_sch = 2
+            dl_ccch = 3
+            dl_dcch = 4
+            mcch = 5
+            pcch = 6
+            ul_ccch = 7
+            ul_ccch1 = 8
+            ul_dcch = 9
+            rrc_reconfig = 10
+            rrc_reconfig_complete = 11
+
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(Nr5gRrcOtaPacket.V20PduType, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.pdu_type = KaitaiStream.resolve_enum(
+                Nr5gRrcOtaPacket.V20PduType.PduType, self._io.read_u1()
+            )
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+
+        def _write__seq(self, io=None):
+            super(Nr5gRrcOtaPacket.V20PduType, self)._write__seq(io)
+            self._io.write_u1(int(self.pdu_type))
+
+        def _check(self):
+            self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v3.GsmtapV3.NrRrcSubtype.bcch_bch
+                if self.pdu_type
+                == Nr5gRrcOtaPacket.V20PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v3.GsmtapV3.NrRrcSubtype.bcch_dl_sch
+                    if self.pdu_type
+                    == Nr5gRrcOtaPacket.V20PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v3.GsmtapV3.NrRrcSubtype.dl_ccch
+                        if self.pdu_type
+                        == Nr5gRrcOtaPacket.V20PduType.PduType.dl_ccch
+                        else (
+                            gsmtap_v3.GsmtapV3.NrRrcSubtype.dl_dcch
+                            if self.pdu_type
+                            == Nr5gRrcOtaPacket.V20PduType.PduType.dl_dcch
+                            else (
+                                gsmtap_v3.GsmtapV3.NrRrcSubtype.mcch
+                                if self.pdu_type
+                                == Nr5gRrcOtaPacket.V20PduType.PduType.mcch
+                                else (
+                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.pcch
+                                    if self.pdu_type
+                                    == Nr5gRrcOtaPacket.V20PduType.PduType.pcch
+                                    else (
+                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_ccch
+                                        if self.pdu_type
+                                        == Nr5gRrcOtaPacket.V20PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_ccch1
+                                            if self.pdu_type
+                                            == Nr5gRrcOtaPacket.V20PduType.PduType.ul_ccch1
+                                            else (
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_dcch
+                                                if self.pdu_type
+                                                == Nr5gRrcOtaPacket.V20PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
+                                                    if self.pdu_type
+                                                    == Nr5gRrcOtaPacket.V20PduType.PduType.rrc_reconfig
+                                                    else (
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
+                                                        if self.pdu_type
+                                                        == Nr5gRrcOtaPacket.V20PduType.PduType.rrc_reconfig_complete
+                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == Nr5gRrcOtaPacket.V20PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type
+                    == Nr5gRrcOtaPacket.V20PduType.PduType.ul_ccch1
+                )
+                or (
+                    self.pdu_type
+                    == Nr5gRrcOtaPacket.V20PduType.PduType.ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
+
+    class V26PduType(ReadWriteKaitaiStruct):
+        class PduType(IntEnum):
+            bcch_bch = 1
+            bcch_dl_sch = 2
+            dl_ccch = 3
+            dl_dcch = 4
+            mcch = 5
+            pcch = 6
+            ul_ccch = 7
+            ul_ccch1 = 8
+            ul_dcch = 9
+            rrc_reconfig = 11
+            rrc_reconfig_complete = 12
+
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(Nr5gRrcOtaPacket.V26PduType, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.pdu_type = KaitaiStream.resolve_enum(
+                Nr5gRrcOtaPacket.V26PduType.PduType, self._io.read_u1()
+            )
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+
+        def _write__seq(self, io=None):
+            super(Nr5gRrcOtaPacket.V26PduType, self)._write__seq(io)
+            self._io.write_u1(int(self.pdu_type))
+
+        def _check(self):
+            self._dirty = False
+
+        @property
+        def gsmtap_subtype(self):
+            if hasattr(self, '_m_gsmtap_subtype'):
+                return self._m_gsmtap_subtype
+
+            self._m_gsmtap_subtype = (
+                gsmtap_v3.GsmtapV3.NrRrcSubtype.bcch_bch
+                if self.pdu_type
+                == Nr5gRrcOtaPacket.V26PduType.PduType.bcch_bch
+                else (
+                    gsmtap_v3.GsmtapV3.NrRrcSubtype.bcch_dl_sch
+                    if self.pdu_type
+                    == Nr5gRrcOtaPacket.V26PduType.PduType.bcch_dl_sch
+                    else (
+                        gsmtap_v3.GsmtapV3.NrRrcSubtype.dl_ccch
+                        if self.pdu_type
+                        == Nr5gRrcOtaPacket.V26PduType.PduType.dl_ccch
+                        else (
+                            gsmtap_v3.GsmtapV3.NrRrcSubtype.dl_dcch
+                            if self.pdu_type
+                            == Nr5gRrcOtaPacket.V26PduType.PduType.dl_dcch
+                            else (
+                                gsmtap_v3.GsmtapV3.NrRrcSubtype.mcch
+                                if self.pdu_type
+                                == Nr5gRrcOtaPacket.V26PduType.PduType.mcch
+                                else (
+                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.pcch
+                                    if self.pdu_type
+                                    == Nr5gRrcOtaPacket.V26PduType.PduType.pcch
+                                    else (
+                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_ccch
+                                        if self.pdu_type
+                                        == Nr5gRrcOtaPacket.V26PduType.PduType.ul_ccch
+                                        else (
+                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_ccch1
+                                            if self.pdu_type
+                                            == Nr5gRrcOtaPacket.V26PduType.PduType.ul_ccch1
+                                            else (
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ul_dcch
+                                                if self.pdu_type
+                                                == Nr5gRrcOtaPacket.V26PduType.PduType.ul_dcch
+                                                else (
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
+                                                    if self.pdu_type
+                                                    == Nr5gRrcOtaPacket.V26PduType.PduType.rrc_reconfig
+                                                    else (
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
+                                                        if self.pdu_type
+                                                        == Nr5gRrcOtaPacket.V26PduType.PduType.rrc_reconfig_complete
+                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            return getattr(self, '_m_gsmtap_subtype', None)
+
+        def _invalidate_gsmtap_subtype(self):
+            del self._m_gsmtap_subtype
+
+        @property
+        def is_uplink(self):
+            if hasattr(self, '_m_is_uplink'):
+                return self._m_is_uplink
+
+            self._m_is_uplink = (
+                (self.pdu_type == Nr5gRrcOtaPacket.V26PduType.PduType.ul_ccch)
+                or (
+                    self.pdu_type
+                    == Nr5gRrcOtaPacket.V26PduType.PduType.ul_ccch1
+                )
+                or (
+                    self.pdu_type
+                    == Nr5gRrcOtaPacket.V26PduType.PduType.ul_dcch
+                )
+            )
+            return getattr(self, '_m_is_uplink', None)
+
+        def _invalidate_is_uplink(self):
+            del self._m_is_uplink
+
     class V2PduType(ReadWriteKaitaiStruct):
         class PduType(IntEnum):
             bcch_bch = 1
@@ -2411,14 +2901,24 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                         if self.pdu_type
                         == Nr5gRrcOtaPacket.V2PduType.PduType.ul_dcch
                         else (
-                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                            gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                             if self.pdu_type
-                            == Nr5gRrcOtaPacket.V2PduType.PduType.ue_mrdc_capability
+                            == Nr5gRrcOtaPacket.V2PduType.PduType.reconfig
                             else (
-                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                 if self.pdu_type
-                                == Nr5gRrcOtaPacket.V2PduType.PduType.ue_nr_capability
-                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                == Nr5gRrcOtaPacket.V2PduType.PduType.reconfig_complete
+                                else (
+                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                    if self.pdu_type
+                                    == Nr5gRrcOtaPacket.V2PduType.PduType.ue_mrdc_capability
+                                    else (
+                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                        if self.pdu_type
+                                        == Nr5gRrcOtaPacket.V2PduType.PduType.ue_nr_capability
+                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                    )
+                                )
                             )
                         )
                     )
@@ -2500,14 +3000,24 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                         if self.pdu_type
                         == Nr5gRrcOtaPacket.V3PduType.PduType.ul_dcch
                         else (
-                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                            gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                             if self.pdu_type
-                            == Nr5gRrcOtaPacket.V3PduType.PduType.ue_mrdc_capability
+                            == Nr5gRrcOtaPacket.V3PduType.PduType.reconfig
                             else (
-                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                 if self.pdu_type
-                                == Nr5gRrcOtaPacket.V3PduType.PduType.ue_nr_capability
-                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                == Nr5gRrcOtaPacket.V3PduType.PduType.reconfig_complete
+                                else (
+                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                    if self.pdu_type
+                                    == Nr5gRrcOtaPacket.V3PduType.PduType.ue_mrdc_capability
+                                    else (
+                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                        if self.pdu_type
+                                        == Nr5gRrcOtaPacket.V3PduType.PduType.ue_nr_capability
+                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                    )
+                                )
                             )
                         )
                     )
@@ -2613,18 +3123,28 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V4PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V4PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V4PduType.PduType.reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V4PduType.PduType.ue_mrdc_capability
+                                                    == Nr5gRrcOtaPacket.V4PduType.PduType.reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V4PduType.PduType.ue_nr_capability
-                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                        == Nr5gRrcOtaPacket.V4PduType.PduType.sib1
+                                                        else (
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                            if self.pdu_type
+                                                            == Nr5gRrcOtaPacket.V4PduType.PduType.ue_mrdc_capability
+                                                            else (
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                if self.pdu_type
+                                                                == Nr5gRrcOtaPacket.V4PduType.PduType.ue_nr_capability
+                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                            )
+                                                        )
                                                     )
                                                 )
                                             )
@@ -2740,34 +3260,44 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V5PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V5PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V5PduType.PduType.reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V5PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V5PduType.PduType.reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V5PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V5PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V5PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V5PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V5PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V5PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V5PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V5PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V5PduType.PduType.sib7
-                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                        == Nr5gRrcOtaPacket.V5PduType.PduType.sib5
+                                                                        else (
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                            if self.pdu_type
+                                                                            == Nr5gRrcOtaPacket.V5PduType.PduType.sib6
+                                                                            else (
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                                if self.pdu_type
+                                                                                == Nr5gRrcOtaPacket.V5PduType.PduType.sib7
+                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                            )
+                                                                        )
                                                                     )
                                                                 )
                                                             )
@@ -2898,50 +3428,60 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V6PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V6PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V6PduType.PduType.reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V6PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V6PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V6PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V6PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V6PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V6PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V6PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V6PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.ue_mrdc_capability
+                                                                                    == Nr5gRrcOtaPacket.V6PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.ue_nr_capability
-                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                        == Nr5gRrcOtaPacket.V6PduType.PduType.sib9
+                                                                                        else (
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            if self.pdu_type
+                                                                                            == Nr5gRrcOtaPacket.V6PduType.PduType.ue_mrdc_capability
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V6PduType.PduType.ue_nr_capability
+                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            )
+                                                                                        )
                                                                                     )
                                                                                 )
                                                                             )
@@ -3077,50 +3617,60 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V7PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V7PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V7PduType.PduType.reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V7PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V7PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V7PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V7PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V7PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V7PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V7PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V7PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.ue_mrdc_capability
+                                                                                    == Nr5gRrcOtaPacket.V7PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.ue_nr_capability
-                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                        == Nr5gRrcOtaPacket.V7PduType.PduType.sib9
+                                                                                        else (
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            if self.pdu_type
+                                                                                            == Nr5gRrcOtaPacket.V7PduType.PduType.ue_mrdc_capability
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V7PduType.PduType.ue_nr_capability
+                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            )
+                                                                                        )
                                                                                     )
                                                                                 )
                                                                             )
@@ -3258,50 +3808,60 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V8PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V8PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V8PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V8PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V8PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V8PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V8PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V8PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V8PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V8PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V8PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.ue_mrdc_capability
+                                                                                    == Nr5gRrcOtaPacket.V8PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.ue_nr_capability
-                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                        == Nr5gRrcOtaPacket.V8PduType.PduType.sib9
+                                                                                        else (
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            if self.pdu_type
+                                                                                            == Nr5gRrcOtaPacket.V8PduType.PduType.ue_mrdc_capability
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V8PduType.PduType.ue_nr_capability
+                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            )
+                                                                                        )
                                                                                     )
                                                                                 )
                                                                             )
@@ -3437,50 +3997,60 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
                                             if self.pdu_type
                                             == Nr5gRrcOtaPacket.V9PduType.PduType.ul_dcch
                                             else (
-                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
+                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration
                                                 if self.pdu_type
-                                                == Nr5gRrcOtaPacket.V9PduType.PduType.sib1
+                                                == Nr5gRrcOtaPacket.V9PduType.PduType.rrc_reconfig
                                                 else (
-                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
+                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.rrc_reconfiguration_complete
                                                     if self.pdu_type
-                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.sib2
+                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.rrc_reconfig_complete
                                                     else (
-                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
+                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib1
                                                         if self.pdu_type
-                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.sib3
+                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.sib1
                                                         else (
-                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
+                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib2
                                                             if self.pdu_type
-                                                            == Nr5gRrcOtaPacket.V9PduType.PduType.sib4
+                                                            == Nr5gRrcOtaPacket.V9PduType.PduType.sib2
                                                             else (
-                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
+                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib3
                                                                 if self.pdu_type
-                                                                == Nr5gRrcOtaPacket.V9PduType.PduType.sib5
+                                                                == Nr5gRrcOtaPacket.V9PduType.PduType.sib3
                                                                 else (
-                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
+                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib4
                                                                     if self.pdu_type
-                                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.sib6
+                                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.sib4
                                                                     else (
-                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
+                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib5
                                                                         if self.pdu_type
-                                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.sib7
+                                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.sib5
                                                                         else (
-                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
+                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.sib6
                                                                             if self.pdu_type
-                                                                            == Nr5gRrcOtaPacket.V9PduType.PduType.sib8
+                                                                            == Nr5gRrcOtaPacket.V9PduType.PduType.sib6
                                                                             else (
-                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
+                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.sib7
                                                                                 if self.pdu_type
-                                                                                == Nr5gRrcOtaPacket.V9PduType.PduType.sib9
+                                                                                == Nr5gRrcOtaPacket.V9PduType.PduType.sib7
                                                                                 else (
-                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                    gsmtap_v3.GsmtapV3.NrRrcSubtype.sib8
                                                                                     if self.pdu_type
-                                                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.ue_mrdc_capability
+                                                                                    == Nr5gRrcOtaPacket.V9PduType.PduType.sib8
                                                                                     else (
-                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                        gsmtap_v3.GsmtapV3.NrRrcSubtype.sib9
                                                                                         if self.pdu_type
-                                                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.ue_nr_capability
-                                                                                        else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                        == Nr5gRrcOtaPacket.V9PduType.PduType.sib9
+                                                                                        else (
+                                                                                            gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_mrdc_capability
+                                                                                            if self.pdu_type
+                                                                                            == Nr5gRrcOtaPacket.V9PduType.PduType.ue_mrdc_capability
+                                                                                            else (
+                                                                                                gsmtap_v3.GsmtapV3.NrRrcSubtype.ue_nr_capability
+                                                                                                if self.pdu_type
+                                                                                                == Nr5gRrcOtaPacket.V9PduType.PduType.ue_nr_capability
+                                                                                                else gsmtap_v3.GsmtapV3.NrRrcSubtype.unknown
+                                                                                            )
+                                                                                        )
                                                                                     )
                                                                                 )
                                                                             )
