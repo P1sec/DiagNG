@@ -92,7 +92,7 @@ class OTADecoder:
                 else:
                     arfcn = 0
 
-                self.pcap_stream.write_gsmtap_packet(
+                self.pcap_stream.write_gsmtap_v2_packet(
                     GsmtapV2.PacketType.umts_rrc,
                     sub_type,
                     msg.message,
@@ -152,7 +152,7 @@ class OTADecoder:
             if msg.channel_type in [ChannelType.bcch, ChannelType.ccch]:
                 data = data[1:]
 
-            self.pcap_stream.write_gsmtap_packet(
+            self.pcap_stream.write_gsmtap_v2_packet(
                 GsmtapV2.PacketType.abis,
                 sub_type,
                 data,
@@ -171,7 +171,7 @@ class OTADecoder:
             ):
                 # ⚠️ TODO: Implement RRC reassembly for v30+ packets?
 
-                self.pcap_stream.write_gsmtap_packet(
+                self.pcap_stream.write_gsmtap_v2_packet(
                     GsmtapV2.PacketType.lte_rrc,
                     msg.pdu_type.gsmtap_subtype,
                     msg.message,
@@ -180,6 +180,8 @@ class OTADecoder:
 
         elif code == DiagLogging.LogCode.nr5g_rrc_ota_packet:  # 0xb821
             pass  # ⚠️ TODO
+
+            # self.pcap_stream.write_gsmtap_v3_packet(XX)
 
         elif code == DiagLogging.LogCode.umts_ue_ota:  # 0x713a
             pass  # ⚠️ TODO
@@ -203,7 +205,7 @@ class OTADecoder:
             # ⚠️ This requires Wireshark 4.7 (CURRENTLY A DEV BUILD) or above:
             # https://github.com/wireshark/wireshark/blob/v4.7.0/epan/dissectors/packet-qcdiag_log.c
 
-            self.pcap_stream.write_gsmtap_packet(
+            self.pcap_stream.write_gsmtap_v2_packet(
                 GsmtapV2.PacketType.qc_diag,
                 0,
                 log,

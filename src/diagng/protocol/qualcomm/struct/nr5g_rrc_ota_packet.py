@@ -27,27 +27,11 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
         self.rrc_ver_minor = self._io.read_bits_int_be(4)
         self.bearer_id = self._io.read_u1()
         self.phy_cellid = self._io.read_u2le()
-        if not self.phy_cellid >= 0:
-            raise kaitaistruct.ValidationLessThanError(
-                0, self.phy_cellid, self._io, '/seq/5'
-            )
-        if not self.phy_cellid <= 503:
-            raise kaitaistruct.ValidationGreaterThanError(
-                503, self.phy_cellid, self._io, '/seq/5'
-            )
         if self.packet_version >= 16:
             pass
             self.nr_global_cellid = self._io.read_u8le()
 
         self.frequency = self._io.read_u4le()
-        if not self.frequency >= 0:
-            raise kaitaistruct.ValidationLessThanError(
-                0, self.frequency, self._io, '/seq/7'
-            )
-        if not self.frequency <= 262143:
-            raise kaitaistruct.ValidationGreaterThanError(
-                262143, self.frequency, self._io, '/seq/7'
-            )
         _on = self.packet_version
         if _on == 1:
             pass
@@ -571,25 +555,9 @@ class Nr5gRrcOtaPacket(ReadWriteKaitaiStruct):
         self._io.write_bytes(self.message)
 
     def _check(self):
-        if not self.phy_cellid >= 0:
-            raise kaitaistruct.ValidationLessThanError(
-                0, self.phy_cellid, None, '/seq/5'
-            )
-        if not self.phy_cellid <= 503:
-            raise kaitaistruct.ValidationGreaterThanError(
-                503, self.phy_cellid, None, '/seq/5'
-            )
         if self.packet_version >= 16:
             pass
 
-        if not self.frequency >= 0:
-            raise kaitaistruct.ValidationLessThanError(
-                0, self.frequency, None, '/seq/7'
-            )
-        if not self.frequency <= 262143:
-            raise kaitaistruct.ValidationGreaterThanError(
-                262143, self.frequency, None, '/seq/7'
-            )
         _on = self.packet_version
         if _on == 1:
             pass

@@ -248,7 +248,10 @@ class PcapOutput(GObject.GObject):
                 )
                 self.stream_active.emit()
 
-    def write_gsmtap_packet(
+    def write_gsmtap_v3_packet():
+        XX
+
+    def write_gsmtap_v2_packet(
         self,
         packet_type: GsmtapV2.PacketType,
         sub_type: Union[ReadWriteKaitaiStruct, int],
@@ -331,6 +334,13 @@ class PcapOutput(GObject.GObject):
         packet.content = content
         packet._check()
 
+        self.write_gsmtap_packet(packet, data)
+
+    def write_gsmtap_packet(
+        self,
+        packet: Gsmtap,
+        data: Union[bytes, DiagLogF.InnerLog, DiagRequest, DiagResponse],
+    ):
         # Write UDP header
 
         buf = BytesIO()

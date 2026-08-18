@@ -26,9 +26,9 @@ seq:
 
   - id: phy_cellid # PCI
     type: u2
-    valid:
-      min: 0
-      max: 503
+    # valid:
+    #   min: 0
+    #   max: 503
 
   - if: packet_version >= 16
     id: nr_global_cellid # NCGI
@@ -36,9 +36,9 @@ seq:
 
   - id: frequency # NARFCN
     type: u4
-    valid:
-      min: 0
-      max: 262143
+    # valid:
+    #   min: 0
+    #   max: 262143
 
   - id: sfn_subfn
     type:
