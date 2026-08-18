@@ -92,8 +92,6 @@ class PcapOutput(GObject.GObject):
     def stream_closed(self):
         self.stream_state = StreamState.Closed
 
-        self.wireshark_proc = None
-
         if self.output_stream:
             self.output_stream.close_async(GLib.PRIORITY_DEFAULT, None, None)
             self.output_stream = None
