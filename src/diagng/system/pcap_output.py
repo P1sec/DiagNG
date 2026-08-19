@@ -37,6 +37,7 @@ from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.protocol.network.protocol_body import ProtocolBody
 from diagng.protocol.network.udp_datagram import UdpDatagram
 from diagng.protocol.network.ipv4_packet import Ipv4Packet
+from diagng.protocol.network.gsmtap_v3 import GsmtapV3
 from diagng.protocol.network.gsmtap_v2 import GsmtapV2
 from diagng.protocol.network.gsmtap import Gsmtap
 from diagng.protocol.network.pcap import Pcap
@@ -248,8 +249,43 @@ class PcapOutput(GObject.GObject):
                 )
                 self.stream_active.emit()
 
-    def write_gsmtap_v3_packet():
-        XX
+    def write_gsmtap_v3_packet(
+        self,
+        packet_type: GsmtapV3.Type,
+        sub_type: Union[ReadWriteKaitaiStruct, int],
+        data: bytes,
+        is_uplink: bool = False,
+        arfcn: Optional[int] = 0,
+        # ⚠️⚠️ 🪧 ➡️ TODO make timestamp a dedicated argument instead of inferring it poorly
+    ):
+        packet = Gsmtap()
+        packet.version = 3
+
+        content = GsmtapV3()
+        content.reserved = 0
+
+        content.type = packet_type
+        content.subtype = sub_type
+
+        # Add metadata tags:
+
+        # 0x0002: Channel number (inc. downlink bit) = (u4) (arcfn | (is_uplink << 31))
+
+        channel_tag = GsmtapV3.ChannelNumber()
+        channel_tag.is_uplink = is_uplink
+        channel_tag.arfcn = arfcn
+        channel_tag._check()
+
+        content.metadata = [channel_tag]
+        content.data = data
+
+        content.header_len = 4  # 2x32 bits header + 1 T16L16V32 metadata field
+        packet.content = content
+
+        content._check()
+        packet._check()
+
+        self.write_gsmtap_packet(packet, data)
 
     def write_gsmtap_v2_packet(
         self,

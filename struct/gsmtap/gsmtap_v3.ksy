@@ -9,11 +9,13 @@ meta:
 
 seq:
   - id: reserved
+    doc: reserved for future use (RFU). Must be 0.
     type: u1
     valid:
       eq: 0
 
   - id: header_len
+    doc: length (including metadata) in number of 32bit words
     type: u2
     valid:
       min: 2
@@ -23,6 +25,7 @@ seq:
     enum: type
 
   - id: subtype
+    doc: type of burst/channel
     type:
       switch-on: type
       cases:
@@ -30,6 +33,7 @@ seq:
         _: u2
 
   - id: metadata
+    doc: type-specific metadata structure
     type: metadata
     repeat: until
     repeat-until: _.tag == metadata::tag::end_of_metadata
@@ -153,6 +157,10 @@ types:
       - if: tag != tag::end_of_metadata
         id: value
         size: len_value
+        type:
+          switch-on: tag
+          cases:
+            'tag::channel_number': channel_number
 
     enums:
       tag:
@@ -200,9 +208,18 @@ types:
         0xfffe: end_of_metadata
 
 
+  channel_number:
+    seq:
+      - id: is_uplink
+        type: b1
+
+      - id: arfcn
+        type: b15
+
   nr_rrc_subtype:
     seq:
-      - type: u2
+      - id: subtype
+        type: u2
         enum: nr_rrc_subtype
 
 #   (WIP)

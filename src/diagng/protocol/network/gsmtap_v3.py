@@ -216,6 +216,28 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
         self._dirty = False
 
+    class ChannelNumber(ReadWriteKaitaiStruct):
+        def __init__(self, _io=None, _parent=None, _root=None):
+            super(GsmtapV3.ChannelNumber, self).__init__(_io)
+            self._parent = _parent
+            self._root = _root
+
+        def _read(self):
+            self.is_uplink = self._io.read_bits_int_be(1) != 0
+            self.arfcn = self._io.read_bits_int_be(15)
+            self._dirty = False
+
+        def _fetch_instances(self):
+            pass
+
+        def _write__seq(self, io=None):
+            super(GsmtapV3.ChannelNumber, self)._write__seq(io)
+            self._io.write_bits_int_be(1, int(self.is_uplink))
+            self._io.write_bits_int_be(15, self.arfcn)
+
+        def _check(self):
+            self._dirty = False
+
     class Metadata(ReadWriteKaitaiStruct):
         class Tag(IntEnum):
             packet_timestamp = 0
@@ -272,7 +294,18 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
             if self.tag != GsmtapV3.Metadata.Tag.end_of_metadata:
                 pass
-                self.value = self._io.read_bytes(self.len_value)
+                _on = self.tag
+                if _on == GsmtapV3.Metadata.Tag.channel_number:
+                    pass
+                    self._raw_value = self._io.read_bytes(self.len_value)
+                    _io__raw_value = KaitaiStream(BytesIO(self._raw_value))
+                    self.value = GsmtapV3.ChannelNumber(
+                        _io__raw_value, self, self._root
+                    )
+                    self.value._read()
+                else:
+                    pass
+                    self.value = self._io.read_bytes(self.len_value)
 
             self._dirty = False
 
@@ -283,6 +316,12 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
             if self.tag != GsmtapV3.Metadata.Tag.end_of_metadata:
                 pass
+                _on = self.tag
+                if _on == GsmtapV3.Metadata.Tag.channel_number:
+                    pass
+                    self.value._fetch_instances()
+                else:
+                    pass
 
         def _write__seq(self, io=None):
             super(GsmtapV3.Metadata, self)._write__seq(io)
@@ -293,7 +332,33 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
             if self.tag != GsmtapV3.Metadata.Tag.end_of_metadata:
                 pass
-                self._io.write_bytes(self.value)
+                _on = self.tag
+                if _on == GsmtapV3.Metadata.Tag.channel_number:
+                    pass
+                    _io__raw_value = KaitaiStream(
+                        BytesIO(bytearray(self.len_value))
+                    )
+                    self._io.add_child_stream(_io__raw_value)
+                    _pos2 = self._io.pos()
+                    self._io.seek(self._io.pos() + (self.len_value))
+
+                    def handler(parent, _io__raw_value=_io__raw_value):
+                        self._raw_value = _io__raw_value.to_byte_array()
+                        if len(self._raw_value) != self.len_value:
+                            raise kaitaistruct.ConsistencyError(
+                                'raw(value)',
+                                self.len_value,
+                                len(self._raw_value),
+                            )
+                        parent.write_bytes(self._raw_value)
+
+                    _io__raw_value.write_back_handler = (
+                        KaitaiStream.WriteBackHandler(_pos2, handler)
+                    )
+                    self.value._write__seq(_io__raw_value)
+                else:
+                    pass
+                    self._io.write_bytes(self.value)
 
         def _check(self):
             if self.tag != GsmtapV3.Metadata.Tag.end_of_metadata:
@@ -301,10 +366,23 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
             if self.tag != GsmtapV3.Metadata.Tag.end_of_metadata:
                 pass
-                if len(self.value) != self.len_value:
-                    raise kaitaistruct.ConsistencyError(
-                        'value', self.len_value, len(self.value)
-                    )
+                _on = self.tag
+                if _on == GsmtapV3.Metadata.Tag.channel_number:
+                    pass
+                    if self.value._root != self._root:
+                        raise kaitaistruct.ConsistencyError(
+                            'value', self._root, self.value._root
+                        )
+                    if self.value._parent != self:
+                        raise kaitaistruct.ConsistencyError(
+                            'value', self, self.value._parent
+                        )
+                else:
+                    pass
+                    if len(self.value) != self.len_value:
+                        raise kaitaistruct.ConsistencyError(
+                            'value', self.len_value, len(self.value)
+                        )
 
             self._dirty = False
 
@@ -315,7 +393,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
             self._root = _root
 
         def _read(self):
-            self._unnamed0 = KaitaiStream.resolve_enum(
+            self.subtype = KaitaiStream.resolve_enum(
                 GsmtapV3.NrRrcSubtype, self._io.read_u2be()
             )
             self._dirty = False
@@ -325,7 +403,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
         def _write__seq(self, io=None):
             super(GsmtapV3.NrRrcSubtype, self)._write__seq(io)
-            self._io.write_u2be(int(self._unnamed0))
+            self._io.write_u2be(int(self.subtype))
 
         def _check(self):
             self._dirty = False
