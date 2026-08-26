@@ -20,7 +20,7 @@ Feature list:
 
 DiagNG is released under the GPL v3 license.
 
-DiagNG is developed with the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as way of conducting security research.
+DiagNG is developed with the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as well of conducting security research.
 
 P1 Security being based in France, read the following extra mentions for more detailed context on the purpose of this software:
 
