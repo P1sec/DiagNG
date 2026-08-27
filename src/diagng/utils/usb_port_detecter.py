@@ -102,8 +102,8 @@ def detect_diag_usb_ports(
         gobjs_out.remove_all()
 
         if nusb_device_tree and nusb_device_tree.get('device_tree'):
-            for bus in nusb_device_tree['device_tree']:
-                for device in bus['devices']:
+            for bus in nusb_device_tree['device_tree'] or []:
+                for device in bus['devices'] or []:
                     vid_pid = device['vendor_id'] + ':' + device['product_id']
                     full_device_id = '%s-%s' % (
                         device['bus_string'].lstrip('0'),
@@ -129,7 +129,7 @@ def detect_diag_usb_ports(
                             device['product_name'].replace(',', ' ').strip()
                         )
 
-                    for configuration in device['configurations']:
+                    for configuration in device['configurations'] or []:
                         conf_num = configuration['b_configuration_number']
                         conf_name = configuration['i_configuration']
 
@@ -153,7 +153,7 @@ def detect_diag_usb_ports(
                             ):
                                 continue
 
-                            for alt_setting in interface['alt_settings']:
+                            for alt_setting in interface['alt_settings'] or []:
                                 alt_setting_num = alt_setting['b_alt_setting']
                                 num_endpoints = len(alt_setting['endpoints'])
 
