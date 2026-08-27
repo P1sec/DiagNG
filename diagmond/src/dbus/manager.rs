@@ -34,6 +34,8 @@ impl Diagmond {
     async fn open_usb_interface(
         &self,
         #[zbus(object_server)] obj_server: &ObjectServer,
+        #[zbus(connection)] connection: &Connection,
+        #[zbus(header)] header: Header<'_>,
         device_path: String,
         kernel_path: String,
         bus_id: String,
@@ -44,6 +46,79 @@ impl Diagmond {
         interface_id: u8,
         alt_setting_id: u8,
     ) -> zbus::fdo::Result<ObjectPath<'_>> {
+        // Check for PolKit rights
+
+        let dbus_proxy = match DBusProxy::new(connection).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not create a \"org.freedesktop.DBus\" interface proxy when trying to acquire USB device: {:?}",
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        let process_id = match dbus_proxy
+            .get_connection_unix_process_id((*header.sender().unwrap()).clone().into())
+            .await
+        {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not call \"org.freedesktop.DBus.GetConnectionUnixProcessID\" when trying to acquire USB device: {:?}",
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        let proxy = match AuthorityProxy::new(connection).await {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not create a Polkit authority proxy when trying to acquire USB device: {:?}",
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+        let subject = match Subject::new_for_owner(process_id, None, None) {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!("Could not find info for PID {}: {:?}", process_id, err);
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+        let result = match proxy
+            .check_authorization(
+                &subject,
+                "com.p1security.diagmond.open-usb-interface",
+                &std::collections::HashMap::new(),
+                CheckAuthorizationFlags::AllowUserInteraction.into(),
+                "",
+            )
+            .await
+        {
+            Ok(obj) => obj,
+            Err(err) => {
+                log::error!(
+                    "Could not communicate with Polkit authority proxy when trying to acquire USB device: {:?}",
+                    err
+                );
+                return Err(zbus::fdo::Error::Failed(err.to_string()));
+            }
+        };
+
+        if !result.is_authorized {
+            let error = format!(
+                "Could not authorize the action of acquiring {} with Polkit: {:?}",
+                device_path, result
+            );
+            log::error!("{}", error);
+            return Err(zbus::fdo::Error::Failed(error));
+        }
+
         // Add UDev rule if ModemManager is running
 
         if kernel_path.len() > 0 {
@@ -91,7 +166,7 @@ impl Diagmond {
             }
         };
 
-        device.detach_kernel_driver(interface_id).ok();
+        // device.detach_kernel_driver(interface_id).ok();
 
         let mut is_configured: bool = false;
         if let Ok(configuration) = device.active_configuration() {
@@ -291,9 +366,9 @@ impl Diagmond {
                 log::warn!("Could not shutdown writer: {:?}", err);
             };
 
-            if let Err(err) = device.attach_kernel_driver(interface_id) {
-                log::warn!("Could not reattach kernel drivers: {:?}", err);
-            };
+            // if let Err(err) = device.attach_kernel_driver(interface_id) {
+            //     log::warn!("Could not reattach kernel drivers: {:?}", err);
+            // };
 
             // Notify clients of close operation
 
@@ -371,7 +446,7 @@ impl Diagmond {
             }
         };
 
-        let pid = match dbus_proxy
+        let process_id = match dbus_proxy
             .get_connection_unix_process_id((*header.sender().unwrap()).clone().into())
             .await
         {
@@ -399,10 +474,10 @@ impl Diagmond {
                 return Err(zbus::fdo::Error::Failed(err.to_string()));
             }
         };
-        let subject = match Subject::new_for_owner(pid, None, None) {
+        let subject = match Subject::new_for_owner(process_id, None, None) {
             Ok(obj) => obj,
             Err(err) => {
-                log::error!("Could not find info for PID {}: {:?}", pid, err);
+                log::error!("Could not find info for PID {}: {:?}", process_id, err);
                 return Err(zbus::fdo::Error::Failed(err.to_string()));
             }
         };
