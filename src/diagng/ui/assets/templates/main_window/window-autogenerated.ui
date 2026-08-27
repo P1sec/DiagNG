@@ -355,7 +355,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="adb_tcp_group">
-                            <property name="title">Active TCP connections</property>
+                            <property name="title">No active TCP connections</property>
                           </object>
                         </child>
                       </object>

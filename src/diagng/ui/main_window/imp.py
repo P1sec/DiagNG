@@ -441,6 +441,12 @@ class MainWindow(Adw.ApplicationWindow):
             self.update_tokio_serial_debug_data,
         )
 
+        # ADB tab
+
+        self.app.adb_watcher.devices.connect(
+            'items-changed', self.update_adb_tab
+        )
+
         # ModemMananger status
 
         self.app.modem_manager.mm_instance.connect(
@@ -468,6 +474,10 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.update_serial_modems()
         self.update_tokio_serial_debug_data()
+
+        # ADB tab
+
+        self.update_adb_tab()
 
         # ModemManager tab
 
@@ -631,6 +641,13 @@ class MainWindow(Adw.ApplicationWindow):
             self.serial_modems.remove_all()
             for obj in vid_pid_to_obj.values():
                 self.serial_modems.append(obj)
+
+    def update_adb_tab(self, *args):
+        self.adb_devices_group.set_title(
+            'ADB devices list'
+            if self.app.adb_watcher.devices.get_n_items()
+            else 'No detected ADB devices'
+        )
 
     def update_mm_instance(self, *args):
         if self.app.modem_manager.mm_instance.initialized:

@@ -28,7 +28,9 @@ if not exists(RESOURCES_PATH) or (
     )
     > stat(RESOURCES_PATH).st_mtime
 ):
-    for blueprint_name in iglob('**.blp', recursive=True, root_dir=ASSETS_DIR):
+    for blueprint_name in iglob(
+        '**/*.blp', recursive=True, root_dir=ASSETS_DIR
+    ):
         base_name, _ = splitext(blueprint_name)
 
         run(
