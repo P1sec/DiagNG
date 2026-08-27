@@ -10,12 +10,12 @@ from io import BytesIO
 # Register resources
 import diagng.utils.gresources
 
-from diagng.ui.main_window.models.usb_interfaces import create_usb_interfaces
+from diagng.ui.main_window.templates.usb_interface_row import USBInterfaceRow
+from diagng.ui.main_window.templates.adb_device_row import ADBDeviceRow
 from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
-from diagng.ui.main_window.models.adb_devices import create_adb_device
-from diagng.ui.main_window.models.spi_modems import create_spi_modem
+from diagng.ui.main_window.templates.spi_modem_row import SPIModemRow
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
-from diagng.ui.main_window.models.mm_modems import create_mm_modem
+from diagng.ui.main_window.templates.mm_modem_row import MMModemRow
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
 from diagng.protocol.qualcomm.acquisition import spi_input
@@ -198,9 +198,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.serial_modems = Gio.ListStore.new(SerialModem)
 
-        self.spi_ports_group.bind_model(
-            self.serial_modems, create_spi_modem, self
-        )
+        self.spi_ports_group.bind_model(self.serial_modems, SPIModemRow, self)
 
         # Build SPI device tree view
 
@@ -258,13 +256,13 @@ class MainWindow(Adw.ApplicationWindow):
         )
 
         self.adb_devices_group.bind_model(
-            self.app.adb_watcher.devices, create_adb_device, self
+            self.app.adb_watcher.devices, ADBDeviceRow, self
         )
 
         # Bind ModemManager modem list
 
         self.detected_modems_group.bind_model(
-            self.app.modem_manager.mm_instance.modems, create_mm_modem
+            self.app.modem_manager.mm_instance.modems, MMModemRow
         )
 
         # Build ModemManager debug SourceView
@@ -285,7 +283,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.usb_devices = Gio.ListStore.new(USBDevice)
 
         self.usb_interfaces_group.bind_model(
-            self.usb_devices, create_usb_interfaces, self
+            self.usb_devices, USBInterfaceRow, self
         )
 
         # Build UDev rules list

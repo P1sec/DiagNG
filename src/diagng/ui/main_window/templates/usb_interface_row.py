@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+from diagng.gobject.usb_device import USBDevice
+
+import gi
+
+gi.require_version('Gtk', '4.0')
+gi.require_version('Adw', '1')
+
+from gi.repository import Adw, Gtk, GLib
+
+
+class USBInterfaceRow(Adw.ExpanderRow):
+    def __init__(self, usb_dev: USBDevice, window: 'MainWindow'):
+        super().__init__()
+
+        markup = '<b>%s %s</b> - %s' % (
+            GLib.markup_escape_text(usb_dev.vendor_name or ''),
+            GLib.markup_escape_text(usb_dev.model_name or ''),
+            GLib.markup_escape_text(usb_dev.vid_pid or ''),
+        )
+
+        if usb_dev.alt_vendor_name:
+            markup = (
+                '<b>%s %s</b> - '
+                % (
+                    GLib.markup_escape_text(usb_dev.alt_vendor_name or ''),
+                    GLib.markup_escape_text(usb_dev.alt_model_name or ''),
+                )
+                + markup
+            )
+
+        self.set_expanded(True)
+        self.set_title_selectable(True)
+        self.set_title(markup)
+
+        for pos in range(usb_dev.interfaces.get_n_items()):
+            item = usb_dev.interfaces.get_item(pos)
+
+            intf_title = 'Configuration %d%s, interface %d%s' % (
+                item.conf_num,
+                '' if not item.conf_name else ' (%s)' % item.conf_name,
+                item.intf_num,
+                '' if not item.intf_name else ' (%s)' % item.intf_name,
+            )
+
+            if item.has_alt_settings:
+                intf_title += ', alt setting %d' % item.alt_setting_num
+
+            intf_subtitle = 'class=%s/subclass=%s/protocol=%s' % (
+                item.usb_class,
+                item.usb_subclass,
+                item.usb_protocol,
+            )
+
+            if item.udev_tty_device_path:
+                intf_subtitle += ', dev=%s' % item.udev_tty_device_path
+
+                if item.mm_obj:
+                    intf_subtitle += ', type=%s' % item.mm_obj.port_type
+
+            intf_row = Adw.ActionRow.new()
+            intf_row.set_title_selectable(True)
+            intf_row.set_subtitle_selectable(True)
+            intf_row.set_title(GLib.markup_escape_text(intf_title))
+            intf_row.set_subtitle(GLib.markup_escape_text(intf_subtitle))
+
+            connect_btn = Gtk.Button()
+            connect_btn.add_css_class('pill')
+            connect_btn.add_css_class('suggested-action')
+
+            def update_connected_state(*args):
+                connect_btn.set_label(
+                    'Disconnect' if item.connected else 'Connect'
+                )
+                if item.connected:
+                    connect_btn.connect(
+                        'clicked',
+                        window.disconnect_usb_intf,
+                        usb_dev,
+                        item,
+                    )
+                else:
+                    connect_btn.connect(
+                        'clicked',
+                        window.connect_usb_intf,
+                        usb_dev,
+                        item,
+                    )
+
+            update_connected_state()
+
+            item.connect('notify::connected', update_connected_state)
+
+            intf_row.add_suffix(connect_btn)
+
+            self.add_row(intf_row)

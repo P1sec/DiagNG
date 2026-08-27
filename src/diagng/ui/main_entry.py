@@ -7,9 +7,6 @@ from json import dumps
 import sys
 import gi
 
-from diagng.ui.qcdm_window.models.wireshark_plugins import (
-    create_wireshark_plugin,
-)
 from diagng.system.diagmond_serialdevice_om import DiagmondSerialDeviceOM
 from diagng.system.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf

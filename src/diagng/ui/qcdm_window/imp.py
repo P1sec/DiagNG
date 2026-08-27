@@ -12,8 +12,8 @@ from diagng.system.wireshark.wireshark_plugin_manager import (
     WiresharkPluginManager,
     PLUGIN_DIR,
 )
-from diagng.ui.qcdm_window.models.wireshark_plugins import (
-    create_wireshark_plugin,
+from diagng.ui.qcdm_window.templates.wireshark_plugin_row import (
+    WiresharkPluginRow,
 )
 from diagng.protocol.qualcomm.struct.diag_verno_f_req import DiagVernoFReq
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
@@ -87,7 +87,7 @@ class QCDMWindow(Adw.Window):
 
         self.wireshark_plugins.bind_model(
             self.ws_plugin_manager.current_plugins,
-            create_wireshark_plugin,
+            WiresharkPluginRow,
             self.ws_plugin_manager,
         )
 

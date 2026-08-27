@@ -47,6 +47,20 @@ class ADBDeviceRow(Adw.ExpanderRow):
     def __init__(self, dev=None, main_window=None):
         super().__init__()
 
+        # ⚠️  TODO: Use bind_property?
+
+        # TODO: Handle unauthorized state
+
+        # TODO: Add TCP connection feature
+
+        # TODO handle Connect button
+        # TODO check root state (+ handle escalation, add dedicated ops?)
+        # TODO handle transferring ARM bin to Android (incl. 64 variant?)
+        # TODO handle dial codes?
+        # TODO: Handle magic APK routes (ex. the Xiaomi thing)?
+        # Cf. https://web.archive.org/web/20260308201119/https://band.radio/diag
+        # ⚠️ http://wiki.dmz.intl.p1sec.io/index.php/Qualcomm_device_USB_bus/Xiaomi_Mi_11#Ways_to_switch_the_diag_endpoint
+
         if dev:
             self.device = dev
             self.main_window = main_window
