@@ -41,7 +41,7 @@ def main():
 
 
 class MainApplication(Adw.Application):
-    window: MainWindow
+    window: MainWindow = None
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None

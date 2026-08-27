@@ -56,6 +56,7 @@ class MainWindow(Adw.ApplicationWindow):
     usb_link_banner: Adw.ActionRow = Gtk.Template.Child()
     spi_link_banner: Adw.ActionRow = Gtk.Template.Child()
     adb_link_banner: Adw.ActionRow = Gtk.Template.Child()
+    udev_link_banner: Adw.ActionRow = Gtk.Template.Child()
 
     # UI panel: USB
 
@@ -401,6 +402,15 @@ class MainWindow(Adw.ApplicationWindow):
         self.app.diagmond_communicator.connect(
             'notify::bus-connected', self.update_daemon_statuses
         )
+        self.app.connect(
+            'notify::udev-debug-data', self.update_daemon_statuses
+        )
+        self.app.adb_watcher.connect(
+            'notify::is-connected', self.update_daemon_statuses
+        )
+        self.app.adb_watcher.connect(
+            'notify::is-failed', self.update_daemon_statuses
+        )
 
         # USB tab
 
@@ -472,8 +482,9 @@ class MainWindow(Adw.ApplicationWindow):
     def update_daemon_statuses(self, *args):
         mm_running = self.app.modem_manager.mm_instance.is_running
         diagmond_running = self.app.diagmond_communicator.bus_connected
-        # udev_reachable = True
-        # adb_reachable = True
+        udev_reachable = bool(self.app.udev_debug_data)
+        adb_reachable = self.app.adb_watcher.is_connected
+        adb_failed = self.app.adb_watcher.is_failed
 
         if (
             not self.app.diagmond_communicator.proxy.get_name_owner()
@@ -487,20 +498,38 @@ class MainWindow(Adw.ApplicationWindow):
 
         # self.run_diagmond_popover.set_visible(not diagmond_running)
 
+        # self.XY.set_enable(XX) # WIP ⚠️
+
         self.usb_link_banner.set_title(
-            'UDev status: REACHABLE - diagmond status: %s'
-            % ('ON' if diagmond_running else 'OFF')
+            'UDev status: %s - diagmond status: %s'
+            % (
+                'ON 🟢' if udev_reachable else 'Loading... ⚠️',
+                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
+            )
         )
         self.spi_link_banner.set_title(
-            'UDev status: REACHABLE - diagmond status: %s'
-            % ('ON' if diagmond_running else 'OFF')
+            'UDev status: %s - diagmond status: %s'
+            % (
+                'ON 🟢' if udev_reachable else 'Loading... ⚠️',
+                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
+            )
         )
         self.mm_link_banner.set_title(
             'ModemManager Link: %s - diagmond status: %s'
             % (
-                'ON' if mm_running else 'OFF',
-                'ON' if diagmond_running else 'OFF',
+                'ON 🟢' if mm_running else 'OFF 💤',
+                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
             )
+        )
+        if adb_failed:
+            self.adb_link_banner.set_title('ADB daemon status: Unreachable ❌')
+        else:
+            self.adb_link_banner.set_title(
+                'ADB daemon status: %s'
+                % ('ON 🟢' if adb_reachable else 'Loading... ⚠️')
+            )
+        self.udev_link_banner.set_title(
+            'UDev status: %s' % ('ON 🟢' if udev_reachable else 'Loading... ⚠️')
         )
 
     def sync_sourceview_theme(self, *args):
@@ -533,6 +562,15 @@ class MainWindow(Adw.ApplicationWindow):
             self.usb_devices,
             self.app.modem_manager.mm_instance.modems,
         )
+
+        if self.usb_devices.get_n_items():
+            self.usb_interfaces_group.set_title(
+                'Potential Qualcomm Diag USB devices'
+            )
+        else:
+            self.usb_interfaces_group.set_title(
+                'No Qualcomm Diag USB devices detected'
+            )
 
     def update_nusb_debug_data(self, *args):
         if self.app.nusb_debug_data:
