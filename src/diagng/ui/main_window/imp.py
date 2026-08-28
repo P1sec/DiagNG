@@ -577,7 +577,7 @@ class MainWindow(Adw.ApplicationWindow):
             )
         else:
             self.usb_interfaces_group.set_title(
-                'No Qualcomm Diag USB devices detected'
+                'Status: 🟠 No Qualcomm Diag USB devices detected'
             )
 
     def update_nusb_debug_data(self, *args):

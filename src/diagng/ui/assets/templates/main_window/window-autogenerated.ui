@@ -23,6 +23,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
                           </object>
                         </property>
+                        <property name="description">Welcome to DiagNG! 👋 Please refer to &lt;a href="https://github.com/P1sec/DiagNG#readme"&gt;https://github.com/P1sec/DiagNG&lt;/a&gt; for usage information.</property>
                         <child>
                           <object class="AdwPreferencesGroup" id="run_diagmond_popover">
                             <property name="visible">false</property>
@@ -113,7 +114,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="nusb_tree_group">
-                            <property name="title">Detected nusb device tree</property>
+                            <property name="title">Debug info: Full USB device tree</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -144,7 +145,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">nusb debug information</property>
+                            <property name="title" translatable="yes">USB debugging information</property>
                             <child>
                               <object class="GtkScrolledWindow" id="nusb_debug_viewport">
                                 <property name="max-content-height">240</property>
@@ -155,7 +156,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="usb_tree_group">
-                            <property name="title" translatable="yes">Detailed UDev device tree</property>
+                            <property name="title" translatable="yes">Debug info: UDev device tree</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">

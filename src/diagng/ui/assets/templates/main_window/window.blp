@@ -12,6 +12,8 @@ template $MainWindow: Adw.ApplicationWindow {
               title: "UDev status: REACHABLE - diagmond status: OFF";
             };
 
+            description: "Welcome to DiagNG! 👋 Please refer to <a href=\"https://github.com/P1sec/DiagNG#readme\">https://github.com/P1sec/DiagNG</a> for usage information.";
+
             Adw.PreferencesGroup run_diagmond_popover {
               visible: false;
 
@@ -95,7 +97,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup nusb_tree_group {
-              title: "Detected nusb device tree";
+              title: "Debug info: Full USB device tree";
 
               ScrolledWindow {
                 child: ListView nusb_tree {
@@ -119,7 +121,7 @@ template $MainWindow: Adw.ApplicationWindow {
                 tooltip-text: _("Copy to clipboard");
               };
 
-              title: _("nusb debug information");
+              title: _("USB debugging information");
 
               ScrolledWindow nusb_debug_viewport {
                 max-content-height: 240;
@@ -128,7 +130,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup usb_tree_group {
-              title: _("Detailed UDev device tree");
+              title: _("Debug info: UDev device tree");
 
               ScrolledWindow {
                 child: ListView usb_tree {
