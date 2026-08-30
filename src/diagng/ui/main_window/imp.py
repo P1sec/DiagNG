@@ -509,24 +509,24 @@ class MainWindow(Adw.ApplicationWindow):
         # self.XY.set_enable(XX) # WIP ⚠️
 
         self.usb_link_banner.set_title(
-            'UDev status: %s - diagmond status: %s'
+            'Data sources status: UDev: %s - diagmond status: %s'
             % (
-                'ON 🟢' if udev_reachable else 'Loading... ⚠️',
-                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
+                '✅' if udev_reachable else 'Loading... ⚠️',
+                '✅' if diagmond_running else 'Loading... ⚠️',
             )
         )
         self.spi_link_banner.set_title(
-            'UDev status: %s - diagmond status: %s'
+            'Data sources status: UDev: %s - diagmond: %s'
             % (
-                'ON 🟢' if udev_reachable else 'Loading... ⚠️',
-                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
+                '✅' if udev_reachable else 'Loading... ⚠️',
+                '✅' if diagmond_running else 'Loading... ⚠️',
             )
         )
         self.mm_link_banner.set_title(
             'ModemManager Link: %s - diagmond status: %s'
             % (
-                'ON 🟢' if mm_running else 'OFF 💤',
-                'ON 🟢' if diagmond_running else 'Loading... ⚠️',
+                '✅' if mm_running else 'OFF 💤',
+                '✅' if diagmond_running else 'Loading... ⚠️',
             )
         )
         if adb_failed:
@@ -534,10 +534,10 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             self.adb_link_banner.set_title(
                 'ADB daemon status: %s'
-                % ('ON 🟢' if adb_reachable else 'Loading... ⚠️')
+                % ('✅' if adb_reachable else 'Loading... ⚠️')
             )
         self.udev_link_banner.set_title(
-            'UDev status: %s' % ('ON 🟢' if udev_reachable else 'Loading... ⚠️')
+            'UDev status: %s' % ('✅' if udev_reachable else 'Loading... ⚠️')
         )
 
     def sync_sourceview_theme(self, *args):

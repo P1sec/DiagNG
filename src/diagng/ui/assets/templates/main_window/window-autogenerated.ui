@@ -20,10 +20,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <property name="banner">
                           <object class="AdwBanner" id="usb_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
+                            <property name="title">Data sources status: UDev: ✅ - diagmond: Loading... ⚠️</property>
                           </object>
                         </property>
-                        <property name="description">Welcome to DiagNG! Please refer to &lt;a href="https://github.com/P1sec/DiagNG#readme"&gt;https://github.com/P1sec/DiagNG&lt;/a&gt; for usage information.</property>
+                        <property name="description">Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on the system and allows you to connect to them.
+
+For now, only Qualcomm-based devices are supported. Please see the "ADB" tab of the current app for connecting to an Android smartphone.</property>
                         <child>
                           <object class="AdwPreferencesGroup" id="run_diagmond_popover">
                             <property name="visible">false</property>
@@ -114,7 +116,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="nusb_tree_group">
-                            <property name="title">Debug info: Full USB device tree</property>
+                            <property name="title">Debug info: Raw USB interfaces list (data source: nusb)</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -145,7 +147,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">USB debugging information</property>
+                            <property name="title" translatable="yes">Debug info: Raw USB interfaces list, raw (data source: nusb)</property>
                             <child>
                               <object class="GtkScrolledWindow" id="nusb_debug_viewport">
                                 <property name="max-content-height">240</property>
@@ -156,7 +158,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="usb_tree_group">
-                            <property name="title" translatable="yes">Debug info: UDev device tree</property>
+                            <property name="title" translatable="yes">Debug info: USB devices list (data source: UDev)</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -187,7 +189,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">UDev debug information</property>
+                            <property name="title" translatable="yes">Debug info: USB devices list, raw (data source: UDev)</property>
                             <child>
                               <object class="GtkScrolledWindow" id="udev_debug_viewport">
                                 <property name="max-content-height">240</property>
@@ -210,9 +212,10 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <property name="banner">
                           <object class="AdwBanner" id="spi_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">UDev status: REACHABLE - diagmond status: OFF</property>
+                            <property name="title">Data sources status: UDev: ✅ - diagmond: Loading... ⚠️</property>
                           </object>
                         </property>
+                        <property name="description">This page lists potential USB modem baseband diagnostic devices detected on the system, focusing on these which were detected as a serial port interface by the system, and allows you to connect to them.</property>
                         <child>
                           <object class="AdwPreferencesGroup" id="spi_ports_group">
                             <property name="title">Detected SPI devices</property>
@@ -263,7 +266,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">tokio-serial debug information</property>
+                            <property name="title" translatable="yes">Debug info: Raw SPI devices (data source: tokio-serial)</property>
                             <child>
                               <object class="GtkScrolledWindow" id="tokio_serial_debug_viewport">
                                 <property name="max-content-height">240</property>
@@ -274,7 +277,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         </child>
                         <child>
                           <object class="AdwPreferencesGroup" id="udev_tree_group">
-                            <property name="title" translatable="yes">UDev tree for Diag candidates</property>
+                            <property name="title" translatable="yes">Debug info: USB devices, SPI-related only (data source: udev)</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="child">
@@ -309,7 +312,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <property name="banner">
                           <object class="AdwBanner" id="adb_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">ADB daemon status: TODO</property>
+                            <property name="title">ADB daemon status: Loading... ⚠️</property>
                           </object>
                         </property>
                         <child>
@@ -373,7 +376,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <property name="banner">
                           <object class="AdwBanner" id="mm_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">ModemManager Link: ON - diagmond status: OFF</property>
+                            <property name="title">ModemManager Link: ✅ - diagmond status: Loading... ⚠️</property>
                           </object>
                         </property>
                         <child>
@@ -469,7 +472,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                         <property name="banner">
                           <object class="AdwBanner" id="udev_link_banner">
                             <property name="revealed">true</property>
-                            <property name="title">UDev status: REACHABLE</property>
+                            <property name="title">UDev status: ✅</property>
                           </object>
                         </property>
                         <property name="description">This page contains a list of the temporary UDev rules containes in the /run system directory, for debugging purposes.</property>
