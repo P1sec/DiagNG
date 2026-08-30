@@ -1,0 +1,55 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $APKSelectWindow: Adw.Dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      Image {
+        icon-name: "xapp-prefs-plugins-symbolic";
+        margin-end: 8;
+        margin-start: 16;
+        margin-top: 8;
+        pixel-size: 48;
+        valign: start;
+      }
+
+      Label {
+        halign: start;
+        hexpand: true;
+        label: "On certain Mi phone devices, it is possible to leverage a vendor-signed APK (package ID: com.longcheertel.midtest) to enable the USB diag interface, without rooting your phone.\n\nThis APK is distributed with the following SHA-1 sums:\n- 8.1.0: 3a584b8cecb45380d74f6e9a4e1e2bef523ab462\n- 9.0.0: 45c6314f176a760d3735ab031b3f29e9c47c94b8\n\nIf you download this APK (which is not bundled with the app for © reasons), DiagNG can use this APK to enable USB diag on the phone for you until the next reboot or configuration change.\n\nUse the button below to select the disk location for the APK if you downloaded it.";
+        margin-bottom: 16;
+        margin-end: 8;
+        margin-start: 8;
+        margin-top: 8;
+        use-markup: true;
+        valign: start;
+        wrap: true;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {}
+
+    [bottom]
+    ActionBar {
+      [end]
+      Button select_button {
+        label: "Select a file...";
+        clicked => $on_select_button();
+
+        styles [
+          "suggested-action",
+        ]
+      }
+
+      [end]
+      Button cancel_button {
+        label: "Cancel";
+        receives-default: false;
+        clicked => $on_cancel_button();
+      }
+    }
+  };
+
+  content-width: 720;
+}
