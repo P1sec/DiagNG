@@ -147,7 +147,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab of 
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">Debug info: Raw USB interfaces list, raw (data source: nusb)</property>
+                            <property name="title" translatable="yes">Debug info: Raw USB interfaces list, as JSON (data source: nusb)</property>
                             <child>
                               <object class="GtkScrolledWindow" id="nusb_debug_viewport">
                                 <property name="max-content-height">240</property>
@@ -189,7 +189,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab of 
                                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                               </object>
                             </property>
-                            <property name="title" translatable="yes">Debug info: USB devices list, raw (data source: UDev)</property>
+                            <property name="title" translatable="yes">Debug info: USB devices list, as JSON (data source: UDev)</property>
                             <child>
                               <object class="GtkScrolledWindow" id="udev_debug_viewport">
                                 <property name="max-content-height">240</property>
