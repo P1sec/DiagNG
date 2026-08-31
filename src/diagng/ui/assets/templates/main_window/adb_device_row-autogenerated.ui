@@ -152,23 +152,22 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       <object class="AdwComboRow">
         <property name="model">
           <object class="GtkStringList">
-            <property name="strings">ABC
+            <property name="strings">Select...
+ABC
 DEF</property>
             <items>
+              <item></item>
               <item>123</item>
               <item>456</item>
             </items>
           </object>
         </property>
         <property name="subtitle">Needs touch screen action. For further documentation, see docs at https://&lt;URL&gt;</property>
-        <property name="subtitle-selectable">true</property>
         <property name="title">Use a vendor-specific dial code to enable diag mode</property>
-        <property name="title-selectable">true</property>
       </object>
     </child>
     <child>
       <object class="AdwExpanderRow" id="enable_diag_usb_row">
-        <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: su -c "setprop sys.usb.config diag,adb"</property>
         <property name="title">Try to enable diag over USB through root</property>
         <property name="title-selectable">true</property>
@@ -202,7 +201,6 @@ DEF</property>
     </child>
     <child>
       <object class="AdwExpanderRow" id="xiaomi_trick_row">
-        <property name="enable-expansion">false</property>
         <property name="subtitle">Will upload and run: com.longcheertel.midtest</property>
         <property name="title">Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK</property>
         <property name="title-selectable">true</property>
@@ -236,7 +234,6 @@ DEF</property>
     </child>
     <child>
       <object class="AdwExpanderRow" id="adbd_root_row">
-        <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: "adb root"</property>
         <property name="title">Try restart adbd as root</property>
         <property name="title-selectable">true</property>

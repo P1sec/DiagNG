@@ -135,24 +135,23 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   Adw.ComboRow {
     model: StringList {
       strings: [
+        "Select...",
         "ABC",
         "DEF",
       ];
 
       strings [
+        "",
         "123",
         "456",
       ]
     };
 
     subtitle: "Needs touch screen action. For further documentation, see docs at https://<URL>";
-    subtitle-selectable: true;
     title: "Use a vendor-specific dial code to enable diag mode";
-    title-selectable: true;
   }
 
   Adw.ExpanderRow enable_diag_usb_row {
-    enable-expansion: false;
     subtitle: "Will run: su -c \"setprop sys.usb.config diag,adb\"";
     title: "Try to enable diag over USB through root";
     title-selectable: true;
@@ -183,7 +182,6 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ExpanderRow xiaomi_trick_row {
-    enable-expansion: false;
     subtitle: "Will upload and run: com.longcheertel.midtest";
     title: "Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK";
     title-selectable: true;
@@ -214,7 +212,6 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ExpanderRow adbd_root_row {
-    enable-expansion: false;
     subtitle: "Will run: \"adb root\"";
     title: "Try restart adbd as root";
     title-selectable: true;
