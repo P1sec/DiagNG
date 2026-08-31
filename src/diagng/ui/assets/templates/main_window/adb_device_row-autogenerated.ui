@@ -152,13 +152,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       <object class="AdwComboRow">
         <property name="model">
           <object class="GtkStringList">
-            <property name="strings">Select...
-ABC
-DEF</property>
+            <property name="strings">Select...</property>
             <items>
               <item></item>
-              <item>123</item>
-              <item>456</item>
+              <item>ABC</item>
+              <item>DEF</item>
             </items>
           </object>
         </property>

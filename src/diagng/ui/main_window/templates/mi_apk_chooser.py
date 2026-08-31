@@ -77,6 +77,7 @@ class APKSelectWindow(Adw.Dialog):
 
         def diag_enabled(*args):
             self.parent.xiaomi_trick_row.set_enable_expansion(True)
+            self.parent.xiaomi_trick_row.set_activatable(False)
             self.parent.xiaomi_trick_row.set_expanded(True)
             self.parent.xiaomi_trick_buffer.set_text(script.text_output)
 

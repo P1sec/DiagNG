@@ -197,6 +197,7 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
         def diag_enabled(*args):
             self.enable_diag_usb_row.set_enable_expansion(True)
+            self.enable_diag_usb_row.set_activatable(False)
             self.enable_diag_usb_row.set_expanded(True)
             self.enable_diag_usb_buffer.set_text(script.text_output)
 
@@ -209,6 +210,7 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
         def root_enabled(*args):
             self.adbd_root_row.set_enable_expansion(True)
+            self.adbd_root_row.set_activatable(False)
             self.adbd_root_row.set_expanded(True)
             self.adbd_root_buffer.set_text(script.text_output)
 
