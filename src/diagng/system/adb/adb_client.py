@@ -7,6 +7,7 @@ from typing import Callable, Optional
 from traceback import format_exc
 from enum import IntEnum
 from shutil import which
+from io import SEEK_END
 from time import time
 from os import getenv
 import socket
@@ -369,6 +370,43 @@ class ADBClient(GObject.Object):
         self.send_cmd(
             ('exec' if can_use_exec_out else 'shell') + ':' + command,
             callback_4,
+        )
+
+    def install_package(
+        self,
+        local_file: str,
+        callback=None,
+    ):
+        def on_sync_enter(resp: ADBResponse):
+            if not isinstance(resp, ADBOkayResponse):
+                if callback:
+                    callback(resp)
+                self.raw_socket.close()
+                return
+
+            def on_file_written(resp: ADBResponse):
+
+                if callback:
+                    callback(resp)
+                self.raw_socket.close()
+
+            self.streaming_mode = True
+            with open(local_file, 'rb') as fd:
+                self.send_sync_chunk(fd.read(), on_file_written)
+
+        with open(local_file, 'rb') as fd:
+            fd.seek(0, SEEK_END)
+            file_len = fd.tell()
+
+        # See https://android.googlesource.com/platform/frameworks/base/+/master/services/core/java/com/android/server/pm/PackageManagerShellCommand.java#3421
+        # for arguments list
+
+        self.send_cmd(
+            'abb_exec:'
+            + '\x00'.join(
+                ['package', 'install', '-r', '-S', '%09d' % file_len]
+            ),
+            on_sync_enter,
         )
 
     def push(
