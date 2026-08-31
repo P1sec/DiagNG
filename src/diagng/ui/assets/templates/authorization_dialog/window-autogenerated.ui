@@ -22,7 +22,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="subprocess_info_text">
                 <property name="halign">1</property>
                 <property name="hexpand">true</property>
                 <property name="label">This application needs to spawn a &lt;b&gt;privileged subprocess&lt;/b&gt; in order to operate.

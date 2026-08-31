@@ -217,6 +217,21 @@ DEF</property>
             </style>
           </object>
         </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vscrollbar-policy">2</property>
+            <child>
+              <object class="GtkTextView" id="xiaomi_trick_output">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="xiaomi_trick_buffer">
+                    <property name="enable-undo">false</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>

@@ -374,7 +374,7 @@ class ADBClient(GObject.Object):
 
     def install_package(
         self,
-        local_file: str,
+        apk_bytes: bytes,
         callback=None,
     ):
         def on_sync_enter(resp: ADBResponse):
@@ -391,12 +391,9 @@ class ADBClient(GObject.Object):
                 self.raw_socket.close()
 
             self.streaming_mode = True
-            with open(local_file, 'rb') as fd:
-                self.send_sync_chunk(fd.read(), on_file_written)
+            self.send_sync_chunk(apk_bytes, on_file_written)
 
-        with open(local_file, 'rb') as fd:
-            fd.seek(0, SEEK_END)
-            file_len = fd.tell()
+        file_len = len(apk_bytes)
 
         # See https://android.googlesource.com/platform/frameworks/base/+/master/services/core/java/com/android/server/pm/PackageManagerShellCommand.java#3421
         # for arguments list

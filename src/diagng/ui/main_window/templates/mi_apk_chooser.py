@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.qcdm_enable_xiaomi import QCDMEnableXiaomi
-from diagng.gobject.adb_device import ADBDevice
 
 from logging import debug
 from hashlib import sha1
@@ -25,6 +24,7 @@ class APKSelectWindow(Adw.Dialog):
     file_dialog: Gtk.FileDialog = Gtk.Template.Child()
     file_error_dialog: Adw.AlertDialog = Gtk.Template.Child()
     file_checksum_dialog: Adw.AlertDialog = Gtk.Template.Child()
+    subprocess_info_text: Gtk.Label = Gtk.Template.Child()
 
     KNOWN_CHECKSUMS = [
         '3a584b8cecb45380d74f6e9a4e1e2bef523ab462',
@@ -65,14 +65,23 @@ class APKSelectWindow(Adw.Dialog):
 
                 self.file_checksum_dialog.choose(self, None, on_confirm)
 
-            # Launch the "QCDMEnableXiaomi" task
+            else:
+                # Launch the "QCDMEnableXiaomi" task
 
-            self.launch_diag_task(open_file, data)
+                self.launch_diag_task(open_file, data)
 
     def launch_diag_task(self, apk_file: Gio.File, apk_bytes: bytes):
         self.close()
 
-        debug('⚠️ WIP launch_diag_task')
+        script = QCDMEnableXiaomi(self.parent.device, apk_bytes)
+
+        def diag_enabled(*args):
+            self.parent.xiaomi_trick_row.set_enable_expansion(True)
+            self.parent.xiaomi_trick_row.set_expanded(True)
+            self.parent.xiaomi_trick_buffer.set_text(script.text_output)
+
+        script.finished.connect(diag_enabled)
+        script.launch()
 
     @Gtk.Template.Callback()
     def on_select_button(self, *args):

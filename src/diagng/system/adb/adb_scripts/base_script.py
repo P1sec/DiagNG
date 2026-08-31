@@ -41,7 +41,7 @@ class BaseScript(GObject.Object):
     def finished(self):
         pass
 
-    def __init__(self, device):
+    def __init__(self, device: ADBDevice):
         super().__init__()
 
         self.device = device

@@ -31,6 +31,7 @@ class ADBDeviceRow(Adw.ExpanderRow):
     xiaomi_trick_row: Adw.ExpanderRow = Gtk.Template.Child()
     system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
     enable_diag_usb_row: Adw.ExpanderRow = Gtk.Template.Child()
+    xiaomi_trick_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     enable_diag_usb_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_spinner: Adw.Spinner = Gtk.Template.Child()

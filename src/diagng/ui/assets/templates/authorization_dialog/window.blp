@@ -13,7 +13,7 @@ template $AuthorizationDialog: Adw.Window {
         valign: start;
       }
 
-      Label {
+      Label subprocess_info_text {
         halign: start;
         hexpand: true;
         label: "This application needs to spawn a <b>privileged subprocess</b> in order to operate.\n\n\nThis process will run under the name \"diagmond-bin\" and will be able to:\n\n•  Enumerate the USB devices and interfaces on your machine.\n•  After prompting for extra authorization, open and forward an USB serial device to the application when needed.\n• Open and forward a raw USB interface to the application when needed.\n\nThis process will run as a D-Bus system service and use Polkit for granting the extra authorizations.\n\nIf you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (Archlinux, Manjaro) system package, feel free to follow the instructions at: <a href=\"https://github.com/P1sec/DiagNG/tree/main/packaging\">https://github.com/P1sec/DiagNG/tree/main/packaging</a>";

@@ -199,6 +199,18 @@ template $ADBDeviceRow: Adw.ExpanderRow {
         "pill",
       ]
     }
+
+    ScrolledWindow {
+      vscrollbar-policy: never;
+
+      TextView xiaomi_trick_output {
+        buffer: TextBuffer xiaomi_trick_buffer {
+          enable-undo: false;
+        };
+
+        editable: false;
+      }
+    }
   }
 
   Adw.ActionRow {

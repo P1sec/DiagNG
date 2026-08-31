@@ -22,7 +22,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="subprocess_info_text">
+                <property name="can-focus">false</property>
                 <property name="halign">1</property>
                 <property name="hexpand">true</property>
                 <property name="label">On certain Mi phone devices, it is possible to leverage a vendor-signed APK (package ID: com.longcheertel.midtest) to enable the USB diag interface, without rooting your phone.
@@ -38,6 +39,7 @@ Use the button below to select the disk location for the APK if you downloaded i
                 <property name="margin-end">8</property>
                 <property name="margin-start">8</property>
                 <property name="margin-top">8</property>
+                <property name="selectable">true</property>
                 <property name="use-markup">true</property>
                 <property name="valign">1</property>
                 <property name="wrap">true</property>
@@ -61,6 +63,7 @@ Use the button below to select the disk location for the APK if you downloaded i
             </child>
             <child type="end">
               <object class="GtkButton" id="cancel_button">
+                <property name="can-focus">false</property>
                 <property name="label">Cancel</property>
                 <property name="receives-default">false</property>
                 <signal name="clicked" handler="on_cancel_button"/>
@@ -92,7 +95,7 @@ Use the button below to select the disk location for the APK if you downloaded i
     <property name="default-response">ok</property>
     <property name="heading">Could not open file</property>
   </object>
-  <object class="AdwAlertDialog">
+  <object class="AdwAlertDialog" id="file_checksum_dialog">
     <property name="body">This is not a known APK file, do you want to continue?</property>
     <property name="close-response">cancel</property>
     <property name="default-response">cancel</property>
