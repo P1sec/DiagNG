@@ -1,5 +1,6 @@
 using Gtk 4.0;
 using Adw 1;
+using Gio 2.0;
 
 template $APKSelectWindow: Adw.Dialog {
   child: Adw.ToolbarView {
@@ -53,4 +54,28 @@ template $APKSelectWindow: Adw.Dialog {
 
   content-width: 720;
   title: "APK Selection";
+}
+
+FileDialog file_dialog {
+  filters: Gio.ListStore {
+    item-type: typeof<FileFilter>;
+
+    FileFilter {
+      mime-types: [
+        "application/vnd.android.package-archive",
+      ];
+
+      name: "APK file (*.apk)";
+
+      suffixes: [
+        "apk",
+      ];
+    }
+  };
+}
+
+Adw.AlertDialog file_error_dialog {
+  close-response: "ok";
+  default-response: "ok";
+  heading: "Could not open file";
 }

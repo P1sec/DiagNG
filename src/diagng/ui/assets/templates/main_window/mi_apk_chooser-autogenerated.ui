@@ -73,4 +73,23 @@ Use the button below to select the disk location for the APK if you downloaded i
     <property name="content-width">720</property>
     <property name="title">APK Selection</property>
   </template>
+  <object class="GtkFileDialog" id="file_dialog">
+    <property name="filters">
+      <object class="GListStore">
+        <property name="item-type">GtkFileFilter</property>
+        <child>
+          <object class="GtkFileFilter">
+            <property name="mime-types">application/vnd.android.package-archive</property>
+            <property name="name">APK file (*.apk)</property>
+            <property name="suffixes">apk</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="AdwAlertDialog" id="file_error_dialog">
+    <property name="close-response">ok</property>
+    <property name="default-response">ok</property>
+    <property name="heading">Could not open file</property>
+  </object>
 </interface>

@@ -27,5 +27,5 @@
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
-  <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="28ddef9ece96b259ebac5295d8d673b5f61138569ca937e17fca6649f1e5bae0"/>
+  <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="4b1e344eb0bb62fc60165c706653c21021d66396a412c4b1d6f8445ca145eb8d"/>
 </cambalache-project>

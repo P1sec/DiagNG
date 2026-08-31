@@ -8,7 +8,7 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, GObject, GLib
+from gi.repository import Gtk, Adw, GLib, Gio
 
 # Register resources
 import diagng.utils.gresources
@@ -21,16 +21,30 @@ class APKSelectWindow(Adw.Dialog):
     __gtype_name__ = 'APKSelectWindow'
 
     parent: 'DeviceRow'
+    file_dialog: Gtk.FileDialog = Gtk.Template.Child()
+    file_error_dialog: Adw.AlertDialog = Gtk.Template.Child()
 
     def __init__(self, parent: 'DeviceRow'):
         super().__init__()
 
         self.parent = parent
+        self.file_error_dialog.add_response('ok', 'Ok')
+
+    def on_open(self, obj: Gtk.FileDialog, res: Gio.AsyncResult):
+        try:
+            open_file: Gio.File = obj.open_finish(res)
+            data: bytes = open_file.load_contents(None)[1]
+        except GLib.GError as err:
+            if err.message != 'Dismissed by user':
+                self.file_error_dialog.set_body(err.message)
+                self.file_error_dialog.choose(self, None, None)
+        else:
+            debug('⚠️ WIP on_open')
 
     @Gtk.Template.Callback()
     def on_select_button(self, *args):
-        debug('⚠️ WIP on_select_button')
+        self.file_dialog.open(self.parent.main_window, None, self.on_open)
 
     @Gtk.Template.Callback()
     def on_cancel_button(self, *args):
-        debug('⚠️ WIP on_cancel_button')
+        self.close()
