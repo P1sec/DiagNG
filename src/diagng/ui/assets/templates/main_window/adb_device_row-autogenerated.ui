@@ -149,10 +149,11 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
-      <object class="AdwActionRow">
+      <object class="AdwActionRow" id="dial_codes_row">
         <property name="activatable-widget">dial_codes_link</property>
         <property name="subtitle">Requires touch screen action.</property>
         <property name="title">Use a vendor-specific dial code to enable diag mode</property>
+        <property name="visible">false</property>
         <child>
           <object class="GtkLinkButton" id="dial_codes_link">
             <property name="can-focus">false</property>
@@ -239,7 +240,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
         <property name="activatable">true</property>
         <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: "adb root"</property>
-        <property name="title">Try restart adbd as root</property>
+        <property name="title">Try to restart adbd as root</property>
         <property name="title-selectable">true</property>
         <property name="use-markup">false</property>
         <child type="suffix">

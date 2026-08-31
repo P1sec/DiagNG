@@ -132,10 +132,11 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
-  Adw.ActionRow {
+  Adw.ActionRow dial_codes_row {
     activatable-widget: dial_codes_link;
     subtitle: "Requires touch screen action.";
     title: "Use a vendor-specific dial code to enable diag mode";
+    visible: false;
 
     LinkButton dial_codes_link {
       can-focus: false;
@@ -214,7 +215,7 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     activatable: true;
     enable-expansion: false;
     subtitle: "Will run: \"adb root\"";
-    title: "Try restart adbd as root";
+    title: "Try to restart adbd as root";
     title-selectable: true;
     use-markup: false;
 

@@ -29,6 +29,7 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
     auto_diag_setup_row: Adw.ExpanderRow = Gtk.Template.Child()
     diag_port_active_row: Adw.ActionRow = Gtk.Template.Child()
+    dial_codes_row: Adw.ActionRow = Gtk.Template.Child()
     xiaomi_trick_row: Adw.ExpanderRow = Gtk.Template.Child()
     adbd_root_row: Adw.ExpanderRow = Gtk.Template.Child()
     system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
@@ -162,6 +163,9 @@ class ADBDeviceRow(Adw.ExpanderRow):
                 )
                 self.diag_port_active_row.set_visible(
                     'diag' in keys_dict.get('USB_CONFIG', '')
+                )
+                self.dial_codes_row.set_visible(
+                    'diag' not in keys_dict.get('USB_CONFIG', '')
                 )
 
                 self.xiaomi_trick_row.set_visible(
