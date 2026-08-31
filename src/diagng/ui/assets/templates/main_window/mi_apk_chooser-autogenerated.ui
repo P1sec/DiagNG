@@ -71,5 +71,6 @@ Use the button below to select the disk location for the APK if you downloaded i
       </object>
     </property>
     <property name="content-width">720</property>
+    <property name="title">APK Selection</property>
   </template>
 </interface>

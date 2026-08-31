@@ -2,9 +2,9 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="b192d49e703cedae74721d11cf7d6dbc2b265d0cfcce271ad220961eceed410e"/>
+  <gresources filename="diagng.gresource.xml" sha256="56445c3f4e4e146b4044897e1e62c7e89c6e1f0ecefdfc95d426510c56f001d1"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
-  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="e8c54c90790ada7f592cdbd5b4b40ec68f73ccf9a18fa4faac04e3344671ee5c"/>
+  <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="0c57922d44764364cc0d37a52b13838df610a87e82c7a8e691d3f498d9abed75"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
     <property id="accessible-description" type-id="gchararray"/>
     <property id="accessible-label" type-id="gchararray" translatable="1"/>
@@ -27,5 +27,5 @@
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
-  <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="094b1f2b94e1edee18a71921cbf4f32a96f94bf1398a56bfbabd211450c98dc9"/>
+  <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="28ddef9ece96b259ebac5295d8d673b5f61138569ca937e17fca6649f1e5bae0"/>
 </cambalache-project>

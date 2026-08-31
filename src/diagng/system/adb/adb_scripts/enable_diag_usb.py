@@ -2,8 +2,8 @@
 from diagng.system.adb.adb_scripts.base_script import BaseScript, ScriptState
 from diagng.system.adb.adb_client import ADBResponse
 
-from gi.repository import GLib, GObject
-from logging import warning, debug
+from gi.repository import GObject
+from logging import debug
 
 
 class EnableDiagUsb(BaseScript):

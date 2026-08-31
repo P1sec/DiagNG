@@ -211,6 +211,7 @@ DEF</property>
         <child type="suffix">
           <object class="GtkButton">
             <property name="label">Trigger</property>
+            <signal name="clicked" handler="trigger_mi_apk_script"/>
             <style>
               <class name="pill"/>
             </style>

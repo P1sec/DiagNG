@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
+from diagng.ui.main_window.templates.mi_apk_chooser import APKSelectWindow
 from diagng.system.adb.adb_scripts.enable_diag_usb import EnableDiagUsb
 from diagng.system.adb.adb_scripts.base_script import BaseScript
 from diagng.gobject.adb_device import ADBDevice
@@ -188,6 +189,11 @@ class ADBDeviceRow(Adw.ExpanderRow):
 
         script.finished.connect(diag_enabled)
         script.launch()
+
+    @Gtk.Template.Callback()
+    def trigger_mi_apk_script(self, *args):
+        dialog = APKSelectWindow(self)
+        dialog.present(self)
 
     @Gtk.Template.Callback()
     def trigger_auto_diag_setup(self, *args):
