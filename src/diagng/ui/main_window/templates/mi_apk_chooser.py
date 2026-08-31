@@ -3,6 +3,7 @@ from diagng.system.adb.adb_scripts.qcdm_enable_xiaomi import QCDMEnableXiaomi
 from diagng.gobject.adb_device import ADBDevice
 
 from logging import debug
+from hashlib import sha1
 
 import gi
 
@@ -23,12 +24,22 @@ class APKSelectWindow(Adw.Dialog):
     parent: 'DeviceRow'
     file_dialog: Gtk.FileDialog = Gtk.Template.Child()
     file_error_dialog: Adw.AlertDialog = Gtk.Template.Child()
+    file_checksum_dialog: Adw.AlertDialog = Gtk.Template.Child()
+
+    KNOWN_CHECKSUMS = [
+        '3a584b8cecb45380d74f6e9a4e1e2bef523ab462',
+        '45c6314f176a760d3735ab031b3f29e9c47c94b8',
+    ]
 
     def __init__(self, parent: 'DeviceRow'):
         super().__init__()
 
         self.parent = parent
+
         self.file_error_dialog.add_response('ok', 'Ok')
+
+        self.file_checksum_dialog.add_response('continue', 'Continue')
+        self.file_checksum_dialog.add_response('cancel', 'Cancel')
 
     def on_open(self, obj: Gtk.FileDialog, res: Gio.AsyncResult):
         try:
@@ -39,7 +50,29 @@ class APKSelectWindow(Adw.Dialog):
                 self.file_error_dialog.set_body(err.message)
                 self.file_error_dialog.choose(self, None, None)
         else:
-            debug('⚠️ WIP on_open')
+            # Validate checksum or display a confirm dialog
+
+            known_file = sha1(data).hexdigest() in self.KNOWN_CHECKSUMS
+
+            if not known_file:
+
+                def on_confirm(
+                    alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
+                ):
+
+                    if alert_dialog.choose_finish(result) == 'continue':
+                        self.launch_diag_task(open_file, data)
+
+                self.file_checksum_dialog.choose(self, None, on_confirm)
+
+            # Launch the "QCDMEnableXiaomi" task
+
+            self.launch_diag_task(open_file, data)
+
+    def launch_diag_task(self, apk_file: Gio.File, apk_bytes: bytes):
+        self.close()
+
+        debug('⚠️ WIP launch_diag_task')
 
     @Gtk.Template.Callback()
     def on_select_button(self, *args):

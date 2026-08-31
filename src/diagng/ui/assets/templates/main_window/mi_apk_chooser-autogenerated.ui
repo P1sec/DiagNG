@@ -92,4 +92,9 @@ Use the button below to select the disk location for the APK if you downloaded i
     <property name="default-response">ok</property>
     <property name="heading">Could not open file</property>
   </object>
+  <object class="AdwAlertDialog">
+    <property name="body">This is not a known APK file, do you want to continue?</property>
+    <property name="close-response">cancel</property>
+    <property name="default-response">cancel</property>
+  </object>
 </interface>
