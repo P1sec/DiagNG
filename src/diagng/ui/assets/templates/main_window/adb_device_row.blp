@@ -152,6 +152,8 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ExpanderRow enable_diag_usb_row {
+    action-name: "adb.enable-diag-usb";
+    enable-expansion: false;
     subtitle: "Will run: su -c \"setprop sys.usb.config diag,adb\"";
     title: "Try to enable diag over USB through root";
     title-selectable: true;
@@ -182,6 +184,9 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ExpanderRow xiaomi_trick_row {
+    action-name: "adb.xiaomi-trick";
+    activatable: true;
+    enable-expansion: false;
     subtitle: "Will upload and run: com.longcheertel.midtest";
     title: "Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK";
     title-selectable: true;
@@ -212,6 +217,9 @@ template $ADBDeviceRow: Adw.ExpanderRow {
   }
 
   Adw.ExpanderRow adbd_root_row {
+    action-name: "adb.adbd-root";
+    activatable: true;
+    enable-expansion: false;
     subtitle: "Will run: \"adb root\"";
     title: "Try restart adbd as root";
     title-selectable: true;

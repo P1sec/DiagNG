@@ -168,6 +168,8 @@ DEF</property>
     </child>
     <child>
       <object class="AdwExpanderRow" id="enable_diag_usb_row">
+        <property name="action-name">adb.enable-diag-usb</property>
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: su -c "setprop sys.usb.config diag,adb"</property>
         <property name="title">Try to enable diag over USB through root</property>
         <property name="title-selectable">true</property>
@@ -201,6 +203,9 @@ DEF</property>
     </child>
     <child>
       <object class="AdwExpanderRow" id="xiaomi_trick_row">
+        <property name="action-name">adb.xiaomi-trick</property>
+        <property name="activatable">true</property>
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Will upload and run: com.longcheertel.midtest</property>
         <property name="title">Xiaomi only: try to enable Qualcomm Diag without root using vendor-signed APK</property>
         <property name="title-selectable">true</property>
@@ -234,6 +239,9 @@ DEF</property>
     </child>
     <child>
       <object class="AdwExpanderRow" id="adbd_root_row">
+        <property name="action-name">adb.adbd-root</property>
+        <property name="activatable">true</property>
+        <property name="enable-expansion">false</property>
         <property name="subtitle">Will run: "adb root"</property>
         <property name="title">Try restart adbd as root</property>
         <property name="title-selectable">true</property>

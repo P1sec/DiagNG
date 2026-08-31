@@ -10,7 +10,7 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw, GObject, GLib
+from gi.repository import Gtk, Adw, GObject, Gio, GLib
 
 # Register resources
 import diagng.utils.gresources
@@ -52,8 +52,6 @@ class ADBDeviceRow(Adw.ExpanderRow):
     def __init__(self, dev=None, main_window=None):
         super().__init__()
 
-        # ⚠️  TODO: Use bind_property?
-
         # TODO: Handle unauthorized state
 
         # TODO: Add TCP connection feature
@@ -73,17 +71,28 @@ class ADBDeviceRow(Adw.ExpanderRow):
             self.device.connect('notify', self.on_device_update)
             self.on_device_update(self.device)
 
+        action_group = Gio.SimpleActionGroup.new()
+        action_group.add_action_entries(
+            [
+                ('enable-diag-usb', self.trigger_usb_switch),
+                ('xiaomi-trick', self.trigger_mi_apk_script),
+                ('adbd-root', self.trigger_adbd_root),
+            ]
+        )
+
+        self.insert_action_group('adb', action_group)
+
     def on_device_update(self, dev: ADBDevice, *args):
         self.set_title(
             '<b>%s</b> (transport id #%s, serial ID %s)'
             % (
-                GLib.markup_escape_text(dev.model_name or '', -1),
+                GLib.markup_escape_text(dev.model_name or ''),
                 # ^ TODO gather extra info from UDev?
-                GLib.markup_escape_text(dev.transport_id or '', -1),
-                GLib.markup_escape_text(dev.serial_str or '', -1),
+                GLib.markup_escape_text(dev.transport_id or ''),
+                GLib.markup_escape_text(dev.serial_str or ''),
             )
         )
-        self.set_subtitle(GLib.markup_escape_text(dev.text_summary or '', -1))
+        self.set_subtitle(GLib.markup_escape_text(dev.text_summary or ''))
 
         is_online = dev.state == 'device'
 
