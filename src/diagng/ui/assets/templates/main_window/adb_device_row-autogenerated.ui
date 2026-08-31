@@ -149,19 +149,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
-      <object class="AdwComboRow">
-        <property name="model">
-          <object class="GtkStringList">
-            <property name="strings">Select...</property>
-            <items>
-              <item></item>
-              <item>ABC</item>
-              <item>DEF</item>
-            </items>
-          </object>
-        </property>
-        <property name="subtitle">Needs touch screen action. For further documentation, see docs at https://&lt;URL&gt;</property>
+      <object class="AdwActionRow">
+        <property name="activatable-widget">dial_codes_link</property>
+        <property name="subtitle">Requires touch screen action.</property>
         <property name="title">Use a vendor-specific dial code to enable diag mode</property>
+        <child>
+          <object class="GtkLinkButton" id="dial_codes_link">
+            <property name="can-focus">false</property>
+            <property name="label">Open documentation...</property>
+            <property name="uri">https://web.archive.org/web/20260308201119/https://band.radio/diag</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>

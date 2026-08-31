@@ -132,21 +132,16 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
-  Adw.ComboRow {
-    model: StringList {
-      strings: [
-        "Select...",
-      ];
-
-      strings [
-        "",
-        "ABC",
-        "DEF",
-      ]
-    };
-
-    subtitle: "Needs touch screen action. For further documentation, see docs at https://<URL>";
+  Adw.ActionRow {
+    activatable-widget: dial_codes_link;
+    subtitle: "Requires touch screen action.";
     title: "Use a vendor-specific dial code to enable diag mode";
+
+    LinkButton dial_codes_link {
+      can-focus: false;
+      label: "Open documentation...";
+      uri: "https://web.archive.org/web/20260308201119/https://band.radio/diag";
+    }
   }
 
   Adw.ExpanderRow enable_diag_usb_row {
