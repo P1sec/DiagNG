@@ -235,24 +235,34 @@ DEF</property>
       </object>
     </child>
     <child>
-      <object class="AdwActionRow">
-        <property name="title">adbd status</property>
+      <object class="AdwExpanderRow" id="adbd_root_row">
+        <property name="enable-expansion">false</property>
+        <property name="subtitle">Will run: "adb root"</property>
+        <property name="title">Try restart adbd as root</property>
         <property name="title-selectable">true</property>
         <property name="use-markup">false</property>
-        <child>
+        <child type="suffix">
           <object class="GtkButton">
-            <property name="label">Restart as root</property>
+            <property name="label">Trigger</property>
+            <signal name="clicked" handler="trigger_adbd_root"/>
             <style>
               <class name="pill"/>
             </style>
           </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label">Restart as TCP/IP</property>
-            <style>
-              <class name="pill"/>
-            </style>
+          <object class="GtkScrolledWindow">
+            <property name="vscrollbar-policy">2</property>
+            <child>
+              <object class="GtkTextView" id="adbd_root_output">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="adbd_root_buffer">
+                    <property name="enable-undo">false</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

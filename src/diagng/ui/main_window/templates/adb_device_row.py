@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from diagng.system.adb.adb_scripts.info_gathering import InformationGathering
+from diagng.system.adb.adb_scripts.adbd_root_trigger import AdbdRootTrigger
 from diagng.ui.main_window.templates.mi_apk_chooser import APKSelectWindow
 from diagng.system.adb.adb_scripts.enable_diag_usb import EnableDiagUsb
 from diagng.system.adb.adb_scripts.base_script import BaseScript
@@ -29,9 +30,11 @@ class ADBDeviceRow(Adw.ExpanderRow):
     auto_diag_setup_row: Adw.ExpanderRow = Gtk.Template.Child()
     diag_port_active_row: Adw.ActionRow = Gtk.Template.Child()
     xiaomi_trick_row: Adw.ExpanderRow = Gtk.Template.Child()
+    adbd_root_row: Adw.ExpanderRow = Gtk.Template.Child()
     system_info_row: Adw.ExpanderRow = Gtk.Template.Child()
     enable_diag_usb_row: Adw.ExpanderRow = Gtk.Template.Child()
     xiaomi_trick_buffer: Gtk.TextBuffer = Gtk.Template.Child()
+    adbd_root_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     enable_diag_usb_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
     system_info_spinner: Adw.Spinner = Gtk.Template.Child()
@@ -189,6 +192,18 @@ class ADBDeviceRow(Adw.ExpanderRow):
             self.enable_diag_usb_buffer.set_text(script.text_output)
 
         script.finished.connect(diag_enabled)
+        script.launch()
+
+    @Gtk.Template.Callback()
+    def trigger_adbd_root(self, *args):
+        script = AdbdRootTrigger(self.device)
+
+        def root_enabled(*args):
+            self.adbd_root_row.set_enable_expansion(True)
+            self.adbd_root_row.set_expanded(True)
+            self.adbd_root_buffer.set_text(script.text_output)
+
+        script.finished.connect(root_enabled)
         script.launch()
 
     @Gtk.Template.Callback()

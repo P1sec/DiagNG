@@ -213,25 +213,33 @@ template $ADBDeviceRow: Adw.ExpanderRow {
     }
   }
 
-  Adw.ActionRow {
-    title: "adbd status";
+  Adw.ExpanderRow adbd_root_row {
+    enable-expansion: false;
+    subtitle: "Will run: \"adb root\"";
+    title: "Try restart adbd as root";
     title-selectable: true;
     use-markup: false;
 
+    [suffix]
     Button {
-      label: "Restart as root";
+      label: "Trigger";
+      clicked => $trigger_adbd_root();
 
       styles [
         "pill",
       ]
     }
 
-    Button {
-      label: "Restart as TCP/IP";
+    ScrolledWindow {
+      vscrollbar-policy: never;
 
-      styles [
-        "pill",
-      ]
+      TextView adbd_root_output {
+        buffer: TextBuffer adbd_root_buffer {
+          enable-undo: false;
+        };
+
+        editable: false;
+      }
     }
   }
 }

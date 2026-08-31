@@ -311,6 +311,14 @@ class ADBClient(GObject.Object):
     def version(self, callback=None):
         self.send_cmd('host:version', callback)
 
+    def adbd_root(self, callback=None):
+        def callback_2(resp: ADBResponse):
+            self.streaming_mode = True
+            if callback:
+                callback(resp)
+
+        self.send_cmd('root:', callback_2)
+
     def track_devices(self, callback=None):
         # track-devices-l is available since 2017:
         # https://cs.android.com/android/_/android/platform/packages/modules/adb/+/3212463a692c359e7dc10c788c49b5406f3c25bb
