@@ -4,9 +4,13 @@
 
 # DiagNG 🎧 The next-generation baseband Diag client software (2G/3G/4G/5G)
 
-DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands. It should eventually support other basebands such as Samsung Exynos processors.
+DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands.
 
-This software is a work-in-progress intended sequel (v3) for [QCSuper](https://github.com/P1sec/QCSuper).
+More largely, it is an experimental, Linux-first, open-source, interoperable, brand-new way to connect to baseband USB diagnostic interfaces; whether for pedagogic or security research purpose.
+
+It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.
+
+It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat).
 
 <center>[TODO: Screenshot]</center>
 
@@ -14,7 +18,36 @@ This software is a work-in-progress intended sequel (v3) for [QCSuper](https://g
 
 Feature list:
 
-* TODO
+*Done*:
+
+- [x] Connect a Linux raw SPI port.
+- [x] Connect a Linux raw USB interface.
+- [x] A sleek GTK 4/Adwaita-based UI.
+- [x] SPI and USB connections are safely connected to the Python UI through a privileged Rust daemon, using a Polkit/DBus-based interface to secure privileged actions, to ensure good integration with Flatpak.
+- [x] Wireshark plug-in management and guided installation for GSMTAP v3/5G RRC decoding (taken from SCAT).
+- [x] Gather phone-related information through ADB, with shortcuts to enable the QCDM USB interface easily.
+- [x] Support basic QCDM (Qualcomm diagnostic monitor) log registration.
+- [x] Support basic QCDM 2G/3G/4G/5G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).
+- [x] Flatpak packaging for good integration to the Linux desktop.
+
+*TODO*:
+
+- [ ] Provide good CLI functionality similar to QCSuper?
+- [ ] QA QCDM to GSMTAP conversion with good testing protocols over real devices?
+- [ ] Complete QCDM to GSMTAP conversion with SIB decoding support, as present in QCSuper?
+- [ ] Complete QCDM to GSMTAP conversion with RRC frame reassembly support, as present in QCSuper?
+- [ ] Complete QCDM support with EFS shell deocidng support, as present in QCSuper?
+- [ ] Provide better QCDM exports interoperability (parse and export QMDL files in addition to DLF, etc.)?
+- [ ] Allow to decode and register other QCDM non-OTA logs, like in SCAT?
+- [ ] Write unit tests?
+- [ ] Export Kaitai Struct definitions to separate repositories/libraries?
+- [ ] Take external contributions from protocolar support?
+- [ ] Support Exynos, Mediatek, HiSilicon, etc. basebands like SCAT?
+- [ ] Provide more UI visualizations for QCDM features?
+- [ ] Provide AppImage packaging?
+- [ ] Provide AT command supports, USIM-related commands support, QMI communication, etc.?
+- [ ] Provide an on-device implant to gather logs on-device, similar to QCSuper, MobileInsight, SnoopSnitch or NSG?
+- [ ] Eventual Windows/macOS port?
 
 ## Legal
 
