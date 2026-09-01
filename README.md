@@ -12,9 +12,9 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat).
 
-<center>[TODO: Screenshot]</center>
+-> [TODO: Screenshot] <-
 
-<center>[TODO: Flathub download badge]</center>
+-> [TODO: Flathub download badge] <-
 
 Feature list:
 
