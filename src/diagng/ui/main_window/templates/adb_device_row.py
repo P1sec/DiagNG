@@ -161,9 +161,9 @@ class ADBDeviceRow(Adw.ExpanderRow):
                 self.auto_diag_setup_row.set_visible(
                     'diag' not in keys_dict.get('USB_CONFIG', '')
                 )
-                self.diag_port_active_row.set_visible(
-                    'diag' in keys_dict.get('USB_CONFIG', '')
-                )
+                # self.diag_port_active_row.set_visible(
+                #     'diag' in keys_dict.get('USB_CONFIG', '')
+                # )
                 self.dial_codes_row.set_visible(
                     'diag' not in keys_dict.get('USB_CONFIG', '')
                 )

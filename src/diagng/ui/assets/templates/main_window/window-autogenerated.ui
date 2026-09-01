@@ -23,9 +23,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                             <property name="title">Data sources status: UDev: ✅ - diagmond: Loading... ⚠️</property>
                           </object>
                         </property>
-                        <property name="description">Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on the system and allows you to connect to them.
+                        <property name="description">Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on this system and allows you to connect to them.
 
-For now, only Qualcomm-based devices are supported. Please see the "ADB" tab of the current app for connecting to an Android smartphone.</property>
+For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for assistance over enabling the Diag interface on an Android smartphone.</property>
                         <child>
                           <object class="AdwPreferencesGroup" id="run_diagmond_popover">
                             <property name="visible">false</property>
@@ -360,6 +360,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab of 
                         <child>
                           <object class="AdwPreferencesGroup" id="adb_tcp_group">
                             <property name="title">No active TCP connections</property>
+                            <property name="visible">false</property>
                           </object>
                         </child>
                       </object>

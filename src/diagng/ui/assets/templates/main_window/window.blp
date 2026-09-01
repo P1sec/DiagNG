@@ -12,7 +12,7 @@ template $MainWindow: Adw.ApplicationWindow {
               title: "Data sources status: UDev: ✅ - diagmond: Loading... ⚠️";
             };
 
-            description: "Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on the system and allows you to connect to them.\n\nFor now, only Qualcomm-based devices are supported. Please see the \"ADB\" tab of the current app for connecting to an Android smartphone.";
+            description: "Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on this system and allows you to connect to them.\n\nFor now, only Qualcomm-based devices are supported. Please see the \"ADB\" tab for assistance over enabling the Diag interface on an Android smartphone.";
 
             Adw.PreferencesGroup run_diagmond_popover {
               visible: false;
@@ -299,6 +299,7 @@ template $MainWindow: Adw.ApplicationWindow {
 
             Adw.PreferencesGroup adb_tcp_group {
               title: "No active TCP connections";
+              visible: false;
             }
           };
 

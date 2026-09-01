@@ -24,7 +24,7 @@
   <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="8d6efeb2e668cc5dee2e72ec80ad1c1803478c4c6db96cac62f8628b071e0e51"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="735644493caab8aeaea70c57b3750f91e8bb876b042f0e746b2fe8918f103426"/>
   <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="dc64fd2a43333fc63469d5766472d2991578a7519ede52e785d1c5decdab041d"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="1a5d6504860fd5b4121ff1075ab0512d29514807572d0e6c309db1942a80d735">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="10997263fb51573ccca0ace876c777b353a2e1429781500000e86143e666551c">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
