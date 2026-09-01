@@ -6,7 +6,7 @@
 
 DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands.
 
-More largely, it is an experimental, Linux-first, open-source, interoperable, brand-new way to connect to baseband USB diagnostic interfaces; whether for pedagogic or security research purpose.
+More largely, it is an experimental, Linux-first, open-source, interoperable, brand-new way to connect to baseband USB diagnostic interfaces; whether for pedagogic or security research purposes.
 
 It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.
 
