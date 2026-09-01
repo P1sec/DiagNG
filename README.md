@@ -45,7 +45,7 @@ Feature list:
 - [ ] Support Exynos, Mediatek, HiSilicon, etc. basebands like SCAT?
 - [ ] Provide more UI visualizations for QCDM features?
 - [ ] Provide AppImage packaging?
-- [ ] Provide AT command supports, USIM-related commands support, QMI communication, etc.?
+- [ ] Provide AT commands support, USIM-related commands support, QMI communication, etc.?
 - [ ] Provide an on-device implant to gather logs on-device, similar to QCSuper, MobileInsight, SnoopSnitch or NSG?
 - [ ] Eventual Windows/macOS port?
 
