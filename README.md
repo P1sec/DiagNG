@@ -71,7 +71,9 @@ sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
     gir1.2-gtksource-5 libgtksourceview-5-dev \
     python3-dev blueprint-compiler cargo rustc polkitd \
-    google-android-platform-tools-installer
+    google-android-platform-tools-installer git
+
+sudo snap install --classic astral-uv
 ```
 
 Dependencies on Archlinux:
@@ -79,14 +81,23 @@ Dependencies on Archlinux:
 ```bash
 sudo pacman -S uv blueprint-compiler python-gobject \
     gtksourceview5 libadwaita libmm-glib rust polkit \
-    android-tools
+    android-tools git
+```
+
+Dependencies on Fedora:
+
+```bash
+sudo dnf install uv glib2-devel libadwaita-devel gtk4-devel \
+    gobject-introspection-devel python3-gobject-devel \
+    python3-devel cairo-devel @development-tools \
+    modemmanager-glib-devel android-tools rustc cargo \
+    gtksourceview5-devel polkit git
 ```
 
 Then:
 
 ```bash
-sudo snap install --classic astral-uv
-sudo apt install git
+cd
 git clone git@github.com:P1sec/DiagNG.git diagng
 
 cd diagng
@@ -138,21 +149,12 @@ ksv \
 DiagNG is meant to be split into two components:
 
 * `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
+  * Diag frame decoding itself is done in the Python daemon, using Kaitai struct
 * `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
-  * Use tokio + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)?
-* Diag frame decoding itself should be done somewhere?
+  * Uses `tokio-serial` + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)
 
-This draft repository (previously called `qcsuper-gui`/QCSuper v3) hence intends to produce a modular GObject+GTK-4 UI app (leveraging GObject data models and signals, and eventually think to make a decoupled UI-daemon thing so that we can perform serial port acquisition in a privileged fashion and the UI and Diag decoder can be unprivileged/sandboxed too) allowing to control and manage interferences with the serial Diag port system wide.
+This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObject data models and signals, plus a decoupled UI-daemon thing, so that we can perform serial port acquisition in a privileged fashion, and the UI and Diag decoder can be unprivileged/sandboxed too), allowing to control and manage interferences with the serial Diag port system-wide.
 
-It shares code with `citsued`.
+Various information is also put in a GObject model and display it using the Adwaita UI.
 
-Next tasks are being tracked here: https://github.com/P1sec/DiagNG/issues
-
-We are putting the parsed information in a GObject model and display it using a simple Adwaita UI.
-
-We should maybe eventually try to see how we can interface more with the ModemManager, systemd etc. DBus APIs to handle this more cleany?
-
-Cf. **https://modemmanager.org/docs/modemmanager/port-and-device-detection/**
-
-Cf. https://manpages.debian.org/unstable/modemmanager/mmcli.1.en.html
-
+It also interfaces with ModemManager, Wireshark, UDev, etc.
