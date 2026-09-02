@@ -280,8 +280,10 @@ template $MainWindow: Adw.ApplicationWindow {
 
               Label adb_daemon_missing {
                 attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
-                label: "Failed to find ADB daemon (TODO: Link to a README section about this?)";
+                can-focus: false;
+                label: "Failed to locate ADB daemon. Please install the corresponding package:\n- On Ubuntu: sudo apt install google-android-platform-tools-installer\n- On Arch Linux: sudo pacman -S android-tools\n- On Fedora: sudo dnf install android-tools";
                 margin-top: 24;
+                selectable: true;
                 visible: false;
               }
             }

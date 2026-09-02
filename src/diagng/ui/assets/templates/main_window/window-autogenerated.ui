@@ -337,8 +337,13 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                             <child>
                               <object class="GtkLabel" id="adb_daemon_missing">
                                 <property name="attributes">0 -1 weight bold, 0 -1 foreground #a4a400000000</property>
-                                <property name="label">Failed to find ADB daemon (TODO: Link to a README section about this?)</property>
+                                <property name="can-focus">false</property>
+                                <property name="label">Failed to locate ADB daemon. Please install the corresponding package:
+- On Ubuntu: sudo apt install google-android-platform-tools-installer
+- On Arch Linux: sudo pacman -S android-tools
+- On Fedora: sudo dnf install android-tools</property>
                                 <property name="margin-top">24</property>
+                                <property name="selectable">true</property>
                                 <property name="visible">false</property>
                               </object>
                             </child>
