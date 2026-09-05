@@ -1,7 +1,3 @@
-<p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/docs/project_banner.png" alt="Landing illustration">
-</p>
-
 # DiagNG 🎧 The next-generation baseband Diag client software (2G/3G/4G/5G)
 
 DiagNG is a general purpose client purpose for the diagnostic interface of the Qualcomm Snapdragon basebands.
