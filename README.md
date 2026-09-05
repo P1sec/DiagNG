@@ -8,11 +8,11 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat).
 
--> [TODO: Screenshot] <-
+<p align="center">
+<em>[TODO: Flathub download badge]</em>
+</p>
 
--> [TODO: Flathub download badge] <-
-
-Feature list:
+## Feature list:
 
 *Done*:
 
@@ -26,22 +26,45 @@ Feature list:
 - [x] Support basic QCDM 2G/3G/4G/5G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).
 - [x] Flatpak packaging for good integration to the Linux desktop.
 
-*TODO*:
+## Screenshots
 
+<p align="center">
+<em>[TODO: Flathub download badge]</em>
+
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/usb-3devices.png?raw=true" alt="Application main screen" width="850">
+
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/qcdm-air.png?raw=true" alt="Network capture screen" width="850">
+
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/modemmanager.png?raw=true" alt="ModemManager screen" width="850">
+
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/adb.png?raw=true" alt="ADB devices screen" width="850">
+</p>
+
+![Screenshot](packaging/Screenshot_hires_light.png?raw=true)
+
+## Roadmap
+
+Required for release:
+- [ ] QA QCDM to GSMTAP conversion with good testing protocols over real devices
+- [ ] Complete QCDM to GSMTAP conversion with SIB decoding support, as present in QCSuper
+- [ ] Complete QCDM to GSMTAP conversion with RRC frame reassembly support, as present in QCSuper
+
+Needed to cover feature gap with other softs:
 - [ ] Provide good CLI functionality similar to QCSuper?
-- [ ] QA QCDM to GSMTAP conversion with good testing protocols over real devices?
-- [ ] Complete QCDM to GSMTAP conversion with SIB decoding support, as present in QCSuper?
-- [ ] Complete QCDM to GSMTAP conversion with RRC frame reassembly support, as present in QCSuper?
-- [ ] Complete QCDM support with EFS shell deocidng support, as present in QCSuper?
+- [ ] Complete QCDM support with EFS shell decoding support, as present in QCSuper?
 - [ ] Provide better QCDM exports interoperability (parse and export QMDL files in addition to DLF, etc.)?
+
+Good idea to add value:
+- [ ] Provide AT commands support, USIM-related commands support, QMI communication, etc.?
+
+Wished:
 - [ ] Allow to decode and register other QCDM non-OTA logs, like in SCAT?
+- [ ] Support Exynos, Mediatek, HiSilicon, etc. basebands like SCAT?
+- [ ] Provide more UI visualizations for QCDM features?
 - [ ] Write unit tests?
 - [ ] Export Kaitai Struct definitions to separate repositories/libraries?
 - [ ] Take external contributions from protocolar support?
-- [ ] Support Exynos, Mediatek, HiSilicon, etc. basebands like SCAT?
-- [ ] Provide more UI visualizations for QCDM features?
 - [ ] Provide AppImage packaging?
-- [ ] Provide AT commands support, USIM-related commands support, QMI communication, etc.?
 - [ ] Provide an on-device implant to gather logs on-device, similar to QCSuper, MobileInsight, SnoopSnitch or NSG?
 - [ ] Eventual Windows/macOS port?
 
@@ -149,7 +172,11 @@ DiagNG is meant to be split into two components:
 * `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
   * Uses `tokio-serial` + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)
 
-This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObject data models and signals, plus a decoupled UI-daemon thing, so that we can perform serial port acquisition in a privileged fashion, and the UI and Diag decoder can be unprivileged/sandboxed too), allowing to control and manage interferences with the serial Diag port system-wide.
+This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObject data models and signals, plus a decoupled UI-daemon architecture leveraging Polkit, so that we can perform serial port acquisition in a privileged fashion, and the UI and Diag decoder can be unprivileged/sandboxed too), allowing to control and manage interferences with the serial Diag port system-wide.
+
+<p align="center">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/authorization-dialog.png?raw=true" alt="Authorization dialog" width="850">
+</p>
 
 Various information is also put in a GObject model and display it using the Adwaita UI.
 
