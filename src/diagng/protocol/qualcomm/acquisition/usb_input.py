@@ -56,7 +56,7 @@ class USBQCDMInput(BaseQCDMInput):
         full_name += '%s - ' % self.usb_intf.full_intf_id
 
         if self.usb_dev.alt_vendor_name:
-            full_name += '%s %s -' % (
+            full_name += '%s %s - ' % (
                 self.usb_dev.alt_vendor_name or '',
                 self.usb_dev.alt_model_name or '',
             )

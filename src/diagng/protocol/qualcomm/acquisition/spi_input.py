@@ -52,7 +52,7 @@ class SerialQCDMInput(BaseQCDMInput):
         full_name += '%s - ' % self.serial_port.tty_device_path
 
         if self.serial_port.usb_vendor_alt:
-            full_name += '%s %s -' % (
+            full_name += '%s %s - ' % (
                 self.serial_port.usb_vendor_alt or '',
                 self.serial_port.usb_product_alt or '',
             )
