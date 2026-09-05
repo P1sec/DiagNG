@@ -14,8 +14,6 @@ It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper)
 
 ## Feature list:
 
-*Done*:
-
 - [x] Connect a Linux raw SPI port.
 - [x] Connect a Linux raw USB interface.
 - [x] A sleek GTK 4/Adwaita-based UI.
@@ -29,8 +27,6 @@ It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper)
 ## Screenshots
 
 <p align="center">
-<em>[TODO: Flathub download badge]</em>
-
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/usb-3devices.png?raw=true" alt="Application main screen" width="850">
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/qcdm-air.png?raw=true" alt="Network capture screen" width="850">
@@ -39,8 +35,6 @@ It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper)
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/adb.png?raw=true" alt="ADB devices screen" width="850">
 </p>
-
-![Screenshot](packaging/Screenshot_hires_light.png?raw=true)
 
 ## Roadmap
 
@@ -70,15 +64,15 @@ Wished:
 
 ## Legal
 
-DiagNG is released under the GPL v3 license.
+DiagNG is released under the [GPL v3](https://www.gnu.org/licenses/licenses.en.html) license.
 
 DiagNG is developed with the ground of allowing the interoperability of Linux system with baseband diagnostic interfaces, as well as of conducting security research.
 
 P1 Security being based in France, read the following extra mentions for more detailed context on the purpose of this software:
 
-DiagNG est un logiciel développé à des fins de sécurité informatique et de recherche, au titre de l'article L122-6-1 du Code de la propriété intellectuelle modifié par l'article 25 de la Loi n° 2013-1168 du 18 décembre 2013 relative à la programmation militaire pour les années 2014 à 2019 et portant diverses dispositions concernant la défense et la sécurité nationale.
+*DiagNG est un logiciel développé à des fins de sécurité informatique et de recherche, au titre de l'article L122-6-1 du Code de la propriété intellectuelle modifié par l'article 25 de la Loi n° 2013-1168 du 18 décembre 2013 relative à la programmation militaire pour les années 2014 à 2019 et portant diverses dispositions concernant la défense et la sécurité nationale.*
 
-DiagNG est également développé en connaissance de l'avis du Conseil d'État, 10ème et 9ème sous-sections réunies, 16/07/2008, 301843, rendu sur saisine de l'APRIL, qui stipule que l'article L122-6-1 du Code de la propriété intellectuelle instaure bien une exception de décompilation destinée à permettre le développement de logiciels libres.
+*DiagNG est également développé en connaissance de l'avis du Conseil d'État, 10ème et 9ème sous-sections réunies, 16/07/2008, 301843, rendu sur saisine de l'APRIL, qui stipule que l'article L122-6-1 du Code de la propriété intellectuelle instaure bien une exception de décompilation destinée à permettre le développement de logiciels libres.*
 
 
 ## Development environment setup
