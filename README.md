@@ -163,7 +163,7 @@ DiagNG is meant to be split into two components:
 
 * `com.p1security.diagng`: The main, single-instance Python 3/GTK 4/libadwaita 1.8+ front process holding a GUI, providing D-Bus session bus IPC on `/com/p1security/diagng` (including the `com.p1security.diagmetad` D-Bus interface which provides info about Linux ModemManager communication, UDev data acquisition)
   * Diag frame decoding itself is done in the Python daemon, using Kaitai struct
-* `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frag acquisition, providing IPC
+* `com.p1security.diagmond`: The background, privileged (runs on system bus), single-instance Rust/async process handling raw USB/SPI, USB, Diag frame acquisition, providing IPC
   * Uses `tokio-serial` + `zbus` + [`nusb`](https://github.com/kevinmehall/nusb)
 
 This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObject data models and signals, plus a decoupled UI-daemon architecture leveraging Polkit, so that we can perform serial port acquisition in a privileged fashion, and the UI and Diag decoder can be unprivileged/sandboxed too), allowing to control and manage interferences with the serial Diag port system-wide.

@@ -19,7 +19,7 @@ SPDX-FileCopyrightText: 2026, P1 Security SAS
 
         The background, privileged, single-instance
         Rust/Tokio service handling raw USB/SPI, USB,
-        Diag frag acquisition, providing IPC.
+        Diag frame acquisition, providing IPC.
     -->
     <interface name="com.p1security.diagmond">
         <!--
