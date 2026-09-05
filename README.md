@@ -57,7 +57,7 @@ Wished:
 - [ ] Provide more UI visualizations for QCDM features?
 - [ ] Write unit tests?
 - [ ] Export Kaitai Struct definitions to separate repositories/libraries?
-- [ ] Take external contributions from protocolar support?
+- [ ] Take external contributions for protocolar support?
 - [ ] Provide AppImage packaging?
 - [ ] Provide an on-device implant to gather logs on-device, similar to QCSuper, MobileInsight, SnoopSnitch or NSG?
 - [ ] Eventual Windows/macOS port?
