@@ -8,9 +8,24 @@
         <color type="primary" scheme_preference="light">#DCB3E7</color>
         <color type="primary" scheme_preference="dark">#664D96</color>
     </branding>
-    <summary>Acquire and capture baseband traces, based on QCSuper</summary>
+    <summary>Client for mobile baseband Diag interface</summary>
     <description>
-        <p>DiagNG is a tool allowing to acquire 2G/3G/4G/5G network traces, based on QCSuper.</p>
+        <p>DiagNG is a general purpose client purpose for the diagnostic interface of Qualcomm Snapdragon basebands.</p>
+        <p>It is an experimental, Linux-first, open-source, interoperable, brand-new way to connect to baseband USB diagnostic interfaces; whether for pedagogic or security research purposes.</p>
+        <p>It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.</p>
+        <p>It can be considered as a sequel for QCSuper, and also takes large inspiration from SCAT. Like these tools, it allows to capture 2G/3G/4G/5G air interface network traces and save them to the GSMTAP/PCAP format, so that you can visualize these in Wireshark.</p>
+        <p>Features:</p>
+        <ul>
+            <li>Connect a Linux raw SPI port.</li>
+            <li>Connect a Linux raw USB interface.</li>
+            <li>A sleek GTK 4/Adwaita-based UI.</li>
+            <li>SPI and USB connections are safely connected to the Python UI through a privileged Rust daemon, using a Polkit/DBus-based interface to secure privileged actions, to ensure good integration with Flatpak.</li>
+            <li>Wireshark plug-in management and guided installation for GSMTAP v3/5G RRC decoding (taken from SCAT).</li>
+            <li>Gather phone-related information through ADB, with shortcuts to enable the QCDM USB interface easily.</li>
+            <li>Support basic QCDM (Qualcomm diagnostic monitor) log registration.</li>
+            <li>Support basic QCDM 2G/3G/4G/5G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).</li>
+            <li>Flatpak packaging for good integration to the Linux desktop.</li>
+        </ul>
     </description>
     <screenshots>
         <screenshot type="default">
