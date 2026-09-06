@@ -48,7 +48,6 @@ class MainWindow(Adw.ApplicationWindow):
     adw_style_manager: Adw.StyleManager
 
     auth_dialog_showed: bool = False
-    about_dialog: Adw.AboutDialog = Gtk.Template.Child()
 
     # All tabs - banner
 
@@ -119,9 +118,14 @@ class MainWindow(Adw.ApplicationWindow):
         self.app = app
         self.set_application(app)
 
-        # self.about_dialog = Adw.AboutDialog.new_from_appdata(
-        #     '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml'
-        # )
+        self.about_dialog = Adw.AboutDialog.new_from_appdata(
+            '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml',
+            version('diagng'),
+        )
+        self.about_dialog.set_developer_name('')
+        self.about_dialog.set_developers(
+            ['Marin Moulinier - P1 Security https://www.p1sec.com/']
+        )
 
         # Perform data bindings
 
@@ -380,7 +384,9 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
 
         def show_about(*args):
-            self.about_dialog.set_version(version('diagng'))
+            """
+            self.about_dialog.set_debug_info(self.ctx_buffered_log)
+            """
             self.about_dialog.present(self)
 
         self.add_simple_action('show-about', show_about)

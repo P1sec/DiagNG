@@ -2,7 +2,7 @@
 <component type="desktop-application">
     <id>com.p1security.diagng</id>
     <metadata_license>CC0-1.0</metadata_license>
-    <project_license>GPL-3.0+</project_license>
+    <project_license>GPL-3.0-or-later</project_license>
     <name>diagng</name>
     <branding>
         <color type="primary" scheme_preference="light">#DCB3E7</color>
@@ -60,7 +60,7 @@
     </recommends>
     <url type="bugtracker">https://github.com/P1sec/DiagNG/issues/new/choose</url>
     <url type="homepage">https://github.com/P1sec/DiagNG</url>
-    <url type="contact">https://matrix.to/#/#diagng:matrix.org</url>
+    <url type="help">https://matrix.to/#/#diagng:matrix.org</url>
     <url type="faq">https://github.com/P1sec/DiagNG#readme</url>
     <!--url type="translate">https://github.com/P1sec/DiagNG/tree/main/translations#readme</url-->
     <url type="vcs-browser">https://github.com/P1sec/DiagNG</url>
@@ -72,7 +72,9 @@
     <releases>
         <release version="0.1.0" date="2026-06-03">
             <description>
-                <p>Development tree</p>
+                <ul>
+                    <li>Initial alpha release</li>
+                </ul>
             </description>
         </release>
     </releases>
