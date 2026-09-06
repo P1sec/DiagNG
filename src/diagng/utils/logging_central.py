@@ -23,6 +23,8 @@ from collections import deque
 # from shlex import join
 import sys
 
+from gi.repository import GObject
+
 
 # Features:
 # - Hook the Python logging module globally
@@ -37,7 +39,7 @@ ROOT_DIR = dirname(realpath(SRC_DIR))
 
 LOG_FILE_NAME = ROOT_DIR + '/_test_log.log'
 LOG_FILE_SIZE = 10 * 1024 * 1024
-MEMORY_LOG_LINES = 400
+MEMORY_LOG_LINES = 5000
 LOG_FORMAT = '[{asctime}] [ui {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
 
 # if '--service' in join(sys.argv).lower():
@@ -83,30 +85,13 @@ class ColorFormatter(Formatter):
 
 
 class ScrollbackHandler(Handler):
-    def __init__(self, logging_central: 'LoggingCentral'):
+    def __init__(self):
         Handler.__init__(self)
-        self.logging_central = logging_central
-        self.logs: Sequence[Dict[str, str]] = deque(maxlen=MEMORY_LOG_LINES)
+        self.logs: Sequence[str] = deque(maxlen=MEMORY_LOG_LINES)
 
     def emit(self, record: LogRecord):
-        # string : str = self.format(record)
-        # self.logs.append(string)
-
-        log_entry: dict = {
-            'log_class': record.levelname.lower(),
-            'log_raw': self.format(record),
-        }
-
-        self.logs.append(log_entry)
-
-        # Dispatch to signal handlers, if present
-
-        if self.logging_central.signal_handler:
-            self.logging_central.signal_handler.broadcast_message(
-                {'type': 'APPEND_EVENT_LOG', 'log': log_entry}
-            )
-
-        # XX : Store metadata?
+        string: str = self.format(record)
+        self.logs.append(string)
 
 
 class GoodPermissionsRotatingFileHandler(RotatingFileHandler):
@@ -124,20 +109,21 @@ class GoodPermissionsRotatingFileHandler(RotatingFileHandler):
         chown(self.baseFilename, uid, gid)
 
 
-class LoggingCentral:
+class LoggingCentral(GObject.Object):
     logs: deque[LogRecord]
     scrollback_handler: 'ScrollbackHandler'
     signal_handler: object = None
+    update_live: bool = False
     logger: Logger
 
-    def get_logs(self) -> List[str]:
+    def get_logs(self) -> Sequence[str]:
         return list(self.scrollback_handler.logs)
 
     def register_signal_handler(self, signal_handler: object):
         self.signal_handler = signal_handler
 
     def __init__(self, debug_mode: bool):
-        self.logs = MEMORY_LOG_LINES
+        super().__init__()
 
         # Register all logging handlers here...
 
@@ -161,9 +147,7 @@ class LoggingCentral:
         self.logger.addHandler(file_handler)
         """
 
-        """
-        self.scrollback_handler = ScrollbackHandler(self)
-        self.scrollback_handler.setLevel(INFO)
+        self.scrollback_handler = ScrollbackHandler()
+        self.scrollback_handler.setLevel(DEBUG)
         self.scrollback_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(self.scrollback_handler)
-        """

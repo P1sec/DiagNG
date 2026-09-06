@@ -112,6 +112,11 @@ class MainWindow(Adw.ApplicationWindow):
 
     udev_rules_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
+    # About dialog
+
+    about_dialog: Adw.AboutDialog
+    debug_timer_source: int = None
+
     def __init__(self, app):
         super().__init__()
 
@@ -122,10 +127,16 @@ class MainWindow(Adw.ApplicationWindow):
             '/com/p1security/diagng/share/metainfo/com.p1security.diagng.metainfo.xml',
             version('diagng'),
         )
+        self.about_dialog.set_debug_info_filename('diagng-debug-info.txt')
         self.about_dialog.set_developer_name('')
         self.about_dialog.set_developers(
             ['Marin Moulinier - P1 Security https://www.p1sec.com/']
         )
+
+        def on_closed(*args):
+            self.about_dialog.set_visible(False)
+
+        self.about_dialog.connect('closed', on_closed)
 
         # Perform data bindings
 
@@ -384,9 +395,29 @@ class MainWindow(Adw.ApplicationWindow):
         self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
 
         def show_about(*args):
-            """
-            self.about_dialog.set_debug_info(self.ctx_buffered_log)
-            """
+
+            self.about_dialog.set_visible(True)
+
+            if not self.debug_timer_source:
+
+                def update_debug_info():
+                    self.about_dialog.set_debug_info(
+                        '\n'.join(
+                            self.app.logging_central.scrollback_handler.logs
+                        )
+                    )
+
+                    if not self.about_dialog.is_visible():
+                        self.debug_timer_source = None
+                        return GLib.SOURCE_REMOVE
+                    else:
+                        return GLib.SOURCE_CONTINUE
+
+                self.debug_timer_source = GLib.timeout_add_seconds(
+                    1, update_debug_info
+                )
+                update_debug_info()
+
             self.about_dialog.present(self)
 
         self.add_simple_action('show-about', show_about)
