@@ -133,6 +133,13 @@ class QCDMWindow(Adw.Window):
         def file_picked(*args):
             error('TODO')  # WIP
 
+            # 🪧 TODO:
+            # - Launch the file-based capture in another task
+            # - Switch the trigger button to a "Stop capture" button
+            #   (with dangerous/red styling?) when a capture to
+            #   a PCAP file is active
+            # - Do the same for the Wireshark Live feature?
+
         file_picker = Gtk.FileDialog()
         file_picker.set_initial_name('output_file.pcap')
         file_picker.save(self, callback=file_picked)
