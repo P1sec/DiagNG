@@ -86,8 +86,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                               <object class="AdwActionRow">
                                 <property name="title">Capture to a new PCAP file</property>
                                 <child type="suffix">
-                                  <object class="GtkButton">
+                                  <object class="GtkButton" id="pcap_output_button">
                                     <property name="label">Pick file...</property>
+                                    <signal name="clicked" handler="pcap_output_clicked"/>
                                   </object>
                                 </child>
                               </object>

@@ -21,7 +21,7 @@
     <property id="focusable" type-id="gboolean" default-value="True"/>
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
-  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="8d6efeb2e668cc5dee2e72ec80ad1c1803478c4c6db96cac62f8628b071e0e51"/>
+  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="11519e6eed668860024a71eb258f4fbcac2c8495a07283011d4a0b9064ca225b"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="735644493caab8aeaea70c57b3750f91e8bb876b042f0e746b2fe8918f103426"/>
   <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="dc64fd2a43333fc63469d5766472d2991578a7519ede52e785d1c5decdab041d"/>
   <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="4a17b3253c082e80011ea75dc7d6efcef171d5553ea4e904960768f3c305a8ef">

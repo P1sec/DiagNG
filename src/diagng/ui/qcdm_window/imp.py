@@ -24,7 +24,7 @@ from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from diagng.system.pcap_output import PcapOutput
-from logging import info, debug
+from logging import info, error, debug
 from typing import Optional
 
 import gi
@@ -122,6 +122,20 @@ class QCDMWindow(Adw.Window):
             self.log_manager.register_ota_related_logs(callback)
         else:
             self.create_wireshark_pipe()
+
+    @Gtk.Template.Callback()
+    def pcap_output_clicked(self, target: Gtk.Button, *args):
+        # Enable network-related logs
+
+        pass  # ⚠️ TODO WIP 2026-09-08
+        # => 1. 🪧 🪧 PROMPT OUTPUT FILE
+
+        def file_picked(*args):
+            error('TODO')  # WIP
+
+        file_picker = Gtk.FileDialog()
+        file_picker.set_initial_name('output_file.pcap')
+        file_picker.save(self, callback=file_picked)
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance

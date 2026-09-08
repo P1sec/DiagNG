@@ -66,8 +66,9 @@ template $QCDMWindow: Adw.Window {
                 title: "Capture to a new PCAP file";
 
                 [suffix]
-                Button {
+                Button pcap_output_button {
                   label: "Pick file...";
+                  clicked => $pcap_output_clicked();
                 }
               }
             }
