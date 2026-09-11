@@ -103,7 +103,7 @@ class BaseQCDMInput(GObject.Object):
                     warning('Failed to parse Diag response: ' + format_exc())
                 else:
                     info(
-                        'Successfully parsed Diag response: %r'
+                        'Successfully parsed Diag response: %s'
                         % pretty_print_struct(resp)
                     )
 
