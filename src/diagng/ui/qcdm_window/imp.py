@@ -133,11 +133,11 @@ class QCDMWindow(Adw.Window):
         def file_picked(*args):
             error('TODO')  # WIP
 
-            # 🪧 TODO:
+            # 🪧 TODO:
             # - Launch the file-based capture in another task
             # - Switch the trigger button to a "Stop capture" button
             #   (with dangerous/red styling?) when a capture to
-            #   a PCAP file is active
+            #   a PCAP file is active
             # - Do the same for the Wireshark Live feature?
 
         file_picker = Gtk.FileDialog()
@@ -148,8 +148,8 @@ class QCDMWindow(Adw.Window):
         assert not self.wireshark_instance
 
         # ⚠️ WIP - TODO ⚠️
-        # ^ ⬆️ Handle Wireshark closing the pipe
-        # ^ ⬆️ Handle the user cancelling the capture task through DiagNG UI
+        # ^ ⬆️ Handle Wireshark closing the pipe
+        # ^ ⬆️ Handle the user cancelling the capture task through DiagNG UI
 
         self.wireshark_instance = PcapOutput(use_wireshark=True)
 

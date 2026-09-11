@@ -17,6 +17,7 @@ from diagng.protocol.qualcomm.utils.hdlc import (
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
+from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 
 DiagCmd = DiagCmdCode.DiagCmd
@@ -101,7 +102,10 @@ class BaseQCDMInput(GObject.Object):
                 except Exception:
                     warning('Failed to parse Diag response: ' + format_exc())
                 else:
-                    info('Successfully parsed Diag response: %r' % resp)
+                    info(
+                        'Successfully parsed Diag response: %r'
+                        % pretty_print_struct(resp)
+                    )
 
                     self.frame_received.emit(resp, data)
 
