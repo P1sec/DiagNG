@@ -147,6 +147,10 @@ class QCDMWindow(Adw.Window):
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
 
+        # ⚠️ WIP - TODO ⚠️
+        # ^ ⬆️ Handle Wireshark closing the pipe
+        # ^ ⬆️ Handle the user cancelling the capture task through DiagNG UI
+
         self.wireshark_instance = PcapOutput(use_wireshark=True)
 
         def on_stream_available(*args):
