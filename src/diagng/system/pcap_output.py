@@ -191,13 +191,12 @@ class PcapOutput(GObject.GObject):
             flags=Gio.SubprocessFlags.STDIN_PIPE,
         )
 
+        proc_pid = self.wireshark_proc.get_identifier()
+
         self.output_stream = self.wireshark_proc.get_stdin_pipe()
 
         def terminate_cb(*args):
-            debug(
-                'Wireshark subprocess %s terminated'
-                % self.wireshark_proc.get_identifier()
-            )
+            debug('Wireshark subprocess %s terminated' % proc_pid)
             self.close()
 
         self.wireshark_proc.wait_async(

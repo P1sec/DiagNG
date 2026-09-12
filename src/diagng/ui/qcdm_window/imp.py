@@ -53,7 +53,7 @@ class QCDMWindow(Adw.Window):
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
-    start_capture_button: Gtk.Label = Gtk.Template.Child()
+    start_ws_capture_button: Gtk.Label = Gtk.Template.Child()
 
     wireshark_plugins: Adw.PreferencesGroup = Gtk.Template.Child()
 
@@ -110,7 +110,7 @@ class QCDMWindow(Adw.Window):
         self.connect('close-request', self.on_quit)
 
     @Gtk.Template.Callback()
-    def start_capture_clicked(self, target: Gtk.Button, *args):
+    def start_ws_capture_clicked(self, target: Gtk.Button, *args):
         # Enable network-related logs
 
         def callback(resp: DiagResponse):
@@ -124,7 +124,11 @@ class QCDMWindow(Adw.Window):
             self.create_wireshark_pipe()
 
     @Gtk.Template.Callback()
-    def pcap_output_clicked(self, target: Gtk.Button, *args):
+    def stop_ws_capture_clicked(self, target: Gtk.Button, *args):
+        pass  # TODO
+
+    @Gtk.Template.Callback()
+    def pick_pcap_file_clicked(self, target: Gtk.Button, *args):
         # Enable network-related logs
 
         pass  # ⚠️ TODO WIP 2026-09-08
@@ -143,6 +147,13 @@ class QCDMWindow(Adw.Window):
         file_picker = Gtk.FileDialog()
         file_picker.set_initial_name('output_file.pcap')
         file_picker.save(self, callback=file_picked)
+
+    @Gtk.Template.Callback()
+    def stop_pcap_capture_clicked(self, target: Gtk.Button, *args):
+        pass  # TODO
+
+    def create_pcap_pipe(self, output_file: Gio.File):
+        pass  # TODO
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance

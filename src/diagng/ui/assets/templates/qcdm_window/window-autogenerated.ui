@@ -68,27 +68,48 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           <object class="AdwPreferencesGroup">
                             <property name="title">Air interface capture</property>
                             <child>
-                              <object class="AdwActionRow">
-                                <property name="activatable-widget">start_capture_button</property>
+                              <object class="AdwActionRow" id="ws_capture_row">
+                                <property name="activatable-widget">start_ws_capture_button</property>
                                 <property name="title">Capture into a new Wireshark instance</property>
                                 <child type="suffix">
-                                  <object class="GtkButton" id="start_capture_button">
+                                  <object class="GtkButton" id="start_ws_capture_button">
                                     <property name="label">Start capture</property>
-                                    <signal name="clicked" handler="start_capture_clicked"/>
+                                    <signal name="clicked" handler="start_ws_capture_clicked"/>
                                     <style>
                                       <class name="suggested-action"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child type="suffix">
+                                  <object class="GtkButton" id="stop_ws_capture_button">
+                                    <property name="label">Stop capture</property>
+                                    <property name="visible">false</property>
+                                    <signal name="clicked" handler="stop_ws_capture_clicked"/>
+                                    <style>
+                                      <class name="destructive-action"/>
                                     </style>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child>
-                              <object class="AdwActionRow">
+                              <object class="AdwActionRow" id="pcap_capture_row">
+                                <property name="activatable-widget">pick_pcap_file_button</property>
                                 <property name="title">Capture to a new PCAP file</property>
                                 <child type="suffix">
-                                  <object class="GtkButton" id="pcap_output_button">
+                                  <object class="GtkButton" id="pick_pcap_file_button">
                                     <property name="label">Pick file...</property>
-                                    <signal name="clicked" handler="pcap_output_clicked"/>
+                                    <signal name="clicked" handler="pick_pcap_file_clicked"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="stop_pcap_capture_button">
+                                    <property name="label">Stop capture</property>
+                                    <property name="visible">false</property>
+                                    <signal name="clicked" handler="stop_pcap_capture_clicked"/>
+                                    <style>
+                                      <class name="destructive-action"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>

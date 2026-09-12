@@ -47,28 +47,50 @@ template $QCDMWindow: Adw.Window {
             Adw.PreferencesGroup {
               title: "Air interface capture";
 
-              Adw.ActionRow {
-                activatable-widget: start_capture_button;
+              Adw.ActionRow ws_capture_row {
+                activatable-widget: start_ws_capture_button;
                 title: "Capture into a new Wireshark instance";
 
                 [suffix]
-                Button start_capture_button {
+                Button start_ws_capture_button {
                   label: "Start capture";
-                  clicked => $start_capture_clicked();
+                  clicked => $start_ws_capture_clicked();
 
                   styles [
                     "suggested-action",
                   ]
                 }
+
+                [suffix]
+                Button stop_ws_capture_button {
+                  label: "Stop capture";
+                  visible: false;
+                  clicked => $stop_ws_capture_clicked();
+
+                  styles [
+                    "destructive-action",
+                  ]
+                }
               }
 
-              Adw.ActionRow {
+              Adw.ActionRow pcap_capture_row {
+                activatable-widget: pick_pcap_file_button;
                 title: "Capture to a new PCAP file";
 
                 [suffix]
-                Button pcap_output_button {
+                Button pick_pcap_file_button {
                   label: "Pick file...";
-                  clicked => $pcap_output_clicked();
+                  clicked => $pick_pcap_file_clicked();
+                }
+
+                Button stop_pcap_capture_button {
+                  label: "Stop capture";
+                  visible: false;
+                  clicked => $stop_pcap_capture_clicked();
+
+                  styles [
+                    "destructive-action",
+                  ]
                 }
               }
             }
