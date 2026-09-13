@@ -53,7 +53,10 @@ class QCDMWindow(Adw.Window):
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
-    start_ws_capture_button: Gtk.Label = Gtk.Template.Child()
+
+    ws_capture_row: Adw.ActionRow = Gtk.Template.Child()
+    start_ws_capture_button: Gtk.Button = Gtk.Template.Child()
+    stop_ws_capture_button: Gtk.Button = Gtk.Template.Child()
 
     wireshark_plugins: Adw.PreferencesGroup = Gtk.Template.Child()
 
@@ -111,21 +114,32 @@ class QCDMWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def start_ws_capture_clicked(self, target: Gtk.Button, *args):
-        # Enable network-related logs
 
-        def callback(resp: DiagResponse):
+        def do_spawn(*args):
             # Spawn wireshark pipe, with flatpak-spawn if needed
 
             self.create_wireshark_pipe()
 
         if self.input_obj.state != InputState.Closed:
-            self.log_manager.register_ota_related_logs(callback)
+            # Enable network-related logs, if this is a live device
+
+            self.log_manager.register_ota_related_logs(do_spawn)
+
+            self.start_ws_capture_button.set_visible(False)
+            self.stop_ws_capture_button.set_visible(True)
+            self.ws_capture_row.set_activatable_widget(
+                self.stop_ws_capture_button
+            )
         else:
-            self.create_wireshark_pipe()
+            # Just spawn Wireshark if this is a DLF file
+
+            do_spawn()
 
     @Gtk.Template.Callback()
     def stop_ws_capture_clicked(self, target: Gtk.Button, *args):
-        pass  # TODO
+        if self.wireshark_instance:
+            self.wireshark_instance.close()
+            self.wireshark_instance = None
 
     @Gtk.Template.Callback()
     def pick_pcap_file_clicked(self, target: Gtk.Button, *args):
@@ -164,17 +178,29 @@ class QCDMWindow(Adw.Window):
 
         self.wireshark_instance = PcapOutput(use_wireshark=True)
 
+        def on_stream_closed(*args):
+            self.start_ws_capture_button.set_visible(True)
+            self.stop_ws_capture_button.set_visible(False)
+            self.ws_capture_row.set_activatable_widget(
+                self.start_ws_capture_button
+            )
+
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
             #   use adapter classes for data conversion
             OTADecoder(self.wireshark_instance, self.input_obj)
 
-            def on_closed(*arg):
-                self.wireshark_instance.close()
+            def close_wireshark(*args):
+                if self.wireshark_instance:
+                    self.wireshark_instance.close()
+                    self.wireshark_instance = None
 
-            self.input_obj.closed.connect(on_closed)
+            self.input_obj.closed.connect(close_wireshark)
 
+            # If this is a DLF file, process data
             self.input_obj.process_stream()
+
+        self.wireshark_instance.stream_closed.connect(on_stream_closed)
 
         self.wireshark_instance.stream_active.connect(on_stream_available)
         self.wireshark_instance.open_stream()

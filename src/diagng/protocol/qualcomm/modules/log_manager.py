@@ -8,14 +8,12 @@ from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
-from diagng.utils.kaitai_pretty_print import pretty_print_struct
 from diagng.system.adb.adb_client import ADBResponse
 
 from logging import info, debug, warning
-from gi.repository import GObject, Gio
 from typing import Callable, Optional
 from collections import defaultdict
-from re import sub
+from gi.repository import GObject
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -163,15 +161,6 @@ class LogManager(GObject.Object):
                 'DiagResponse received for DiagCmd.log_config_f: %r' % response
             )
 
-            debug(
-                'Parsed DiagCmd.log_config_f response: %s',
-                sub(
-                    r' logs_on_bitfield: .+',
-                    ' logs_on_bitfield: [...]',
-                    pretty_print_struct(response),
-                ),
-            )
-
             callback(response)
 
         self.source.send_recv(
@@ -210,15 +199,6 @@ class LogManager(GObject.Object):
             )
 
             # ⚠️ TODO ➡️ Add due error HANDLING Here?
-
-            debug(
-                'Parsed DiagCmd.log_config_f response: %s',
-                sub(
-                    r' logs_on_bitfield: .+',
-                    ' logs_on_bitfield: [...]',
-                    pretty_print_struct(response),
-                ),
-            )
 
             for equip_id_raw, max_item in enumerate(
                 response.payload.action.last_item
@@ -324,15 +304,6 @@ class LogManager(GObject.Object):
                 )
 
                 # ⚠️ TODO Handle error
-
-                debug(
-                    'Parsed DiagCmd.log_config_f response: %s',
-                    sub(
-                        r' logs_on_bitfield: .+',
-                        ' logs_on_bitfield: [...]',
-                        pretty_print_struct(response),
-                    ),
-                )
 
                 nonlocal last_diag_response
                 last_diag_response = response

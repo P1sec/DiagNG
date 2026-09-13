@@ -8,6 +8,7 @@ from traceback import format_exc
 from abc import abstractmethod
 from enum import IntEnum
 from io import BytesIO
+from re import sub
 
 from diagng.protocol.qualcomm.utils.hdlc import (
     hdlc_encode,
@@ -107,7 +108,11 @@ class BaseQCDMInput(GObject.Object):
                 else:
                     info(
                         'Successfully parsed Diag response: %s'
-                        % pretty_print_struct(resp)
+                        % sub(
+                            r' logs_on_bitfield: .+',
+                            ' logs_on_bitfield: [...]',
+                            pretty_print_struct(resp),
+                        )
                     )
 
                     self.frame_received.emit(resp, data)
