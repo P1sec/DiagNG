@@ -114,7 +114,7 @@ class PcapOutput(GObject.GObject):
         if self.use_wireshark:
             self.spawn_wireshark()
         else:
-            # ⚠️ TODO: Check whether file exists/is writeable here
+            # Check whether file exists/is writeable here
 
             def callback(selected_mode: FileOutMode):
 
@@ -127,18 +127,34 @@ class PcapOutput(GObject.GObject):
                 #    - an interactive gui prompt path
 
                 if selected_mode == FileOutMode.Append:
-                    pass  # ⚠️ TODO
+                    duplex = self.output_file.open_readwrite(None)
+
+                    # ⚠️ TODO: Check file magic
+                    # ⚠️ TODO: Eventually handle GZip format?
+
+                    duplex.seek(0, GLib.SeekType.END, None)
+
+                    self.output_stream = duplex.get_output_stream()
+
                 elif selected_mode == FileOutMode.Overwrite:
-                    pass  # ⚠️ TODO
+                    self.output_stream = self.output_file.replace(
+                        None, False, Gio.FileCreateFlags.NONE, None
+                    )
+
+                    self.write_pcap_header()
                 elif selected_mode == FileOutMode.Dismiss:
-                    pass  # ⚠️ TODO
+                    self.close()
 
-                #    => Use replace_readwrite_async ?
-                #       OR append_to_async / open_readwrite_async ?
+            try:
+                file_exists = self.output_file.query_exists()
+            except Exception:
+                self.close()
+                raise
 
-            self.mode_selector.query_file_out_mode(callback)
-
-        pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
+            if not file_exists:
+                callback(FileOutMode.Overwrite)
+            else:
+                self.mode_selector.query_file_out_mode(callback)
 
     @staticmethod
     def check_wireshark_version(callback: Callable[[Optional[str]], []]):
@@ -172,7 +188,7 @@ class PcapOutput(GObject.GObject):
         # ⚠️ ➡️➡️ LATER: Think to install the _5G decoding Lua plug-in_
         #       for Wireshark somewhere?
 
-        # ℹ️ How do we device between
+        # ℹ️ How do we decide between
         #  Gio.Subprocess
         # and
         # GLib.spawn_async_* ?
@@ -188,8 +204,6 @@ class PcapOutput(GObject.GObject):
 
     def spawn_wireshark(self):
 
-        # TODO: SEE: https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
-        # https://lazka.github.io/pgi-docs/Gio-2.0/classes/SubprocessLauncher.html
         self.wireshark_proc = Gio.Subprocess.new(
             (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
             + ['wireshark', '-k', '-i', '-'],
@@ -204,9 +218,7 @@ class PcapOutput(GObject.GObject):
             debug('Wireshark subprocess %s terminated' % proc_pid)
             self.close()
 
-        self.wireshark_proc.wait_async(
-            None, terminate_cb
-        )  # Close callback (TODO)
+        self.wireshark_proc.wait_async(None, terminate_cb)  # Close callback
 
         self.write_pcap_header()
 

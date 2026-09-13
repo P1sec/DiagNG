@@ -73,12 +73,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <property name="title">Capture into a new Wireshark instance</property>
                                 <child type="suffix">
                                   <object class="GtkButton" id="start_ws_capture_button">
-                                    <property name="css-classes">suggested-action</property>
                                     <property name="label">Start capture</property>
                                     <signal name="clicked" handler="start_ws_capture_clicked"/>
-                                    <style>
-                                      <class name="suggested-action"/>
-                                    </style>
                                   </object>
                                 </child>
                                 <child type="suffix">

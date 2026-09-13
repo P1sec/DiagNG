@@ -273,7 +273,7 @@ class QCDMWindow(Adw.Window):
             self.pcap_capture_row.set_activatable_widget(
                 self.pick_pcap_file_button
             )
-            self.pcap_capture_row.set_subtitle(None)
+            self.pcap_capture_row.set_subtitle('')
 
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
