@@ -42,13 +42,48 @@ DiagCmd = DiagCmdCode.DiagCmd
 
 
 class InteractiveGUIFileOutModeSelector(FileOutModeSelector):
+    output_file: Gio.File
     input_dialog: Gtk.Window
 
-    def __init__(self, input_dialog: Gtk.Window):
+    def __init__(self, output_file: Gio.File, input_dialog: Gtk.Window):
+        self.output_file = output_file
         self.input_dialog = input_dialog
 
-    def query_file_out_mode(callback: Callable[[FileOutMode], None]):
-        raise NotImplementedError  # WIP XX
+    def query_file_out_mode(self, callback: Callable[[FileOutMode], None]):
+        file_path = self.output_file.get_path()
+
+        visible_file_path = file_path
+        if visible_file_path.startswith('/run/user'):  # Flatpak-sandboxed path
+            visible_file_path = visible_file_path.split('/').pop()
+
+        def on_choose(dialog: Adw.AlertDialog, result: Gio.AsyncResult):
+            result = dialog.choose_finish(result)
+
+            callback(
+                {
+                    'dismiss': FileOutMode.Dismiss,
+                    'append': FileOutMode.Append,
+                    'overwrite': FileOutMode.Overwrite,
+                }[result]
+            )
+
+        dialog = Adw.AlertDialog.new(
+            '"%s" already exists' % visible_file_path,
+            'Do you want to append to this file, or create a new one over it?',
+        )
+        dialog.set_heading_use_markup(False)
+        dialog.add_response('dismiss', 'Dismiss')
+        dialog.add_response('append', 'Append')
+        dialog.add_response('overwrite', 'Overwrite')
+        dialog.set_default_response('dismiss')
+        dialog.set_close_response('dismiss')
+        dialog.set_response_appearance(
+            'append', Adw.ResponseAppearance.SUGGESTED
+        )
+        dialog.set_response_appearance(
+            'overwrite', Adw.ResponseAppearance.DESTRUCTIVE
+        )
+        dialog.choose(self.input_dialog, None, on_choose)
 
 
 @Gtk.Template(
@@ -228,7 +263,7 @@ class QCDMWindow(Adw.Window):
         assert not self.output_pcap
 
         self.output_pcap = PcapOutput(
-            mode_selector=InteractiveGUIFileOutModeSelector(self),
+            mode_selector=InteractiveGUIFileOutModeSelector(output_file, self),
             output_file=output_file,
         )
 

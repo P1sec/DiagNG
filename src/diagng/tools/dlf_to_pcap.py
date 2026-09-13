@@ -26,8 +26,22 @@ class ConstantFileOutModeSelector(FileOutModeSelector):
 
 
 class InteractiveCLIFileOutModeSelector(FileOutModeSelector):
-    def query_file_out_mode(callback: Callable[[FileOutMode], None]):
-        raise NotImplementedError  # WIP XX
+    def query_file_out_mode(self, callback: Callable[[FileOutMode], None]):
+        while True:
+            prompt = (
+                input(
+                    'This file already exists. Do you want to (a)ppend to it or to (o)verwrite it? (a/o) '
+                )
+                .strip()
+                .lower()
+            )
+
+            if prompt == 'a':
+                callback(FileOutMode.Append)
+                return
+            elif prompt == 'o':
+                callback(FileOutMode.Overwrite)
+                return
 
 
 def main():

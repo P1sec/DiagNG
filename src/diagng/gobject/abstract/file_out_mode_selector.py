@@ -8,6 +8,7 @@ from abc import abstractmethod
 class FileOutMode(GObject.GEnum):
     Append = 1
     Overwrite = 2
+    Dismiss = 3
 
 
 class FileOutModeSelector:
