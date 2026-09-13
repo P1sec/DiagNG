@@ -6,6 +6,7 @@ meta:
     - command/diag_verno_f_rsp
     - command/diag_log_config_f_rsp
     - command/diag_log_f
+    - command/diag_cmd_ext_f
     - command/diag_unknown
 
 seq:
@@ -19,6 +20,7 @@ seq:
         'diag_cmd_code::diag_cmd::verno_f': diag_verno_f_rsp
         'diag_cmd_code::diag_cmd::log_config_f': diag_log_config_f_rsp
         'diag_cmd_code::diag_cmd::log_f': diag_log_f
+        'diag_cmd_code::diag_cmd::cmd_ext_f': diag_cmd_ext_f
         _: diag_unknown
     size-eos: true
 
