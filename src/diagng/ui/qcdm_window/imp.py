@@ -58,6 +58,10 @@ class QCDMWindow(Adw.Window):
     start_ws_capture_button: Gtk.Button = Gtk.Template.Child()
     stop_ws_capture_button: Gtk.Button = Gtk.Template.Child()
 
+    pcap_capture_row: Adw.ActionRow = Gtk.Template.Child()
+    pick_pcap_file_button: Gtk.Button = Gtk.Template.Child()
+    stop_pcap_capture_button: Gtk.Button = Gtk.Template.Child()
+
     wireshark_plugins: Adw.PreferencesGroup = Gtk.Template.Child()
 
     wireshark_instance: Optional[PcapOutput] = None
@@ -145,18 +149,46 @@ class QCDMWindow(Adw.Window):
     def pick_pcap_file_clicked(self, target: Gtk.Button, *args):
         # Enable network-related logs
 
-        pass  # ⚠️ TODO WIP 2026-09-08
-        # => 1. 🪧 🪧 PROMPT OUTPUT FILE
+        def file_picked(file_dialog: Gtk.FileDialog, task: Gio.Task):
 
-        def file_picked(*args):
-            error('TODO')  # WIP
+            try:
+                open_result: Gio.File = file_dialog.save_finish(task)
+            except GLib.GError as err:
+                if err.message != 'Dismissed by user':
+                    dialog = Adw.AlertDialog.new(
+                        'Could not open file', err.message
+                    )
+                    dialog.add_response('ok', 'Ok')
+                    dialog.set_default_response('ok')
+                    dialog.set_close_response('ok')
+                    dialog.choose(self, None, None)
+                return
 
             # 🪧 TODO:
             # - Launch the file-based capture in another task
             # - Switch the trigger button to a "Stop capture" button
             #   (with dangerous/red styling?) when a capture to
             #   a PCAP file is active
-            # - Do the same for the Wireshark Live feature?
+
+            def do_open(*args):
+                error('TODO %r' % open_result)  # WIP
+
+                pass  # ⚠️ TODO WIP 2026-09-13
+
+            if self.input_obj.state != InputState.Closed:
+                # Enable network-related logs, if this is a live device
+
+                self.log_manager.register_ota_related_logs(do_open)
+
+                self.pick_pcap_file_button.set_visible(False)
+                self.stop_pcap_capture_button.set_visible(True)
+                self.pcap_capture_row.set_activatable_widget(
+                    self.stop_pcap_capture_button
+                )
+            else:
+                # Just spawn Wireshark if this is a DLF file
+
+                do_open()
 
         file_picker = Gtk.FileDialog()
         file_picker.set_initial_name('output_file.pcap')
