@@ -127,9 +127,21 @@ class PcapOutput(GObject.GObject):
                 #    - an interactive gui prompt path
 
                 if selected_mode == FileOutMode.Append:
-                    duplex = self.output_file.open_readwrite(None)
+                    try:
+                        duplex = self.output_file.open_readwrite(None)
+                    except Exception:
+                        self.close()
+                        raise
 
-                    # ⚠️ TODO: Check file magic
+                    reader = duplex.get_input_stream()
+                    if reader.read_bytes(4, None).get_data() != bytes.fromhex(
+                        'D4 C3 B2 A1'
+                    ):
+                        self.close()
+                        raise ValueError(
+                            'This is not a PCAP file produced by DiagNG'
+                        )
+
                     # ⚠️ TODO: Eventually handle GZip format?
 
                     duplex.seek(0, GLib.SeekType.END, None)
@@ -137,9 +149,13 @@ class PcapOutput(GObject.GObject):
                     self.output_stream = duplex.get_output_stream()
 
                 elif selected_mode == FileOutMode.Overwrite:
-                    self.output_stream = self.output_file.replace(
-                        None, False, Gio.FileCreateFlags.NONE, None
-                    )
+                    try:
+                        self.output_stream = self.output_file.replace(
+                            None, False, Gio.FileCreateFlags.NONE, None
+                        )
+                    except Exception:
+                        self.close()
+                        raise
 
                     self.write_pcap_header()
                 elif selected_mode == FileOutMode.Dismiss:

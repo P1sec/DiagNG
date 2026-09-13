@@ -68,9 +68,10 @@ class InteractiveGUIFileOutModeSelector(FileOutModeSelector):
             )
 
         dialog = Adw.AlertDialog.new(
-            '"%s" already exists' % visible_file_path,
+            '%s: already exists' % visible_file_path,
             'Do you want to append to this file, or create a new one over it?',
         )
+        dialog.set_prefer_wide_layout(True)
         dialog.set_heading_use_markup(False)
         dialog.add_response('dismiss', 'Dismiss')
         dialog.add_response('append', 'Append')
@@ -275,6 +276,8 @@ class QCDMWindow(Adw.Window):
             )
             self.pcap_capture_row.set_subtitle('')
 
+            self.output_pcap = None
+
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
             #   use adapter classes for data conversion
@@ -294,7 +297,6 @@ class QCDMWindow(Adw.Window):
 
         self.output_pcap.stream_active.connect(on_stream_available)
         self.output_pcap.open_stream()
-        # ⚠️ WIP
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
@@ -307,6 +309,8 @@ class QCDMWindow(Adw.Window):
             self.ws_capture_row.set_activatable_widget(
                 self.start_ws_capture_button
             )
+
+            self.wireshark_instance = None
 
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
