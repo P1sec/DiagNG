@@ -389,7 +389,7 @@ enums:
     151: log_on_demand_ext_f
 
     # Packet ID for extended event/log/F3 pkt
-    152: cmd_ext_f
+    152: cmd_ext_f # alias multi_radio_cmd_f
 
     # Qshrink4 command code for Qshrink 4 packet
     153: qsr4_ext_msg_terse_f

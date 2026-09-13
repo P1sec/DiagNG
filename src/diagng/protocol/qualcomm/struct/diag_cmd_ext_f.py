@@ -116,7 +116,7 @@ class DiagCmdExtF(ReadWriteKaitaiStruct):
             self.proc_id = KaitaiStream.resolve_enum(
                 DiagCmdExtF.ProcType, self._io.read_u2le()
             )
-            self.id = self._io.read_u4le()
+            self.subscription_id = self._io.read_u4le()
             self._dirty = False
 
         def _fetch_instances(self):
@@ -125,7 +125,7 @@ class DiagCmdExtF(ReadWriteKaitaiStruct):
         def _write__seq(self, io=None):
             super(DiagCmdExtF.V1Header, self)._write__seq(io)
             self._io.write_u2le(int(self.proc_id))
-            self._io.write_u4le(self.id)
+            self._io.write_u4le(self.subscription_id)
 
         def _check(self):
             self._dirty = False

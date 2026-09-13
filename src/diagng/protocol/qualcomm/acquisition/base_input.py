@@ -47,6 +47,9 @@ class BaseQCDMInput(GObject.Object):
         arg_types=(object, object),
     )
     def frame_received(self, response: DiagResponse, raw_frame: bytes):
+        if response.cmd_code == DiagCmd.cmd_ext_f:
+            response = response.payload.payload
+
         if response.cmd_code == DiagCmd.log_f:
             self.log_received.emit(response.payload.inner_log, 1, 1)
 

@@ -1,5 +1,6 @@
 meta:
   id: diag_cmd_ext_f
+  # alias diag_multi_radio_cmd_f
   endian: le
   imports:
     - ../response
@@ -24,7 +25,7 @@ types:
       - id: proc_id
         type: u2
         enum: proc_type
-      - id: id
+      - id: subscription_id # in case of Dual SIM
         type: u4
 
   v2_header:
