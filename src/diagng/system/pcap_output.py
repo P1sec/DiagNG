@@ -29,6 +29,9 @@ from diagng.gobject.abstract.file_out_mode_selector import (
     FileOutModeSelector,
     FileOutMode,
 )
+from diagng.system.wireshark.wireshark_plugin_manager import (
+    WiresharkPluginManager,
+)
 from diagng.protocol.qualcomm.struct.diag_response import DiagResponse
 from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
@@ -112,6 +115,9 @@ class PcapOutput(GObject.GObject):
 
     def open_stream(self):
         if self.use_wireshark:
+            ws_plugin_manager = WiresharkPluginManager()
+            ws_plugin_manager.install_plugin()
+
             self.spawn_wireshark()
         else:
             # Check whether file exists/is writeable here
