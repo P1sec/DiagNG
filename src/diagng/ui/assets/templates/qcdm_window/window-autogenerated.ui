@@ -120,7 +120,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           <object class="AdwPreferencesGroup">
                             <property name="title">Advanced capture options</property>
                             <child>
-                              <object class="AdwSwitchRow">
+                              <object class="AdwSwitchRow" id="enable_raw_qcdiag_switch">
                                 <property name="active">true</property>
                                 <property name="title">Capture extra logs as QC_DIAG GSMTAP (requires Wireshark 4.7+)</property>
                               </object>

@@ -96,6 +96,8 @@ class QCDMWindow(Adw.Window):
     ws_plugin_manager: WiresharkPluginManager
     plugin_watch_task: Gio.Cancellable
 
+    enable_raw_qcdiag_switch: Adw.SwitchRow = Gtk.Template.Child()
+
     input_obj: BaseQCDMInput
     log_manager: LogManager
     parent: Adw.ApplicationWindow
@@ -116,6 +118,9 @@ class QCDMWindow(Adw.Window):
 
     wireshark_instance: Optional[PcapOutput] = None
     output_pcap: Optional[PcapOutput] = None
+
+    ws_ota_decoder: Optional[OTADecoder] = None
+    pcap_ota_decoder: Optional[OTADecoder] = None
 
     def __init__(
         self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
@@ -278,10 +283,21 @@ class QCDMWindow(Adw.Window):
 
             self.output_pcap = None
 
+            if self.pcap_ota_decoder:
+                self.pcap_ota_decoder.disconnect()
+                self.pcap_ota_decoder = None
+
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
             #   use adapter classes for data conversion
-            OTADecoder(self.output_pcap, self.input_obj)
+            self.pcap_ota_decoder = OTADecoder(
+                self.output_pcap,
+                self.input_obj,
+                self.enable_raw_qcdiag_switch.active,
+            )
+            self.enable_raw_qcdiag_switch.bind_property(
+                'active', self.pcap_ota_decoder, 'embed_raw_qcdiag'
+            )
 
             def close_wireshark(*args):
                 if self.output_pcap:
@@ -312,10 +328,21 @@ class QCDMWindow(Adw.Window):
 
             self.wireshark_instance = None
 
+            if self.ws_ota_decoder:
+                self.ws_ota_decoder.disconnect()
+                self.ws_ota_decoder = None
+
         def on_stream_available(*args):
             # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
             #   use adapter classes for data conversion
-            OTADecoder(self.wireshark_instance, self.input_obj)
+            self.ws_ota_decoder = OTADecoder(
+                self.wireshark_instance,
+                self.input_obj,
+                self.enable_raw_qcdiag_switch.active,
+            )
+            self.enable_raw_qcdiag_switch.bind_property(
+                'active', self.ws_ota_decoder, 'embed_raw_qcdiag'
+            )
 
             def close_wireshark(*args):
                 if self.wireshark_instance:
@@ -331,7 +358,6 @@ class QCDMWindow(Adw.Window):
 
         self.wireshark_instance.stream_active.connect(on_stream_available)
         self.wireshark_instance.open_stream()
-        # ⚠️ WIP
 
     def on_title_change(self, *args):
         self.set_title(self.input_obj.full_name)

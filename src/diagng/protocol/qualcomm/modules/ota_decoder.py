@@ -15,6 +15,8 @@ from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.protocol.network.gsmtap_v2 import GsmtapV2
 from diagng.system.pcap_output import PcapOutput
 
+from gi.repository import GObject
+
 from enum import IntEnum
 from sys import stderr
 
@@ -26,7 +28,7 @@ class RATType(IntEnum):
     RAT_5G = 4
 
 
-class OTADecoder:
+class OTADecoder(GObject.Object):
     # ⚠️ TODO use a GIO I/O channel to plug the PCAP GSMTAP
     # stream to either a subprocess pipe or a PCAP file?
 
@@ -34,7 +36,11 @@ class OTADecoder:
     input_obj: BaseQCDMInput
     current_rat: RATType = None
 
-    def __init__(self, pcap_stream, input_obj):
+    input_signal: int
+
+    embed_raw_qcdiag = GObject.Property(type=bool, default=False)
+
+    def __init__(self, pcap_stream, input_obj, embed_raw_qcdiag):
         self.pcap_stream = pcap_stream
         self.input_obj = input_obj
 
@@ -53,7 +59,12 @@ class OTADecoder:
                     print()
             self.handle_log(log)
 
-        self.input_obj.log_received.connect(on_log)
+        self.input_signal = self.input_obj.log_received.connect(on_log)
+
+        self.embed_raw_qcdiag = embed_raw_qcdiag
+
+    def disconnect(self):
+        self.input_obj.log_received.disconnect(self.input_signal)
 
     def handle_log(self, log: DiagLogF.InnerLog):
 
@@ -200,8 +211,7 @@ class OTADecoder:
         elif code == DiagLogging.LogCode.data_protocol_logging:  # 0x11eb
             pass  # ⚠️ TODO
 
-        """
-        elif isinstance(log.content, bytes):
+        elif isinstance(log.content, bytes) and self.embed_raw_qcdiag:
             # ⚠️ This requires Wireshark 4.7 (CURRENTLY A DEV BUILD) or above:
             # https://github.com/wireshark/wireshark/blob/v4.7.0/epan/dissectors/packet-qcdiag_log.c
 
@@ -211,5 +221,3 @@ class OTADecoder:
                 log,
                 False,
             )
-            pass  # TODO
-        """
