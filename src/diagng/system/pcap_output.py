@@ -114,25 +114,30 @@ class PcapOutput(GObject.GObject):
         if self.use_wireshark:
             self.spawn_wireshark()
         else:
+            # ⚠️ TODO: Check whether file exists/is writeable here
 
             def callback(selected_mode: FileOutMode):
-                # ⚠️ Maybe we should support appending to the file too?
-                self.output_file.XX  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
+
+                # Prompt the user on whether to replace
+                # the file or append to it whenever it exists?
+
+                #   We have:
+                #    - an interactive cli prompt path
+                #    - an explicit, non-interactive cli prompt path (through argparse)
+                #    - an interactive gui prompt path
+
+                if selected_mode == FileOutMode.Append:
+                    pass  # ⚠️ TODO
+                elif selected_mode == FileOutMode.Overwrite:
+                    pass  # ⚠️ TODO
+                elif selected_mode == FileOutMode.Dismiss:
+                    pass  # ⚠️ TODO
+
                 #    => Use replace_readwrite_async ?
                 #       OR append_to_async / open_readwrite_async ?
 
-                # => ⚠️ SHOULD WE prompt THE USER ON
-                #  WHETHER TO REPLACE THE FILE OR
-                #  APPEND TO IT WHENEVER IT EXISTS?
-
-                #   => ⚠️ 🪧 ADD
-                #    - AN INTERACTIVE CLI PROMPT PATH
-                #    - AN EXPLICIT, NON-INTERACTIVE CLI PROMPT PATH (THROUGH ARGPARSE)
-                #    - AN INTERACTIVE GUI PROMPT PATH
-
             self.mode_selector.query_file_out_mode(callback)
 
-        pass  # ⚠️ TODO spawn Wireshark with Gio async funcs if chosen options
         pass  # ⚠️ TODO open file with Gio async funcs? if chosen option
 
     @staticmethod
