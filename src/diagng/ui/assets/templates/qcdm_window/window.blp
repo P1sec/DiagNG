@@ -53,6 +53,10 @@ template $QCDMWindow: Adw.Window {
 
                 [suffix]
                 Button start_ws_capture_button {
+                  css-classes: [
+                    "suggested-action",
+                  ];
+
                   label: "Start capture";
                   clicked => $start_ws_capture_clicked();
 
@@ -63,6 +67,10 @@ template $QCDMWindow: Adw.Window {
 
                 [suffix]
                 Button stop_ws_capture_button {
+                  css-classes: [
+                    "destructive-action",
+                  ];
+
                   label: "Stop capture";
                   visible: false;
                   clicked => $stop_ws_capture_clicked();
@@ -84,6 +92,10 @@ template $QCDMWindow: Adw.Window {
                 }
 
                 Button stop_pcap_capture_button {
+                  css-classes: [
+                    "destructive-action",
+                  ];
+
                   label: "Stop capture";
                   visible: false;
                   clicked => $stop_pcap_capture_clicked();
@@ -140,6 +152,10 @@ template $QCDMWindow: Adw.Window {
 
                 [suffix]
                 Button start_capture_button_2 {
+                  css-classes: [
+                    "suggested-action",
+                  ];
+
                   label: "Start capture";
                   clicked => $start_capture_clicked();
 
