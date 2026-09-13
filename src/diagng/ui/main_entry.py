@@ -98,7 +98,7 @@ class MainApplication(Adw.Application):
                     '⚠️ Caught Python exception', tb_string
                 )
                 dialog.add_response('ok', 'Ok')
-                dialog.choose(self.window, None, None)
+                dialog.choose(None, None, None)
 
         sys.excepthook = error_handler
 

@@ -77,7 +77,6 @@ class PcapOutput(GObject.GObject):
     header: Optional[Pcap]
 
     wireshark_proc = GObject.Property(type=Gio.Subprocess)
-    file_path = GObject.Property(type=str)
     output_file = GObject.Property(type=Gio.File)
     output_stream = GObject.Property(type=Gio.OutputStream)
 
@@ -101,13 +100,15 @@ class PcapOutput(GObject.GObject):
         self,
         use_wireshark: bool = False,
         mode_selector: Optional[FileOutModeSelector] = None,
-        output_file: Optional[str] = None,
+        output_file: Optional[Union[Gio.File, str]] = None,
     ):
         super().__init__()
 
         self.use_wireshark = use_wireshark
         self.mode_selector = mode_selector
-        self.file_path = output_file
+        if isinstance(output_file, str):
+            output_file = Gio.File.new_for_path(output_file)
+        self.output_file = output_file
 
     def open_stream(self):
         if self.use_wireshark:
@@ -115,7 +116,6 @@ class PcapOutput(GObject.GObject):
         else:
 
             def callback(selected_mode: FileOutMode):
-                self.output_file = Gio.File.new_for_path(self.file_path)
                 # ⚠️ Maybe we should support appending to the file too?
                 self.output_file.XX  #  ⚠️ ⚠️ TODO: ACTUALLY SET UP A FILE HERE
                 #    => Use replace_readwrite_async ?

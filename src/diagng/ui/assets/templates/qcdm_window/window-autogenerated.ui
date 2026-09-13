@@ -98,6 +98,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                               <object class="AdwActionRow" id="pcap_capture_row">
                                 <property name="activatable-widget">pick_pcap_file_button</property>
                                 <property name="title">Capture to a new PCAP file</property>
+                                <property name="use-markup">false</property>
                                 <child type="suffix">
                                   <object class="GtkButton" id="pick_pcap_file_button">
                                     <property name="label">Pick file...</property>

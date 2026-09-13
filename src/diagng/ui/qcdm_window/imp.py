@@ -21,11 +21,15 @@ from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
+from diagng.gobject.abstract.file_out_mode_selector import (
+    FileOutModeSelector,
+    FileOutMode,
+)
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
 
 from diagng.system.pcap_output import PcapOutput
-from logging import info, error, debug
-from typing import Optional
+from typing import Optional, Callable
+from logging import info
 
 import gi
 
@@ -35,6 +39,16 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw, GLib, Gio
 
 DiagCmd = DiagCmdCode.DiagCmd
+
+
+class InteractiveGUIFileOutModeSelector(FileOutModeSelector):
+    input_dialog: Gtk.Window
+
+    def __init__(self, input_dialog: Gtk.Window):
+        self.input_dialog = input_dialog
+
+    def query_file_out_mode(callback: Callable[[FileOutMode], None]):
+        raise NotImplementedError  # WIP XX
 
 
 @Gtk.Template(
@@ -65,6 +79,7 @@ class QCDMWindow(Adw.Window):
     wireshark_plugins: Adw.PreferencesGroup = Gtk.Template.Child()
 
     wireshark_instance: Optional[PcapOutput] = None
+    output_pcap: Optional[PcapOutput] = None
 
     def __init__(
         self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
@@ -164,16 +179,25 @@ class QCDMWindow(Adw.Window):
                     dialog.choose(self, None, None)
                 return
 
-            # 🪧 TODO:
             # - Launch the file-based capture in another task
             # - Switch the trigger button to a "Stop capture" button
             #   (with dangerous/red styling?) when a capture to
             #   a PCAP file is active
 
             def do_open(*args):
-                error('TODO %r' % open_result)  # WIP
+                file_path = open_result.get_path()
 
-                pass  # ⚠️ TODO WIP 2026-09-13
+                visible_file_path = file_path
+                if visible_file_path.startswith(
+                    '/run/user'
+                ):  # Flatpak-sandboxed path
+                    visible_file_path = visible_file_path.split('/').pop()
+
+                self.pcap_capture_row.set_subtitle(
+                    'Writing to: ' + visible_file_path
+                )
+
+                self.create_pcap_pipe(open_result)
 
             if self.input_obj.state != InputState.Closed:
                 # Enable network-related logs, if this is a live device
@@ -196,10 +220,46 @@ class QCDMWindow(Adw.Window):
 
     @Gtk.Template.Callback()
     def stop_pcap_capture_clicked(self, target: Gtk.Button, *args):
-        pass  # TODO
+        if self.output_pcap:
+            self.output_pcap.close()
+            self.output_pcap = None
 
     def create_pcap_pipe(self, output_file: Gio.File):
-        pass  # TODO
+        assert not self.output_pcap
+
+        self.output_pcap = PcapOutput(
+            mode_selector=InteractiveGUIFileOutModeSelector(self),
+            output_file=output_file,
+        )
+
+        def on_stream_closed(*args):
+            self.pick_pcap_file_button.set_visible(True)
+            self.stop_pcap_capture_button.set_visible(False)
+            self.pcap_capture_row.set_activatable_widget(
+                self.pick_pcap_file_button
+            )
+            self.pcap_capture_row.set_subtitle(None)
+
+        def on_stream_available(*args):
+            # Transmit on-the-fly converted ota rrc gsmtap v3 pcap -
+            #   use adapter classes for data conversion
+            OTADecoder(self.output_pcap, self.input_obj)
+
+            def close_wireshark(*args):
+                if self.output_pcap:
+                    self.output_pcap.close()
+                    self.output_pcap = None
+
+            self.input_obj.closed.connect(close_wireshark)
+
+            # If this is a DLF file, process data
+            self.input_obj.process_stream()
+
+        self.output_pcap.stream_closed.connect(on_stream_closed)
+
+        self.output_pcap.stream_active.connect(on_stream_available)
+        self.output_pcap.open_stream()
+        # ⚠️ WIP
 
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance

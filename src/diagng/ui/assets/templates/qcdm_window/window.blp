@@ -84,6 +84,7 @@ template $QCDMWindow: Adw.Window {
               Adw.ActionRow pcap_capture_row {
                 activatable-widget: pick_pcap_file_button;
                 title: "Capture to a new PCAP file";
+                use-markup: false;
 
                 [suffix]
                 Button pick_pcap_file_button {
