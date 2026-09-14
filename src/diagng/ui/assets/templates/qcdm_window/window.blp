@@ -161,6 +161,10 @@ template $QCDMWindow: Adw.Window {
 
             Adw.PreferencesGroup {
               title: "Log selection";
+
+              Adw.StatusPage {
+                title: "🚧 To be implemented";
+              }
             }
           };
 
@@ -170,8 +174,8 @@ template $QCDMWindow: Adw.Window {
         }
 
         Adw.ViewStackPage efs_page {
-          child: Label {
-            label: "Empty Page";
+          child: Adw.StatusPage {
+            title: "🚧 To be implemented";
           };
 
           icon-name: "folder-remote-symbolic";
@@ -183,6 +187,10 @@ template $QCDMWindow: Adw.Window {
           child: Adw.PreferencesPage {
             Adw.PreferencesGroup {
               title: "Logs preview";
+
+              Adw.StatusPage {
+                title: "🚧 To be implemented";
+              }
             }
           };
 
