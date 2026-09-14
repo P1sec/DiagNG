@@ -8,14 +8,15 @@ from logging import (
     WARNING,
     ERROR,
     CRITICAL,
+    log,
     Handler,
     Formatter,
     Logger,
     LogRecord,
 )
+from typing import List, Dict, Sequence, Optional
 from logging.handlers import RotatingFileHandler
 from os import umask, chmod, chown, stat
-from typing import List, Dict, Sequence
 from os.path import dirname, realpath
 from re import split, IGNORECASE
 from collections import deque
@@ -23,7 +24,7 @@ from collections import deque
 # from shlex import join
 import sys
 
-from gi.repository import GObject
+from gi.repository import GObject, GLib
 
 
 # Features:
@@ -151,3 +152,66 @@ class LoggingCentral(GObject.Object):
         self.scrollback_handler.setLevel(DEBUG)
         self.scrollback_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(self.scrollback_handler)
+
+        self.setup_glib_log_handling()
+
+    def setup_glib_log_handling(self):
+
+        def convert_log_level(log_level: GLib.LogLevelFlags) -> int:
+            return {
+                GLib.LogLevelFlags.LEVEL_DEBUG: DEBUG,
+                GLib.LogLevelFlags.LEVEL_MESSAGE: INFO,
+                GLib.LogLevelFlags.LEVEL_INFO: INFO,
+                GLib.LogLevelFlags.LEVEL_WARNING: WARNING,
+                GLib.LogLevelFlags.LEVEL_ERROR: ERROR,
+                GLib.LogLevelFlags.LEVEL_CRITICAL: CRITICAL,
+            }[log_level]
+
+        # Handle structured GLib logging
+        # ⚠️ Nonworking, see: https://gitlab.gnome.org/GNOME/pygobject/-/work_items/771
+
+        """
+        def log_writer_func(
+            log_level: GLib.LogLevelFlags, fields: List[GLib.LogField], *args
+        ):
+            log(
+                convert_log_level(log_level),
+                repr(
+                    {
+                        item.key: ctypes.string_at(item.value, item.length)
+                        for item in fields
+                    }
+                ),
+            )
+
+        GLib.log_set_writer_func(log_writer_func)
+        """
+
+        # Handle unstructured GLib logging
+        # No effect because structured logging is enabled
+
+        """
+        def log_func(
+            log_domain: Optional[str],
+            log_level: GLib.LogLevelFlags,
+            message: str,
+            *args,
+        ):
+            log(
+                convert_log_level(log_level), '[%s] %s' % (log_domain, message)
+            )
+
+        for domain in [
+            None,
+            'Gdk',
+            'Gtk',
+            'GLib',
+            'Gio',
+            'GObject',
+            'Adw',
+            'GtkSource',
+        ]:
+            GLib.log_set_handler(
+                domain, GLib.LogLevelFlags.LEVEL_MASK, log_func
+            )
+        """
