@@ -41,6 +41,8 @@ class OTADecoder(GObject.Object):
     embed_raw_qcdiag = GObject.Property(type=bool, default=False)
 
     def __init__(self, pcap_stream, input_obj, embed_raw_qcdiag):
+        super().__init__()
+
         self.pcap_stream = pcap_stream
         self.input_obj = input_obj
 
