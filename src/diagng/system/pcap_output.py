@@ -202,8 +202,9 @@ class PcapOutput(GObject.GObject):
             ver_string = search(r'Wireshark (\d\S+)', stdout_buf)
             if not ver_string:
                 callback(None)
-            ver_string = ver_string.group(1).strip('.')
-            callback(ver_string)
+            else:
+                ver_string = ver_string.group(1).strip('.')
+                callback(ver_string)
 
         child.communicate_utf8_async(None, None, on_complete)
 

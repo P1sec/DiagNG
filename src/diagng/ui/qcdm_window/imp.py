@@ -400,9 +400,11 @@ class QCDMWindow(Adw.Window):
         def on_version(version: Optional[str]):
             if not version:
                 self.wireshark_version_label.set_text('(Unavailable ⚠️)')
+                self.start_ws_capture_button.set_sensitive(False)
                 # (⚠️ Maybe display/add extra download instructions?)
             else:
                 self.wireshark_version_label.set_text(version)
+                self.start_ws_capture_button.set_sensitive(True)
 
         PcapOutput.check_wireshark_version(on_version)
 
