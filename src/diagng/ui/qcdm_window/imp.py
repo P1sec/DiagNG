@@ -294,7 +294,7 @@ class QCDMWindow(Adw.Window):
             self.pcap_ota_decoder = OTADecoder(
                 self.output_pcap,
                 self.input_obj,
-                self.enable_raw_qcdiag_switch.active,
+                self.enable_raw_qcdiag_switch.get_active(),
             )
             self.enable_raw_qcdiag_switch.bind_property(
                 'active', self.pcap_ota_decoder, 'embed_raw_qcdiag'
@@ -339,7 +339,7 @@ class QCDMWindow(Adw.Window):
             self.ws_ota_decoder = OTADecoder(
                 self.wireshark_instance,
                 self.input_obj,
-                self.enable_raw_qcdiag_switch.active,
+                self.enable_raw_qcdiag_switch.get_active(),
             )
             self.enable_raw_qcdiag_switch.bind_property(
                 'active', self.ws_ota_decoder, 'embed_raw_qcdiag'
