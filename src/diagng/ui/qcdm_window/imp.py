@@ -152,6 +152,7 @@ class QCDMWindow(Adw.Window):
             self.ws_plugin_manager.current_plugins,
             WiresharkPluginRow,
             self.ws_plugin_manager,
+            self,
         )
 
         self.log_manager = LogManager(input_obj)
