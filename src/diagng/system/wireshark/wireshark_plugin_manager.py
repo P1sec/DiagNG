@@ -26,6 +26,8 @@ class WiresharkPluginManager(GObject.Object):
         type=Gio.ListStore
     )  # of ListedPlugin objects
 
+    file_monitor: Optional[Gio.FileMonitor]
+
     def __init__(self):
         super().__init__()
 
@@ -58,7 +60,7 @@ class WiresharkPluginManager(GObject.Object):
         cancellable = Gio.Cancellable()
 
         folder = Gio.File.new_for_path(PLUGIN_DIR)
-        file_monitor = folder.monitor_directory(
+        self.file_monitor = folder.monitor_directory(
             Gio.FileMonitorFlags.WATCH_MOVES, cancellable
         )
 
@@ -67,7 +69,7 @@ class WiresharkPluginManager(GObject.Object):
             if callback:
                 callback(self.current_plugins)
 
-        file_monitor.connect('changed', on_change)
+        self.file_monitor.connect('changed', on_change)
 
         return cancellable
 
