@@ -172,7 +172,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                                 <child type="suffix">
                                   <object class="GtkButton" id="start_capture_button_2">
                                     <property name="css-classes">suggested-action</property>
-                                    <property name="label">Start capture</property>
+                                    <property name="label">🚧 To be implemented</property>
+                                    <property name="sensitive">false</property>
                                     <signal name="clicked" handler="start_capture_clicked"/>
                                     <style>
                                       <class name="suggested-action"/>
