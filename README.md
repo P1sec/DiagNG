@@ -33,13 +33,13 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 ## Screenshots
 
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/usb-3devices-1x.png?raw=true" alt="Application main screen" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/usb-3devices.png?raw=true" alt="Application main screen" width="838">
 
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air-1x.png?raw=true" alt="Network capture screen" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air.png?raw=true" alt="Network capture screen" width="838">
 
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager-1x.png?raw=true" alt="ModemManager screen" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager.png?raw=true" alt="ModemManager screen" width="838">
 
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb-1x.png?raw=true" alt="ADB devices screen" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb.png?raw=true" alt="ADB devices screen" width="838">
 </p>
 
 ## Roadmap
@@ -175,7 +175,7 @@ DiagNG is meant to be split into two components:
 This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObject data models and signals, plus a decoupled UI-daemon architecture leveraging Polkit, so that we can perform serial port acquisition in a privileged fashion, and the UI and Diag decoder can be unprivileged/sandboxed too), allowing to control and manage interferences with the serial Diag port system-wide.
 
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/authorization-dialog-1x.png?raw=true" alt="Authorization dialog" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/authorization-dialog.png?raw=true" alt="Authorization dialog" width="838">
 </p>
 
 Various information is also put in a GObject model and display it using the Adwaita UI.

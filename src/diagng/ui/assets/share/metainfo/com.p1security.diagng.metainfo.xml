@@ -37,19 +37,19 @@
             <caption>Application main screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air-1x.png?raw=true</image>
+            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air.png?raw=true</image>
             <caption>Network capture screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager-1x.png?raw=true</image>
+            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager.png?raw=true</image>
             <caption>ModemManager screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb-1x.png?raw=true</image>
+            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb.png?raw=true</image>
             <caption>ADB devices screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/authorization-dialog-1x.png?raw=true</image>
+            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/authorization-dialog.png?raw=true</image>
             <caption>Authorization dialog</caption>
         </screenshot>
     </screenshots>
