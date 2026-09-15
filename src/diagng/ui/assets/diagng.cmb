@@ -2,7 +2,7 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="56445c3f4e4e146b4044897e1e62c7e89c6e1f0ecefdfc95d426510c56f001d1"/>
+  <gresources filename="diagng.gresource.xml" sha256="38b0a6be846c0412a1ea8a1b436f44dfda93956c0cbfd9c4e43b250fe604a82c"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
   <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="34e83aedb53312698f84d4176b36c16745520edf83b3ca1314dc9f981543a2e3"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
