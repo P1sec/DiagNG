@@ -1,4 +1,4 @@
-# DiagNG 🎧 The next-generation baseband Diag client software (easily capture air traffic to PCAP - 2G/3G/4G/5G)
+# DiagNG 🎧 The next-generation baseband Diag client software (easily capture air traffic to mobile PCAP - 📡 2G/3G/4G/5G)
 
 DiagNG is a general purpose client purpose for the diagnostic interface of Qualcomm Snapdragon basebands.
 
