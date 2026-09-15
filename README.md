@@ -1,16 +1,20 @@
-# DiagNG 🎧 The next-generation baseband Diag client software (2G/3G/4G/5G)
+# DiagNG 🎧 The next-generation baseband Diag client software (easily capture mobile traffic to PCAP - 2G/3G/4G/5G)
 
 DiagNG is a general purpose client purpose for the diagnostic interface of Qualcomm Snapdragon basebands.
+
+It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat). Like these tools, it allows to **capture 2G/3G/4G/5G air interface network traces** and save them to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP)/PCAP format, so that you can visualize these in [Wireshark](https://www.wireshark.org/).
+
+<p align="center">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen.png?raw=true" alt="Application main screen + device screen + Wireshark">
+</p>
 
 It is an experimental, Linux-first, open-source, interoperable, brand-new way to connect to baseband USB diagnostic interfaces; whether for pedagogic or security research purposes.
 
 It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.
 
-It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat). Like these tools, it allows to **capture 2G/3G/4G/5G air interface network traces** and save them to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP)/PCAP format, so that you can visualize these in [Wireshark](https://www.wireshark.org/).
-
 <h1>
     <p align="center">
-        <a href="https://github.com/P1sec/DiagNG/releases/download/0.0.1/com.p1security.diagng.flatpak">Download Flatpak 😎 (Linux x86)</a>
+        <a href="https://github.com/P1sec/DiagNG/releases/download/0.0.1/com.p1security.diagng.flatpak">Download for Linux 😎 (Flatpak)</a>
     </p>
 </h1>
 
