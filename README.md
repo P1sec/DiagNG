@@ -33,7 +33,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 ## Screenshots
 
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/usb-3devices.png?raw=true" alt="Application main screen" width="838">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/usb-3devices-1x.png?raw=true" alt="Application main screen" width="838">
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air-1x.png?raw=true" alt="Network capture screen" width="838">
 
