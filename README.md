@@ -8,9 +8,11 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat). Like these tools, it allows to capture 2G/3G/4G/5G air interface network traces and save them to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP)/PCAP format, so that you can visualize these in [Wireshark](https://www.wireshark.org/).
 
-<p align="center">
-<em>[TODO: Flathub download badge]</em>
-</p>
+<h1>
+    <p align="center">
+        <a href="https://github.com/P1sec/DiagNG/releases/download/0.0.1/com.p1security.diagng.flatpak">Download Flatpak 😎 (Linux x86)</a>
+    </p>
+</h1>
 
 ## Feature list:
 
