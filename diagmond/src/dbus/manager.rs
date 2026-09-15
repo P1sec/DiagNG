@@ -166,7 +166,7 @@ impl Diagmond {
             }
         };
 
-        // device.detach_kernel_driver(interface_id).ok();
+        device.detach_kernel_driver(interface_id).ok();
 
         let mut is_configured: bool = false;
         if let Ok(configuration) = device.active_configuration() {
@@ -366,9 +366,9 @@ impl Diagmond {
                 log::warn!("Could not shutdown writer: {:?}", err);
             };
 
-            // if let Err(err) = device.attach_kernel_driver(interface_id) {
-            //     log::warn!("Could not reattach kernel drivers: {:?}", err);
-            // };
+            if let Err(err) = device.attach_kernel_driver(interface_id) {
+                log::warn!("Could not reattach kernel drivers: {:?}", err);
+            };
 
             // Notify clients of close operation
 
