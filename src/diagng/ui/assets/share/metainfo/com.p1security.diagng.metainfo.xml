@@ -29,23 +29,27 @@
     </description>
     <screenshots>
         <screenshot type="default">
-            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/usb-3devices.png?raw=true</image>
+            <image type="source">https://github.com/P1sec/DiagNG/raw/main/packaging/screenshots/light/global-screen-focus.png?raw=true</image>
+            <caption>Application main features: main screen + device screen + Wireshark</caption>
+        </screenshot>
+        <screenshot type="default">
+            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/usb-3devices.png?raw=true</image>
             <caption>Application main screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/qcdm-air.png?raw=true</image>
+            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air-1x.png?raw=true</image>
             <caption>Network capture screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/modemmanager.png?raw=true</image>
+            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager-1x.png?raw=true</image>
             <caption>ModemManager screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/adb.png?raw=true</image>
+            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb-1x.png?raw=true</image>
             <caption>ADB devices screen</caption>
         </screenshot>
         <screenshot>
-            <image type="source" scale="2">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/dark/authorization-dialog.png?raw=true</image>
+            <image type="source">https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/authorization-dialog-1x.png?raw=true</image>
             <caption>Authorization dialog</caption>
         </screenshot>
     </screenshots>
