@@ -181,3 +181,20 @@ This repository hence contains a modular GObject + GTK4 GUI app (leveraging GObj
 Various information is also put in a GObject model and display it using the Adwaita UI.
 
 It also interfaces with ModemManager, Wireshark, UDev, etc.
+
+## Extra resources
+
+* Related tools
+  * [SCAT](https://github.com/fgsect/scat) (CLI, Python, multi-vendor)
+  * [QCSuper](https://github.com/P1sec/QCSuper) (CLI, Python)
+  * [MobileInsight](https://github.com/mobile-insight/mobileinsight-core) (heavier framework, mixed C++/Python)
+* Protocol documentation
+  * [GSMTAP v2](https://wiki.wireshark.org/GSMTAP)
+  * [GSMTAP v3](https://gitea.osmocom.org/peremen/gsmtapv3/src/branch/master/GSMTAPv3.md)
+  * [PCAP RFC](https://www.ietf.org/archive/id/draft-gharris-opsawg-pcap-01.html)
+  * [Kaitai structure](https://doc.kaitai.io/user_guide.html)
+  * [Qualcomm Diag - Osmocom](https://osmocom.org/projects/quectel-modems/wiki/Diag)
+* Research
+  * [Reverse engineering a Qualcomm baseband - 28C3 - Berlin](https://fahrplan.events.ccc.de/congress/2011/Fahrplan/attachments/2022_11-ccc-qcombbdbg.pdf), Guillaume Delugré, 2011
+  * [Exploiting Qualcomm WLAN And Modem Over-The-Air - Black Hat USA](https://i.blackhat.com/USA-19/Thursday/us-19-Pi-Exploiting-Qualcomm-WLAN-And-Modem-Over-The-Air.pdf) - Xiling Gong, Peter Pi, 2019
+  * [QCSuper on Google Scholar](https://scholar.google.com/scholar?q=%22QCSuper%22)
