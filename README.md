@@ -36,10 +36,9 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 - [x] Connect a Linux raw USB interface.
 - [x] A sleek GTK 4/Adwaita-based UI.
 - [x] SPI and USB connections are safely connected to the Python UI through a privileged Rust daemon, using a Polkit/DBus-based interface to secure privileged actions, to ensure good integration with Flatpak.
-- [x] Wireshark plug-in management and automated installation for GSMTAP v3/5G RRC decoding (taken from SCAT).
 - [x] Gather phone-related information through ADB, with shortcuts to enable the QCDM USB interface easily.
 - [x] Support basic QCDM (Qualcomm diagnostic monitor) log registration.
-- [x] Support basic QCDM 2G/3G/4G/5G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).
+- [x] Support basic QCDM 2G/3G/4G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).
 - [x] Flatpak packaging for good integration to the Linux desktop.
 
 ## Screenshots
@@ -57,6 +56,8 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 ## Roadmap
 
 Required for release:
+- [ ] Wireshark plug-in management and automated installation for GSMTAP v3/5G RRC decoding (taken from SCAT) - ⚠️ 5G decoding is still pending in the current build.
+- [ ] Support for decoding and reassembling IP/data packets, as present in QCSuper
 - [ ] QA QCDM to GSMTAP conversion with good testing protocols over real devices
 - [ ] Complete QCDM to GSMTAP conversion with SIB decoding support, as present in QCSuper
 - [ ] Complete QCDM to GSMTAP conversion with RRC frame reassembly support, as present in QCSuper
