@@ -18,7 +18,19 @@ It should eventually support other basebands such as Samsung Exynos processors, 
     </p>
 </h1>
 
-## Feature list:
+## Table of contents
+
+* [Feature list](#feature-list)
+* [Screenshots](#screenshots)
+* [Roadmap](#roadmap)
+* [Legal](#legal)
+* [Development environment setup](#development-environment-setup)
+  * [Run project tests](#run-project-tests)
+  * [Test decoder using KSV](#test-decoder-using-ksv)
+  * [Technical architecture](#technical-architecture)
+* [Extra resources](#extra-resources)
+
+## Feature list
 
 - [x] Connect a Linux raw SPI port.
 - [x] Connect a Linux raw USB interface.
@@ -37,7 +49,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/qcdm-air.png?raw=true" alt="Network capture screen" width="838">
 
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager.png?raw=true" alt="ModemManager screen" width="838">
+<!--img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/modemmanager.png?raw=true" alt="ModemManager screen" width="838"-->
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb.png?raw=true" alt="ADB devices screen" width="838">
 </p>
@@ -145,13 +157,13 @@ diagmond
 diagng
 ```
 
-## Run project tests
+### Run project tests
 
 ```bash
 uv run pytest
 ```
 
-## Test decoder using KSV
+### Test decoder using KSV
 
 Example command for using [`kaitai_struct_visualizer`](https://github.com/kaitai-io/kaitai_struct_visualizer):
 
@@ -163,7 +175,7 @@ ksv \
   ~/diagng/struct/qualcomm/dlf/dlf_file.ksy
 ```
 
-## Technical architecture
+### Technical architecture
 
 DiagNG is meant to be split into two components:
 
