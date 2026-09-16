@@ -2,7 +2,7 @@
 
 DiagNG is a general purpose client purpose for the diagnostic interface of Qualcomm Snapdragon basebands, present on a large part of Android phones and various USB modems.
 
-It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat). Like these tools, it allows to **capture 2G/3G/4G/5G air interface network traces** and save them to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP)/[PCAP](https://www.ietf.org/archive/id/draft-gharris-opsawg-pcap-01.html) format, so that you can visualize these in [Wireshark](https://www.wireshark.org/).
+It can be considered as a sequel for [QCSuper](https://github.com/P1sec/QCSuper), and also takes large inspiration from [SCAT](https://github.com/fgsect/scat). Like these tools, it allows to **capture 2G/3G/4G/5G air interface network traces** and save them to the [GSMTAP/PCAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) format, so that you can visualize these in [Wireshark](https://www.wireshark.org/).
 
 <p align="center">
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark">
