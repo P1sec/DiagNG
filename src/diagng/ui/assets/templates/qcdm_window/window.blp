@@ -216,3 +216,12 @@ template $QCDMWindow: Adw.Window {
   default-width: 720;
   title: "/dev/ttyUSB1 - TEST";
 }
+
+Adw.AlertDialog progress_dialog {
+  close-response: "cancel";
+  default-response: "cancel";
+
+  extra-child: ProgressBar progress_gauge {};
+
+  heading: "Processing capture...";
+}

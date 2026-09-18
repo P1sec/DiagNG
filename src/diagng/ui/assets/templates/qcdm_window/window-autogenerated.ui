@@ -253,4 +253,12 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     <property name="default-width">720</property>
     <property name="title">/dev/ttyUSB1 - TEST</property>
   </template>
+  <object class="AdwAlertDialog" id="progress_dialog">
+    <property name="close-response">cancel</property>
+    <property name="default-response">cancel</property>
+    <property name="extra-child">
+      <object class="GtkProgressBar" id="progress_gauge"></object>
+    </property>
+    <property name="heading">Processing capture...</property>
+  </object>
 </interface>

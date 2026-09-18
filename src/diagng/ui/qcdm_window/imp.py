@@ -96,6 +96,9 @@ class QCDMWindow(Adw.Window):
     ws_plugin_manager: WiresharkPluginManager
     plugin_watch_task: Gio.Cancellable
 
+    progress_dialog: Adw.AlertDialog = Gtk.Template.Child()
+    progress_gauge: Gtk.ProgressBar = Gtk.Template.Child()
+
     qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
     info_page: Adw.ViewStackPage = Gtk.Template.Child()
     pcap_page: Adw.ViewStackPage = Gtk.Template.Child()
@@ -143,6 +146,8 @@ class QCDMWindow(Adw.Window):
 
         self.input_obj = input_obj
         self.parent = parent
+
+        self.progress_dialog.add_response('cancel', 'Cancel')
 
         self.offline_mode = offline_mode
 
