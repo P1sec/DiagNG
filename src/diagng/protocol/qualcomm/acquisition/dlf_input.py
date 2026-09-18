@@ -5,6 +5,8 @@ from diagng.protocol.qualcomm.struct.dlf_file import DlfFile
 from gzip import decompress
 
 from kaitaistruct import KaitaiStream
+from gi.repository import Gio
+from threading import Thread
 from io import BytesIO
 
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
@@ -24,16 +26,21 @@ class DLFInput(BaseQCDMInput):
 
         self.stream = KaitaiStream(stream_io)
 
-    def process_stream(self):
-        self.stream.seek(0)
+    def process_stream(self, cancellable: Gio.Cancellable):
+        def processor():
+            self.stream.seek(0)
 
-        dlf = DlfFile(self.stream)
-        dlf._read()
+            dlf = DlfFile(self.stream)
+            dlf._read()
 
-        for num_log, inner_log in enumerate(dlf.logs):
-            self.log_received.emit(inner_log, num_log + 1, len(dlf.logs))
+            for num_log, inner_log in enumerate(dlf.logs):
+                if cancellable.is_cancelled():
+                    break
+                self.log_received.emit(inner_log, num_log + 1, len(dlf.logs))
 
-        self.close()
+            self.close()
+
+        Thread(target=processor, daemon=True).start()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')

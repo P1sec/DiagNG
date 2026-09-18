@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
+from gi.repository import Gio
+from threading import Thread
 from gzip import decompress
 from io import BytesIO
 
@@ -18,12 +20,15 @@ class QMDLInput(BaseQCDMInput):
 
         self.stream_io = stream_io
 
-    def process_stream(self):
-        self.stream.seek(0)
+    def process_stream(self, cancellable: Gio.Cancellable):
+        def processor():
+            self.stream.seek(0)
 
-        self.process_input(self.stream_io.read())
+            self.process_input(self.stream_io.read(), cancellable)
 
-        self.close()
+            self.close()
+
+        Thread(target=processor, daemon=True).start()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')

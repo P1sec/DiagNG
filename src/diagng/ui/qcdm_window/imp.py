@@ -21,6 +21,7 @@ from diagng.protocol.qualcomm.struct.diag_cmd_code import DiagCmdCode
 from diagng.protocol.qualcomm.struct.diag_request import DiagRequest
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.protocol.qualcomm.modules.ota_decoder import OTADecoder
+from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
 from diagng.gobject.abstract.file_out_mode_selector import (
     FileOutModeSelector,
     FileOutMode,
@@ -97,6 +98,7 @@ class QCDMWindow(Adw.Window):
     plugin_watch_task: Gio.Cancellable
 
     progress_dialog: Adw.AlertDialog = Gtk.Template.Child()
+    progress_status = GObject.Property(type=Gio.Cancellable)
     progress_gauge: Gtk.ProgressBar = Gtk.Template.Child()
 
     qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
@@ -107,6 +109,7 @@ class QCDMWindow(Adw.Window):
     raw_page: Adw.ViewStackPage = Gtk.Template.Child()
 
     offline_mode = GObject.Property(type=bool, default=False)
+    decoding_in_progress = GObject.Property(type=bool, default=False)
 
     enable_raw_qcdiag_switch: Adw.SwitchRow = Gtk.Template.Child()
 
@@ -165,6 +168,30 @@ class QCDMWindow(Adw.Window):
             self.start_ws_capture_button.add_css_class('suggested-action')
             self.start_ws_capture_button.set_label('Start conversion')
 
+            def on_frame(
+                input_obj: BaseQCDMInput,
+                response: DiagResponse,
+                raw_frame: bytes,
+                num_frame: int = 1,
+                total_frames: int = 1,
+            ):
+                GLib.idle_add(
+                    self.update_decoding_progress, num_frame, total_frames
+                )
+
+            def on_log(
+                input_obj: BaseQCDMInput,
+                log: DiagLogF.InnerLog,
+                num_log: int,
+                total_logs: int,
+            ):
+                GLib.idle_add(
+                    self.update_decoding_progress, num_log, total_logs
+                )
+
+            self.input_obj.frame_received.connect(on_frame)
+            self.input_obj.log_received.connect(on_log)
+
         WIRESHARK_INFO_URL = 'https://github.com/P1sec/DiagNG/tree/main/src/diagng/system/wireshark'
 
         self.wireshark_plugins.set_description(
@@ -207,6 +234,39 @@ class QCDMWindow(Adw.Window):
         self.gather_wireshark_info()
 
         self.connect('close-request', self.on_quit)
+
+    def update_decoding_progress(
+        self,
+        num_entry: int,
+        total_entries: int,
+    ):
+        if total_entries > 1:
+            if not self.decoding_in_progress:
+                self.decoding_in_progress = True
+
+                def on_close(
+                    alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
+                ):
+                    try:
+                        alert_dialog.choose_finish(result)
+                    except Exception:
+                        pass
+                    self.decoding_in_progress = False
+
+                    alert_dialog.close()
+
+                    if self.progress_status:
+                        self.progress_status.cancel()
+                        self.progress_status = None
+
+                self.progress_dialog.choose(
+                    self, self.progress_status, on_close
+                )
+            self.progress_gauge.set_fraction(num_entry / total_entries)
+            if self.progress_status and num_entry >= total_entries:
+                self.decoding_in_progress = False
+                self.progress_status.cancel()
+                self.progress_status = None
 
     @Gtk.Template.Callback()
     def start_ws_capture_clicked(self, target: Gtk.Button, *args):
@@ -342,8 +402,9 @@ class QCDMWindow(Adw.Window):
 
             self.input_obj.closed.connect(close_wireshark)
 
-            # If this is a DLF file, process data
-            self.input_obj.process_stream()
+            # If this is a DLF or QMDL file, process data
+            self.progress_status = Gio.Cancellable.new()
+            self.input_obj.process_stream(self.progress_status)
 
         self.output_pcap.stream_closed.connect(on_stream_closed)
 
@@ -387,8 +448,9 @@ class QCDMWindow(Adw.Window):
 
             self.input_obj.closed.connect(close_wireshark)
 
-            # If this is a DLF file, process data
-            self.input_obj.process_stream()
+            # If this is a DLF or QMDL file, process data
+            self.progress_status = Gio.Cancellable.new()
+            self.input_obj.process_stream(self.progress_status)
 
         self.wireshark_instance.stream_closed.connect(on_stream_closed)
 

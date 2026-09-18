@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from logging import warning, debug, error, info
-from gi.repository import GObject, GLib
+from gi.repository import GObject, Gio, GLib
 from kaitaistruct import KaitaiStream
 from collections.abc import Callable
 from traceback import format_exc
@@ -47,7 +47,13 @@ class BaseQCDMInput(GObject.Object):
     @GObject.Signal(
         arg_types=(object, object),
     )
-    def frame_received(self, response: DiagResponse, raw_frame: bytes):
+    def frame_received(
+        self,
+        response: DiagResponse,
+        raw_frame: bytes,
+        num_frame: int = 1,
+        total_frames: int = 1,
+    ):
         if response.cmd_code == DiagCmd.cmd_ext_f:
             response = response.payload.payload
 
@@ -76,22 +82,29 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @abstractmethod
-    def process_stream(self):
+    def process_stream(self, cancellable: Gio.Cancellable):
         pass
 
     @abstractmethod
     def close(self):
         pass
 
-    def process_input(self, data: bytes):
+    def process_input(self, data: bytes, cancellable: Gio.Cancellable = None):
         debug('Demuxing pseudo-HDLC data: %r' % data)
 
         self.buffered_data += data
 
+        total_frames = self.buffered_data.count(TRAILER_CHAR)
+        num_frame = 0
+
         while TRAILER_CHAR in self.buffered_data:
+            if cancellable.is_cancelled():
+                break
             payload, sep, self.buffered_data = self.buffered_data.partition(
                 TRAILER_CHAR
             )
+            if total_frames > 1:
+                num_frame += 1
             try:
                 data = hdlc_decode(payload + sep)
             except AssertionError:
@@ -115,7 +128,13 @@ class BaseQCDMInput(GObject.Object):
                         )
                     )
 
-                    self.frame_received.emit(resp, data)
+                    GLib.idle_add(
+                        self.frame_received.emit,
+                        resp,
+                        data,
+                        num_frame,
+                        total_frames,
+                    )
 
     def send(self, request: DiagRequest):
         buf = BytesIO()
@@ -139,7 +158,11 @@ class BaseQCDMInput(GObject.Object):
         retry_delay: int = 4,
     ):
         def temp_callback(
-            self, diag_response: DiagResponse, raw_response: bytes
+            self,
+            diag_response: DiagResponse,
+            raw_response: bytes,
+            num_frame: int = 1,
+            total_frames: int = 1,
         ):
             nonlocal handler_id
             nonlocal timeout_id
