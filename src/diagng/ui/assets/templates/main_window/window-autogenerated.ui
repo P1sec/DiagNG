@@ -206,106 +206,6 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                   </object>
                 </child>
                 <child>
-                  <object class="AdwViewStackPage" id="spi_tab">
-                    <property name="child">
-                      <object class="AdwPreferencesPage" id="spi_tab_page">
-                        <property name="banner">
-                          <object class="AdwBanner" id="spi_link_banner">
-                            <property name="revealed">true</property>
-                            <property name="title">Data sources status: UDev: ✅ - diagmond: Loading... ⚠️</property>
-                          </object>
-                        </property>
-                        <property name="description">This page lists potential USB modem baseband diagnostic devices detected on the system, focusing on these which were detected as a serial port interface by the system, and allows you to connect to them.</property>
-                        <child>
-                          <object class="AdwPreferencesGroup" id="spi_ports_group">
-                            <property name="title">Detected SPI devices</property>
-                            <child>
-                              <object class="AdwExpanderRow">
-                                <property name="expanded">true</property>
-                                <property name="title">ZTE MF667 (placeholder)</property>
-                                <property name="visible">false</property>
-                                <child>
-                                  <object class="AdwActionRow">
-                                    <property name="title">/dev/ttyHS0</property>
-                                    <child type="suffix">
-                                      <object class="GtkButton">
-                                        <property name="label">Connect</property>
-                                        <style>
-                                          <class name="pill"/>
-                                          <class name="suggested-action"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="AdwActionRow">
-                                    <property name="title">/dev/ttyHS1</property>
-                                    <child type="suffix">
-                                      <object class="GtkButton">
-                                        <property name="label" translatable="yes">Connect</property>
-                                        <style>
-                                          <class name="pill"/>
-                                          <class name="suggested-action"/>
-                                        </style>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwPreferencesGroup" id="tokio_serial_debug_group">
-                            <property name="header-suffix">
-                              <object class="GtkButton">
-                                <property name="action-name">win.copy-tokio-serial-debug-info</property>
-                                <property name="has-tooltip">true</property>
-                                <property name="icon-name">edit-copy-symbolic</property>
-                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
-                              </object>
-                            </property>
-                            <property name="title" translatable="yes">Debug info: Raw SPI devices (data source: tokio-serial)</property>
-                            <child>
-                              <object class="GtkScrolledWindow" id="tokio_serial_debug_viewport">
-                                <property name="max-content-height">240</property>
-                                <property name="min-content-height">240</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwPreferencesGroup" id="udev_tree_group">
-                            <property name="title" translatable="yes">Debug info: USB devices, SPI-related only (data source: udev)</property>
-                            <child>
-                              <object class="GtkScrolledWindow">
-                                <property name="child">
-                                  <object class="GtkListView" id="spi_tree">
-                                    <property name="factory">
-                                      <object class="GtkBuilderListItemFactory" id="spi_factory">
-                                        <property name="resource">/com/p1security/diagng/templates/main_window/udev_serial_tree_factory-autogenerated.ui</property>
-                                      </object>
-                                    </property>
-                                    <property name="model">
-                                      <object class="GtkSingleSelection" id="spi_selection"></object>
-                                    </property>
-                                  </object>
-                                </property>
-                                <property name="max-content-height">240</property>
-                                <property name="min-content-height">240</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </property>
-                    <property name="icon-name">preferences-system-network-proxy-symbolic</property>
-                    <property name="name">spi_tab</property>
-                    <property name="title">SPI</property>
-                  </object>
-                </child>
-                <child>
                   <object class="AdwViewStackPage" id="adb_tab">
                     <property name="child">
                       <object class="AdwPreferencesPage" id="adb_tab_page">
@@ -370,7 +270,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                         </child>
                       </object>
                     </property>
-                    <property name="icon-name">network-cellular-connected-symbolic</property>
+                    <property name="icon-name">phone-symbolic</property>
                     <property name="name">adb_tab</property>
                     <property name="title">ADB</property>
                   </object>
@@ -469,6 +369,106 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                     <property name="icon-name">modem-symbolic</property>
                     <property name="name">mm_tab</property>
                     <property name="title">ModemManager</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwViewStackPage" id="spi_tab">
+                    <property name="child">
+                      <object class="AdwPreferencesPage" id="spi_tab_page">
+                        <property name="banner">
+                          <object class="AdwBanner" id="spi_link_banner">
+                            <property name="revealed">true</property>
+                            <property name="title">Data sources status: UDev: ✅ - diagmond: Loading... ⚠️</property>
+                          </object>
+                        </property>
+                        <property name="description">This page lists potential USB modem baseband diagnostic devices detected on the system, focusing on these which were detected as a serial port interface by the system, and allows you to connect to them.</property>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="spi_ports_group">
+                            <property name="title">Detected SPI devices</property>
+                            <child>
+                              <object class="AdwExpanderRow">
+                                <property name="expanded">true</property>
+                                <property name="title">ZTE MF667 (placeholder)</property>
+                                <property name="visible">false</property>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyHS0</property>
+                                    <child type="suffix">
+                                      <object class="GtkButton">
+                                        <property name="label">Connect</property>
+                                        <style>
+                                          <class name="pill"/>
+                                          <class name="suggested-action"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="title">/dev/ttyHS1</property>
+                                    <child type="suffix">
+                                      <object class="GtkButton">
+                                        <property name="label" translatable="yes">Connect</property>
+                                        <style>
+                                          <class name="pill"/>
+                                          <class name="suggested-action"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="tokio_serial_debug_group">
+                            <property name="header-suffix">
+                              <object class="GtkButton">
+                                <property name="action-name">win.copy-tokio-serial-debug-info</property>
+                                <property name="has-tooltip">true</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                              </object>
+                            </property>
+                            <property name="title" translatable="yes">Debug info: Raw SPI devices (data source: tokio-serial)</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="tokio_serial_debug_viewport">
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="udev_tree_group">
+                            <property name="title" translatable="yes">Debug info: USB devices, SPI-related only (data source: udev)</property>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="child">
+                                  <object class="GtkListView" id="spi_tree">
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory" id="spi_factory">
+                                        <property name="resource">/com/p1security/diagng/templates/main_window/udev_serial_tree_factory-autogenerated.ui</property>
+                                      </object>
+                                    </property>
+                                    <property name="model">
+                                      <object class="GtkSingleSelection" id="spi_selection"></object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="max-content-height">240</property>
+                                <property name="min-content-height">240</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="icon-name">preferences-system-network-proxy-symbolic</property>
+                    <property name="name">spi_tab</property>
+                    <property name="title">SPI</property>
                   </object>
                 </child>
                 <child>

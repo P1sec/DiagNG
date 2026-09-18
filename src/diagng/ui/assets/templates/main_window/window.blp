@@ -168,6 +168,142 @@ template $MainWindow: Adw.ApplicationWindow {
           title: "USB";
         }
 
+        Adw.ViewStackPage adb_tab {
+          child: Adw.PreferencesPage adb_tab_page {
+            banner: Adw.Banner adb_link_banner {
+              revealed: true;
+              title: "ADB daemon status: Loading... ⚠️";
+            };
+
+            Adw.PreferencesGroup adb_daemon_group {
+              title: "ADB daemon status";
+
+              Adw.ActionRow adb_status_row {
+                activatable: true;
+                subtitle: _("Protocol version 41");
+                subtitle-selectable: true;
+                title: _("localhost:5037");
+                title-selectable: true;
+
+                Label adb_status_label {
+                  attributes: "0 -1 weight bold";
+                  label: _("Disconnected");
+                  selectable: true;
+                }
+              }
+
+              Label adb_daemon_missing {
+                attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
+                can-focus: false;
+                label: "Failed to locate ADB daemon. Please install the corresponding package:\n- On Ubuntu: sudo apt install google-android-platform-tools-installer\n- On Arch Linux: sudo pacman -S android-tools\n- On Fedora: sudo dnf install android-tools";
+                margin-top: 24;
+                selectable: true;
+                visible: false;
+              }
+            }
+
+            Adw.PreferencesGroup adb_devices_group {
+              title: "ADB devices list";
+
+              $ADBDeviceRow {
+                subtitle: "State: online | usb=3-1.3, product=venus_eea, model=M2011K2G, device=venus";
+                title: "Xiaomi Mi 11 (transport id #1, serial ID d94f4341)";
+                title-selectable: "True";
+                visible: "False";
+              }
+            }
+
+            Adw.PreferencesGroup adb_tcp_group {
+              title: "No active TCP connections";
+              visible: false;
+            }
+          };
+
+          icon-name: "phone-symbolic";
+          name: "adb_tab";
+          title: "ADB";
+        }
+
+        Adw.ViewStackPage mm_tab {
+          child: Adw.PreferencesPage mm_tab_page {
+            banner: Adw.Banner mm_link_banner {
+              revealed: true;
+              title: "ModemManager Link: ✅ - diagmond status: Loading... ⚠️";
+            };
+
+            Adw.PreferencesGroup mm_status_group {
+              title: _("ModemManager system daemon");
+
+              Adw.ActionRow mm_status_row {
+                activatable: true;
+                subtitle: _("PID %d");
+                subtitle-selectable: true;
+                title: _("Daemon status");
+                title-selectable: true;
+
+                Label mm_status_label {
+                  attributes: "0 -1 weight bold";
+                  label: _("Stopped");
+                  selectable: true;
+                }
+              }
+
+              Adw.ActionRow mm_version_row {
+                title: _("Service version");
+                title-selectable: true;
+
+                Label mm_version_label {
+                  label: "1.2.24";
+                  selectable: true;
+                }
+              }
+            }
+
+            Adw.PreferencesGroup detected_modems_group {
+              title: _("Detected modems");
+              visible: false;
+
+              Adw.ExpanderRow {
+                expanded: true;
+                subtitle: "IMEI: 123456 | Firmware: REL_0.645.56";
+                title: "<b>ZTE MF667</b>";
+                title-selectable: true;
+                visible: false;
+
+                Adw.ActionRow {
+                  title: "/dev/ttyUSB0 (type: AT) - Primary";
+                  title-selectable: true;
+                }
+
+                Adw.ActionRow {
+                  title: "/dev/ttyUSB0 (type: QCDM)";
+                  title-selectable: true;
+                }
+              }
+            }
+
+            Adw.PreferencesGroup mm_debug_group {
+              header-suffix: Button {
+                action-name: "win.copy-mm-debug-info";
+                has-tooltip: true;
+                icon-name: "edit-copy-symbolic";
+                tooltip-text: _("Copy to clipboard");
+              };
+
+              title: _("DBus information");
+
+              ScrolledWindow mm_debug_viewport {
+                max-content-height: 240;
+                min-content-height: 240;
+              }
+            }
+          };
+
+          icon-name: "modem-symbolic";
+          name: "mm_tab";
+          title: "ModemManager";
+        }
+
         Adw.ViewStackPage spi_tab {
           child: Adw.PreferencesPage spi_tab_page {
             banner: Adw.Banner spi_link_banner {
@@ -252,142 +388,6 @@ template $MainWindow: Adw.ApplicationWindow {
           icon-name: "preferences-system-network-proxy-symbolic";
           name: "spi_tab";
           title: "SPI";
-        }
-
-        Adw.ViewStackPage adb_tab {
-          child: Adw.PreferencesPage adb_tab_page {
-            banner: Adw.Banner adb_link_banner {
-              revealed: true;
-              title: "ADB daemon status: Loading... ⚠️";
-            };
-
-            Adw.PreferencesGroup adb_daemon_group {
-              title: "ADB daemon status";
-
-              Adw.ActionRow adb_status_row {
-                activatable: true;
-                subtitle: _("Protocol version 41");
-                subtitle-selectable: true;
-                title: _("localhost:5037");
-                title-selectable: true;
-
-                Label adb_status_label {
-                  attributes: "0 -1 weight bold";
-                  label: _("Disconnected");
-                  selectable: true;
-                }
-              }
-
-              Label adb_daemon_missing {
-                attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
-                can-focus: false;
-                label: "Failed to locate ADB daemon. Please install the corresponding package:\n- On Ubuntu: sudo apt install google-android-platform-tools-installer\n- On Arch Linux: sudo pacman -S android-tools\n- On Fedora: sudo dnf install android-tools";
-                margin-top: 24;
-                selectable: true;
-                visible: false;
-              }
-            }
-
-            Adw.PreferencesGroup adb_devices_group {
-              title: "ADB devices list";
-
-              $ADBDeviceRow {
-                subtitle: "State: online | usb=3-1.3, product=venus_eea, model=M2011K2G, device=venus";
-                title: "Xiaomi Mi 11 (transport id #1, serial ID d94f4341)";
-                title-selectable: "True";
-                visible: "False";
-              }
-            }
-
-            Adw.PreferencesGroup adb_tcp_group {
-              title: "No active TCP connections";
-              visible: false;
-            }
-          };
-
-          icon-name: "network-cellular-connected-symbolic";
-          name: "adb_tab";
-          title: "ADB";
-        }
-
-        Adw.ViewStackPage mm_tab {
-          child: Adw.PreferencesPage mm_tab_page {
-            banner: Adw.Banner mm_link_banner {
-              revealed: true;
-              title: "ModemManager Link: ✅ - diagmond status: Loading... ⚠️";
-            };
-
-            Adw.PreferencesGroup mm_status_group {
-              title: _("ModemManager system daemon");
-
-              Adw.ActionRow mm_status_row {
-                activatable: true;
-                subtitle: _("PID %d");
-                subtitle-selectable: true;
-                title: _("Daemon status");
-                title-selectable: true;
-
-                Label mm_status_label {
-                  attributes: "0 -1 weight bold";
-                  label: _("Stopped");
-                  selectable: true;
-                }
-              }
-
-              Adw.ActionRow mm_version_row {
-                title: _("Service version");
-                title-selectable: true;
-
-                Label mm_version_label {
-                  label: "1.2.24";
-                  selectable: true;
-                }
-              }
-            }
-
-            Adw.PreferencesGroup detected_modems_group {
-              title: _("Detected modems");
-              visible: false;
-
-              Adw.ExpanderRow {
-                expanded: true;
-                subtitle: "IMEI: 123456 | Firmware: REL_0.645.56";
-                title: "<b>ZTE MF667</b>";
-                title-selectable: true;
-                visible: false;
-
-                Adw.ActionRow {
-                  title: "/dev/ttyUSB0 (type: AT) - Primary";
-                  title-selectable: true;
-                }
-
-                Adw.ActionRow {
-                  title: "/dev/ttyUSB0 (type: QCDM)";
-                  title-selectable: true;
-                }
-              }
-            }
-
-            Adw.PreferencesGroup mm_debug_group {
-              header-suffix: Button {
-                action-name: "win.copy-mm-debug-info";
-                has-tooltip: true;
-                icon-name: "edit-copy-symbolic";
-                tooltip-text: _("Copy to clipboard");
-              };
-
-              title: _("DBus information");
-
-              ScrolledWindow mm_debug_viewport {
-                max-content-height: 240;
-                min-content-height: 240;
-              }
-            }
-          };
-
-          icon-name: "modem-symbolic";
-          name: "mm_tab";
-          title: "ModemManager";
         }
 
         Adw.ViewStackPage udev_tab {
