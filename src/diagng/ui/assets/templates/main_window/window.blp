@@ -462,8 +462,13 @@ template $MainWindow: Adw.ApplicationWindow {
         menu-model: menu {
           section {
             item {
-              action: "win.open-file";
-              label: "Open File...";
+              action: "win.open-dlf-file";
+              label: "Open DLF file...";
+            }
+
+            item {
+              action: "win.open-qmdl-file";
+              label: "Open QMDL file...";
             }
           }
 

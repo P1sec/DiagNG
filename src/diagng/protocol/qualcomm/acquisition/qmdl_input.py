@@ -19,7 +19,11 @@ class QMDLInput(BaseQCDMInput):
         self.stream_io = stream_io
 
     def process_stream(self):
+        self.stream.seek(0)
+
         self.process_input(self.stream_io.read())
+
+        self.close()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')

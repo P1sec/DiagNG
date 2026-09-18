@@ -14,6 +14,7 @@ from diagng.ui.main_window.templates.usb_interface_row import USBInterfaceRow
 from diagng.ui.main_window.templates.adb_device_row import ADBDeviceRow
 from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
 from diagng.ui.main_window.templates.spi_modem_row import SPIModemRow
+from diagng.protocol.qualcomm.acquisition.qmdl_input import QMDLInput
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.ui.main_window.templates.mm_modem_row import MMModemRow
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
@@ -323,14 +324,55 @@ class MainWindow(Adw.ApplicationWindow):
 
     def connect_actions(self):
 
-        def open_file(*args):
-            # WIP
+        def open_dlf_file(*args):
             filters = Gio.ListStore.new(Gtk.FileFilter)
 
             file_filter = Gtk.FileFilter.new()
             file_filter.add_suffix('dlf')
             file_filter.add_suffix('dlf.gz')
             file_filter.set_name('DLF File')
+            filters.append(file_filter)
+
+            dialog = Gtk.FileDialog.new()
+            dialog.set_filters(filters)
+
+            def on_open(dialog: Gtk.FileDialog, res: Gio.AsyncResult):
+                try:
+                    file_handle: Gio.File = dialog.open_finish(res)
+
+                except GLib.GError as err:
+                    if err.message != 'Dismissed by user':
+                        dialog = Adw.AlertDialog.new(
+                            'Could not open file', err.message
+                        )
+                        dialog.add_response('ok', 'Ok')
+                        dialog.set_default_response('ok')
+                        dialog.set_close_response('ok')
+                        dialog.choose(self, None, None)
+                else:
+                    stream = BytesIO(file_handle.load_contents(None)[1])
+
+                    file_path = file_handle.get_path()
+                    # if file_path.startswith('/run/user'):
+                    file_path = basename(file_path)
+
+                    input_obj = DLFInput(stream)
+                    input_obj.full_name = file_path
+                    input_obj.close()
+
+                    QCDMWindow(self, input_obj, offline_mode=True)
+
+            dialog.open(self, None, on_open)
+
+        self.add_simple_action('open-dlf-file', open_dlf_file)
+
+        def open_qmdl_file(*args):
+            filters = Gio.ListStore.new(Gtk.FileFilter)
+
+            file_filter = Gtk.FileFilter.new()
+            file_filter.add_suffix('qmdl')
+            file_filter.add_suffix('qmdl.gz')
+            file_filter.set_name('QMDL File')
             filters.append(file_filter)
 
             dialog = Gtk.FileDialog.new()
@@ -358,7 +400,7 @@ class MainWindow(Adw.ApplicationWindow):
                     # if file_path.startswith('/run/user'):
                     file_path = basename(file_path)
 
-                    input_obj = DLFInput(stream)
+                    input_obj = QMDLInput(stream)
                     input_obj.full_name = file_path
                     input_obj.close()
 
@@ -366,7 +408,7 @@ class MainWindow(Adw.ApplicationWindow):
 
             dialog.open(self, None, on_open)
 
-        self.add_simple_action('open-file', open_file)
+        self.add_simple_action('open-qmdl-file', open_qmdl_file)
 
         def copy_nusb_debug_info(*args):
             clipboard = Gdk.Display.get_default().get_clipboard()

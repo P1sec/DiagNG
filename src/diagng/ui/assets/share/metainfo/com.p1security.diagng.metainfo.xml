@@ -22,6 +22,7 @@
             <li>SPI and USB connections are safely connected to the Python UI through a privileged Rust daemon, using a Polkit/DBus-based interface to secure privileged actions, to ensure good integration with Flatpak.</li>
             <li>Wireshark plug-in management and automated installation for GSMTAP v3/5G RRC decoding (taken from SCAT).</li>
             <li>Gather phone-related information through ADB, with shortcuts to enable the QCDM USB interface easily.</li>
+            <li>Import DLF or QMDL files in order to enable interoperability with other software.</li>
             <li>Support basic QCDM (Qualcomm diagnostic monitor) log registration.</li>
             <li>Support basic QCDM 2G/3G/4G/5G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).</li>
             <li>Flatpak packaging for good integration to the Linux desktop.</li>

@@ -37,6 +37,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 - [x] A sleek GTK 4/Adwaita-based UI.
 - [x] SPI and USB connections are safely connected to the Python UI through a privileged Rust daemon, using a Polkit/DBus-based interface to secure privileged actions, to ensure good integration with Flatpak.
 - [x] Gather phone-related information through ADB, with shortcuts to enable the QCDM USB interface easily.
+- [x] Import DLF or QMDL files in order to enable interoperability with other software.
 - [x] Support basic QCDM (Qualcomm diagnostic monitor) log registration.
 - [x] Support basic QCDM 2G/3G/4G log conversion to GSMTAP/PCAP (without advanced features such as SIB decoding, reassembly).
 - [x] Flatpak packaging for good integration to the Linux desktop.
@@ -65,7 +66,7 @@ Required for release:
 Needed to cover feature gap with other softs:
 - [ ] Provide good CLI functionality similar to QCSuper?
 - [ ] Complete QCDM support with EFS shell decoding support, as present in QCSuper?
-- [ ] Provide better QCDM exports interoperability (parse and export QMDL files in addition to DLF, etc.)?
+- [ ] Decode more QCDM logs?
 
 Good idea to add value:
 - [ ] Provide AT commands support, USIM-related commands support, QMI communication, etc.?
