@@ -36,7 +36,7 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw, GLib, Gio
+from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
 DiagCmd = DiagCmdCode.DiagCmd
 
@@ -96,6 +96,15 @@ class QCDMWindow(Adw.Window):
     ws_plugin_manager: WiresharkPluginManager
     plugin_watch_task: Gio.Cancellable
 
+    qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
+    info_page: Adw.ViewStackPage = Gtk.Template.Child()
+    pcap_page: Adw.ViewStackPage = Gtk.Template.Child()
+    logs_page: Adw.ViewStackPage = Gtk.Template.Child()
+    efs_page: Adw.ViewStackPage = Gtk.Template.Child()
+    raw_page: Adw.ViewStackPage = Gtk.Template.Child()
+
+    offline_mode = GObject.Property(type=bool, default=False)
+
     enable_raw_qcdiag_switch: Adw.SwitchRow = Gtk.Template.Child()
 
     input_obj: BaseQCDMInput
@@ -105,6 +114,8 @@ class QCDMWindow(Adw.Window):
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
+
+    air_interface_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
     ws_capture_row: Adw.ActionRow = Gtk.Template.Child()
     start_ws_capture_button: Gtk.Button = Gtk.Template.Child()
@@ -123,12 +134,31 @@ class QCDMWindow(Adw.Window):
     pcap_ota_decoder: Optional[OTADecoder] = None
 
     def __init__(
-        self, parent: Adw.ApplicationWindow, input_obj: BaseQCDMInput
+        self,
+        parent: Adw.ApplicationWindow,
+        input_obj: BaseQCDMInput,
+        offline_mode: bool = False,
     ):
         super().__init__()
 
         self.input_obj = input_obj
         self.parent = parent
+
+        self.offline_mode = offline_mode
+
+        if offline_mode:
+            self.ws_capture_row.set_title('View into a new Wireshark instance')
+            self.pcap_capture_row.set_title('Convert into a PCAP file')
+
+            self.air_interface_group.set_title('Air logs extraction')
+
+            self.qcdm_stack.set_visible_child_name('pcap_page')
+            self.info_page.set_visible(False)
+            self.logs_page.set_visible(False)
+            self.efs_page.set_visible(False)
+
+            self.start_ws_capture_button.add_css_class('suggested-action')
+            self.start_ws_capture_button.set_label('Start conversion')
 
         WIRESHARK_INFO_URL = 'https://github.com/P1sec/DiagNG/tree/main/src/diagng/system/wireshark'
 
@@ -167,7 +197,7 @@ class QCDMWindow(Adw.Window):
         self.present()
 
         self.on_state_change()
-        if self.input_obj.state != InputState.Closed:
+        if not self.offline_mode:
             self.gather_device_info()
         self.gather_wireshark_info()
 
@@ -181,7 +211,7 @@ class QCDMWindow(Adw.Window):
 
             self.create_wireshark_pipe()
 
-        if self.input_obj.state != InputState.Closed:
+        if not self.offline_mode:
             # Enable network-related logs, if this is a live device
 
             self.log_manager.register_ota_related_logs(do_spawn)
@@ -241,7 +271,7 @@ class QCDMWindow(Adw.Window):
 
                 self.create_pcap_pipe(open_result)
 
-            if self.input_obj.state != InputState.Closed:
+            if not self.offline_mode:
                 # Enable network-related logs, if this is a live device
 
                 self.log_manager.register_ota_related_logs(do_open)

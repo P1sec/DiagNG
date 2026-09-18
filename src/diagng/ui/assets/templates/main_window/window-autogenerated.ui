@@ -300,7 +300,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                         </child>
                       </object>
                     </property>
-                    <property name="icon-name">network-offline-symbolic</property>
+                    <property name="icon-name">preferences-system-network-proxy-symbolic</property>
                     <property name="name">spi_tab</property>
                     <property name="title">SPI</property>
                   </object>

@@ -362,7 +362,7 @@ class MainWindow(Adw.ApplicationWindow):
                     input_obj.full_name = file_path
                     input_obj.close()
 
-                    QCDMWindow(self, input_obj)
+                    QCDMWindow(self, input_obj, offline_mode=True)
 
             dialog.open(self, None, on_open)
 

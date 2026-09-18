@@ -2,7 +2,7 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0.3 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1">
-  <gresources filename="diagng.gresource.xml" sha256="3ec88cffb76dd1de3d0d568376dc353b465e09d9c26d2bf5d22e04d08d10e6b8"/>
+  <gresources filename="diagng.gresource.xml" sha256="4884ca67a8e63f78c00413f84e550a0538d2feff308d38605ffa434d12c2c191"/>
   <css priority="600" is_global="1" filename="style.css" sha256="544ce7de244fc92ce8298fa42ee8b1d5bf8ecb0aefc9cba44d50672632672c8a"/>
   <ui template-class="ADBDeviceRow" filename="templates/main_window/adb_device_row.blp" sha256="34e83aedb53312698f84d4176b36c16745520edf83b3ca1314dc9f981543a2e3"/>
   <ui template-class="GtkListItem" filename="templates/main_window/udev_serial_tree_factory.blp" sha256="3a8284100b1f7395ccce4f007a9a3944d81ddf2aa5343ba7cfad945154b103b3">
@@ -21,10 +21,10 @@
     <property id="focusable" type-id="gboolean" default-value="True"/>
     <property id="selectable" type-id="gboolean" default-value="True"/>
   </ui>
-  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="e2278a60c6b0953f3b1c421995068dd42a6f423bcd43b491ceb76a1aba8e4d4b"/>
+  <ui template-class="QCDMWindow" filename="templates/qcdm_window/window.blp" sha256="ba7b63c37ebfffd9200c890c85c1fd4c5e53365e4ef3aef1f0e9151c2e4bcd3f"/>
   <ui template-class="AuthorizationDialog" filename="templates/authorization_dialog/window.blp" sha256="735644493caab8aeaea70c57b3750f91e8bb876b042f0e746b2fe8918f103426"/>
   <ui template-class="APKSelectWindow" filename="templates/main_window/mi_apk_chooser.blp" sha256="dc64fd2a43333fc63469d5766472d2991578a7519ede52e785d1c5decdab041d"/>
-  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="4a17b3253c082e80011ea75dc7d6efcef171d5553ea4e904960768f3c305a8ef">
+  <ui template-class="MainWindow" filename="templates/main_window/window.blp" sha256="e2c60723c6bd80bdd9c64bb88b27ffb8f8093569ca3714a3e0f4dc0cf16a954e">
     <requires>ADBDeviceRow</requires>
     <css-provider>style.css</css-provider>
   </ui>
