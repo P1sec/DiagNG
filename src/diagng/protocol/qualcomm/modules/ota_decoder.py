@@ -196,6 +196,15 @@ class OTADecoder(GObject.Object):
 
             # self.pcap_stream.write_gsmtap_v3_packet(XX)
 
+            # TODO add PCI to metadata
+            # (see https://github.com/fgsect/scat/blob/v2.1.1/src/scat/parsers/qualcomm/diagnrlogparser.py#L455
+            #    + https://github.com/fgsect/scat/blob/v2.1.1/src/scat/util.py#L566)
+            # TODO try to serialize without
+            #  Kaitai in order to improve
+            #  test artifact performance?
+            #  (rewrite serialization code
+            #   using ctypes)
+
         elif code == DiagLogging.LogCode.umts_ue_ota:  # 0x713a
             pass  # ⚠️ TODO
 
