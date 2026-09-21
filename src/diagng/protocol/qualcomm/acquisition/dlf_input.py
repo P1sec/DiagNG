@@ -26,7 +26,7 @@ class DLFInput(BaseQCDMInput):
 
         self.stream = KaitaiStream(stream_io)
 
-    def process_stream(self, cancellable: Gio.Cancellable):
+    def process_stream(self, cancellable: Gio.Cancellable, background=True):
         def processor():
             self.stream.seek(0)
 
@@ -34,13 +34,16 @@ class DLFInput(BaseQCDMInput):
             dlf._read()
 
             for num_log, inner_log in enumerate(dlf.logs):
-                if cancellable.is_cancelled():
+                if cancellable and cancellable.is_cancelled():
                     break
                 self.log_received.emit(inner_log, num_log + 1, len(dlf.logs))
 
             self.close()
 
-        Thread(target=processor, daemon=True).start()
+        if background:
+            Thread(target=processor, daemon=True).start()
+        else:
+            processor()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')

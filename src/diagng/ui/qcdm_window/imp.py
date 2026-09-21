@@ -172,8 +172,8 @@ class QCDMWindow(Adw.Window):
                 input_obj: BaseQCDMInput,
                 response: DiagResponse,
                 raw_frame: bytes,
-                num_frame: int = 1,
-                total_frames: int = 1,
+                num_frame: int,
+                total_frames: int,
             ):
                 GLib.idle_add(
                     self.update_decoding_progress, num_frame, total_frames

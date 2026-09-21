@@ -10,7 +10,7 @@ from diagng.system.pcap_output import PcapOutput
 
 from argparse import ArgumentParser, Namespace
 from collections.abc import Callable
-from gi.repository import GLib
+from gi.repository import GLib, Gio
 from typing import Optional
 from logging import info
 
@@ -104,7 +104,7 @@ def process_data(
             dlf_input = DLFInput(raw_stream)
 
             # Will connect dlf_input.log_received
-            OTADecoder(pcap_stream, dlf_input)
+            OTADecoder(pcap_stream, dlf_input, False)
 
             def on_closed(*arg):
                 pcap_stream.close()
@@ -112,7 +112,7 @@ def process_data(
 
             dlf_input.closed.connect(on_closed)
 
-            dlf_input.process_stream()
+            dlf_input.process_stream(None, background=False)
 
         info('All data was processed')
 

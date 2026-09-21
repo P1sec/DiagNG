@@ -20,7 +20,7 @@ class QMDLInput(BaseQCDMInput):
 
         self.stream_io = stream_io
 
-    def process_stream(self, cancellable: Gio.Cancellable):
+    def process_stream(self, cancellable: Gio.Cancellable, background=True):
         def processor():
             self.stream.seek(0)
 
@@ -28,7 +28,10 @@ class QMDLInput(BaseQCDMInput):
 
             self.close()
 
-        Thread(target=processor, daemon=True).start()
+        if background:
+            Thread(target=processor, daemon=True).start()
+        else:
+            processor()
 
     def send_raw(self, data: bytes):
         raise IOError('Stream is read-only')

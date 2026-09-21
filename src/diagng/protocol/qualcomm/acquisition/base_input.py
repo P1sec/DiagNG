@@ -45,14 +45,14 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @GObject.Signal(
-        arg_types=(object, object),
+        arg_types=(object, object, int, int),
     )
     def frame_received(
         self,
         response: DiagResponse,
         raw_frame: bytes,
-        num_frame: int = 1,
-        total_frames: int = 1,
+        num_frame: int,
+        total_frames: int,
     ):
         if response.cmd_code == DiagCmd.cmd_ext_f:
             response = response.payload.payload
@@ -63,9 +63,7 @@ class BaseQCDMInput(GObject.Object):
     @GObject.Signal(
         arg_types=(object, int, int),
     )
-    def log_received(
-        self, log: DiagLogF, num_log: int = 1, total_logs: int = 1
-    ):
+    def log_received(self, log: DiagLogF, num_log: int, total_logs: int):
         pass
 
     @GObject.Signal
@@ -82,7 +80,7 @@ class BaseQCDMInput(GObject.Object):
         pass
 
     @abstractmethod
-    def process_stream(self, cancellable: Gio.Cancellable):
+    def process_stream(self, cancellable: Gio.Cancellable, background=True):
         pass
 
     @abstractmethod
@@ -98,7 +96,7 @@ class BaseQCDMInput(GObject.Object):
         num_frame = 0
 
         while TRAILER_CHAR in self.buffered_data:
-            if cancellable.is_cancelled():
+            if cancellable and cancellable.is_cancelled():
                 break
             payload, sep, self.buffered_data = self.buffered_data.partition(
                 TRAILER_CHAR
@@ -161,8 +159,8 @@ class BaseQCDMInput(GObject.Object):
             self,
             diag_response: DiagResponse,
             raw_response: bytes,
-            num_frame: int = 1,
-            total_frames: int = 1,
+            num_frame: int,
+            total_frames: int,
         ):
             nonlocal handler_id
             nonlocal timeout_id
