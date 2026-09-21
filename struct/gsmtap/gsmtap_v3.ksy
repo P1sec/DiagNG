@@ -22,14 +22,14 @@ seq:
 
   - id: type
     type: u2
-    enum: type
+    enum: packet_type
 
   - id: subtype
     doc: type of burst/channel
     type:
       switch-on: type
       cases:
-        'type::nr_rrc': nr_rrc_subtype
+        'packet_type::nr_rrc': nr_rrc_subtype_field
         _: u2
 
   - id: metadata
@@ -44,7 +44,7 @@ seq:
 #   (WIP)
 
 enums:
-  type:
+  packet_type:
     # 0x00, 0x01: Common and non-3GPP protocols
 
     0x0000: osmocore_log # libosmocore logging
@@ -214,9 +214,9 @@ types:
         type: b1
 
       - id: arfcn
-        type: b15
+        type: b31
 
-  nr_rrc_subtype:
+  nr_rrc_subtype_field:
     seq:
       - id: subtype
         type: u2

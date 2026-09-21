@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from diagng.protocol.qualcomm.struct.nr5g_rrc_ota_packet import (
+    Nr5gRrcOtaPacket,
+)
 from diagng.protocol.qualcomm.struct.lte_rrc_ota_packet import (
     LteRrcOtaPacket,
 )
@@ -12,6 +15,7 @@ from diagng.protocol.qualcomm.struct.wcdma_signaling_message import (
 from diagng.protocol.qualcomm.acquisition.base_input import BaseQCDMInput
 from diagng.protocol.qualcomm.struct.diag_logging import DiagLogging
 from diagng.protocol.qualcomm.struct.diag_log_f import DiagLogF
+from diagng.protocol.network.gsmtap_v3 import GsmtapV3
 from diagng.protocol.network.gsmtap_v2 import GsmtapV2
 from diagng.system.pcap_output import PcapOutput
 
@@ -184,22 +188,44 @@ class OTADecoder(GObject.Object):
             ):
                 # ⚠️ TODO: Implement RRC reassembly for v30+ packets?
 
+                sub_type = GsmtapV2.LteRrcSubtypeField()
+                sub_type.lte_rrc_subtype = msg.pdu_type.gsmtap_subtype
+
                 self.pcap_stream.write_gsmtap_v2_packet(
                     GsmtapV2.PacketType.lte_rrc,
-                    msg.pdu_type.gsmtap_subtype,
+                    sub_type,
                     msg.message,
                     msg.pdu_type.is_uplink,
+                    msg.earfcn_long
+                    if msg.packet_version >= 8
+                    else msg.earfcn_short,
                 )
 
         elif code == DiagLogging.LogCode.nr5g_rrc_ota_packet:  # 0xb821
-            pass  # ⚠️ TODO
+            msg: Nr5gRrcOtaPacket = log.content
+
+            self.current_rat = RATType.RAT_5G
+
+            if msg.pdu_type.gsmtap_subtype != GsmtapV3.NrRrcSubtype.unknown:
+                # ⚠️ TODO: Implement RRC reassembly for v23+ packets?
+
+                sub_type = GsmtapV3.NrRrcSubtypeField()
+                sub_type.subtype = msg.pdu_type.gsmtap_subtype
+
+                self.pcap_stream.write_gsmtap_v3_packet(
+                    GsmtapV3.PacketType.nr_rrc,
+                    sub_type,
+                    msg.message,
+                    msg.pdu_type.is_uplink,
+                    msg.frequency,
+                )
 
             # self.pcap_stream.write_gsmtap_v3_packet(XX)
 
             # TODO add PCI to metadata
             # (see https://github.com/fgsect/scat/blob/v2.1.1/src/scat/parsers/qualcomm/diagnrlogparser.py#L455
             #    + https://github.com/fgsect/scat/blob/v2.1.1/src/scat/util.py#L566)
-            # TODO try to serialize without
+            # TODO try to serialize without
             #  Kaitai in order to improve
             #  test artifact performance?
             #  (rewrite serialization code

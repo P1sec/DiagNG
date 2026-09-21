@@ -56,6 +56,7 @@ from traceback import format_exc
 from shutil import which
 from io import BytesIO
 from time import time
+from math import ceil
 from os import getenv
 
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
@@ -290,7 +291,7 @@ class PcapOutput(GObject.GObject):
 
     def write_gsmtap_v3_packet(
         self,
-        packet_type: GsmtapV3.Type,
+        packet_type: GsmtapV3.PacketType,
         sub_type: Union[ReadWriteKaitaiStruct, int],
         data: bytes,
         is_uplink: bool = False,
@@ -304,21 +305,38 @@ class PcapOutput(GObject.GObject):
         content.reserved = 0
 
         content.type = packet_type
+        if isinstance(sub_type, ReadWriteKaitaiStruct):
+            sub_type._parent = content
+            sub_type._root = content._root
+            sub_type._check()
         content.subtype = sub_type
 
         # Add metadata tags:
 
         # 0x0002: Channel number (inc. downlink bit) = (u4) (arcfn | (is_uplink << 31))
 
-        channel_tag = GsmtapV3.ChannelNumber()
-        channel_tag.is_uplink = is_uplink
-        channel_tag.arfcn = arfcn
-        channel_tag._check()
+        channel_tlv = GsmtapV3.Metadata(None, content, content._root)
+        channel_tlv.tag = GsmtapV3.Metadata.Tag.channel_number
+        channel_tlv.len_value = 4
 
-        content.metadata = [channel_tag]
+        channel = GsmtapV3.ChannelNumber(None, channel_tlv, channel_tlv._root)
+        channel.is_uplink = is_uplink
+        channel.arfcn = arfcn
+        channel._check()
+
+        channel_tlv.value = channel
+        channel_tlv._check()
+
+        end_of_metadata = GsmtapV3.Metadata(None, content, content._root)
+        end_of_metadata.tag = GsmtapV3.Metadata.Tag.end_of_metadata
+        end_of_metadata._check()
+
+        content.metadata = [channel_tlv, end_of_metadata]
         content.data = data
 
-        content.header_len = 4  # 2x32 bits header + 1 T16L16V32 metadata field
+        content.header_len = int(
+            ceil((64 + 16 + 16 + 32 + 16) / 4)
+        )  # 2x32 bits header + 1 T16L16V32 metadata field + 1 T16 tag
         packet.content = content
 
         content._check()

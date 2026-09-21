@@ -48,6 +48,7 @@ seq:
       switch-on: type
       cases:
         'packet_type::umts_rrc': umts_rrc_subtype_field
+        'packet_type::lte_rrc': lte_rrc_subtype_field
         'packet_type::um': gsm_rr_subtype_field
         'packet_type::abis': gsm_rr_subtype_field
         _: u1
@@ -81,6 +82,12 @@ types:
           cases:
             true: diag_request
             false: diag_response
+
+  lte_rrc_subtype_field:
+    seq:
+      - id: lte_rrc_subtype
+        type: u1
+        enum: lte_rrc_subtype
 
   umts_rrc_subtype_field:
     seq:

@@ -3,8 +3,8 @@
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from diagng.protocol.network import gsmtap_v2
 from diagng.protocol.network import gsmtap_v3
+from diagng.protocol.network import gsmtap_v2
 
 
 if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):

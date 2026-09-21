@@ -253,7 +253,7 @@ class QCDMWindow(Adw.Window):
                         pass
                     self.decoding_in_progress = False
 
-                    alert_dialog.close()
+                    alert_dialog.force_close()
 
                     if self.progress_status:
                         self.progress_status.cancel()

@@ -60,7 +60,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
         sib25_r18 = 543
         sib17bis_r18 = 544
 
-    class Type(IntEnum):
+    class PacketType(IntEnum):
         osmocore_log = 0
         sim = 1
         baseband_diag = 2
@@ -109,12 +109,14 @@ class GsmtapV3(ReadWriteKaitaiStruct):
                 2, self.header_len, self._io, '/seq/1'
             )
         self.type = KaitaiStream.resolve_enum(
-            GsmtapV3.Type, self._io.read_u2be()
+            GsmtapV3.PacketType, self._io.read_u2be()
         )
         _on = self.type
-        if _on == GsmtapV3.Type.nr_rrc:
+        if _on == GsmtapV3.PacketType.nr_rrc:
             pass
-            self.subtype = GsmtapV3.NrRrcSubtype(self._io, self, self._root)
+            self.subtype = GsmtapV3.NrRrcSubtypeField(
+                self._io, self, self._root
+            )
             self.subtype._read()
         else:
             pass
@@ -137,7 +139,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
     def _fetch_instances(self):
         pass
         _on = self.type
-        if _on == GsmtapV3.Type.nr_rrc:
+        if _on == GsmtapV3.PacketType.nr_rrc:
             pass
             self.subtype._fetch_instances()
         else:
@@ -152,7 +154,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
         self._io.write_u2be(self.header_len)
         self._io.write_u2be(int(self.type))
         _on = self.type
-        if _on == GsmtapV3.Type.nr_rrc:
+        if _on == GsmtapV3.PacketType.nr_rrc:
             pass
             self.subtype._write__seq(self._io)
         else:
@@ -178,7 +180,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
                 2, self.header_len, None, '/seq/1'
             )
         _on = self.type
-        if _on == GsmtapV3.Type.nr_rrc:
+        if _on == GsmtapV3.PacketType.nr_rrc:
             pass
             if self.subtype._root != self._root:
                 raise kaitaistruct.ConsistencyError(
@@ -224,7 +226,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
         def _read(self):
             self.is_uplink = self._io.read_bits_int_be(1) != 0
-            self.arfcn = self._io.read_bits_int_be(15)
+            self.arfcn = self._io.read_bits_int_be(31)
             self._dirty = False
 
         def _fetch_instances(self):
@@ -233,7 +235,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
         def _write__seq(self, io=None):
             super(GsmtapV3.ChannelNumber, self)._write__seq(io)
             self._io.write_bits_int_be(1, int(self.is_uplink))
-            self._io.write_bits_int_be(15, self.arfcn)
+            self._io.write_bits_int_be(31, self.arfcn)
 
         def _check(self):
             self._dirty = False
@@ -386,9 +388,9 @@ class GsmtapV3(ReadWriteKaitaiStruct):
 
             self._dirty = False
 
-    class NrRrcSubtype(ReadWriteKaitaiStruct):
+    class NrRrcSubtypeField(ReadWriteKaitaiStruct):
         def __init__(self, _io=None, _parent=None, _root=None):
-            super(GsmtapV3.NrRrcSubtype, self).__init__(_io)
+            super(GsmtapV3.NrRrcSubtypeField, self).__init__(_io)
             self._parent = _parent
             self._root = _root
 
@@ -402,7 +404,7 @@ class GsmtapV3(ReadWriteKaitaiStruct):
             pass
 
         def _write__seq(self, io=None):
-            super(GsmtapV3.NrRrcSubtype, self)._write__seq(io)
+            super(GsmtapV3.NrRrcSubtypeField, self)._write__seq(io)
             self._io.write_u2be(int(self.subtype))
 
         def _check(self):
