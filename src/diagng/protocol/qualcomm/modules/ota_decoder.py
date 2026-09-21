@@ -232,6 +232,11 @@ class OTADecoder(GObject.Object):
             #   using ctypes)
 
         elif code == DiagLogging.LogCode.umts_ue_ota:  # 0x713a
+            if (
+                self.current_rat != RATType.RAT_2G
+            ):  # Not needed in 3G, where this is already embedded in RRC
+                return
+
             pass  # ⚠️ TODO
 
         elif (

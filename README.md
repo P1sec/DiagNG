@@ -14,7 +14,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 <h1>
     <p align="center">
-        <a href="https://github.com/P1sec/DiagNG/releases/download/0.0.1/com.p1security.diagng.flatpak">Download for Linux 😎 (Flatpak)</a>
+        <a href="https://github.com/P1sec/DiagNG/releases/download/0.1.0/com.p1security.diagng.flatpak">Download for Linux 😎 (Flatpak)</a>
     </p>
 </h1>
 

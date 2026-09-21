@@ -75,10 +75,11 @@
     -->
     <content_rating type="oars-1.1" />
     <releases>
-        <release version="0.0.1" date="2026-09-14">
+        <release version="0.1.0" date="2026-09-21">
             <description>
                 <ul>
-                    <li>Initial alpha release</li>
+                    <li>Initial beta release, including device acquisition and basic RRC OTA network frame capture abilities</li>
+                    <li>Please refer to the feature list for extra details</li>
                 </ul>
             </description>
         </release>
