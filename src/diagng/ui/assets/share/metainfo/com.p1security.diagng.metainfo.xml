@@ -3,7 +3,7 @@
     <id>com.p1security.diagng</id>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-3.0-or-later</project_license>
-    <name>diagng</name>
+    <name>DiagNG</name>
     <branding>
         <color type="primary" scheme_preference="light">#DCB3E7</color>
         <color type="primary" scheme_preference="dark">#664D96</color>

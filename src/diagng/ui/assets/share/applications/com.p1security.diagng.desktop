@@ -11,7 +11,7 @@ Terminal=false
 Type=Application
 Version=1.5
 
-Name=diagng
+Name=DiagNG
 Comment=The next generation diag frame analysis software, based on QCSuper
 Keywords=QCSuper;Network;Qualcomm;Baseband;Capture;Analysis;Wireshark;2G;3G;4G;5G;Security;
 
