@@ -9,15 +9,49 @@
         "org.freedesktop.Sdk.Extension.llvm22"
     ],
     "finish-args": [
+        /**
+         * We need this to run the GTK-4 app
+         */
         "--share=ipc",
         "--share=network",
         "--socket=fallback-x11",
         "--socket=wayland",
+
+        /**
+         * We need the --device=all permission in order to
+         * able to scan devices with pyudev.glib
+         */
         "--device=all",
+
+        /**
+         * We need this permission so that we can check
+         * for the presence of the GSMTAP v3 decoding
+         * plug-in on the system, and install it if
+         * not present
+         */
         "--filesystem=~/.local/lib/wireshark/plugins:create",
-        "--own-name=com.p1security.diagng",
+
+        /**
+         * We need to be able to use the "flatpak-spawn"
+         * command in order to connect to raw USB devices
+         * and SPI devices in a privileged fashion on
+         * the system through the "diagmond" system DBus
+         * daemon, which will authentify privileged
+         * user-initiated actions using a PolKit request.
+         * See:
+         * - https://github.com/flathub/flathub/pull/10329#discussion_r4065045730
+         * - https://github.com/flathub-infra/flatpak-builder-lint/pull/1175
+         * - https://github.com/P1sec/DiagNG#technical-architecture
+         * - https://github.com/P1sec/DiagNG/tree/main/diagmond
+         */
         "--talk-name=org.freedesktop.Flatpak",
         "--system-talk-name=com.p1security.diagmond",
+
+        /**
+         * We need to talk to the ModemManager daemon in
+         * order to query device status and check for the
+         * risk of interference over the system.
+         */
         "--system-talk-name=org.freedesktop.ModemManager1"
     ],
     "build-options": {
@@ -101,6 +135,11 @@
         {
             "name": "diagmond",
             "buildsystem": "simple",
+            "build-options": {
+                "build-args": [
+                    "--share=network"
+                ]
+            },
             "build-commands": [
                 "cargo build --release --verbose",
                 "install -Dm755 ./target/release/diagmond-bin -t /app/bin/",
