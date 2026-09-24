@@ -13,7 +13,7 @@ It is an experimental, Linux-first, open-source, interoperable, brand-new way to
 It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.
 
 <div align="center">
-    <h1><a href="https://p1sec-foss.gitlab.io/flatpak/diagng.html">Download for Linux 😎 (Flatpak)</a></h1>
+    <h1><a href="#install">Download for Linux 💾</a></h1>
 </div>
 <a href="https://matrix.to/#/#diagng:matrix.org">Chat on Matrix</a>
 
@@ -71,6 +71,8 @@ Then, you should be able to find DiagNG in your applications list, or to run it 
 ```bash
 flatpak run com.p1security.diagng
 ```
+
+If your browser supports it, you can also [click here](https://p1sec-foss.gitlab.io/flatpak/diagng.html) to install DiagNG directly from your software center.
 
 ## Roadmap
 
