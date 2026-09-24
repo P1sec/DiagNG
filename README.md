@@ -12,16 +12,17 @@ It is an experimental, Linux-first, open-source, interoperable, brand-new way to
 
 It should eventually support other basebands such as Samsung Exynos processors, and why not other protocols such as AT commands.
 
-<h1>
-    <p align="center">
-        <a href="https://github.com/P1sec/DiagNG/releases/download/0.1.0/com.p1security.diagng.flatpak">Download for Linux 😎 (Flatpak)</a>
-    </p>
-</h1>
+<div align="center">
+    <h1><a href="https://p1sec-foss.gitlab.io/flatpak/diagng.html">Download for Linux 😎 (Flatpak)</a></h1>
+</div>
+<a href="https://matrix.to/#/#diagng:matrix.org">Chat on Matrix</a>
 
 ## Table of contents
 
 * [Feature list](#feature-list)
 * [Screenshots](#screenshots)
+* [Install](#install)
+  * [Install GUI on Linux with updates (Flatpak)](#install-gui-on-linux-with-updates-flatpak)
 * [Roadmap](#roadmap)
 * [Legal](#legal)
 * [Development environment setup](#development-environment-setup)
@@ -54,6 +55,22 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/adb.png?raw=true" alt="ADB devices screen" width="838">
 </p>
+
+## Install
+
+### Install GUI on Linux with updates (Flatpak)
+
+Use the following command in order to install the DiagNG GUI on Linux:
+
+```bash
+flatpak install -y https://p1sec-foss.gitlab.io/flatpak/diagng.flatpakref
+```
+
+Then, you should be able to find DiagNG in your applications list, or to run it using this command:
+
+```bash
+flatpak run com.p1security.diagng
+```
 
 ## Roadmap
 
