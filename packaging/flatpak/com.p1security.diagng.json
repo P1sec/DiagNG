@@ -1,7 +1,7 @@
 {
     "app-id": "com.p1security.diagng",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "50",
+    "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "command": "diagng",
     "sdk-extensions" : [
@@ -102,8 +102,7 @@
             "name": "diagmond",
             "buildsystem": "simple",
             "build-commands": [
-                "cargo --offline fetch --verbose",
-                "cargo --offline build --release --verbose",
+                "cargo build --release --verbose",
                 "install -Dm755 ./target/release/diagmond-bin -t /app/bin/",
                 "cp -r ./share/dbus-1 /app/share/",
                 "cp -r ./share/polkit-1 /app/share/"
