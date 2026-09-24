@@ -8,7 +8,7 @@
         <color type="primary" scheme_preference="light">#DCB3E7</color>
         <color type="primary" scheme_preference="dark">#664D96</color>
     </branding>
-    <summary>Client for mobile baseband Diag interface</summary>
+    <summary>Client for mobile baseband Diag interfaces</summary>
     <description>
         <p>DiagNG is a general purpose client purpose for the diagnostic interface of Qualcomm Snapdragon basebands, present on a large part of Android phones and various USB modems.</p>
         <p>It can be considered as a sequel for QCSuper, and also takes large inspiration from SCAT. Like these tools, it allows to capture 2G/3G/4G/5G air interface network traces and save them to the GSMTAP/PCAP format, so that you can visualize these in Wireshark.</p>
