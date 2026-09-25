@@ -1,3 +1,11 @@
+diagmond (0.1.0+1) bionic; urgency=low
+
+  * Add systemd unit file
+  * Fix diagmond daemon logging
+  * Add missing debhelper build dependency
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Fri, 25 Sep 2026 23:48:27 +0200
+
 diagmond (0.1.0) bionic; urgency=low
 
   * Initial beta release, including device acquisition and basic RRC OTA

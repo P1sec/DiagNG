@@ -2,3 +2,4 @@
 Name=com.p1security.diagmond
 Exec=/usr/bin/diagmond
 User=root
+SystemdService=diagmond.service

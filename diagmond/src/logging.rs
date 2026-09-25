@@ -10,7 +10,7 @@ impl Logging {
                 out.finish(format_args!(
                     "[{}] [{} {}] - {} - {} ({}:{})",
                     humantime::format_rfc3339_seconds(std::time::SystemTime::now()),
-                    record.target(),
+                    record.target().replace("diagmond_bin", "diagmond"),
                     // record.module_path().unwrap_or("??"), <- Usually same as target
                     std::process::id(),
                     record.level(),
@@ -23,7 +23,7 @@ impl Logging {
                 ))
             })
             .level(log::LevelFilter::Warn)
-            .level_for("diagmond", log::LevelFilter::Debug)
+            .level_for("diagmond_bin", log::LevelFilter::Debug)
             .chain(std::io::stderr())
             .apply()
             .unwrap();

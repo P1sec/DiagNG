@@ -41,10 +41,7 @@ ROOT_DIR = dirname(realpath(SRC_DIR))
 LOG_FILE_NAME = ROOT_DIR + '/_test_log.log'
 LOG_FILE_SIZE = 10 * 1024 * 1024
 MEMORY_LOG_LINES = 5000
-LOG_FORMAT = '[{asctime}] [ui {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
-
-# if '--service' in join(sys.argv).lower():
-#     LOG_FORMAT = LOG_FORMAT.replace('ui ', 'service ')
+LOG_FORMAT = '[{asctime}] [diagng {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
 
 BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 

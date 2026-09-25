@@ -23,8 +23,8 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	mkdir -p $(CURDIR)/debian/diagmond/usr
-	cp -ra $(CURDIR)/share $(CURDIR)/debian/diagmond/usr/
-	
+	cp -ra $(CURDIR)/share $(CURDIR)/lib $(CURDIR)/debian/diagmond/usr/
+
 	mkdir -p $(CURDIR)/debian/diagmond/usr/bin
 	cp -ra $(CURDIR)/target/release/diagmond-bin $(CURDIR)/debian/diagmond/usr/bin/
 

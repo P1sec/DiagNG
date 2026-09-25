@@ -3,7 +3,8 @@ Section: net
 Priority: optional
 Maintainer: Marin Moulinier <p1-mmr@users.noreply.github.com>
 Standards-Version: 4.1.2
-Build-Depends: libdbus-1-dev,
+Build-Depends: debhelper (>= 10),
+               libdbus-1-dev,
                libglib2.0-dev,
                cargo (>= 1.88) | rustup,
                rustc (>= 1.88) | rustup

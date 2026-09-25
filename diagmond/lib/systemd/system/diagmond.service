@@ -1,0 +1,16 @@
+[Unit]
+Description=D-Bus daemon for DiagNG privileged actions
+After=polkit.service
+Requires=polkit.service
+
+[Service]
+Type=dbus
+BusName=com.p1security.diagmond
+ExecStart=/usr/bin/diagmond-bin
+ProtectSystem=true
+ProtectHome=true
+PrivateTmp=true
+User=root
+
+# [Install]
+# WantedBy=multi-user.target
