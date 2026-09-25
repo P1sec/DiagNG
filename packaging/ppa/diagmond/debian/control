@@ -1,0 +1,23 @@
+Source: diagmond
+Section: net
+Priority: optional
+Maintainer: Marin Moulinier <p1-mmr@users.noreply.github.com>
+Standards-Version: 4.1.2
+Build-Depends: libdbus-1-dev,
+               libglib2.0-dev,
+               cargo (>= 1.88) | rustup,
+               rustc (>= 1.88) | rustup
+Homepage: https://github.com/P1sec/DiagNG#technical-architecture
+Vcs-Git: https://github.com/P1sec/DiagNG.git
+Vcs-Browser: https://github.com/P1sec/DiagNG/tree/main/diagmond
+
+Package: diagmond
+Architecture: any
+Depends: libglib2.0-0t64,
+         libc6,
+         libdbus-1-3,
+         polkitd,
+         pkexec
+Description: D-Bus daemon for DiagNG privileged actions
+ D-Bus daemon allowing DiagNG for raw USB and serial port access,
+ authorizing actions with Polkit

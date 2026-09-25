@@ -1,0 +1,7 @@
+diagmond (0.1.0) bionic; urgency=low
+
+  * Initial beta release, including device acquisition and basic RRC OTA
+    network frame capture abilities
+  * Please refer to the feature list for extra details
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Fri, 25 Sep 2026 22:57:28 +0200
