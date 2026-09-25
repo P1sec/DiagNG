@@ -121,7 +121,7 @@ Dependencies on Ubuntu 26.04 LTS:
 ```bash
 sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
     gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
-    gir1.2-gtksource-5 libgtksourceview-5-dev \
+    gir1.2-gtksource-5 libgtksourceview-5-dev libudev-dev \
     python3-dev blueprint-compiler cargo rustc polkitd \
     google-android-platform-tools-installer git wireshark
 
@@ -143,7 +143,7 @@ sudo dnf install uv glib2-devel libadwaita-devel gtk4-devel \
     gobject-introspection-devel python3-gobject-devel \
     python3-devel cairo-devel @development-tools \
     modemmanager-glib-devel android-tools rustc cargo \
-    gtksourceview5-devel polkit git wireshark
+    gtksourceview5-devel polkit git wireshark systemd-devel
 ```
 
 Then:
