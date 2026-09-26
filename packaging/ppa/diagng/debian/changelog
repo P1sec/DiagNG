@@ -1,3 +1,9 @@
+diagng (0.1.1) bionic; urgency=low
+
+  * Synchronize version number with the project
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Sat, 26 Sep 2026 12:05:37 +0200
+
 diagng (0.1.0+1) bionic; urgency=low
 
   * Include PyTest as a mandatory package dependency

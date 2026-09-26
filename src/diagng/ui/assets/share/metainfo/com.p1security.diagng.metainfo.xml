@@ -75,6 +75,16 @@
     -->
     <content_rating type="oars-1.1" />
     <releases>
+        <release version="0.1.1" date="2026-09-26">
+            <description>
+                <ul>
+                    <li>Add systemd unit file for diagmond</li>
+                    <li>Fix logging in diagmond</li>
+                    <li>Support PPA packaging</li>
+                    <li>Support self-hosted Flatpak packaging</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.1.0" date="2026-09-21">
             <description>
                 <ul>
