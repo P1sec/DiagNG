@@ -1,0 +1,53 @@
+Source: diagng
+Section: net
+Priority: optional
+Maintainer: Marin Moulinier <p1-mmr@users.noreply.github.com>
+Standards-Version: 4.1.2
+Build-Depends: debhelper (>= 10),
+               dh-python,
+               pybuild-plugin-pyproject,
+               python3-setuptools,
+               python3-setuptools-scm,
+               python3-dev,
+               python3-pytest,
+               python3-kaitaistruct,
+               python3-crcmod,
+               blueprint-compiler
+Homepage: https://github.com/P1sec/DiagNG#readme
+Vcs-Git: https://github.com/P1sec/DiagNG.git
+Vcs-Browser: https://github.com/P1sec/DiagNG
+
+Package: diagng
+Architecture: all
+Provides: python3-diagng
+Depends: python3,
+         pkexec,
+         diagmond,
+         ${python3:Depends},
+         ${misc:Depends},
+         python3-kaitaistruct,
+         python3-crcmod,
+         python3-gi,
+         python3-pyudev,
+         gir1.2-modemmanager-1.0,
+         gir1.2-adw-1 (>= 1.8),
+         gir1.2-gtk-4.0 (>= 4.14),
+         gir1.2-gtksource-5,
+         google-android-platform-tools-installer | adb,
+         wireshark
+Description: Client for mobile baseband Diag interfaces
+ DiagNG is a general purpose client purpose for the diagnostic interface of
+ Qualcomm Snapdragon basebands, present on a large part of Android phones and
+ various USB modems.
+ .
+ It can be considered as a sequel for QCSuper, and also takes large inspiration
+ from SCAT. Like these tools, it allows to capture 2G/3G/4G/5G air interface
+ network traces and save them to the GSMTAP/PCAP format, so that you can
+ visualize these in Wireshark.
+ .
+ It is an experimental, Linux-first, open-source, interoperable, brand-new way
+ to connect to baseband USB diagnostic interfaces; whether for pedagogic or
+ security research purposes.
+ .
+ It should eventually support other basebands such as Samsung Exynos
+ processors, and why not other protocols such as AT commands.

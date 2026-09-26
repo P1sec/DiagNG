@@ -22,7 +22,8 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 * [Feature list](#feature-list)
 * [Screenshots](#screenshots)
 * [Install](#install)
-  * [Install GUI on Linux with updates (Flatpak)](#install-gui-on-linux-with-updates-flatpak)
+  * [Install GUI on Linux (Flatpak)](#install-gui-on-linux-flatpak)
+  * [Install GUI+CLI on Ubuntu (PPA)](#install-gui-cli-on-ubuntu-ppa)
 * [Roadmap](#roadmap)
 * [Legal](#legal)
 * [Development environment setup](#development-environment-setup)
@@ -58,7 +59,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 ## Install
 
-### Install GUI on Linux with updates (Flatpak)
+### Install GUI on Linux (Flatpak)
 
 Use the following command in order to install the DiagNG GUI on Linux:
 
@@ -73,6 +74,17 @@ flatpak run com.p1security.diagng
 ```
 
 If your browser supports it, you can also [click here](https://p1sec-foss.gitlab.io/flatpak/diagng.html) to install DiagNG directly from your software center.
+
+### Install GUI+CLI on Ubuntu (PPA)
+
+Use the following commands in order to install the DiagNG GUI+CLI on Ubuntu 26.04 and above (for older versions, please use the Flatpak method described above):
+
+```bash
+wget -qO- 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6888550b2fc77d09' | sudo tee /etc/apt/trusted.gpg.d/p1sec-foss.asc
+sudo apt-add-repository ppa:marin-m/p1sec-foss -y -u
+sudo apt install diagng -y
+diagng
+```
 
 ## Roadmap
 
@@ -119,11 +131,11 @@ P1 Security being based in France, read the following extra mentions for more de
 Dependencies on Ubuntu 26.04 LTS:
 
 ```bash
-sudo apt install libgirepository-2.0-dev libadwaita-1-dev \
-    gir1.2-modemmanager-1.0 gir1.2-adw-1 gir1.2-gtk-4.0 \
-    gir1.2-gtksource-5 libgtksourceview-5-dev libudev-dev \
-    python3-dev blueprint-compiler cargo rustc polkitd \
-    google-android-platform-tools-installer git wireshark
+sudo apt install libgirepository-2.0-0 gir1.2-adw-1 \
+    gir1.2-modemmanager-1.0 gir1.2-gtk-4.0 libudev-dev \
+    gir1.2-gtksource-5 python3-dev blueprint-compiler \
+    cargo rustc polkitd git wireshark \
+    google-android-platform-tools-installer
 
 sudo snap install --classic astral-uv
 ```
