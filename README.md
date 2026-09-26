@@ -14,8 +14,8 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 
 <div align="center">
     <h1><a href="#install">Download for Linux 💾</a></h1>
+    <a href="https://matrix.to/#/#diagng:matrix.org">💬 Chat on Matrix</a>
 </div>
-<a href="https://matrix.to/#/#diagng:matrix.org">Chat on Matrix</a>
 
 ## Table of contents
 
