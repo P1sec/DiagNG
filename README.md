@@ -23,7 +23,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 * [Screenshots](#screenshots)
 * [Install](#install)
   * [Install GUI on Linux (Flatpak)](#install-gui-on-linux-flatpak)
-  * [Install GUI+CLI on Ubuntu (PPA)](#install-gui-cli-on-ubuntu-ppa)
+  * [Install GUI+CLI on Ubuntu (PPA)](#install-guicli-on-ubuntu-ppa)
 * [Roadmap](#roadmap)
 * [Legal](#legal)
 * [Development environment setup](#development-environment-setup)
