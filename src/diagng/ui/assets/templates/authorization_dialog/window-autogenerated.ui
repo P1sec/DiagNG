@@ -36,7 +36,7 @@ This process will run under the name "diagmond-bin" and will be able to:
 
 This process will run as a D-Bus system service and use Polkit for granting the extra authorizations.
 
-If you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (Archlinux, Manjaro) system package, this should also be available soon, the instructions should be available at: &lt;a href="https://github.com/P1sec/DiagNG/tree/main/packaging"&gt;https://github.com/P1sec/DiagNG/tree/main/packaging&lt;/a&gt;</property>
+If you prefer to install the daemon as a proper DEB (Ubuntu, Debian) or Pacman (Archlinux, Manjaro) system package, install the diagmond package from the PPA or AUR repository, see &lt;a href="https://github.com/P1sec/DiagNG#install"&gt;instructions here&lt;/a&gt;.</property>
                 <property name="margin-bottom">16</property>
                 <property name="margin-end">8</property>
                 <property name="margin-start">8</property>

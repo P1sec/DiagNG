@@ -24,6 +24,7 @@ It should eventually support other basebands such as Samsung Exynos processors, 
 * [Install](#install)
   * [Install GUI on Linux (Flatpak)](#install-gui-on-linux-flatpak)
   * [Install GUI+CLI on Ubuntu (PPA)](#install-guicli-on-ubuntu-ppa)
+  * [Install GUI+CLI on Archlinux (AUR)](#install-guicli-on-archlinux-aur)
 * [Roadmap](#roadmap)
 * [Legal](#legal)
 * [Development environment setup](#development-environment-setup)
@@ -81,8 +82,17 @@ Use the following commands in order to install the DiagNG GUI+CLI on Ubuntu 26.0
 
 ```bash
 wget -qO- 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6888550b2fc77d09' | sudo tee /etc/apt/trusted.gpg.d/p1sec-foss.asc
-sudo apt-add-repository ppa:marin-m/p1sec-foss -y -u
-sudo apt install diagng -y
+sudo apt-add-repository -y ppa:marin-m/p1sec-foss
+sudo apt install -y diagng
+diagng
+```
+
+### Install GUI+CLI on Archlinux (AUR)
+
+Use the following commands in order to install the DiagNG GUI+CLI on Archlinux, Manjaro, CachyOS and derivate distributions:
+
+```bash
+yay -S diagng
 diagng
 ```
 
