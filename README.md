@@ -89,11 +89,10 @@ diagng
 
 ### Install GUI+CLI on Archlinux (AUR)
 
-Use the following commands in order to install the DiagNG GUI+CLI on Archlinux, Manjaro, CachyOS and derivate distributions:
+Use the following command in order to install the DiagNG GUI+CLI on Archlinux, Manjaro, CachyOS and derivate distributions:
 
 ```bash
 yay -S diagng
-diagng
 ```
 
 ## Roadmap
