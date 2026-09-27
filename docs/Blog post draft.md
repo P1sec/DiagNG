@@ -1,4 +1,4 @@
-# Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols
+# Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols, up to 5G
 
 You may have heard of our [QCSuper](https://github.com/P1sec/QCSuper) tool, originally [released in 2019](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones), which brought up a breakthrough of simplicity and ergonomy in the task of producing sample **2G/3G/4G/5G air interface captures** ("OTA RRC logs") to the **PCAP format**, usable in [Wireshark](https://www.wireshark.org/) thanks to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) convention.
 
@@ -17,6 +17,16 @@ flatpak install -y https://p1sec-foss.gitlab.io/flatpak/diagng.flatpakref
 flatpak run com.p1security.diagng
 </pre>
 <p align="center"><em>Install and run DiagNG in two commands on Linux</em></p>
+
+## Also NR/5G compatible!
+
+DiagNG also supports producing NR/5G RRC logs in Wireshark, using the soon-to-be-standardized [GSMTAP v3](https://gitea.osmocom.org/peremen/gsmtapv3/src/branch/master/GSMTAPv3.md) protocol encapsulation format, already produced by other tools like SCAT.
+
+<p align="center">
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/5g-wireshark-screenshot.png?raw=true" alt="A 5G/NR RRC log opened in Wireshark"><br><em>Screenshot of a NR/5G RRC log produced by DiagNG, opened in Wireshark</em>
+</p>
+
+For this, it prompts the user to install a custom Lua Wireshark GSMTAP v3 plug-in, allowing to leverage the NR/5G decoding abilities of Wireshark without the need of waiting for the upstream to push a full implementation.
 
 ## Under the hood
 
