@@ -1,4 +1,4 @@
-## Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols
+# Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols
 
 You may have heard of our [QCSuper](https://github.com/P1sec/QCSuper) tool, originally [released in 2019](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones), which brought up a breakthrough of simplicity and ergonomy in the task of producting sample 2G/3G/4G/5G air interface captures ("OTA RRC logs") to the PCAP format, usable in [Wireshark](https://www.wireshark.org/) thanks to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) convention.
 
@@ -9,5 +9,5 @@ Today, **we want to push the interoperability and protocol openness exercise fur
 We are today proud to present **[DiagNG](https://github.com/P1sec/DiagNG), a new GUI-based software** that shuld **embody as the sequel for QCSuper**. DiagNG is right now [available for Linux users](https://github.com/P1sec/DiagNG#install) and already contains the [key features from QCSuper](https://github.com/P1sec/DiagNG#feature-list), with [more to come](https://github.com/P1sec/DiagNG#roadmap).
 
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark"><br><em>Screenshot of the main window of DiagNG</em>
+<img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark"><br><em>Screenshot of the main features of DiagNG</em>
 </p>
