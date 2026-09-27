@@ -22,7 +22,7 @@ We hope that you will enjoy it as an early Christmas gift! 🙌
 
 Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon basebands like QCSuper does, but we would love to support reading from other baseband vendors such as Qualcomm, Mediatek or HiSilicon in the future! We are also looking forward to implement more baseband Diag protocol features.
 
-For now, the features of DiagNG largely overlap with these of QCSuper in addition to the nice GUI, but, as a video is ofter worth a thousand words, feel free to watch the below in order to see it in direct operation:
+For now, the features of DiagNG largely overlap with these of QCSuper in addition to the nice GUI, but, as a video is often worth a thousand words, feel free to watch the below in order to see it in direct operation:
 
 https://github.com/user-attachments/assets/665e3498-11e4-4e00-8968-ea8ea15bd000
 
