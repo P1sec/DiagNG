@@ -42,7 +42,7 @@ DiagNG is an open-source tool released under the GPL v3 license, leveraging the 
 
 [Ubuntu](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-ubuntu-ppa) and [Archlinux](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-archlinux-aur) packages are also available as a second distribution channel.
 
-DiagNG leverages an **asynchronous architecture** based on the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
+DiagNG leverages an **asynchronous architecture** based on the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for providing standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
 
 It also uses a fully integrated D-Bus/Polkit-based Rust daemon for performing privileged operations, such as serial port reads, without bypassing too much the standard Linux privilege model.
 
