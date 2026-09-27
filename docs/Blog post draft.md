@@ -23,7 +23,7 @@ flatpak run com.p1security.diagng
 DiagNG also supports producing NR/5G RRC logs in Wireshark, using the soon-to-be-standardized [GSMTAP v3](https://gitea.osmocom.org/peremen/gsmtapv3/src/branch/master/GSMTAPv3.md) protocol encapsulation format, already produced by other tools like SCAT.
 
 <p align="center">
-<img src="https://github.com/P1sec/DiagNG/blob/refs/heads/main/packaging/screenshots/light/5g-wireshark-screenshot.png?raw=true" alt="A 5G/NR RRC log opened in Wireshark"><br><em>Screenshot of a NR/5G RRC log produced by DiagNG, opened in Wireshark</em>
+<img src="https://github.com/P1sec/DiagNG/blob/refs/heads/main/packaging/screenshots/light/5g-wireshark-screenshot-detailed.png?raw=true" alt="A 5G/NR RRC log opened in Wireshark"><br><em>Screenshot of a NR/5G RRC log produced by DiagNG, opened in Wireshark</em>
 </p>
 
 For this, it prompts the user to install a custom Lua Wireshark GSMTAP v3 plug-in, allowing to leverage the NR/5G decoding abilities of Wireshark without the need of waiting for the upstream to push a full implementation.
