@@ -34,7 +34,7 @@ DiagNG is an open-source tool released under the GPL v3 license, leveraging the 
 
 It also uses the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
 
-<p align="center"><a href="https://www.youtube.com/watch?v=aMbaXFxMELw"><img src="https://i.ytimg.com/vi/aMbaXFxMELw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGwgbChsMA8=&rs=AOn4CLBoATe0MB0KiEaWQMcJayZI6ZOYaQ"><br><em>Click to launch full demo video</em></a></p>
+<p align="center"><a href="https://www.youtube.com/watch?v=aMbaXFxMELw"><img src="https://i.ytimg.com/vi/aMbaXFxMELw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGwgbChsMA8=&rs=AOn4CLBoATe0MB0KiEaWQMcJayZI6ZOYaQ"><br><em>Click to launch full demo video 🎥</em></a></p>
 
 Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon basebands like QCSuper does, but we would love to support reading from other baseband vendors such as Qualcomm, Mediatek or HiSilicon in the future! We are also looking forward to implement more baseband Diag protocol features.
 
