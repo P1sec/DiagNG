@@ -1,4 +1,4 @@
-# Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols, up to 5G
+# Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols (up to 5G!)
 
 You may have heard of our [QCSuper](https://github.com/P1sec/QCSuper) tool, originally [released in 2019](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones), which brought up a breakthrough of simplicity and ergonomy in the task of producing sample **2G/3G/4G/5G air interface captures** ("OTA RRC logs") to the **PCAP format**, usable in [Wireshark](https://www.wireshark.org/) thanks to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) convention.
 
