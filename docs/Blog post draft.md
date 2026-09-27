@@ -1,16 +1,22 @@
 # Presenting DiagNG: After QCSuper, a new open-source initiative for freeing up mobile baseband Diag protocols
 
-You may have heard of our [QCSuper](https://github.com/P1sec/QCSuper) tool, originally [released in 2019](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones), which brought up a breakthrough of simplicity and ergonomy in the task of producting sample 2G/3G/4G/5G air interface captures ("OTA RRC logs") to the PCAP format, usable in [Wireshark](https://www.wireshark.org/) thanks to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) convention.
+You may have heard of our [QCSuper](https://github.com/P1sec/QCSuper) tool, originally [released in 2019](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones), which brought up a breakthrough of simplicity and ergonomy in the task of producing sample **2G/3G/4G/5G air interface captures** ("OTA RRC logs") to the **PCAP format**, usable in [Wireshark](https://www.wireshark.org/) thanks to the [GSMTAP](https://osmocom.org/projects/baseband/wiki/GSMTAP) convention.
 
 Since QCSuper has been released, it had the opportunity to stockpile [30 references on Google Scholar](https://scholar.google.com/scholar?q=%22qcsuper%22) and [almost 1.7k stars](https://github.com/P1sec/QCSuper/stargazers) on Github, a rare feat for a niche telecom security pedagogy and research tool, and we're frequently hearing about customer and telco operators using it in real-world conditions for device testing.
 
 Today, **we want to push the interoperability and protocol openness exercise further**. QCSuper was a CLI (command line interface)-based tool, which limited its usability and capacity to be extended without impacting the usability of its usage notice.
 
-We are today proud to present **[DiagNG](https://github.com/P1sec/DiagNG), a new GUI-based software** that shuld **embody as the sequel for QCSuper**. DiagNG is right now [available for Linux users](https://github.com/P1sec/DiagNG#install) and already contains the [key features from QCSuper](https://github.com/P1sec/DiagNG#feature-list), with [more to come](https://github.com/P1sec/DiagNG#roadmap).
+We are today proud to present **[DiagNG](https://github.com/P1sec/DiagNG), a new GUI-based software** that should **embody as the sequel for QCSuper**. DiagNG is right now [available for Linux users](https://github.com/P1sec/DiagNG#install) and already contains the [key features from QCSuper](https://github.com/P1sec/DiagNG#feature-list), with [more to come](https://github.com/P1sec/DiagNG#roadmap).
 
 <p align="center">
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark"><br><em>Screenshot of the main features of DiagNG</em>
 </p>
+
+<pre>
+flatpak install -y https://p1sec-foss.gitlab.io/flatpak/diagng.flatpakref
+flatpak run com.p1security.diagng
+</pre>
+<p align="center"><em>Install and run DiagNG in two commands on Linux</em></p>
 
 ## Under the hood
 
@@ -21,5 +27,9 @@ It also uses the GLib event loop for better parallelism, communicates with other
 <p align="center"><a href="https://www.youtube.com/watch?v=aMbaXFxMELw"><img src="https://i.ytimg.com/vi/aMbaXFxMELw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGwgbChsMA8=&rs=AOn4CLBoATe0MB0KiEaWQMcJayZI6ZOYaQ"><br><em>Click to launch full demo video</em></a></p>
 
 Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon basebands like QCSuper does, but we would love to support reading from other baseband vendors such as Qualcomm, Mediatek or HiSilicon in the future! We are also looking forward to implement more baseband Diag protocol features.
+
+## Want to know more about it?
+
+Feel free to [**read the original presentation blog post for QCSuper**](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones) to know more about what DiagNG does under the hood.
 
 Feel free to [**find the general information and install instructions**](https://github.com/P1sec/DiagNG#readme) for the tool on Github, and/or [chat with us on Matrix](https://matrix.to/#/#diagng:matrix.org) for getting in touch and perhaps helping us to improve this new open-source tool!
