@@ -18,6 +18,10 @@ flatpak run com.p1security.diagng
 </pre>
 <p align="center"><em>Install and run DiagNG in two commands on Linux</em></p>
 
+For now, the features of DiagNG largely overlap with these of QCSuper in addition to the nice GUI, but, as a video is ofter worth a thousand words, feel free to watch the below in order to see it in direct operation:
+
+https://github.com/user-attachments/assets/665e3498-11e4-4e00-8968-ea8ea15bd000
+
 ## Also NR/5G compatible!
 
 DiagNG also supports producing NR/5G RRC logs in Wireshark, using the soon-to-be-standardized [GSMTAP v3](https://gitea.osmocom.org/peremen/gsmtapv3/src/branch/master/GSMTAPv3.md) protocol encapsulation format, already produced by other tools like SCAT.
@@ -33,8 +37,6 @@ For this, it prompts the user to install a custom Lua Wireshark GSMTAP v3 plug-i
 DiagNG is an open-source tool released under the GPL v3 license, leveraging the GTK 4/Adwaita toolkit in order to provide a sleek UI and UX to the users, and [Flatpak-based packaging](https://github.com/P1sec/DiagNG#install-gui-on-linux-flatpak) for Linux-first integration.
 
 It also uses the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
-
-https://github.com/user-attachments/assets/665e3498-11e4-4e00-8968-ea8ea15bd000
 
 Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon basebands like QCSuper does, but we would love to support reading from other baseband vendors such as Qualcomm, Mediatek or HiSilicon in the future! We are also looking forward to implement more baseband Diag protocol features.
 
