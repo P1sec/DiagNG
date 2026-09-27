@@ -11,3 +11,15 @@ We are today proud to present **[DiagNG](https://github.com/P1sec/DiagNG), a new
 <p align="center">
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark"><br><em>Screenshot of the main features of DiagNG</em>
 </p>
+
+## Under the hood
+
+DiagNG is an open-source tool released under the GPL v3 license, leveraging the GTK 4/Adwaita toolkit in order to provide a sleek UI and UX to the users, and [Flatpak-based packaging](https://github.com/P1sec/DiagNG#install-gui-on-linux-flatpak) for Linux-first integration.
+
+It also uses the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
+
+<p align="center"><a href="https://www.youtube.com/watch?v=aMbaXFxMELw"><img src="https://i.ytimg.com/vi/aMbaXFxMELw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGwgbChsMA8=&rs=AOn4CLBoATe0MB0KiEaWQMcJayZI6ZOYaQ"><br><em>Click to launch full demo video</em></a></p>
+
+Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon basebands like QCSuper does, but we would love to support reading from other baseband vendors such as Qualcomm, Mediatek or HiSilicon in the future! We are also looking forward to implement more baseband Diag protocol features.
+
+Feel free to [**find the general information and install instructions**](https://github.com/P1sec/DiagNG#readme) for the tool on Github, and/or [chat with us on Matrix](https://matrix.to/#/#diagng:matrix.org) for getting in touch and perhaps helping us to improve this new open-source tool!
