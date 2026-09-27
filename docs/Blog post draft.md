@@ -50,6 +50,6 @@ It also uses a fully integrated D-Bus/Polkit-based Rust daemon for performing pr
 
 Feel free to [**read the original presentation blog post for QCSuper**](https://www.p1sec.com/blog/presenting-qcsuper-a-tool-for-capturing-your-2g-3g-4g-air-traffic-on-qualcomm-based-phones) to know more about what DiagNG does under the hood.
 
-Feel free to [**find the general information and install instructions**](https://github.com/P1sec/DiagNG#readme) for the tool on Github, and/or [chat with us on Matrix](https://matrix.to/#/#diagng:matrix.org) for getting in touch and perhaps helping us to improve this new open-source tool!
+Feel free to [**find the general information and install instructions**](https://github.com/P1sec/DiagNG#readme) for the tool on Github, and/or [chat with us on Matrix](https://matrix.to/#/#diagng:matrix.org) for getting in touch and perhaps helping us to improve this new open-source tool.
 
 Have a good time exploring the depths of telecom networks protocol security!
