@@ -18,6 +18,8 @@ flatpak run com.p1security.diagng
 </pre>
 <p align="center"><em>Install and run DiagNG in two commands on Linux</em></p>
 
+We hope that you will enjoy it as an early Christmas gift! 🙌
+
 For now, the features of DiagNG largely overlap with these of QCSuper in addition to the nice GUI, but, as a video is ofter worth a thousand words, feel free to watch the below in order to see it in direct operation:
 
 https://github.com/user-attachments/assets/665e3498-11e4-4e00-8968-ea8ea15bd000
