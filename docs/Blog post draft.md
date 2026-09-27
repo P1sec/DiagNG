@@ -40,7 +40,7 @@ For this, it prompts the user to install a custom Lua Wireshark GSMTAP v3 plug-i
 
 DiagNG is an open-source tool released under the GPL v3 license, leveraging the GTK 4/Adwaita toolkit in order to provide a sleek UI and UX to the users, and [Flatpak-based packaging](https://github.com/P1sec/DiagNG#install-gui-on-linux-flatpak) for Linux-first integration.
 
-[Ubuntu](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-ubuntu-ppa) and [Archlinux](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-archlinux-aur) packages are also available as a second distribution channel.
+[Ubuntu](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-ubuntu-ppa) and [Archlinux](https://github.com/P1sec/DiagNG/tree/main#install-guicli-on-archlinux-aur) packages are also available as a secondary distribution channel.
 
 DiagNG leverages an **asynchronous architecture** based on the GLib event loop for better parallelism, communicates with other system components such as ADB, ModemManager and UDev (see [screenshots](https://github.com/P1sec/DiagNG#readme)) for slick integration to the Linux desktop, and ultimately integrates the [**Kaitai Struct library**](https://kaitai.io/) for providing standarized, interoperable **[definitions of vendor baseband protocol diagnostic interfaces](https://github.com/P1sec/DiagNG/tree/main/struct)**.
 
