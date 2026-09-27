@@ -12,7 +12,7 @@ We are today proud to present **[DiagNG](https://github.com/P1sec/DiagNG), a new
 <img src="https://github.com/P1sec/DiagNG/blob/main/packaging/screenshots/light/global-screen-focus.png?raw=true" alt="Application main screen + device screen + Wireshark"><br><em>Screenshot of the main features of DiagNG</em>
 </p>
 
-## Under the hood
+## Under the hood
 
 DiagNG is an open-source tool released under the GPL v3 license, leveraging the GTK 4/Adwaita toolkit in order to provide a sleek UI and UX to the users, and [Flatpak-based packaging](https://github.com/P1sec/DiagNG#install-gui-on-linux-flatpak) for Linux-first integration.
 
