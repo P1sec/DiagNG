@@ -29,6 +29,15 @@ from gi.repository import Adw, Gtk, Gdk, GLib, Gio, GObject
 
 def main():
     args = ArgumentParser(description='Prototype for DiagNG 🍕 🎧')
+
+    args.add_argument(
+        '-d',
+        '--debug',
+        help='Compile the diagmond binary with debugging symbols whenever it '
+        + 'has changed',
+        action='store_true',
+    )
+
     args = args.parse_args()
 
     GLib.set_prgname('com.p1security.diagng')

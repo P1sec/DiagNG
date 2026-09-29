@@ -96,6 +96,10 @@ def get_flatpak_bin_dir(callback: Callable[[str], []]):
 def spawn_diagmond_as_outer_process(
     script_path: str = None, bin_path: str = None
 ):
+    extra_args = []
+    if '-d' in sys.argv or '--debug' in sys.argv:
+        extra_args.append('--debug')
+
     if IS_FLATPAK:
         if not script_path:
             get_flatpak_bin_dir(spawn_diagmond_as_outer_process)
@@ -110,6 +114,7 @@ def spawn_diagmond_as_outer_process(
                 'env',
                 'python3',
                 script_path,
+                *extra_args,
                 bin_path,
             ],
             flags=GLib.SpawnFlags.SEARCH_PATH,
@@ -118,26 +123,37 @@ def spawn_diagmond_as_outer_process(
     else:
         debug('Trying to launch: ' + __file__)
         GLib.spawn_async(
-            ['env', 'python3', __file__], flags=GLib.SpawnFlags.SEARCH_PATH
+            ['env', 'python3', __file__, *extra_args],
+            flags=GLib.SpawnFlags.SEARCH_PATH,
         )
 
 
 def main():
 
+    input_args = list(sys.argv)
+    debug_mode = False
+
+    if '--debug' in input_args:
+        input_args.remove('--debug')
+        debug_mode = True
+
     if (
-        len(sys.argv) == 1
+        len(input_args) == 1
         and IS_GIT_TREE
         and not getenv('SUDO_UID')
         and not getenv('PKEXEC_UID')
     ):
         chdir(DIAGMOND_DIR)
 
-        run(['cargo', 'build', '--release'], check=True)
+        run(
+            ['cargo', 'build', *([] if debug_mode else ['--release'])],
+            check=True,
+        )
 
     install_dbus_and_polkit_files(__file__)
 
-    if len(sys.argv) > 1:
-        execlp(sys.argv[1], sys.argv[1])
+    if len(input_args) > 1:
+        execlp(input_args[1], input_args[1])
     elif IS_GIT_TREE:
         execlp(DIAGMOND_GIT_PATH, DIAGMOND_GIT_PATH)
     elif DIAGMOND_PATH:
