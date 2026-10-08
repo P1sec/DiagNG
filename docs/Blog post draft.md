@@ -24,7 +24,7 @@ Currently DiagNG can produce PCAP/GSMTAP captures for Qualcomm Snapdragon baseba
 
 For now, the features of DiagNG largely overlap with these of QCSuper in addition to the nice GUI, but, as a video is often worth a thousand words, feel free to watch the below in order to see it in direct operation:
 
-https://github.com/user-attachments/assets/665e3498-11e4-4e00-8968-ea8ea15bd000
+https://github.com/user-attachments/assets/98cdbca9-b070-4ffd-a3f2-3c211e8a496d
 
 ## Also NR/5G compatible!
 
