@@ -30,8 +30,9 @@ template $QCDMWindow: Adw.Window {
             Adw.PreferencesGroup {
               title: "Compatibility checks";
 
-              Adw.ActionRow {
+              Adw.ActionRow wireshark_version_row {
                 title: "Wireshark version";
+                visible: false;
 
                 Label wireshark_version_label {
                   label: "Checking...";
@@ -228,9 +229,9 @@ Adw.AlertDialog progress_dialog {
 Adw.Dialog launch_wireshark_popup {
   child: Adw.ToolbarView {
     content: Box {
-      margin-bottom: 15;
-      margin-end: 15;
-      margin-start: 15;
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
       orientation: vertical;
       spacing: 15;
 

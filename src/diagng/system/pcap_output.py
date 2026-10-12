@@ -246,9 +246,7 @@ class PcapOutput(GObject.GObject):
 
             is_flatpak: bool = FlatpakHelper.is_flatpak()
 
-            use_named_pipe = (
-                True  # DEBUG - else is_flatpak and not flatpak_spawn_available
-            )
+            use_named_pipe = is_flatpak and not flatpak_spawn_available
 
             if use_named_pipe and self.window:
                 temp_path = join(

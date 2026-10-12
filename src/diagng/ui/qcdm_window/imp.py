@@ -27,6 +27,7 @@ from diagng.gobject.abstract.file_out_mode_selector import (
     FileOutMode,
 )
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
+from diagng.utils.flatpak_helper import FlatpakHelper
 
 from diagng.system.pcap_output import PcapOutput
 from typing import Optional, Callable
@@ -122,6 +123,7 @@ class QCDMWindow(Adw.Window):
     qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
+    wireshark_version_row: Adw.ActionRow = Gtk.Template.Child()
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
 
     air_interface_group: Adw.PreferencesGroup = Gtk.Template.Child()
@@ -234,7 +236,18 @@ class QCDMWindow(Adw.Window):
         self.on_state_change()
         if not self.offline_mode:
             self.gather_device_info()
-        self.gather_wireshark_info()
+
+        is_flatpak: bool = FlatpakHelper.is_flatpak()
+
+        def on_flatpak_status(flatpak_spawn_available: bool):
+
+            if is_flatpak and not flatpak_spawn_available:
+                self.wireshark_version_row.set_visible(False)
+            else:
+                self.wireshark_version_row.set_visible(True)
+                self.gather_wireshark_info()
+
+        FlatpakHelper.is_flatpak_spawn_available(on_flatpak_status)
 
         self.connect('close-request', self.on_quit)
 
