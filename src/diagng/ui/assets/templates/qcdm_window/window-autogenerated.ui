@@ -260,4 +260,25 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
     </property>
     <property name="heading">Processing capture...</property>
   </object>
+  <object class="AdwAlertDialog" id="launch_wireshark_popup">
+    <property name="extra-child">
+      <object class="GtkLabel" id="launch_wireshark_label">
+        <property name="can-focus">false</property>
+        <property name="label">In order to launch to launch a Wireshark capture, please do either of the following:
+
+&lt;u&gt;Solution 1 (single use)&lt;/u&gt;
+• Run this command:
+
+&lt;tt&gt;wireshark -k -i {PIPE_PATH}&lt;/tt&gt;
+
+&lt;u&gt;Solution 2 (permanent)&lt;/u&gt;
+• Run these commands, then restart DiagNG:
+
+&lt;tt&gt;sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak &amp;amp;&amp;amp; flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak&lt;/tt&gt;</property>
+        <property name="selectable">true</property>
+        <property name="use-markup">true</property>
+        <property name="wrap">true</property>
+      </object>
+    </property>
+  </object>
 </interface>

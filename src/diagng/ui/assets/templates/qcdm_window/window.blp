@@ -224,3 +224,13 @@ Adw.AlertDialog progress_dialog {
 
   heading: "Processing capture...";
 }
+
+Adw.AlertDialog launch_wireshark_popup {
+  extra-child: Label launch_wireshark_label {
+    can-focus: false;
+    label: "In order to launch to launch a Wireshark capture, please do either of the following:\n\n<u>Solution 1 (single use)</u>\n• Run this command:\n\n<tt>wireshark -k -i {PIPE_PATH}</tt>\n\n<u>Solution 2 (permanent)</u>\n• Run these commands, then restart DiagNG:\n\n<tt>sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak &amp;&amp; flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak</tt>";
+    selectable: true;
+    use-markup: true;
+    wrap: true;
+  };
+}

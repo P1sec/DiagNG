@@ -12,7 +12,6 @@ import diagng.utils.gresources
 
 from diagng.ui.main_window.templates.usb_interface_row import USBInterfaceRow
 from diagng.ui.main_window.templates.adb_device_row import ADBDeviceRow
-from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
 from diagng.ui.main_window.templates.spi_modem_row import SPIModemRow
 from diagng.protocol.qualcomm.acquisition.qmdl_input import QMDLInput
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
@@ -60,7 +59,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: USB
 
-    run_diagmond_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    authorize_spawn_popover: Adw.PreferencesGroup = Gtk.Template.Child()
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
     usb_devices: Gio.ListStore  # Of USBDevice items
@@ -154,11 +153,6 @@ class MainWindow(Adw.ApplicationWindow):
         # Reset the default UI state
 
         self.reset_state()
-
-    @Gtk.Template.Callback()
-    def launch_diagmond(self, target: Gtk.Button, *args):
-        target.set_sensitive(False)
-        spawn_diagmond_as_outer_process()
 
     def bind_data(self):
 
@@ -583,7 +577,10 @@ class MainWindow(Adw.ApplicationWindow):
             auth_dialog.set_transient_for(self)
             auth_dialog.present()
 
-        # self.run_diagmond_popover.set_visible(not diagmond_running)
+        # self.authorize_spawn_popover.set_visible(XX)
+        # self.spi_tab.set_visible(XX)
+        # self.udev_rules.set_visible(XX)
+        # XX adapt the ADB tab too
 
         # self.XY.set_enable(XX) # WIP ⚠️
 

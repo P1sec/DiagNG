@@ -32,6 +32,12 @@
         "--filesystem=~/.local/lib/wireshark/plugins:create",
 
         /**
+         * Needed for putting PCAP socket streams
+         * be accessible from Wireshark
+         */
+        "--filesystem=xdg-run/diagng:create",
+
+        /**
          * We need to be able to use the "flatpak-spawn"
          * command in order to connect to raw USB devices
          * and SPI devices in a privileged fashion on
@@ -43,6 +49,9 @@
          * - https://github.com/flathub-infra/flatpak-builder-lint/pull/1175
          * - https://github.com/P1sec/DiagNG#technical-architecture
          * - https://github.com/P1sec/DiagNG/tree/main/diagmond
+         */
+        /* ⚠️ TODO: Disable the access to org.freedesktop.Flatpak
+         * in the Flathub build for guidelines compliance
          */
         "--talk-name=org.freedesktop.Flatpak",
         "--system-talk-name=com.p1security.diagmond",

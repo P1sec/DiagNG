@@ -97,6 +97,10 @@ class QCDMWindow(Adw.Window):
     ws_plugin_manager: WiresharkPluginManager
     plugin_watch_task: Gio.Cancellable
 
+    launch_wireshark_popup: Adw.AlertDialog = Gtk.Template.Child()
+    launch_wireshark_label: Gtk.Label = Gtk.Template.Child()
+    launch_wireshark_text = GObject.Property(type=str)
+
     progress_dialog: Adw.AlertDialog = Gtk.Template.Child()
     progress_status = GObject.Property(type=Gio.Cancellable)
     progress_gauge: Gtk.ProgressBar = Gtk.Template.Child()
@@ -149,6 +153,8 @@ class QCDMWindow(Adw.Window):
 
         self.input_obj = input_obj
         self.parent = parent
+
+        self.launch_wireshark_text = self.launch_wireshark_label.get_label()
 
         self.progress_dialog.add_response('cancel', 'Cancel')
 
@@ -414,7 +420,7 @@ class QCDMWindow(Adw.Window):
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
 
-        self.wireshark_instance = PcapOutput(use_wireshark=True)
+        self.wireshark_instance = PcapOutput(use_wireshark=True, window=self)
 
         def on_stream_closed(*args):
             self.start_ws_capture_button.set_visible(True)

@@ -10,7 +10,11 @@ from gi.repository import Gio
 
 class FlatpakHelper:
     @staticmethod
-    def is_flatpak_spawn_available(callback: Callable[bool, []]) -> bool:
+    def is_flatpak() -> bool:
+        return getenv('container')
+
+    @staticmethod
+    def is_flatpak_spawn_available(callback: Callable[[bool], []]) -> bool:
         if getenv('container') and which('flatpak-spawn'):
 
             def on_which_result(obj: Gio.Subprocess, res: Gio.AsyncResult):
