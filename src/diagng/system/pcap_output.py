@@ -279,7 +279,9 @@ class PcapOutput(GObject.GObject):
                     if not self.output_stream:
                         self.close()
 
-                self.window.launch_wireshark_popup.connect(
+                    self.window.launch_wireshark_popup.disconnect(close_handle)
+
+                close_handle = self.window.launch_wireshark_popup.connect(
                     'closed', on_popup_close
                 )
 

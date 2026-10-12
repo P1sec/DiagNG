@@ -272,7 +272,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
             <property name="spacing">15</property>
             <child>
               <object class="GtkLabel">
-                <property name="label">In order to launch to launch a Wireshark capture, please do either of the following:
+                <property name="label">In order to launch a Wireshark capture, please do either of the following:
 
 &lt;u&gt;Solution 1 (single use)&lt;/u&gt;
 • Run this command:</property>
@@ -300,7 +300,7 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
             <child>
               <object class="GtkLabel">
                 <property name="label">&lt;u&gt;Solution 2 (permanent)&lt;/u&gt;
-• Run these commands, then restart DiagNG:</property>
+• In order to allow Wireshark to be spawned automatically, run these commands, then restart DiagNG:</property>
                 <property name="use-markup">true</property>
                 <property name="wrap">true</property>
                 <property name="xalign">0</property>
