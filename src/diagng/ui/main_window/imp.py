@@ -631,6 +631,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         if (
             not self.app.diagmond_communicator.proxy.get_name_owner()
+            and self.app.can_spawn_commands
             and not self.auth_dialog_showed
         ):
             self.auth_dialog_showed = True
