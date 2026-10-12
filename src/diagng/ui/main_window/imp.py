@@ -60,7 +60,10 @@ class MainWindow(Adw.ApplicationWindow):
     # UI panel: USB
 
     authorize_spawn_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    authorize_spawn_dialog: Adw.Dialog = Gtk.Template.Child()
+
     stop_modemmanager_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    stop_modemmanager_dialog: Adw.Dialog = Gtk.Template.Child()
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
     usb_devices: Gio.ListStore  # Of USBDevice items
@@ -169,6 +172,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.stop_modemmanager_popover.set_visible(False)
 
         else:
+            """
             self.app.diagmond_communicator.bind_property(
                 'bus-connected',
                 self.authorize_spawn_popover,
@@ -176,6 +180,8 @@ class MainWindow(Adw.ApplicationWindow):
                 GObject.BindingFlags.INVERT_BOOLEAN
                 | GObject.BindingFlags.SYNC_CREATE,
             )
+            """
+            self.authorize_spawn_popover.set_visible(True)
 
             self.app.modem_manager.bind_property(
                 'daemon-connected',
@@ -475,6 +481,16 @@ class MainWindow(Adw.ApplicationWindow):
             clipboard.set(self.app.mm_debug_data)
 
         self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
+
+        def authorize_spawn(*args):
+            self.authorize_spawn_dialog.present(self)
+
+        self.add_simple_action('authorize-spawn', authorize_spawn)
+
+        def stop_modemmanager(*args):
+            self.stop_modemmanager_dialog.present(self)
+
+        self.add_simple_action('stop-modemmanager', stop_modemmanager)
 
         def show_about(*args):
 

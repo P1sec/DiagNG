@@ -52,7 +52,7 @@ template $MainWindow: Adw.ApplicationWindow {
 
                 [suffix]
                 Button stop_modemmanager_button {
-                  action-name: "win.authorize-spawn";
+                  action-name: "win.stop-modemmanager";
                   label: "Click here for instructions";
                 }
               }
@@ -516,4 +516,86 @@ template $MainWindow: Adw.ApplicationWindow {
   default-width: 800;
   name: "DiagNG";
   title: "DiagNG";
+}
+
+Adw.Dialog authorize_spawn_dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
+      orientation: vertical;
+      spacing: 15;
+
+      Label {
+        label: "In order to authorize DiagNG to spawn external programs, please run the following commands:";
+        wrap: true;
+        xalign: 0.0;
+      }
+
+      TextView {
+        bottom-margin: 5;
+
+        buffer: TextBuffer {
+          text: "sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak && flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak";
+        };
+
+        editable: false;
+        left-margin: 5;
+        monospace: true;
+        right-margin: 5;
+        top-margin: 5;
+        wrap-mode: word;
+      }
+
+      Label {
+        label: "Then, restart the app.";
+        wrap: true;
+        xalign: 0.0;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {
+      show-title: false;
+    }
+  };
+}
+
+Adw.Dialog stop_modemmanager_dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
+      orientation: vertical;
+      spacing: 15;
+
+      Label {
+        label: "In order to stop ModemManager, please run the following command:";
+        wrap: true;
+        xalign: 0.0;
+      }
+
+      TextView {
+        bottom-margin: 5;
+
+        buffer: TextBuffer {
+          text: "sudo systemctl stop ModemManager";
+        };
+
+        editable: false;
+        left-margin: 5;
+        monospace: true;
+        right-margin: 5;
+        top-margin: 5;
+        wrap-mode: word;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {
+      show-title: false;
+    }
+  };
 }
