@@ -60,6 +60,7 @@ class MainWindow(Adw.ApplicationWindow):
     # UI panel: USB
 
     authorize_spawn_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    stop_modemmanager_popover: Adw.PreferencesGroup = Gtk.Template.Child()
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
     usb_devices: Gio.ListStore  # Of USBDevice items
@@ -165,6 +166,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.spi_tab.set_visible(True)
             self.udev_tab.set_visible(True)
             self.authorize_spawn_popover.set_visible(False)
+            self.stop_modemmanager_popover.set_visible(False)
 
         else:
             self.app.diagmond_communicator.bind_property(
@@ -173,6 +175,13 @@ class MainWindow(Adw.ApplicationWindow):
                 'visible',
                 GObject.BindingFlags.INVERT_BOOLEAN
                 | GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.modem_manager.bind_property(
+                'daemon-connected',
+                self.stop_modemmanager_popover,
+                'visible',
+                GObject.BindingFlags.SYNC_CREATE,
             )
 
             self.app.diagmond_communicator.bind_property(
