@@ -271,17 +271,11 @@ class PcapOutput(GObject.GObject):
                 #     "flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak"
                 #     for allowing DiagNG to spawn external protocols
 
-                cancellable = Gio.Cancellable.new()
-
-                self.window.launch_wireshark_label.set_label(
-                    self.window.launch_wireshark_text.replace(
-                        '{PIPE_PATH}', GLib.markup_escape_text(temp_path)
-                    )
+                self.window.launch_wireshark_command.set_text(
+                    'wireshark -k -i ' + temp_path
                 )
 
-                self.window.launch_wireshark_popup.choose(
-                    self.window, cancellable, None
-                )
+                self.window.launch_wireshark_popup.present(self.window)
 
                 def on_pipe_available(
                     temp_file: Gio.File, result: Gio.AsyncResult
@@ -289,7 +283,7 @@ class PcapOutput(GObject.GObject):
                     self.output_stream = temp_file.append_to_finish(result)
                     # ⚠️ TODO handle errors
 
-                    cancellable.cancel()
+                    self.window.launch_wireshark_popup.force_close()
 
                     self.write_pcap_header()
 
@@ -299,17 +293,6 @@ class PcapOutput(GObject.GObject):
                     None,
                     on_pipe_available,
                 )
-
-                """
-                launcher = Gtk.FileLauncher.new(temp_file)
-                def on_launched(launcher: Gtk.FileLauncher, result: Gio.AsyncResult):
-                    try:
-                        launcher.launch_finish(result)
-                    except Exception:
-                        temp_file.delete(None)
-                launcher.open_containing_folder(self.window, None, None) # DEBUG
-                # launcher.launch(self.window, None, on_launched)
-                """
 
             else:
                 self.wireshark_proc = Gio.Subprocess.new(

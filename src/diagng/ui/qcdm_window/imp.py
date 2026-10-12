@@ -98,8 +98,7 @@ class QCDMWindow(Adw.Window):
     plugin_watch_task: Gio.Cancellable
 
     launch_wireshark_popup: Adw.AlertDialog = Gtk.Template.Child()
-    launch_wireshark_label: Gtk.Label = Gtk.Template.Child()
-    launch_wireshark_text = GObject.Property(type=str)
+    launch_wireshark_command: Gtk.TextBuffer = Gtk.Template.Child()
 
     progress_dialog: Adw.AlertDialog = Gtk.Template.Child()
     progress_status = GObject.Property(type=Gio.Cancellable)
@@ -153,8 +152,6 @@ class QCDMWindow(Adw.Window):
 
         self.input_obj = input_obj
         self.parent = parent
-
-        self.launch_wireshark_text = self.launch_wireshark_label.get_label()
 
         self.progress_dialog.add_response('cancel', 'Cancel')
 
