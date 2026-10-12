@@ -78,6 +78,8 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: SPI
 
+    spi_tab: Adw.ViewStackPage = Gtk.Template.Child()
+
     serial_modems: Gio.ListStore  # Of SerialPort items
     spi_ports_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
@@ -110,6 +112,8 @@ class MainWindow(Adw.ApplicationWindow):
     mm_sourceview_buffer: GtkSource.Buffer
 
     # UI panel: UDev
+
+    udev_tab: Adw.ViewStackPage = Gtk.Template.Child()
 
     udev_rules_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
@@ -156,6 +160,23 @@ class MainWindow(Adw.ApplicationWindow):
         self.reset_state()
 
     def bind_data(self):
+
+        if self.app.can_spawn_commands:
+            self.spi_tab.set_visible(True)
+            self.udev_tab.set_visible(True)
+
+        else:
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.spi_tab,
+                'visible',
+            )
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.udev_tab,
+                'visible',
+            )
 
         lang_manager = GtkSource.LanguageManager.new()
 
