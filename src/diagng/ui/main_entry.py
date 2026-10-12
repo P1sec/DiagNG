@@ -12,6 +12,7 @@ from diagng.system.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.system.udev_device_scanner import DeviceScanner
 from diagng.utils.logging_central import LoggingCentral
+from diagng.utils.flatpak_helper import FlatpakHelper
 from diagng.system.adb.adb_watcher import ADBWatcher
 from diagng.ui.main_window.imp import MainWindow
 
@@ -50,6 +51,8 @@ class MainApplication(Adw.Application):
     window: MainWindow = None
 
     logging_central: LoggingCentral = None
+
+    can_spawn_commands = GObject.Property(type=bool, default=False)
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
@@ -181,17 +184,26 @@ class MainApplication(Adw.Application):
         pass
 
     def on_startup(self, app, *args):
-        self.diagmond_communicator = DiagmondCommunicator(self)
 
-        self.modem_manager = ModemManagerIntf(self)
-        self.device_scanner = DeviceScanner(self)
-        self.adb_watcher = ADBWatcher()
+        def on_flatpak_status(flatpak_spawn_available: bool):
 
-        self.window = MainWindow(self)
+            is_flatpak: bool = FlatpakHelper.is_flatpak()
 
-        self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
-            self.window, self.diagmond_communicator.connection
-        )
+            self.can_spawn_commands = flatpak_spawn_available or not is_flatpak
+
+            self.diagmond_communicator = DiagmondCommunicator(self)
+
+            self.modem_manager = ModemManagerIntf(self)
+            self.device_scanner = DeviceScanner(self)
+            self.adb_watcher = ADBWatcher()
+
+            self.window = MainWindow(self)
+
+            self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
+                self.window, self.diagmond_communicator.connection
+            )
+
+        FlatpakHelper.is_flatpak_spawn_available(on_flatpak_status)
 
         # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
         # main_window using a CUSTOM LOGGING HANDLER

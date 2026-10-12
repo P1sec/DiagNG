@@ -236,7 +236,7 @@ class ADBClient(GObject.Object):
             self.daemon_unavailable()
 
     def daemon_unavailable(self):
-        error('ADB not available on this sytem')
+        error('ADB not available on this system')
         self.state = ConnectionState.ClosedServerNotInstalled
         self.closed.emit()
 

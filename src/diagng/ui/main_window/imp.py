@@ -92,6 +92,7 @@ class MainWindow(Adw.ApplicationWindow):
     adb_status_row: Adw.ActionRow = Gtk.Template.Child()
     adb_status_label: Gtk.Label = Gtk.Template.Child()
     adb_daemon_missing: Gtk.Label = Gtk.Template.Child()
+    adb_daemon_not_running: Gtk.Label = Gtk.Template.Child()
 
     adb_devices_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
@@ -262,7 +263,11 @@ class MainWindow(Adw.ApplicationWindow):
         got_connect_status()
 
         self.app.adb_watcher.bind_property(
-            'is-failed', self.adb_daemon_missing, 'visible'
+            'is-failed',
+            self.adb_daemon_missing
+            if self.app.can_spawn_commands
+            else self.adb_daemon_not_running,
+            'visible',
         )
 
         self.adb_devices_group.bind_model(

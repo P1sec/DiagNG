@@ -27,7 +27,6 @@ from diagng.gobject.abstract.file_out_mode_selector import (
     FileOutMode,
 )
 from diagng.utils.kaitai_pretty_print import pretty_print_struct
-from diagng.utils.flatpak_helper import FlatpakHelper
 
 from diagng.system.pcap_output import PcapOutput
 from typing import Optional, Callable
@@ -237,17 +236,11 @@ class QCDMWindow(Adw.Window):
         if not self.offline_mode:
             self.gather_device_info()
 
-        is_flatpak: bool = FlatpakHelper.is_flatpak()
-
-        def on_flatpak_status(flatpak_spawn_available: bool):
-
-            if is_flatpak and not flatpak_spawn_available:
-                self.wireshark_version_row.set_visible(False)
-            else:
-                self.wireshark_version_row.set_visible(True)
-                self.gather_wireshark_info()
-
-        FlatpakHelper.is_flatpak_spawn_available(on_flatpak_status)
+        if self.parent.app.can_spawn_commands:
+            self.wireshark_version_row.set_visible(True)
+            self.gather_wireshark_info()
+        else:
+            self.wireshark_version_row.set_visible(False)
 
         self.connect('close-request', self.on_quit)
 
@@ -383,6 +376,7 @@ class QCDMWindow(Adw.Window):
         self.output_pcap = PcapOutput(
             mode_selector=InteractiveGUIFileOutModeSelector(output_file, self),
             output_file=output_file,
+            can_spawn_commands=self.parent.app.can_spawn_commands,
         )
 
         def on_stream_closed(*args):
@@ -430,7 +424,11 @@ class QCDMWindow(Adw.Window):
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
 
-        self.wireshark_instance = PcapOutput(use_wireshark=True, window=self)
+        self.wireshark_instance = PcapOutput(
+            use_wireshark=True,
+            window=self,
+            can_spawn_commands=self.parent.app.can_spawn_commands,
+        )
 
         def on_stream_closed(*args):
             self.start_ws_capture_button.set_visible(True)

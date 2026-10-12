@@ -33,7 +33,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                                 <property name="activatable-widget">authorize_spawn_button</property>
                                 <property name="subtitle">See explanations at: &lt;a href="https://github.com/P1sec/DiagNG#technical-architecture"&gt;https://github.com/P1sec/DiagNG#technical-architecture&lt;/a&gt;</property>
                                 <property name="subtitle-selectable">true</property>
-                                <property name="title">&lt;b&gt;DiagNG needs to be allowed to launch external programs in order to connect to most USB modems.&lt;/b&gt;</property>
+                                <property name="title">&lt;b&gt;DiagNG needs to be allowed to launch external programs in order to connect to serial USB modems.&lt;/b&gt;</property>
                                 <property name="title-selectable">true</property>
                                 <child type="prefix">
                                   <object class="GtkImage">
