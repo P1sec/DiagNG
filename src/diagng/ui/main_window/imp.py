@@ -164,18 +164,29 @@ class MainWindow(Adw.ApplicationWindow):
         if self.app.can_spawn_commands:
             self.spi_tab.set_visible(True)
             self.udev_tab.set_visible(True)
+            self.authorize_spawn_popover.set_visible(False)
 
         else:
             self.app.diagmond_communicator.bind_property(
                 'bus-connected',
+                self.authorize_spawn_popover,
+                'visible',
+                GObject.BindingFlags.INVERT_BOOLEAN
+                | GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
                 self.spi_tab,
                 'visible',
+                GObject.BindingFlags.SYNC_CREATE,
             )
 
             self.app.diagmond_communicator.bind_property(
                 'bus-connected',
                 self.udev_tab,
                 'visible',
+                GObject.BindingFlags.SYNC_CREATE,
             )
 
         lang_manager = GtkSource.LanguageManager.new()
