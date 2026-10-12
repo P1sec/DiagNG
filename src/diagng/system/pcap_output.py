@@ -250,10 +250,6 @@ class PcapOutput(GObject.GObject):
                 True  # DEBUG - else is_flatpak and not flatpak_spawn_available
             )
 
-            # ❌ The below does not work - ⚠️ 🪧 TODO: Replace the
-            # named pipe logic draft by the logic of displaying
-            # a pop-up prompting to display a command line
-
             if use_named_pipe and self.window:
                 temp_path = join(
                     GLib.get_user_runtime_dir(),
@@ -277,11 +273,24 @@ class PcapOutput(GObject.GObject):
 
                 self.window.launch_wireshark_popup.present(self.window)
 
+                def on_popup_close(*args):
+                    temp_file.delete_async(GLib.PRIORITY_DEFAULT, None, None)
+
+                    if not self.output_stream:
+                        self.close()
+
+                self.window.launch_wireshark_popup.connect(
+                    'closed', on_popup_close
+                )
+
                 def on_pipe_available(
                     temp_file: Gio.File, result: Gio.AsyncResult
                 ):
-                    self.output_stream = temp_file.append_to_finish(result)
-                    # ⚠️ TODO handle errors
+                    try:
+                        self.output_stream = temp_file.append_to_finish(result)
+                    except Exception:
+                        self.close()
+                        raise
 
                     self.window.launch_wireshark_popup.force_close()
 
