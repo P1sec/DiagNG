@@ -1,6 +1,13 @@
+diagng (0.1.2) bionic; urgency=low
+
+  * Change the tool for supporting Polkit < 125, as present on Ubuntu 24.04 (PR #55 thanks to @philippossfrn)
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Tue, 13 Oct 2026 16:42:59 +0200
+
 diagng (0.1.1) bionic; urgency=low
 
-  * Synchronize version number with the project
+  * Support PPA packaging
+  * Support self-hosted Flatpak packaging
 
  -- Marin <p1-mmr@users.noreply.github.com>  Sat, 26 Sep 2026 12:05:37 +0200
 
