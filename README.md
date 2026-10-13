@@ -137,7 +137,7 @@ P1 Security being based in France, read the following extra mentions for more de
 
 ## Development environment setup
 
-Dependencies on Ubuntu 26.04 LTS:
+Dependencies on Ubuntu 26.04 LTS (note, `libadwaita` 1.8+ is needed, old Ubuntu versions may not work outside the Flatpak sandbox):
 
 ```bash
 sudo apt install libgirepository-2.0-0 gir1.2-adw-1 \
