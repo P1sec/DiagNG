@@ -37,7 +37,7 @@ template $MainWindow: Adw.ApplicationWindow {
             }
 
             Adw.PreferencesGroup stop_modemmanager_popover {
-              Adw.ActionRow {
+              Adw.ActionRow stop_modemmanager_row {
                 activatable-widget: stop_modemmanager_button;
                 subtitle: "See explanations at: <a href=\"https://github.com/P1sec/DiagNG#technical-architecture\">https://github.com/P1sec/DiagNG#technical-architecture</a>";
                 subtitle-selectable: true;
@@ -530,7 +530,7 @@ Adw.Dialog authorize_spawn_dialog {
       Label {
         label: "In order to authorize DiagNG to spawn external programs, please run the following commands:";
         wrap: true;
-        xalign: 0.0;
+        xalign: 0;
       }
 
       TextView {
@@ -551,7 +551,7 @@ Adw.Dialog authorize_spawn_dialog {
       Label {
         label: "Then, restart the app.";
         wrap: true;
-        xalign: 0.0;
+        xalign: 0;
       }
     };
 
@@ -574,7 +574,7 @@ Adw.Dialog stop_modemmanager_dialog {
       Label {
         label: "In order to stop ModemManager, please run the following command:";
         wrap: true;
-        xalign: 0.0;
+        xalign: 0;
       }
 
       TextView {

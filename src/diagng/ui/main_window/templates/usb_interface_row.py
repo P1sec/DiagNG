@@ -13,11 +13,15 @@ class USBInterfaceRow(Adw.ExpanderRow):
     def __init__(self, usb_dev: USBDevice, window: 'MainWindow'):
         super().__init__()
 
-        markup = '<b>%s %s</b> - %s' % (
-            GLib.markup_escape_text(usb_dev.vendor_name or ''),
-            GLib.markup_escape_text(usb_dev.model_name or ''),
-            GLib.markup_escape_text(usb_dev.vid_pid or ''),
-        )
+        if usb_dev.vendor_name or usb_dev.model_name:
+            markup = '<b>%s %s</b> - %s' % (
+                GLib.markup_escape_text(usb_dev.vendor_name or ''),
+                GLib.markup_escape_text(usb_dev.model_name or ''),
+                GLib.markup_escape_text(usb_dev.vid_pid or ''),
+            )
+
+        else:
+            markup = GLib.markup_escape_text(usb_dev.vid_pid or '')
 
         if usb_dev.alt_vendor_name:
             markup = (

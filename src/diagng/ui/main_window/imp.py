@@ -64,6 +64,7 @@ class MainWindow(Adw.ApplicationWindow):
     authorize_spawn_dialog: Adw.Dialog = Gtk.Template.Child()
 
     stop_modemmanager_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    stop_modemmanager_row: Adw.ActionRow = Gtk.Template.Child()
     stop_modemmanager_dialog: Adw.Dialog = Gtk.Template.Child()
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
@@ -175,7 +176,6 @@ class MainWindow(Adw.ApplicationWindow):
             self.stop_modemmanager_popover.set_visible(False)
 
         else:
-            """
             self.app.diagmond_communicator.bind_property(
                 'bus-connected',
                 self.authorize_spawn_popover,
@@ -183,12 +183,18 @@ class MainWindow(Adw.ApplicationWindow):
                 GObject.BindingFlags.INVERT_BOOLEAN
                 | GObject.BindingFlags.SYNC_CREATE,
             )
-            """
-            self.authorize_spawn_popover.set_visible(True)
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.stop_modemmanager_popover,
+                'visible',
+                GObject.BindingFlags.INVERT_BOOLEAN
+                | GObject.BindingFlags.SYNC_CREATE,
+            )
 
             self.app.modem_manager.bind_property(
                 'daemon-connected',
-                self.stop_modemmanager_popover,
+                self.stop_modemmanager_row,
                 'visible',
                 GObject.BindingFlags.SYNC_CREATE,
             )
@@ -923,6 +929,8 @@ class MainWindow(Adw.ApplicationWindow):
                     user_data=(usb_dev, usb_intf),
                 )
         else:
+            # ⚠️ 🪧 WIP: Implement the PyUSB connection path
+
             dialog = Adw.AlertDialog.new(
                 "⚠️ diagmond not available, can't open interface", None
             )

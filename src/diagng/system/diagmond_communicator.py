@@ -49,7 +49,9 @@ class DiagmondCommunicator(GObject.Object):
 
         self.proxy = Gio.DBusProxy.new_sync(
             self.connection,
-            Gio.DBusProxyFlags.NONE,
+            Gio.DBusProxyFlags.DO_NOT_AUTO_START
+            if main_app.force_no_spawn
+            else Gio.DBusProxyFlags.NONE,
             interface_info,
             'com.p1security.diagmond',
             '/com/p1security/diagmond',
