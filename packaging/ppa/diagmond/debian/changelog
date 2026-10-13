@@ -1,6 +1,13 @@
-diagmond (0.1.1) bionic; urgency=low
+diagmond (0.1.2) bionic; urgency=low
 
   * Synchronize version number with the project
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Tue, 13 Oct 2026 16:42:59 +0200
+
+diagmond (0.1.1) bionic; urgency=low
+
+  * Add systemd unit file for diagmond
+  * Fix logging in diagmond
 
  -- Marin <p1-mmr@users.noreply.github.com>  Sat, 26 Sep 2026 12:05:14 +0200
 

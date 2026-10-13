@@ -137,7 +137,7 @@ P1 Security being based in France, read the following extra mentions for more de
 
 ## Development environment setup
 
-Dependencies on Ubuntu 26.04 LTS:
+Dependencies on Ubuntu 26.04 LTS (note, `libadwaita` 1.8+ is needed, old Ubuntu versions may not work outside the Flatpak sandbox):
 
 ```bash
 sudo apt install libgirepository-2.0-0 gir1.2-adw-1 \
@@ -185,6 +185,9 @@ sudo install -Dm644 diagmond/share/dbus-1/system.d/com.p1security.diagmond.conf 
     /etc/dbus-1/system.d/com.p1security.diagmond.conf
 
 sudo install -Dm644 diagmond/share/polkit-1/actions/* -t /etc/polkit-1/actions/
+# With Polkit < 125 (e.g. Ubuntu 24.04), which does not read
+# /etc/polkit-1/actions, use this instead:
+# sudo install -Dm644 diagmond/share/polkit-1/actions/* -t /usr/share/polkit-1/actions/
 
 install -Dm644 src/diagng/ui/assets/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg \
     ~/.local/share/icons/com.p1security.diagng.svg

@@ -248,8 +248,10 @@ class ADBClient(GObject.Object):
             try:
                 obj.wait_check_finish(res)
             except Exception:
-                self.failed.emit()
-                raise
+                error('Could not start ADB server: ' + format_exc())
+                self.state = ConnectionState.ClosedServerUnreachable
+                self.closed.emit()
+                return
 
             info('ADB server started successfully on localhost:5037')
 
