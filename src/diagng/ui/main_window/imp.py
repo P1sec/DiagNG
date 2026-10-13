@@ -3,8 +3,8 @@ from typing import List, Dict, Tuple, Optional, Union
 from importlib.metadata import version
 from logging import info, error, debug
 from collections import defaultdict
+from json import loads, dumps
 from os.path import basename
-from json import loads
 from io import BytesIO
 
 # Register resources
@@ -22,6 +22,7 @@ from diagng.protocol.qualcomm.acquisition import spi_input
 from diagng.protocol.qualcomm.acquisition import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.system.pyusb_wrapper import PyUSBWrapper
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.gobject.serial_port import SerialPort
@@ -76,7 +77,9 @@ class MainWindow(Adw.ApplicationWindow):
     udev_debug_view: GtkSource.View
     udev_sourceview_buffer: GtkSource.Buffer
 
-    nusb_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_tree_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_debug_viewport: Gtk.ScrolledWindow = Gtk.Template.Child()
     nusb_debug_view: GtkSource.View
     nusb_sourceview_buffer: GtkSource.Buffer
 
@@ -550,8 +553,12 @@ class MainWindow(Adw.ApplicationWindow):
         self.app.modem_manager.mm_instance.modems.connect(
             'items-changed', self.update_usb_devices
         )
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_pyusb_data
+        )
         self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
         self.app.connect('notify::udev-debug-data', self.update_usb_devices)
+        self.app.connect('notify::udev-debug-data', self.update_pyusb_data)
 
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
@@ -600,6 +607,7 @@ class MainWindow(Adw.ApplicationWindow):
         # USB tab
 
         self.update_usb_devices()
+        self.update_pyusb_data()
         self.update_nusb_debug_data()
         self.update_udev_debug_data()
 
@@ -651,21 +659,39 @@ class MainWindow(Adw.ApplicationWindow):
             'Data sources status: UDev: %s - diagmond status: %s'
             % (
                 '✅' if udev_reachable else 'Loading... ⚠️',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         self.spi_link_banner.set_title(
             'Data sources status: UDev: %s - diagmond: %s'
             % (
                 '✅' if udev_reachable else 'Loading... ⚠️',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         self.mm_link_banner.set_title(
             'ModemManager Link: %s - diagmond status: %s'
             % (
                 '✅' if mm_running else 'OFF 💤',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         if adb_failed:
@@ -717,6 +743,21 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             self.usb_interfaces_group.set_title(
                 'Status: 🟠 No Qualcomm Diag USB devices detected'
+            )
+
+    def update_pyusb_data(self, *args):
+        if not self.app.diagmond_communicator.bus_connected:
+            self.nusb_tree_group.set_visible(False)
+            self.nusb_debug_group.set_title(
+                'Debug info: Raw USB interfaces list, as JSON (data source: PyUSB)'
+            )
+            self.app.nusb_debug_data = dumps(
+                PyUSBWrapper.get_pyusb_metadata(), indent=4
+            )
+        else:
+            self.nusb_tree_group.set_visible(True)
+            self.nusb_debug_group.set_title(
+                'Debug info: Raw USB interfaces list, as JSON (data source: nusb)'
             )
 
     def update_nusb_debug_data(self, *args):

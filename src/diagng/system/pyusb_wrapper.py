@@ -4,10 +4,11 @@ from usb.legacy import busses
 from usb.core import _try_get_string
 
 
-class PyUSBThread:
+class PyUSBWrapper:
     # ⚠️ WIP
 
-    def get_pyusb_metadata(self) -> dict:
+    @staticmethod
+    def get_pyusb_metadata() -> dict:
         # List buses using PyUSB, then reconstruct output compatible with
         # the nusb debug JSON data from diagmond
 
