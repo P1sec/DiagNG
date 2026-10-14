@@ -50,10 +50,10 @@
          * - https://github.com/P1sec/DiagNG#technical-architecture
          * - https://github.com/P1sec/DiagNG/tree/main/diagmond
          */
-        /* ⚠️ TODO: Disable the access to org.freedesktop.Flatpak
+        /* ⚠️ We disable the access to org.freedesktop.Flatpak
          * in the Flathub build for guidelines compliance
+            "--talk-name=org.freedesktop.Flatpak",
          */
-        "--talk-name=org.freedesktop.Flatpak",
         "--system-talk-name=com.p1security.diagmond",
 
         /**

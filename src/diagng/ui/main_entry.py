@@ -200,36 +200,35 @@ class MainApplication(Adw.Application):
 
     def on_startup(self, app, *args):
 
-        def on_flatpak_status(flatpak_spawn_available: bool):
+        flatpak_spawn_available: bool = (
+            FlatpakHelper.is_flatpak_spawn_available()
+        )
+        is_flatpak: bool = FlatpakHelper.is_flatpak()
 
-            is_flatpak: bool = FlatpakHelper.is_flatpak()
+        self.can_spawn_commands = (
+            flatpak_spawn_available or not is_flatpak
+        ) and not self.force_no_spawn
 
-            self.can_spawn_commands = (
-                flatpak_spawn_available or not is_flatpak
-            ) and not self.force_no_spawn
+        self.diagmond_communicator = DiagmondCommunicator(self)
 
-            self.diagmond_communicator = DiagmondCommunicator(self)
+        self.modem_manager = ModemManagerIntf(self)
+        self.device_scanner = DeviceScanner(self)
+        self.adb_watcher = ADBWatcher()
 
-            self.modem_manager = ModemManagerIntf(self)
-            self.device_scanner = DeviceScanner(self)
-            self.adb_watcher = ADBWatcher()
+        self.window = MainWindow(self)
 
-            self.window = MainWindow(self)
-
-            self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
-                self.window, self.diagmond_communicator.connection
-            )
-
-        FlatpakHelper.is_flatpak_spawn_available(on_flatpak_status)
-
-        # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
-        # main_window using a CUSTOM LOGGING HANDLER
-        # when the GUI IS ENABLED?
+        self.diagmond_serialdevice_om = DiagmondSerialDeviceOM(
+            self.window, self.diagmond_communicator.connection
+        )
 
         # Application will close once it has no longer has active
         # windows attached to it
 
         self.window.present()
+
+        # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
+        # main_window using a CUSTOM LOGGING HANDLER
+        # when the GUI IS ENABLED?
 
     def on_activate(self, app):
         self.window.present()

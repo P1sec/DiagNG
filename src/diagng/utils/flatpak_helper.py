@@ -12,21 +12,19 @@ class FlatpakHelper:
         return getenv('container')
 
     @staticmethod
-    def is_flatpak_spawn_available(callback: Callable[[bool], []]) -> bool:
+    def is_flatpak_spawn_available() -> bool:
         if getenv('container') and which('flatpak-spawn'):
+            try:
+                Gio.Subprocess.new(
+                    ['flatpak-spawn', '--host', 'id'],
+                    Gio.SubprocessFlags.STDOUT_SILENCE
+                    | Gio.SubprocessFlags.STDERR_SILENCE,
+                ).wait_check(None)
 
-            def on_result(obj: Gio.Subprocess, res: Gio.AsyncResult):
-                try:
-                    assert obj.wait_check_finish(res)
-                except Exception:
-                    callback(False)
-                else:
-                    callback(True)
-
-            Gio.Subprocess.new(
-                ['flatpak-spawn', '--host', 'id'],
-                Gio.SubprocessFlags.STDOUT_PIPE,
-            ).wait_check_async(None, on_result)
+            except Exception:
+                return False
+            else:
+                return True
 
         else:
-            callback(False)
+            return False
