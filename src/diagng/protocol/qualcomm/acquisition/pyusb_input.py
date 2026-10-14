@@ -41,7 +41,7 @@ class PyUSBQCDMInput(BaseQCDMInput):
 
         self.pyusb_device = pyusb_device
         self.in_endpoint = in_endpoint
-        self.out_endpoint = in_endpoint
+        self.out_endpoint = out_endpoint
 
         self.usb_dev = usb_dev
         self.usb_intf = usb_intf
