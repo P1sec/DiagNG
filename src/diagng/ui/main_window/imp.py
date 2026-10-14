@@ -3,14 +3,18 @@ from typing import List, Dict, Tuple, Optional, Union
 from importlib.metadata import version
 from logging import info, error, debug
 from collections import defaultdict
+from traceback import format_exc
 from json import loads, dumps
 from os.path import basename
 from io import BytesIO
+import usb.core
+import usb.util
 
 # Register resources
 import diagng.utils.gresources
 
 from diagng.ui.main_window.templates.usb_interface_row import USBInterfaceRow
+from diagng.protocol.qualcomm.acquisition.pyusb_input import PyUSBQCDMInput
 from diagng.ui.main_window.templates.adb_device_row import ADBDeviceRow
 from diagng.ui.main_window.templates.spi_modem_row import SPIModemRow
 from diagng.protocol.qualcomm.acquisition.qmdl_input import QMDLInput
@@ -18,6 +22,7 @@ from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.ui.main_window.templates.mm_modem_row import MMModemRow
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
+from diagng.protocol.qualcomm.acquisition import pyusb_input
 from diagng.protocol.qualcomm.acquisition import spi_input
 from diagng.protocol.qualcomm.acquisition import usb_input
 from diagng.gobject.usb_interface import USBInterface
@@ -874,6 +879,9 @@ class MainWindow(Adw.ApplicationWindow):
         if usb_intf.full_intf_id in usb_input._connected_ports:
             usb_input._connected_ports[usb_intf.full_intf_id].close()
 
+        if usb_intf.full_intf_id in pyusb_input._connected_ports:
+            usb_input._connected_ports[usb_intf.full_intf_id].close()
+
     def connect_usb_intf(
         self, target: Gtk.Button, usb_dev: USBDevice, usb_intf: USBInterface
     ):
@@ -931,12 +939,83 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             # ⚠️ 🪧 WIP: Implement the PyUSB connection path
 
-            dialog = Adw.AlertDialog.new(
-                "⚠️ diagmond not available, can't open interface", None
+            dev = usb.core.find(
+                idVendor=int(usb_dev.vid_pid.split(':')[0], 16),
+                idProduct=int(usb_dev.vid_pid.split(':')[1], 16),
+                bus=int(usb_dev.bus_id, 10),
             )
-            error("diagmond not available, can't open interface")
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
+
+            try:
+                cfg = dev.get_active_configuration()
+                if usb_intf.conf_num != cfg.bConfigurationValue:
+                    dev.set_configuration(usb_intf.conf_num)
+                dev.set_interface_altsetting(
+                    usb_intf.intf_num, usb_intf.alt_setting_num
+                )
+
+                cfg = dev.get_active_configuration()
+                intf = usb.util.find_descriptor(
+                    cfg,
+                    bInterfaceNumber=usb_intf.intf_num,
+                    bAlternateSetting=usb_intf.alt_setting_num,
+                )
+
+                out_ep = usb.util.find_descriptor(
+                    intf,
+                    # match the first OUT endpoint
+                    custom_match=(
+                        lambda item: (
+                            usb.util.endpoint_direction(item.bEndpointAddress)
+                            == usb.util.ENDPOINT_OUT
+                            and usb.util.endpoint_type(item.bmAttributes)
+                            == usb.util.ENDPOINT_TYPE_BULK
+                        )
+                    ),
+                )
+
+                in_ep = usb.util.find_descriptor(
+                    intf,
+                    # match the first IN endpoint
+                    custom_match=(
+                        lambda item: (
+                            usb.util.endpoint_direction(item.bEndpointAddress)
+                            == usb.util.ENDPOINT_IN
+                            and usb.util.endpoint_type(item.bmAttributes)
+                            == usb.util.ENDPOINT_TYPE_BULK
+                        )
+                    ),
+                )
+
+                assert in_ep
+                assert out_ep
+
+                usb.util.claim_interface(dev, usb_intf.intf_num)
+
+            except usb.core.USBError:
+                error('Could not open USB device: ' + format_exc())
+
+                dialog = Adw.AlertDialog.new(
+                    'Could not open USB interface',
+                    'Accessing this interface requires '
+                    + 'privileges.\n\n'
+                    + 'Please <b>follow the instructions '
+                    + 'proposed on the main screen to allow '
+                    + 'DiagNG to launch external programs</b> '
+                    + 'in order to solve the issue.\n\n'
+                    + 'An alternate solution is to manually '
+                    + 'detach the kernel driver associated '
+                    + 'with the specified USB interface.',
+                )
+                dialog.set_body_use_markup(True)
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self, None, None)
+
+            else:
+                input_obj = PyUSBQCDMInput(
+                    dev, in_ep, out_ep, usb_dev, usb_intf, self
+                )
+
+                QCDMWindow(self, input_obj)
 
     def disconnect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('disconnect_spi_port called on %s' % serial_port.tty_device_path)
