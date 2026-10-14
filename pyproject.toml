@@ -32,6 +32,7 @@ dependencies = [
     "kaitaistruct>=0.11",
     "pygobject>=3.56.2",
     "pyudev>=0.24.4",
+    "pyusb>=1.3.1",
 ]
 
 [project.scripts]

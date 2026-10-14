@@ -32,6 +32,12 @@
         "--filesystem=~/.local/lib/wireshark/plugins:create",
 
         /**
+         * Needed for putting PCAP socket streams
+         * be accessible from Wireshark
+         */
+        "--filesystem=xdg-run/diagng:create",
+
+        /**
          * We need to be able to use the "flatpak-spawn"
          * command in order to connect to raw USB devices
          * and SPI devices in a privileged fashion on
@@ -44,7 +50,10 @@
          * - https://github.com/P1sec/DiagNG#technical-architecture
          * - https://github.com/P1sec/DiagNG/tree/main/diagmond
          */
-        "--talk-name=org.freedesktop.Flatpak",
+        /* ⚠️ We disable the access to org.freedesktop.Flatpak
+         * in the Flathub build for guidelines compliance
+            "--talk-name=org.freedesktop.Flatpak",
+         */
         "--system-talk-name=com.p1security.diagmond",
 
         /**
@@ -101,6 +110,20 @@
                     "type": "file",
                     "url": "https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b/crcmod-1.7.tar.gz",
                     "sha256": "dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyusb",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pyusb>=1.3.1\" --no-build-isolation"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/28/b8/27e6312e86408a44fe16bd28ee12dd98608b39f7e7e57884a24e8f29b573/pyusb-1.3.1-py3-none-any.whl",
+                    "sha256": "bf9b754557af4717fe80c2b07cc2b923a9151f5c08d17bdb5345dac09d6a0430"
                 }
             ]
         },

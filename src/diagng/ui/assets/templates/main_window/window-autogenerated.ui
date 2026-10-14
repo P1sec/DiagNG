@@ -27,14 +27,13 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
 
 For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for assistance over enabling the Diag interface on an Android smartphone.</property>
                         <child>
-                          <object class="AdwPreferencesGroup" id="run_diagmond_popover">
-                            <property name="visible">false</property>
+                          <object class="AdwPreferencesGroup" id="authorize_spawn_popover">
                             <child>
                               <object class="AdwActionRow">
-                                <property name="activatable-widget">run_diagmond_button</property>
-                                <property name="subtitle">If you wish to install this service separately as a system package, feel free to browse instructions at &lt;a href="https://github.com/P1sec/DiagNG/tree/main/packaging"&gt;https://github.com/P1sec/DiagNG/tree/main/packaging&lt;/a&gt;</property>
+                                <property name="activatable-widget">authorize_spawn_button</property>
+                                <property name="subtitle">See explanations at: &lt;a href="https://github.com/P1sec/DiagNG#technical-architecture"&gt;https://github.com/P1sec/DiagNG#technical-architecture&lt;/a&gt;</property>
                                 <property name="subtitle-selectable">true</property>
-                                <property name="title">&lt;b&gt;DiagNG needs to run a privileged service to allow you to connect to serial port or USB devices.&lt;/b&gt;</property>
+                                <property name="title">&lt;b&gt;DiagNG needs to be allowed to launch external programs in order to connect to serial USB modems.&lt;/b&gt;</property>
                                 <property name="title-selectable">true</property>
                                 <child type="prefix">
                                   <object class="GtkImage">
@@ -43,9 +42,34 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                                   </object>
                                 </child>
                                 <child type="suffix">
-                                  <object class="GtkButton" id="run_diagmond_button">
-                                    <property name="label">Click here to proceed</property>
-                                    <signal name="clicked" handler="launch_diagmond"/>
+                                  <object class="GtkButton" id="authorize_spawn_button">
+                                    <property name="action-name">win.authorize-spawn</property>
+                                    <property name="label">Click here to authorize</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="stop_modemmanager_popover">
+                            <child>
+                              <object class="AdwActionRow" id="stop_modemmanager_row">
+                                <property name="activatable-widget">stop_modemmanager_button</property>
+                                <property name="subtitle">See explanations at: &lt;a href="https://github.com/P1sec/DiagNG#technical-architecture"&gt;https://github.com/P1sec/DiagNG#technical-architecture&lt;/a&gt;</property>
+                                <property name="subtitle-selectable">true</property>
+                                <property name="title">&lt;b&gt;Please stop ModemManager before connecting to USB modems.&lt;/b&gt;</property>
+                                <property name="title-selectable">true</property>
+                                <child type="prefix">
+                                  <object class="GtkImage">
+                                    <property name="icon-name">warning-symbolic</property>
+                                    <property name="icon-size">2</property>
+                                  </object>
+                                </child>
+                                <child type="suffix">
+                                  <object class="GtkButton" id="stop_modemmanager_button">
+                                    <property name="action-name">win.stop-modemmanager</property>
+                                    <property name="label">Click here for instructions</property>
                                   </object>
                                 </child>
                               </object>
@@ -242,6 +266,20 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
 - On Ubuntu: sudo apt install google-android-platform-tools-installer
 - On Arch Linux: sudo pacman -S android-tools
 - On Fedora: sudo dnf install android-tools</property>
+                                <property name="margin-top">24</property>
+                                <property name="selectable">true</property>
+                                <property name="visible">false</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="adb_daemon_not_running">
+                                <property name="attributes">0 -1 weight bold, 0 -1 foreground #a4a400000000</property>
+                                <property name="can-focus">false</property>
+                                <property name="label">The ADB daemon is not running. Please install the corresponding package:
+- On Ubuntu: sudo apt install google-android-platform-tools-installer
+- On Arch Linux: sudo pacman -S android-tools
+- On Fedora: sudo dnf install android-tools
+And use a command such as "adb devices -l" to launch it, then restart the app.</property>
                                 <property name="margin-top">24</property>
                                 <property name="selectable">true</property>
                                 <property name="visible">false</property>
@@ -603,4 +641,97 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
     <property name="name">DiagNG</property>
     <property name="title">DiagNG</property>
   </template>
+  <object class="AdwDialog" id="authorize_spawn_dialog">
+    <property name="child">
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="GtkBox">
+            <property name="margin-bottom">25</property>
+            <property name="margin-end">25</property>
+            <property name="margin-start">25</property>
+            <property name="orientation">1</property>
+            <property name="spacing">15</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">In order to authorize DiagNG to spawn external programs, please run the following commands:</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTextView">
+                <property name="bottom-margin">5</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer">
+                    <property name="text">sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak &amp;&amp; flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+                <property name="left-margin">5</property>
+                <property name="monospace">true</property>
+                <property name="right-margin">5</property>
+                <property name="top-margin">5</property>
+                <property name="wrap-mode">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Then, restart the app.</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+          </object>
+        </property>
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-title">false</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="AdwDialog" id="stop_modemmanager_dialog">
+    <property name="child">
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="GtkBox">
+            <property name="margin-bottom">25</property>
+            <property name="margin-end">25</property>
+            <property name="margin-start">25</property>
+            <property name="orientation">1</property>
+            <property name="spacing">15</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">In order to stop ModemManager, please run the following command:</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTextView">
+                <property name="bottom-margin">5</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer">
+                    <property name="text">sudo systemctl stop ModemManager</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+                <property name="left-margin">5</property>
+                <property name="monospace">true</property>
+                <property name="right-margin">5</property>
+                <property name="top-margin">5</property>
+                <property name="wrap-mode">2</property>
+              </object>
+            </child>
+          </object>
+        </property>
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-title">false</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
 </interface>

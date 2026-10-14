@@ -3,26 +3,31 @@ from typing import List, Dict, Tuple, Optional, Union
 from importlib.metadata import version
 from logging import info, error, debug
 from collections import defaultdict
+from traceback import format_exc
+from json import loads, dumps
 from os.path import basename
-from json import loads
 from io import BytesIO
+import usb.core
+import usb.util
 
 # Register resources
 import diagng.utils.gresources
 
 from diagng.ui.main_window.templates.usb_interface_row import USBInterfaceRow
+from diagng.protocol.qualcomm.acquisition.pyusb_input import PyUSBQCDMInput
 from diagng.ui.main_window.templates.adb_device_row import ADBDeviceRow
-from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
 from diagng.ui.main_window.templates.spi_modem_row import SPIModemRow
 from diagng.protocol.qualcomm.acquisition.qmdl_input import QMDLInput
 from diagng.protocol.qualcomm.acquisition.dlf_input import DLFInput
 from diagng.ui.main_window.templates.mm_modem_row import MMModemRow
 from diagng.ui.authorization_dialog.imp import AuthorizationDialog
 from diagng.utils.usb_port_detecter import detect_diag_usb_ports
+from diagng.protocol.qualcomm.acquisition import pyusb_input
 from diagng.protocol.qualcomm.acquisition import spi_input
 from diagng.protocol.qualcomm.acquisition import usb_input
 from diagng.gobject.usb_interface import USBInterface
 from diagng.gobject.mm_modem import ModemManagerModem
+from diagng.system.pyusb_wrapper import PyUSBWrapper
 from diagng.gobject.serial_modem import SerialModem
 from diagng.gobject.mm_port import ModemManagerPort
 from diagng.gobject.serial_port import SerialPort
@@ -60,7 +65,12 @@ class MainWindow(Adw.ApplicationWindow):
 
     # UI panel: USB
 
-    run_diagmond_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    authorize_spawn_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    authorize_spawn_dialog: Adw.Dialog = Gtk.Template.Child()
+
+    stop_modemmanager_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    stop_modemmanager_row: Adw.ActionRow = Gtk.Template.Child()
+    stop_modemmanager_dialog: Adw.Dialog = Gtk.Template.Child()
 
     usb_interfaces_group: Gtk.SingleSelection = Gtk.Template.Child()
     usb_devices: Gio.ListStore  # Of USBDevice items
@@ -73,11 +83,15 @@ class MainWindow(Adw.ApplicationWindow):
     udev_debug_view: GtkSource.View
     udev_sourceview_buffer: GtkSource.Buffer
 
-    nusb_debug_viewport: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_tree_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_debug_group: Adw.PreferencesGroup = Gtk.Template.Child()
+    nusb_debug_viewport: Gtk.ScrolledWindow = Gtk.Template.Child()
     nusb_debug_view: GtkSource.View
     nusb_sourceview_buffer: GtkSource.Buffer
 
     # UI panel: SPI
+
+    spi_tab: Adw.ViewStackPage = Gtk.Template.Child()
 
     serial_modems: Gio.ListStore  # Of SerialPort items
     spi_ports_group: Adw.PreferencesGroup = Gtk.Template.Child()
@@ -93,6 +107,7 @@ class MainWindow(Adw.ApplicationWindow):
     adb_status_row: Adw.ActionRow = Gtk.Template.Child()
     adb_status_label: Gtk.Label = Gtk.Template.Child()
     adb_daemon_missing: Gtk.Label = Gtk.Template.Child()
+    adb_daemon_not_running: Gtk.Label = Gtk.Template.Child()
 
     adb_devices_group: Adw.PreferencesGroup = Gtk.Template.Child()
 
@@ -110,6 +125,8 @@ class MainWindow(Adw.ApplicationWindow):
     mm_sourceview_buffer: GtkSource.Buffer
 
     # UI panel: UDev
+
+    udev_tab: Adw.ViewStackPage = Gtk.Template.Child()
 
     udev_rules_selection: Gtk.SingleSelection = Gtk.Template.Child()
 
@@ -155,12 +172,51 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.reset_state()
 
-    @Gtk.Template.Callback()
-    def launch_diagmond(self, target: Gtk.Button, *args):
-        target.set_sensitive(False)
-        spawn_diagmond_as_outer_process()
-
     def bind_data(self):
+
+        if self.app.can_spawn_commands:
+            self.spi_tab.set_visible(True)
+            self.udev_tab.set_visible(True)
+            self.authorize_spawn_popover.set_visible(False)
+            self.stop_modemmanager_popover.set_visible(False)
+
+        else:
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.authorize_spawn_popover,
+                'visible',
+                GObject.BindingFlags.INVERT_BOOLEAN
+                | GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.stop_modemmanager_popover,
+                'visible',
+                GObject.BindingFlags.INVERT_BOOLEAN
+                | GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.modem_manager.bind_property(
+                'daemon-connected',
+                self.stop_modemmanager_row,
+                'visible',
+                GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.spi_tab,
+                'visible',
+                GObject.BindingFlags.SYNC_CREATE,
+            )
+
+            self.app.diagmond_communicator.bind_property(
+                'bus-connected',
+                self.udev_tab,
+                'visible',
+                GObject.BindingFlags.SYNC_CREATE,
+            )
 
         lang_manager = GtkSource.LanguageManager.new()
 
@@ -268,7 +324,11 @@ class MainWindow(Adw.ApplicationWindow):
         got_connect_status()
 
         self.app.adb_watcher.bind_property(
-            'is-failed', self.adb_daemon_missing, 'visible'
+            'is-failed',
+            self.adb_daemon_missing
+            if self.app.can_spawn_commands
+            else self.adb_daemon_not_running,
+            'visible',
         )
 
         self.adb_devices_group.bind_model(
@@ -436,6 +496,16 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.add_simple_action('copy-mm-debug-info', copy_mm_debug_info)
 
+        def authorize_spawn(*args):
+            self.authorize_spawn_dialog.present(self)
+
+        self.add_simple_action('authorize-spawn', authorize_spawn)
+
+        def stop_modemmanager(*args):
+            self.stop_modemmanager_dialog.present(self)
+
+        self.add_simple_action('stop-modemmanager', stop_modemmanager)
+
         def show_about(*args):
 
             self.about_dialog.set_visible(True)
@@ -494,8 +564,12 @@ class MainWindow(Adw.ApplicationWindow):
         self.app.modem_manager.mm_instance.modems.connect(
             'items-changed', self.update_usb_devices
         )
+        self.app.modem_manager.mm_instance.modems.connect(
+            'items-changed', self.update_pyusb_data
+        )
         self.app.connect('notify::nusb-debug-data', self.update_usb_devices)
         self.app.connect('notify::udev-debug-data', self.update_usb_devices)
+        self.app.connect('notify::udev-debug-data', self.update_pyusb_data)
 
         self.app.connect(
             'notify::udev-debug-data', self.update_udev_debug_data
@@ -544,6 +618,7 @@ class MainWindow(Adw.ApplicationWindow):
         # USB tab
 
         self.update_usb_devices()
+        self.update_pyusb_data()
         self.update_nusb_debug_data()
         self.update_udev_debug_data()
 
@@ -575,6 +650,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         if (
             not self.app.diagmond_communicator.proxy.get_name_owner()
+            and self.app.can_spawn_commands
             and not self.auth_dialog_showed
         ):
             self.auth_dialog_showed = True
@@ -583,7 +659,10 @@ class MainWindow(Adw.ApplicationWindow):
             auth_dialog.set_transient_for(self)
             auth_dialog.present()
 
-        # self.run_diagmond_popover.set_visible(not diagmond_running)
+        # self.authorize_spawn_popover.set_visible(XX)
+        # self.spi_tab.set_visible(XX)
+        # self.udev_rules.set_visible(XX)
+        # XX adapt the ADB tab too
 
         # self.XY.set_enable(XX) # WIP ⚠️
 
@@ -591,21 +670,39 @@ class MainWindow(Adw.ApplicationWindow):
             'Data sources status: UDev: %s - diagmond status: %s'
             % (
                 '✅' if udev_reachable else 'Loading... ⚠️',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         self.spi_link_banner.set_title(
             'Data sources status: UDev: %s - diagmond: %s'
             % (
                 '✅' if udev_reachable else 'Loading... ⚠️',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         self.mm_link_banner.set_title(
             'ModemManager Link: %s - diagmond status: %s'
             % (
                 '✅' if mm_running else 'OFF 💤',
-                '✅' if diagmond_running else 'Loading... ⚠️',
+                '✅'
+                if diagmond_running
+                else (
+                    'Loading... ⚠️'
+                    if self.app.can_spawn_commands
+                    else 'Stopped ❌'
+                ),
             )
         )
         if adb_failed:
@@ -657,6 +754,21 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             self.usb_interfaces_group.set_title(
                 'Status: 🟠 No Qualcomm Diag USB devices detected'
+            )
+
+    def update_pyusb_data(self, *args):
+        if not self.app.diagmond_communicator.bus_connected:
+            self.nusb_tree_group.set_visible(False)
+            self.nusb_debug_group.set_title(
+                'Debug info: Raw USB interfaces list, as JSON (data source: PyUSB)'
+            )
+            self.app.nusb_debug_data = dumps(
+                PyUSBWrapper.get_pyusb_metadata(), indent=4
+            )
+        else:
+            self.nusb_tree_group.set_visible(True)
+            self.nusb_debug_group.set_title(
+                'Debug info: Raw USB interfaces list, as JSON (data source: nusb)'
             )
 
     def update_nusb_debug_data(self, *args):
@@ -767,6 +879,9 @@ class MainWindow(Adw.ApplicationWindow):
         if usb_intf.full_intf_id in usb_input._connected_ports:
             usb_input._connected_ports[usb_intf.full_intf_id].close()
 
+        if usb_intf.full_intf_id in pyusb_input._connected_ports:
+            usb_input._connected_ports[usb_intf.full_intf_id].close()
+
     def connect_usb_intf(
         self, target: Gtk.Button, usb_dev: USBDevice, usb_intf: USBInterface
     ):
@@ -822,12 +937,85 @@ class MainWindow(Adw.ApplicationWindow):
                     user_data=(usb_dev, usb_intf),
                 )
         else:
-            dialog = Adw.AlertDialog.new(
-                "⚠️ diagmond not available, can't open interface", None
+            # ⚠️ 🪧 WIP: Implement the PyUSB connection path
+
+            dev = usb.core.find(
+                idVendor=int(usb_dev.vid_pid.split(':')[0], 16),
+                idProduct=int(usb_dev.vid_pid.split(':')[1], 16),
+                bus=int(usb_dev.bus_id, 10),
             )
-            error("diagmond not available, can't open interface")
-            dialog.add_response('ok', 'Ok')
-            dialog.choose(self, None, None)
+
+            try:
+                cfg = dev.get_active_configuration()
+                if usb_intf.conf_num != cfg.bConfigurationValue:
+                    dev.set_configuration(usb_intf.conf_num)
+                dev.set_interface_altsetting(
+                    usb_intf.intf_num, usb_intf.alt_setting_num
+                )
+
+                cfg = dev.get_active_configuration()
+                intf = usb.util.find_descriptor(
+                    cfg,
+                    bInterfaceNumber=usb_intf.intf_num,
+                    bAlternateSetting=usb_intf.alt_setting_num,
+                )
+
+                out_ep = usb.util.find_descriptor(
+                    intf,
+                    # match the first OUT endpoint
+                    custom_match=(
+                        lambda item: (
+                            usb.util.endpoint_direction(item.bEndpointAddress)
+                            == usb.util.ENDPOINT_OUT
+                            and usb.util.endpoint_type(item.bmAttributes)
+                            == usb.util.ENDPOINT_TYPE_BULK
+                        )
+                    ),
+                )
+
+                in_ep = usb.util.find_descriptor(
+                    intf,
+                    # match the first IN endpoint
+                    custom_match=(
+                        lambda item: (
+                            usb.util.endpoint_direction(item.bEndpointAddress)
+                            == usb.util.ENDPOINT_IN
+                            and usb.util.endpoint_type(item.bmAttributes)
+                            == usb.util.ENDPOINT_TYPE_BULK
+                        )
+                    ),
+                )
+
+                assert in_ep
+                assert out_ep
+
+                usb.util.claim_interface(dev, usb_intf.intf_num)
+
+            except usb.core.USBError:
+                error('Could not open USB device: ' + format_exc())
+
+                dialog = Adw.AlertDialog.new(
+                    'Could not open USB interface',
+                    'Accessing this interface requires '
+                    + 'privileges.\n\n'
+                    + 'Please <b>follow the instructions '
+                    + 'proposed on the main screen to allow '
+                    + 'DiagNG to launch external programs</b> '
+                    + 'in order to solve the issue.\n\n'
+                    + 'An alternate solution is to manually '
+                    + 'detach the kernel driver associated '
+                    + 'with the specified USB interface.',
+                )
+                dialog.set_body_use_markup(True)
+                dialog.add_response('ok', 'Ok')
+                dialog.choose(self, None, None)
+
+            else:
+                input_obj = PyUSBQCDMInput(
+                    dev, in_ep, out_ep, usb_dev, usb_intf, self
+                )
+
+                QCDMWindow(self, input_obj)
 
     def disconnect_spi_port(self, target: Gtk.Button, serial_port: SerialPort):
         info('disconnect_spi_port called on %s' % serial_port.tty_device_path)

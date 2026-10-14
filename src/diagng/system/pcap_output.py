@@ -47,17 +47,22 @@ from diagng.protocol.network.pcap import Pcap
 
 from kaitaistruct import ReadWriteKaitaiStruct
 from kaitaistruct import KaitaiStream
-from gi.repository import Gio, GObject, GLib
 from re import search
 
+from os import getenv, mkfifo, makedirs, urandom
 from typing import Optional, Callable, Union
 from logging import error, debug, info
+from os.path import join, dirname
 from traceback import format_exc
 from shutil import which
 from io import BytesIO
 from time import time
 from math import ceil
-from os import getenv
+
+import gi
+
+gi.require_version('Gtk', '4.0')
+from gi.repository import Gio, GObject, GLib, Gtk
 
 KaitaiStream._ensure_bytes_left_to_write = lambda *args: True
 
@@ -77,6 +82,7 @@ class StreamState(GObject.GEnum):
 
 class PcapOutput(GObject.GObject):
     use_wireshark = GObject.Property(type=bool, default=False)
+    can_spawn_commands = GObject.Property(type=bool, default=True)
 
     header: Optional[Pcap]
 
@@ -105,6 +111,8 @@ class PcapOutput(GObject.GObject):
         use_wireshark: bool = False,
         mode_selector: Optional[FileOutModeSelector] = None,
         output_file: Optional[Union[Gio.File, str]] = None,
+        window: Gtk.Window = None,
+        can_spawn_commands: bool = True,
     ):
         super().__init__()
 
@@ -113,6 +121,8 @@ class PcapOutput(GObject.GObject):
         if isinstance(output_file, str):
             output_file = Gio.File.new_for_path(output_file)
         self.output_file = output_file
+        self.window = window
+        self.can_spawn_commands = can_spawn_commands
 
     def open_stream(self):
         if self.use_wireshark:
@@ -228,21 +238,85 @@ class PcapOutput(GObject.GObject):
 
     def spawn_wireshark(self):
 
-        self.wireshark_proc = Gio.Subprocess.new(
-            (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
-            + ['wireshark', '-k', '-i', '-'],
-            flags=Gio.SubprocessFlags.STDIN_PIPE,
-        )
+        # Handle two cases:
+        # - No flatpak OR flatpak with flatpak-spawn available
+        #   (see flatpak_helper.py) => use a stdin-based pipe
+        # - Flatpak without flatpak-spawn available => use
+        #   a named pipe
 
-        proc_pid = self.wireshark_proc.get_identifier()
+        if self.window and not self.can_spawn_commands:
+            temp_path = join(
+                GLib.get_user_runtime_dir(),
+                'diagng',
+                'capture_%s.pcap' % urandom(4).hex(),
+            )
+            makedirs(dirname(temp_path), exist_ok=True)
+            mkfifo(temp_path)
+            temp_file = Gio.File.new_for_path(temp_path)
 
-        self.output_stream = self.wireshark_proc.get_stdin_pipe()
+            #  ➡️ Display an INFORMATION POP-UP
+            #     telling either to run
+            #     "wireshark -i ${pipe_path}" for unique use or
+            #     "sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak"
+            #     "flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak"
+            #     for allowing DiagNG to spawn external protocols
 
-        def terminate_cb(*args):
-            debug('Wireshark subprocess %s terminated' % proc_pid)
-            self.close()
+            self.window.launch_wireshark_command.set_text(
+                'wireshark -k -i ' + temp_path
+            )
 
-        self.wireshark_proc.wait_async(None, terminate_cb)  # Close callback
+            self.window.launch_wireshark_popup.present(self.window)
+
+            def on_popup_close(*args):
+                temp_file.delete_async(GLib.PRIORITY_DEFAULT, None, None)
+
+                if not self.output_stream:
+                    self.close()
+
+                self.window.launch_wireshark_popup.disconnect(close_handle)
+
+            close_handle = self.window.launch_wireshark_popup.connect(
+                'closed', on_popup_close
+            )
+
+            def on_pipe_available(
+                temp_file: Gio.File, result: Gio.AsyncResult
+            ):
+                try:
+                    self.output_stream = temp_file.append_to_finish(result)
+                except Exception:
+                    self.close()
+                    raise
+
+                self.window.launch_wireshark_popup.force_close()
+
+                self.write_pcap_header()
+
+            temp_file.append_to_async(
+                Gio.FileCreateFlags.NONE,
+                GLib.PRIORITY_DEFAULT,
+                None,
+                on_pipe_available,
+            )
+
+        else:
+            self.wireshark_proc = Gio.Subprocess.new(
+                (['flatpak-spawn', '--host'] if IS_FLATPAK else [])
+                + ['wireshark', '-k', '-i', '-'],
+                flags=Gio.SubprocessFlags.STDIN_PIPE,
+            )
+
+            proc_pid = self.wireshark_proc.get_identifier()
+
+            self.output_stream = self.wireshark_proc.get_stdin_pipe()
+
+            def terminate_cb(*args):
+                debug('Wireshark subprocess %s terminated' % proc_pid)
+                self.close()
+
+            self.wireshark_proc.wait_async(
+                None, terminate_cb
+            )  # Close callback
 
         self.write_pcap_header()
 

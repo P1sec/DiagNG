@@ -12,6 +12,7 @@ from diagng.system.diagmond_communicator import DiagmondCommunicator
 from diagng.system.modem_manager_dbus import ModemManagerIntf
 from diagng.system.udev_device_scanner import DeviceScanner
 from diagng.utils.logging_central import LoggingCentral
+from diagng.utils.flatpak_helper import FlatpakHelper
 from diagng.system.adb.adb_watcher import ADBWatcher
 from diagng.ui.main_window.imp import MainWindow
 
@@ -28,7 +29,10 @@ from gi.repository import Adw, Gtk, Gdk, GLib, Gio, GObject
 
 
 def main():
-    args = ArgumentParser(description='Prototype for DiagNG 🍕 🎧')
+    args = ArgumentParser(
+        description='DiagNG is a general-purpose client for '
+        + 'mobile basebands, allowing to product 2G/3G/4G/5G network traces'
+    )
 
     args.add_argument(
         '-d',
@@ -38,11 +42,21 @@ def main():
         action='store_true',
     )
 
+    args.add_argument(
+        '-n',
+        '--no-spawn',
+        help='Disallow spawning external commands in order to simulate a '
+        + 'Flatpak sandbox',
+        action='store_true',
+    )
+
     args = args.parse_args()
 
     GLib.set_prgname('com.p1security.diagng')
 
-    app = MainApplication(application_id='com.p1security.diagng')
+    app = MainApplication(
+        args.no_spawn, application_id='com.p1security.diagng'
+    )
     app.run()
 
 
@@ -50,6 +64,9 @@ class MainApplication(Adw.Application):
     window: MainWindow = None
 
     logging_central: LoggingCentral = None
+
+    can_spawn_commands = GObject.Property(type=bool, default=False)
+    force_no_spawn = GObject.Property(type=bool, default=False)
 
     diagmond_communicator: DiagmondCommunicator = None
     diagmond_serialdevice_om: DiagmondSerialDeviceOM = None
@@ -62,7 +79,7 @@ class MainApplication(Adw.Application):
     nusb_debug_data = GObject.Property(type=str)
     tokio_serial_debug_data = GObject.Property(type=str)
 
-    def __init__(self, **kwargs):
+    def __init__(self, no_spawn: bool, **kwargs):
         self.logging_central = LoggingCentral(debug_mode=True)
 
         # self.setup_signal_handling()
@@ -74,6 +91,7 @@ class MainApplication(Adw.Application):
         icon_theme.add_resource_path('/com/p1security/diagng/')
 
         super().__init__(**kwargs)
+        self.force_no_spawn = no_spawn
 
         self.connect('startup', self.on_startup)
         self.connect('activate', self.on_activate)
@@ -181,6 +199,16 @@ class MainApplication(Adw.Application):
         pass
 
     def on_startup(self, app, *args):
+
+        flatpak_spawn_available: bool = (
+            FlatpakHelper.is_flatpak_spawn_available()
+        )
+        is_flatpak: bool = FlatpakHelper.is_flatpak()
+
+        self.can_spawn_commands = (
+            flatpak_spawn_available or not is_flatpak
+        ) and not self.force_no_spawn
+
         self.diagmond_communicator = DiagmondCommunicator(self)
 
         self.modem_manager = ModemManagerIntf(self)
@@ -193,14 +221,14 @@ class MainApplication(Adw.Application):
             self.window, self.diagmond_communicator.connection
         )
 
-        # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
-        # main_window using a CUSTOM LOGGING HANDLER
-        # when the GUI IS ENABLED?
-
         # Application will close once it has no longer has active
         # windows attached to it
 
         self.window.present()
+
+        # ^ ⚠️ ⚠️ TODO propagate logging.error errors to
+        # main_window using a CUSTOM LOGGING HANDLER
+        # when the GUI IS ENABLED?
 
     def on_activate(self, app):
         self.window.present()

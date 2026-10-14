@@ -47,8 +47,9 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
                           <object class="AdwPreferencesGroup">
                             <property name="title">Compatibility checks</property>
                             <child>
-                              <object class="AdwActionRow">
+                              <object class="AdwActionRow" id="wireshark_version_row">
                                 <property name="title">Wireshark version</property>
+                                <property name="visible">false</property>
                                 <child>
                                   <object class="GtkLabel" id="wireshark_version_label">
                                     <property name="label">Checking...</property>
@@ -259,5 +260,77 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       <object class="GtkProgressBar" id="progress_gauge"></object>
     </property>
     <property name="heading">Processing capture...</property>
+  </object>
+  <object class="AdwDialog" id="launch_wireshark_popup">
+    <property name="child">
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="GtkBox">
+            <property name="margin-bottom">25</property>
+            <property name="margin-end">25</property>
+            <property name="margin-start">25</property>
+            <property name="orientation">1</property>
+            <property name="spacing">15</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">In order to launch a Wireshark capture, please do either of the following:
+
+&lt;u&gt;Solution 1 (single use)&lt;/u&gt;
+• Run this command:</property>
+                <property name="use-markup">true</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTextView">
+                <property name="bottom-margin">5</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="launch_wireshark_command">
+                    <property name="text">wireshark -k -i {PIPE_PATH}</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+                <property name="left-margin">5</property>
+                <property name="monospace">true</property>
+                <property name="right-margin">5</property>
+                <property name="top-margin">5</property>
+                <property name="wrap-mode">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">&lt;u&gt;Solution 2 (permanent)&lt;/u&gt;
+• In order to allow Wireshark to be spawned automatically, run these commands, then restart DiagNG:</property>
+                <property name="use-markup">true</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTextView">
+                <property name="bottom-margin">5</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer">
+                    <property name="text">sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak &amp;&amp; flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+                <property name="left-margin">5</property>
+                <property name="monospace">true</property>
+                <property name="right-margin">5</property>
+                <property name="top-margin">5</property>
+                <property name="wrap-mode">2</property>
+              </object>
+            </child>
+          </object>
+        </property>
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-title">false</property>
+          </object>
+        </child>
+      </object>
+    </property>
   </object>
 </interface>

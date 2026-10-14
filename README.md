@@ -143,7 +143,7 @@ Dependencies on Ubuntu 26.04 LTS (note: `libadwaita` 1.8+ is needed, old Ubuntu 
 sudo apt install libgirepository-2.0-0 gir1.2-adw-1 \
     gir1.2-modemmanager-1.0 gir1.2-gtk-4.0 libudev-dev \
     gir1.2-gtksource-5 python3-dev blueprint-compiler \
-    cargo rustc polkitd git wireshark \
+    cargo rustc polkitd git wireshark libusb-1.0-0 \
     google-android-platform-tools-installer
 
 sudo snap install --classic astral-uv
@@ -153,8 +153,8 @@ Dependencies on Archlinux:
 
 ```bash
 sudo pacman -S uv blueprint-compiler python-gobject \
-    gtksourceview5 libadwaita libmm-glib rust polkit \
-    android-tools git wireshark-qt
+    gtksourceview5 libadwaita libmm-glib libusb \
+    rust polkit android-tools git wireshark-qt
 ```
 
 Dependencies on Fedora:
@@ -162,9 +162,10 @@ Dependencies on Fedora:
 ```bash
 sudo dnf install uv glib2-devel libadwaita-devel gtk4-devel \
     gobject-introspection-devel python3-gobject-devel \
-    python3-devel cairo-devel @development-tools \
+    python3-devel cairo-devel libusb1 @development-tools \
     modemmanager-glib-devel android-tools rustc cargo \
-    gtksourceview5-devel polkit git wireshark systemd-devel
+    gtksourceview5-devel polkit git wireshark \
+    blueprint-compiler systemd-devel
 ```
 
 Then:

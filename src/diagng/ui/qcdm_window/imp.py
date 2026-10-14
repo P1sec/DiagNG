@@ -97,6 +97,9 @@ class QCDMWindow(Adw.Window):
     ws_plugin_manager: WiresharkPluginManager
     plugin_watch_task: Gio.Cancellable
 
+    launch_wireshark_popup: Adw.AlertDialog = Gtk.Template.Child()
+    launch_wireshark_command: Gtk.TextBuffer = Gtk.Template.Child()
+
     progress_dialog: Adw.AlertDialog = Gtk.Template.Child()
     progress_status = GObject.Property(type=Gio.Cancellable)
     progress_gauge: Gtk.ProgressBar = Gtk.Template.Child()
@@ -119,6 +122,7 @@ class QCDMWindow(Adw.Window):
     qcdm_stack: Adw.ViewStack = Gtk.Template.Child()
     device_info_buffer: Gtk.TextBuffer = Gtk.Template.Child()
 
+    wireshark_version_row: Adw.ActionRow = Gtk.Template.Child()
     wireshark_version_label: Gtk.Label = Gtk.Template.Child()
 
     air_interface_group: Adw.PreferencesGroup = Gtk.Template.Child()
@@ -231,7 +235,12 @@ class QCDMWindow(Adw.Window):
         self.on_state_change()
         if not self.offline_mode:
             self.gather_device_info()
-        self.gather_wireshark_info()
+
+        if self.parent.app.can_spawn_commands:
+            self.wireshark_version_row.set_visible(True)
+            self.gather_wireshark_info()
+        else:
+            self.wireshark_version_row.set_visible(False)
 
         self.connect('close-request', self.on_quit)
 
@@ -367,6 +376,7 @@ class QCDMWindow(Adw.Window):
         self.output_pcap = PcapOutput(
             mode_selector=InteractiveGUIFileOutModeSelector(output_file, self),
             output_file=output_file,
+            can_spawn_commands=self.parent.app.can_spawn_commands,
         )
 
         def on_stream_closed(*args):
@@ -414,7 +424,11 @@ class QCDMWindow(Adw.Window):
     def create_wireshark_pipe(self):
         assert not self.wireshark_instance
 
-        self.wireshark_instance = PcapOutput(use_wireshark=True)
+        self.wireshark_instance = PcapOutput(
+            use_wireshark=True,
+            window=self,
+            can_spawn_commands=self.parent.app.can_spawn_commands,
+        )
 
         def on_stream_closed(*args):
             self.start_ws_capture_button.set_visible(True)

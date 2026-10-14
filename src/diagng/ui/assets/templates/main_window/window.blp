@@ -14,14 +14,12 @@ template $MainWindow: Adw.ApplicationWindow {
 
             description: "Welcome to DiagNG! This page lists potential USB modem baseband diagnostic devices detected on this system and allows you to connect to them.\n\nFor now, only Qualcomm-based devices are supported. Please see the \"ADB\" tab for assistance over enabling the Diag interface on an Android smartphone.";
 
-            Adw.PreferencesGroup run_diagmond_popover {
-              visible: false;
-
+            Adw.PreferencesGroup authorize_spawn_popover {
               Adw.ActionRow {
-                activatable-widget: run_diagmond_button;
-                subtitle: "If you wish to install this service separately as a system package, feel free to browse instructions at <a href=\"https://github.com/P1sec/DiagNG/tree/main/packaging\">https://github.com/P1sec/DiagNG/tree/main/packaging</a>";
+                activatable-widget: authorize_spawn_button;
+                subtitle: "See explanations at: <a href=\"https://github.com/P1sec/DiagNG#technical-architecture\">https://github.com/P1sec/DiagNG#technical-architecture</a>";
                 subtitle-selectable: true;
-                title: "<b>DiagNG needs to run a privileged service to allow you to connect to serial port or USB devices.</b>";
+                title: "<b>DiagNG needs to be allowed to launch external programs in order to connect to serial USB modems.</b>";
                 title-selectable: true;
 
                 [prefix]
@@ -31,9 +29,31 @@ template $MainWindow: Adw.ApplicationWindow {
                 }
 
                 [suffix]
-                Button run_diagmond_button {
-                  label: "Click here to proceed";
-                  clicked => $launch_diagmond();
+                Button authorize_spawn_button {
+                  action-name: "win.authorize-spawn";
+                  label: "Click here to authorize";
+                }
+              }
+            }
+
+            Adw.PreferencesGroup stop_modemmanager_popover {
+              Adw.ActionRow stop_modemmanager_row {
+                activatable-widget: stop_modemmanager_button;
+                subtitle: "See explanations at: <a href=\"https://github.com/P1sec/DiagNG#technical-architecture\">https://github.com/P1sec/DiagNG#technical-architecture</a>";
+                subtitle-selectable: true;
+                title: "<b>Please stop ModemManager before connecting to USB modems.</b>";
+                title-selectable: true;
+
+                [prefix]
+                Image {
+                  icon-name: "warning-symbolic";
+                  icon-size: large;
+                }
+
+                [suffix]
+                Button stop_modemmanager_button {
+                  action-name: "win.stop-modemmanager";
+                  label: "Click here for instructions";
                 }
               }
             }
@@ -196,6 +216,15 @@ template $MainWindow: Adw.ApplicationWindow {
                 attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
                 can-focus: false;
                 label: "Failed to locate ADB daemon. Please install the corresponding package:\n- On Ubuntu: sudo apt install google-android-platform-tools-installer\n- On Arch Linux: sudo pacman -S android-tools\n- On Fedora: sudo dnf install android-tools";
+                margin-top: 24;
+                selectable: true;
+                visible: false;
+              }
+
+              Label adb_daemon_not_running {
+                attributes: "0 -1 weight bold, 0 -1 foreground #a4a400000000";
+                can-focus: false;
+                label: "The ADB daemon is not running. Please install the corresponding package:\n- On Ubuntu: sudo apt install google-android-platform-tools-installer\n- On Arch Linux: sudo pacman -S android-tools\n- On Fedora: sudo dnf install android-tools\nAnd use a command such as \"adb devices -l\" to launch it, then restart the app.";
                 margin-top: 24;
                 selectable: true;
                 visible: false;
@@ -487,4 +516,86 @@ template $MainWindow: Adw.ApplicationWindow {
   default-width: 800;
   name: "DiagNG";
   title: "DiagNG";
+}
+
+Adw.Dialog authorize_spawn_dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
+      orientation: vertical;
+      spacing: 15;
+
+      Label {
+        label: "In order to authorize DiagNG to spawn external programs, please run the following commands:";
+        wrap: true;
+        xalign: 0;
+      }
+
+      TextView {
+        bottom-margin: 5;
+
+        buffer: TextBuffer {
+          text: "sudo flatpak override com.p1security.diagng --talk-name=org.freedesktop.Flatpak && flatpak override --user com.p1security.diagng --talk-name=org.freedesktop.Flatpak";
+        };
+
+        editable: false;
+        left-margin: 5;
+        monospace: true;
+        right-margin: 5;
+        top-margin: 5;
+        wrap-mode: word;
+      }
+
+      Label {
+        label: "Then, restart the app.";
+        wrap: true;
+        xalign: 0;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {
+      show-title: false;
+    }
+  };
+}
+
+Adw.Dialog stop_modemmanager_dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
+      orientation: vertical;
+      spacing: 15;
+
+      Label {
+        label: "In order to stop ModemManager, please run the following command:";
+        wrap: true;
+        xalign: 0;
+      }
+
+      TextView {
+        bottom-margin: 5;
+
+        buffer: TextBuffer {
+          text: "sudo systemctl stop ModemManager";
+        };
+
+        editable: false;
+        left-margin: 5;
+        monospace: true;
+        right-margin: 5;
+        top-margin: 5;
+        wrap-mode: word;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {
+      show-title: false;
+    }
+  };
 }
