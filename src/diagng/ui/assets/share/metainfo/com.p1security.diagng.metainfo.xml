@@ -75,6 +75,13 @@
     -->
     <content_rating type="oars-1.1" />
     <releases>
+        <release version="0.1.3" date="2026-10-14">
+            <description>
+                <ul>
+                    <li>Remove the requirement over the flatpak-spawn command in order to be able to submit the app on Flathub, implement a PyUSB-based backend for device communication for this purpose</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.1.2" date="2026-10-13">
             <description>
                 <ul>
