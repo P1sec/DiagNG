@@ -247,7 +247,8 @@ class PcapOutput(GObject.GObject):
         if self.window and not self.can_spawn_commands:
             temp_path = join(
                 GLib.get_user_runtime_dir(),
-                'diagng',
+                'app',
+                'com.p1security.diagng',
                 'capture_%s.pcap' % urandom(4).hex(),
             )
             makedirs(dirname(temp_path), exist_ok=True)

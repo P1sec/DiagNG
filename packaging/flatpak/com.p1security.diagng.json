@@ -32,12 +32,6 @@
         "--filesystem=~/.local/lib/wireshark/plugins:create",
 
         /**
-         * Needed for putting PCAP socket streams
-         * be accessible from Wireshark
-         */
-        "--filesystem=xdg-run/diagng:create",
-
-        /**
          * We need to be able to use the "flatpak-spawn"
          * command in order to connect to raw USB devices
          * and SPI devices in a privileged fashion on
