@@ -20,6 +20,7 @@ from os import umask, chmod, chown, stat
 from os.path import dirname, realpath
 from re import split, IGNORECASE
 from collections import deque
+import ctypes
 
 # from shlex import join
 import sys
@@ -41,7 +42,7 @@ ROOT_DIR = dirname(realpath(SRC_DIR))
 LOG_FILE_NAME = ROOT_DIR + '/_test_log.log'
 LOG_FILE_SIZE = 10 * 1024 * 1024
 MEMORY_LOG_LINES = 5000
-LOG_FORMAT = '[{asctime}] [diagng {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
+LOG_FORMAT = '[{asctime}] [{name} {process}] - {levelname} - {message} ({pathname_last}:{lineno})'
 
 BASE_FORMATTER = Formatter(fmt=LOG_FORMAT, style='{')
 
@@ -56,7 +57,7 @@ class NoColorFormatter(Formatter):
 
 class ColorFormatter(Formatter):
     CSI = '\x1b['
-    grey = CSI + '38m'
+    black = ''
     yellow = CSI + '33m'
     red = CSI + '31m'
     magenta = CSI + '35m'
@@ -66,8 +67,8 @@ class ColorFormatter(Formatter):
     format = LOG_FORMAT
 
     FORMATS = {
-        DEBUG: grey + format + reset,
-        INFO: grey + format + reset,
+        DEBUG: black + format + reset,
+        INFO: black + format + reset,
         WARNING: yellow + format + reset,
         ERROR: magenta + format + reset,
         CRITICAL: red + format + reset,
@@ -113,6 +114,7 @@ class LoggingCentral(GObject.Object):
     signal_handler: object = None
     update_live: bool = False
     logger: Logger
+    glib_logger: Logger
 
     def get_logs(self) -> Sequence[str]:
         return list(self.scrollback_handler.logs)
@@ -126,15 +128,28 @@ class LoggingCentral(GObject.Object):
         # Register all logging handlers here...
 
         self.logger = getLogger()
+        self.logger.name = 'diagng'
         self.logger.setLevel(DEBUG)
 
+        self.glib_logger = getLogger('glib_logger')
+        self.glib_logger.propagate = False
+        self.glib_logger.setLevel(DEBUG)
+
         stderr_handler = StreamHandler()
-        stderr_handler.setLevel(DEBUG if debug_mode else INFO)
+        stderr_handler.setLevel(DEBUG)
         if sys.stderr.isatty():
             stderr_handler.setFormatter(ColorFormatter())
         else:
             stderr_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(stderr_handler)
+
+        stderr_handler = StreamHandler()
+        stderr_handler.setLevel(DEBUG if debug_mode else ERROR)
+        if sys.stderr.isatty():
+            stderr_handler.setFormatter(ColorFormatter())
+        else:
+            stderr_handler.setFormatter(NoColorFormatter())
+        self.glib_logger.addHandler(stderr_handler)
 
         """
         file_handler = GoodPermissionsRotatingFileHandler(
@@ -149,6 +164,11 @@ class LoggingCentral(GObject.Object):
         self.scrollback_handler.setLevel(DEBUG)
         self.scrollback_handler.setFormatter(NoColorFormatter())
         self.logger.addHandler(self.scrollback_handler)
+
+        self.scrollback_handler = ScrollbackHandler()
+        self.scrollback_handler.setLevel(DEBUG)
+        self.scrollback_handler.setFormatter(NoColorFormatter())
+        self.glib_logger.addHandler(self.scrollback_handler)
 
         self.setup_glib_log_handling()
 
@@ -165,24 +185,40 @@ class LoggingCentral(GObject.Object):
             }[log_level]
 
         # Handle structured GLib logging
-        # ⚠️ Nonworking, see: https://gitlab.gnome.org/GNOME/pygobject/-/work_items/771
+        # ⚠️ Messy, see: https://gitlab.gnome.org/GNOME/pygobject/-/work_items/771
 
-        """
         def log_writer_func(
             log_level: GLib.LogLevelFlags, fields: List[GLib.LogField], *args
         ):
-            log(
-                convert_log_level(log_level),
-                repr(
-                    {
-                        item.key: ctypes.string_at(item.value, item.length)
-                        for item in fields
-                    }
-                ),
+            items = {}
+            for item in fields:
+                value = ctypes.string_at(item.value, item.length)
+                try:
+                    value = value.decode('utf-8')
+                except Exception:
+                    pass
+                items[item.key] = value
+            items.pop('PRIORITY', None)
+            items.pop('SYSLOG_IDENTIFIER', None)
+            items.pop('GLIB_OLD_LOG_API', None)
+            args = dict(
+                name=items.pop('GLIB_DOMAIN', self.logger.name),
+                level=convert_log_level(log_level),
+                pathname=items.pop('CODE_FILE', '???').strip('./'),
+                lineno=int(items.pop('CODE_LINE', '0')),
+                msg=items.pop('MESSAGE', '???'),
+                args={},
+                exc_info=None,
+                func=items.pop('CODE_FUNC', None),
+                sinfo=None,
             )
+            for key, value in items.items():
+                args.dict += ' %s=%r' % (key, value)
+            self.glib_logger.handle(LogRecord(**args))
+
+            return GLib.LogWriterOutput.HANDLED
 
         GLib.log_set_writer_func(log_writer_func)
-        """
 
         # Handle unstructured GLib logging
         # No effect because structured logging is enabled

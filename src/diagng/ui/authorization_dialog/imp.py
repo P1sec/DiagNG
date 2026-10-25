@@ -42,5 +42,5 @@ class AuthorizationDialog(Adw.Window):
     @Gtk.Template.Callback()
     def on_continue(self, *args):
         self.do_launch = True
-        spawn_diagmond_as_outer_process()
+        spawn_diagmond_as_outer_process(self.parent.app.is_debug)
         self.close()

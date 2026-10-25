@@ -40,7 +40,9 @@ sys.path.insert(0, SRC_DIR)
 from diagng.utils.dbus_service_installer import install_dbus_and_polkit_files
 
 
-def get_flatpak_bin_dir(callback: Callable[[str], []]):
+def get_flatpak_bin_dir(
+    callback: Callable[[bool, str, str], []], is_debug: bool
+):
     # See https://github.com/flathub/io.github.Archeb.opentrace/blob/master/nexttrace.sh
 
     proc = Gio.Subprocess.new(
@@ -86,7 +88,7 @@ def get_flatpak_bin_dir(callback: Callable[[str], []]):
             )
             bin_path = join(stdout.strip(), 'files', 'bin', 'diagmond-bin')
 
-            callback(script_path, bin_path)
+            callback(is_debug, script_path, bin_path)
 
         proc_2.communicate_utf8_async(None, None, on_complete_2)
 
@@ -94,15 +96,15 @@ def get_flatpak_bin_dir(callback: Callable[[str], []]):
 
 
 def spawn_diagmond_as_outer_process(
-    script_path: str = None, bin_path: str = None
+    is_debug: bool, script_path: str = None, bin_path: str = None
 ):
     extra_args = []
-    if '-d' in sys.argv or '--debug' in sys.argv:
+    if is_debug:
         extra_args.append('--debug')
 
     if IS_FLATPAK:
         if not script_path:
-            get_flatpak_bin_dir(spawn_diagmond_as_outer_process)
+            get_flatpak_bin_dir(spawn_diagmond_as_outer_process, is_debug)
             return
 
         debug('Trying to launch from inside Flatpak: ' + script_path)

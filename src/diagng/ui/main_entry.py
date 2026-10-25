@@ -38,7 +38,8 @@ def main():
         '-d',
         '--debug',
         help='Compile the diagmond binary with debugging symbols whenever it '
-        + 'has changed',
+        + 'has changed, and print GLib debug logs to the standard error '
+        + 'output',
         action='store_true',
     )
 
@@ -55,7 +56,7 @@ def main():
     GLib.set_prgname('com.p1security.diagng')
 
     app = MainApplication(
-        args.no_spawn, application_id='com.p1security.diagng'
+        args.debug, args.no_spawn, application_id='com.p1security.diagng'
     )
     app.run()
 
@@ -63,6 +64,7 @@ def main():
 class MainApplication(Adw.Application):
     window: MainWindow = None
 
+    is_debug: bool = False
     logging_central: LoggingCentral = None
 
     can_spawn_commands = GObject.Property(type=bool, default=False)
@@ -79,8 +81,8 @@ class MainApplication(Adw.Application):
     nusb_debug_data = GObject.Property(type=str)
     tokio_serial_debug_data = GObject.Property(type=str)
 
-    def __init__(self, no_spawn: bool, **kwargs):
-        self.logging_central = LoggingCentral(debug_mode=True)
+    def __init__(self, is_debug: bool, no_spawn: bool, **kwargs):
+        self.logging_central = LoggingCentral(debug_mode=is_debug)
 
         # self.setup_signal_handling()
         self.setup_error_handling()
@@ -91,6 +93,7 @@ class MainApplication(Adw.Application):
         icon_theme.add_resource_path('/com/p1security/diagng/')
 
         super().__init__(**kwargs)
+        self.is_debug = is_debug
         self.force_no_spawn = no_spawn
 
         self.connect('startup', self.on_startup)
