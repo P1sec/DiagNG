@@ -36,6 +36,30 @@ template $MainWindow: Adw.ApplicationWindow {
               }
             }
 
+            Adw.PreferencesGroup install_diagmond_popover {
+              visible: false;
+
+              Adw.ActionRow {
+                activatable-widget: install_diagmond_button;
+                subtitle: "See explanations at: <a href=\"https://github.com/P1sec/DiagNG#technical-architecture\">https://github.com/P1sec/DiagNG#technical-architecture</a>";
+                subtitle-selectable: true;
+                title: "<b>You need in order to install an external software component (diagmond) in order to connect to serial USB modems.</b>";
+                title-selectable: true;
+
+                [prefix]
+                Image {
+                  icon-name: "xapp-prefs-plugins-symbolic";
+                  icon-size: large;
+                }
+
+                [suffix]
+                Button install_diagmond_button {
+                  action-name: "win.prompt-install-diagmond";
+                  label: "Click here for instructions";
+                }
+              }
+            }
+
             Adw.PreferencesGroup stop_modemmanager_popover {
               Adw.ActionRow stop_modemmanager_row {
                 activatable-widget: stop_modemmanager_button;
@@ -590,6 +614,50 @@ Adw.Dialog stop_modemmanager_dialog {
         right-margin: 5;
         top-margin: 5;
         wrap-mode: word;
+      }
+    };
+
+    [top]
+    Adw.HeaderBar {
+      show-title: false;
+    }
+  };
+}
+
+Adw.Dialog install_diagmond_dialog {
+  child: Adw.ToolbarView {
+    content: Box {
+      margin-bottom: 25;
+      margin-end: 25;
+      margin-start: 25;
+      orientation: vertical;
+      spacing: 15;
+
+      Label {
+        label: "In order to authorize DiagNG to connect to USB serial modems, please run the following commands:";
+        wrap: true;
+        xalign: 0;
+      }
+
+      TextView {
+        bottom-margin: 5;
+
+        buffer: TextBuffer {
+          text: "sudo apt-add-repository -P ppa:marin-m/p1sec-foss\nsudo apt install diagmond";
+        };
+
+        editable: false;
+        left-margin: 5;
+        monospace: true;
+        right-margin: 5;
+        top-margin: 5;
+        wrap-mode: word;
+      }
+
+      Label {
+        label: "Then, restart the app.";
+        wrap: true;
+        xalign: 0;
       }
     };
 
