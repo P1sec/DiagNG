@@ -36,6 +36,30 @@ template $MainWindow: Adw.ApplicationWindow {
               }
             }
 
+            Adw.PreferencesGroup install_diagmond_popover_2 {
+              visible: false;
+
+              Adw.ActionRow {
+                activatable-widget: install_diagmond_button;
+                subtitle: "See explanations at: <a href=\"https://github.com/P1sec/DiagNG#technical-architecture\">https://github.com/P1sec/DiagNG#technical-architecture</a>";
+                subtitle-selectable: true;
+                title: "<b>You need in order to install an external software component (diagmond) in order to connect to serial USB modems.</b>";
+                title-selectable: true;
+
+                [prefix]
+                Image {
+                  icon-name: "xapp-prefs-plugins-symbolic";
+                  icon-size: large;
+                }
+
+                [suffix]
+                Button install_diagmond_button {
+                  action-name: "win.prompt-install-diagmond";
+                  label: "Click here for instructions";
+                }
+              }
+            }
+
             Adw.PreferencesGroup stop_modemmanager_popover {
               Adw.ActionRow stop_modemmanager_row {
                 activatable-widget: stop_modemmanager_button;

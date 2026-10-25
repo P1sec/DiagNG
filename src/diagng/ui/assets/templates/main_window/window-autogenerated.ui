@@ -52,6 +52,32 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                           </object>
                         </child>
                         <child>
+                          <object class="AdwPreferencesGroup" id="install_diagmond_popover_2">
+                            <property name="visible">false</property>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="activatable-widget">install_diagmond_button</property>
+                                <property name="subtitle">See explanations at: &lt;a href="https://github.com/P1sec/DiagNG#technical-architecture"&gt;https://github.com/P1sec/DiagNG#technical-architecture&lt;/a&gt;</property>
+                                <property name="subtitle-selectable">true</property>
+                                <property name="title">&lt;b&gt;You need in order to install an external software component (diagmond) in order to connect to serial USB modems.&lt;/b&gt;</property>
+                                <property name="title-selectable">true</property>
+                                <child type="prefix">
+                                  <object class="GtkImage">
+                                    <property name="icon-name">xapp-prefs-plugins-symbolic</property>
+                                    <property name="icon-size">2</property>
+                                  </object>
+                                </child>
+                                <child type="suffix">
+                                  <object class="GtkButton" id="install_diagmond_button">
+                                    <property name="action-name">win.prompt-install-diagmond</property>
+                                    <property name="label">Click here for instructions</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="AdwPreferencesGroup" id="stop_modemmanager_popover">
                             <child>
                               <object class="AdwActionRow" id="stop_modemmanager_row">
