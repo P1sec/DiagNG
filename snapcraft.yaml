@@ -67,9 +67,9 @@ parts:
     override-pull: |
       snapcraftctl pull
 
-      sed -i -e 's|Icon=com.p1security.diagng|Icon=/usr/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg|g' share/applications/com.p1security.diagng.desktop
-      mkdir -p usr
-      mv share usr
+      sed -i -e 's|Icon=com.p1security.diagng|Icon=/usr/share/icons/hicolor/scalable/apps/com.p1security.diagng.svg|g' applications/com.p1security.diagng.desktop
+      mkdir -p usr/share
+      mv applications dbus-1 icons metainfo polkit-1 usr/share
       chmod -R 644 usr/share
 
 layout:
