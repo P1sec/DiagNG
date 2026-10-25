@@ -7,6 +7,7 @@ from traceback import format_exc
 from json import loads, dumps
 from os.path import basename
 from io import BytesIO
+from os import getenv
 import usb.core
 import usb.util
 
@@ -67,6 +68,9 @@ class MainWindow(Adw.ApplicationWindow):
 
     authorize_spawn_popover: Adw.PreferencesGroup = Gtk.Template.Child()
     authorize_spawn_dialog: Adw.Dialog = Gtk.Template.Child()
+
+    install_diagmond_popover: Adw.PreferencesGroup = Gtk.Template.Child()
+    install_diagmond_dialog: Adw.Dialog = Gtk.Template.Child()
 
     stop_modemmanager_popover: Adw.PreferencesGroup = Gtk.Template.Child()
     stop_modemmanager_row: Adw.ActionRow = Gtk.Template.Child()
@@ -179,6 +183,15 @@ class MainWindow(Adw.ApplicationWindow):
             self.udev_tab.set_visible(True)
             self.authorize_spawn_popover.set_visible(False)
             self.stop_modemmanager_popover.set_visible(False)
+
+            if getenv('SNAP_NAME'):
+                self.app.diagmond_communicator.bind_property(
+                    'bus-connected',
+                    self.install_diagmond_popover,
+                    'visible',
+                    GObject.BindingFlags.INVERT_BOOLEAN
+                    | GObject.BindingFlags.SYNC_CREATE,
+                )
 
         else:
             self.app.diagmond_communicator.bind_property(
@@ -501,6 +514,13 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.add_simple_action('authorize-spawn', authorize_spawn)
 
+        def prompt_install_diagmond(*args):
+            self.install_diagmond_dialog.present(self)
+
+        self.add_simple_action(
+            'prompt-install-diagmond', prompt_install_diagmond
+        )
+
         def stop_modemmanager(*args):
             self.stop_modemmanager_dialog.present(self)
 
@@ -651,6 +671,7 @@ class MainWindow(Adw.ApplicationWindow):
         if (
             not self.app.diagmond_communicator.proxy.get_name_owner()
             and self.app.can_spawn_commands
+            and not getenv('SNAP_NAME')
             and not self.auth_dialog_showed
         ):
             self.auth_dialog_showed = True
@@ -674,7 +695,7 @@ class MainWindow(Adw.ApplicationWindow):
                 if diagmond_running
                 else (
                     'Loading... ⚠️'
-                    if self.app.can_spawn_commands
+                    if self.app.can_spawn_commands and not getenv('SNAP_NAME')
                     else 'Stopped ❌'
                 ),
             )
@@ -687,7 +708,7 @@ class MainWindow(Adw.ApplicationWindow):
                 if diagmond_running
                 else (
                     'Loading... ⚠️'
-                    if self.app.can_spawn_commands
+                    if self.app.can_spawn_commands and not getenv('SNAP_NAME')
                     else 'Stopped ❌'
                 ),
             )
@@ -700,7 +721,7 @@ class MainWindow(Adw.ApplicationWindow):
                 if diagmond_running
                 else (
                     'Loading... ⚠️'
-                    if self.app.can_spawn_commands
+                    if self.app.can_spawn_commands and not getenv('SNAP_NAME')
                     else 'Stopped ❌'
                 ),
             )

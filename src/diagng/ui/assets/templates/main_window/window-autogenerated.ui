@@ -52,7 +52,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                           </object>
                         </child>
                         <child>
-                          <object class="AdwPreferencesGroup" id="install_diagmond_popover_2">
+                          <object class="AdwPreferencesGroup" id="install_diagmond_popover">
                             <property name="visible">false</property>
                             <child>
                               <object class="AdwActionRow">
@@ -748,6 +748,57 @@ And use a command such as "adb devices -l" to launch it, then restart the app.</
                 <property name="right-margin">5</property>
                 <property name="top-margin">5</property>
                 <property name="wrap-mode">2</property>
+              </object>
+            </child>
+          </object>
+        </property>
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-title">false</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="AdwDialog" id="install_diagmond_dialog">
+    <property name="child">
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="GtkBox">
+            <property name="margin-bottom">25</property>
+            <property name="margin-end">25</property>
+            <property name="margin-start">25</property>
+            <property name="orientation">1</property>
+            <property name="spacing">15</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">In order to authorize DiagNG to connect to USB serial modems, please run the following commands:</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTextView">
+                <property name="bottom-margin">5</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer">
+                    <property name="text">sudo apt-add-repository -P ppa:marin-m/p1sec-foss
+sudo apt install diagmond</property>
+                  </object>
+                </property>
+                <property name="editable">false</property>
+                <property name="left-margin">5</property>
+                <property name="monospace">true</property>
+                <property name="right-margin">5</property>
+                <property name="top-margin">5</property>
+                <property name="wrap-mode">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Then, restart the app.</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
               </object>
             </child>
           </object>
