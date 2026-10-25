@@ -1016,16 +1016,22 @@ class MainWindow(Adw.ApplicationWindow):
                 error('Could not open USB device: ' + format_exc())
 
                 dialog = Adw.AlertDialog.new(
-                    'Could not open USB interface',
-                    'Accessing this interface requires '
-                    + 'privileges.\n\n'
-                    + 'Please <b>follow the instructions '
-                    + 'proposed on the main screen to allow '
-                    + 'DiagNG to launch external programs</b> '
-                    + 'in order to solve the issue.\n\n'
-                    + 'An alternate solution is to manually '
-                    + 'detach the kernel driver associated '
-                    + 'with the specified USB interface.',
+                    (
+                        'Could not open USB interface',
+                        'Accessing this interface requires '
+                        + 'privileges.\n\n'
+                        + 'Please <b>follow the instructions '
+                        + 'proposed on the main screen to %s</b> '
+                        + 'in order to solve the issue.\n\n'
+                        + 'An alternate solution is to manually '
+                        + 'detach the kernel driver associated '
+                        + 'with the specified USB interface.',
+                    )
+                    % (
+                        'allow DiagNG to launch external programs'
+                        if not getenv('SNAP_NAME')
+                        else 'install the diagmond component'
+                    )
                 )
                 dialog.set_body_use_markup(True)
                 dialog.add_response('ok', 'Ok')
