@@ -22,8 +22,6 @@ apps:
       - network
       - network-status
       - hardware-observe
-      - diagng-usb-plug
-      - diagng-serial-port
       - raw-usb
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/android:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
@@ -33,19 +31,6 @@ plugs:
     interface: content
     target: $SNAP/data-dir/themes
     default-provider: gtk-common-themes
-  diagng-usb-plug:
-    interface: custom-device
-    custom-device: diagng-usb-device
-  diagng-serial-port:
-    interface: serial-port
-
-slots:
-  diagng-usb-slot:
-    interface: custom-device
-    custom-device: diagng-usb-device
-    devices:
-      - /dev/ttyUSB[0-9]*
-      - /dev/ttyHS[0-9]*
 
 parts:
   diagng:
