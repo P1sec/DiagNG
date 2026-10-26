@@ -203,15 +203,6 @@ diagmond
 diagng
 ```
 
-When building the Snap package, remind to connect the interfaces manually:
-
-```bash
-snapcraft pack
-sudo snap install --dangerous diagng_0.1.4_amd64.snap
-sudo snap connect diagng:modem-manager
-diagng
-```
-
 ### Run project tests
 
 ```bash
