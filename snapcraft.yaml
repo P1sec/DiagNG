@@ -63,7 +63,7 @@ parts:
   share:
     plugin: dump
     source: src/diagng/ui/assets/share/
-    parse-info: [com.p1security.diagng.metainfo.xml]
+    parse-info: [usr/share/metainfo/com.p1security.diagng.metainfo.xml]
     source-type: local
 
     override-pull: |
