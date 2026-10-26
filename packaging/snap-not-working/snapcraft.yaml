@@ -22,8 +22,8 @@ apps:
       - network
       - network-status
       - hardware-observe
+      - modem-manager
       - raw-usb
-      - modemmanager-svc
       - diagmond-svc
     environment:
       LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/android:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
@@ -44,6 +44,10 @@ plugs:
     bus: system
     interface: dbus
     name: com.p1security.diagmond
+    # ⚠️ BLOCKED: We have no solution
+    #  with the current `snapd` version
+    #  to connect to a custom D-Bus
+    #  service on the host system.
   modemmanager-svc:
     bus: system
     interface: dbus
@@ -53,6 +57,12 @@ parts:
   diagng:
     plugin: python
     source: .
+
+    python-packages:
+      # The development tree for PyUSB has a
+      # Snap support-specific patch, but
+      # the PyPI distribution doesn't
+      - git+https://github.com/pyusb/pyusb.git@3241c0e
 
     stage-packages:
       - libdrm-common
@@ -65,6 +75,7 @@ parts:
     stage-packages:
       - libpython3.14-minimal
       - libpython3.14-stdlib
+      - libusb-1.0-0
       - python3-minimal # for the "python3" symlink
       - python3.14-minimal
       - python3.14-venv
