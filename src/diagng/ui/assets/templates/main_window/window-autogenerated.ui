@@ -88,7 +88,7 @@ For now, only Qualcomm-based devices are supported. Please see the "ADB" tab for
                                 <property name="title-selectable">true</property>
                                 <child type="prefix">
                                   <object class="GtkImage">
-                                    <property name="icon-name">warning-symbolic</property>
+                                    <property name="icon-name">xsi-dialog-warning-symbolic</property>
                                     <property name="icon-size">2</property>
                                   </object>
                                 </child>
