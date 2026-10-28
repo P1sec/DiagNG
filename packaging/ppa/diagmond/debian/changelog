@@ -1,3 +1,9 @@
+diagmond (0.1.5) bionic; urgency=low
+
+  * Synchronize version number with the project
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Wed, 28 Oct 2026 22:03:12 +0100
+
 diagmond (0.1.4) bionic; urgency=low
 
   * Synchronize version number with the project

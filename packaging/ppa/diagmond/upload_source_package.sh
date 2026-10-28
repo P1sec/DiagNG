@@ -19,7 +19,7 @@ function cleanup_dirs {
 
 trap cleanup_dirs INT TERM
 
-for version in resolute stonking; do
+for version in resolute stonking tenacious; do
 
     cp -ra ../../../diagmond "${temp_dir}/diagmond-${PKGVER}${version}"
     cp -ra debian "${temp_dir}/diagmond-${PKGVER}${version}/"
