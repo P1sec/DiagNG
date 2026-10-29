@@ -25,5 +25,6 @@
     <file compressed="true" preprocess="xml-stripblanks" alias="scalable/places/folder-remote-symbolic.svg">yaru-icons/folder-remote-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="scalable/categories/xapp-prefs-plugins-symbolic.svg">yaru-icons/xapp-prefs-plugins-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="scalable/actions/xsi-dialog-warning-symbolic.svg">yaru-icons/xsi-dialog-warning-symbolic.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks" alias="scalable/actions/xsi-search-symbolic.svg">yaru-icons/xsi-search-symbolic.svg</file>
   </gresource>
 </gresources>
