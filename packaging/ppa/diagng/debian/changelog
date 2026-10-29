@@ -1,3 +1,10 @@
+diagng (0.1.6) bionic; urgency=low
+
+  * Add missing UI icons on non-Yaru themes
+  * Run restorecon when installing D-Bus rules and Polkit actions in order to ensure Fedora compatibility
+
+ -- Marin <p1-mmr@users.noreply.github.com>  Fri, 30 Oct 2026 00:11:47 +0100
+
 diagng (0.1.5) bionic; urgency=low
 
   * Add missing UI icons on non-Yaru themes
