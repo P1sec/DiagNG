@@ -20,11 +20,12 @@
 
 from os.path import dirname, realpath, join, exists
 from os import makedirs, geteuid, execlp
-from subprocess import run
 from typing import Optional
+from subprocess import run
+from shutil import which
 from shutil import copy2
-from sys import argv
 from re import search
+from sys import argv
 
 UTILS_DIR = dirname(realpath(__file__))
 MODULE_DIR = dirname(realpath(UTILS_DIR))
@@ -50,10 +51,10 @@ POLKIT_ACTION_PATHS = [
     '/usr/share/polkit-1/actions/',
 ]
 
-# Polkit only reads actions from /etc/polkit-1/actions since version 125,
+# Polkit only reads actions from /etc/polkit-1/actions since version 126,
 # older versions (e.g. 124 on Ubuntu 24.04) only read /usr/share
 POLKIT_LEGACY_ACTION_PATHS = ['/usr/share/polkit-1/actions/']
-POLKIT_ETC_ACTIONS_MIN_VERSION = 125
+POLKIT_ETC_ACTIONS_MIN_VERSION = 126
 
 
 def get_polkit_version() -> Optional[int]:
@@ -94,6 +95,12 @@ def install_dbus_and_polkit_files(entry_point: str):
             join(DBUS_SYSTEM_D_DIR, DBUS_SYSTEM_D_FILE), DBUS_SYSTEM_D_PATHS[0]
         )
 
+        if which('restorecon'):
+            try:
+                run(['restorecon', DBUS_SYSTEM_D_PATHS[0]])
+            except OSError:
+                pass
+
     polkit_action_paths = get_polkit_action_paths()
 
     for file_name in POLKIT_ACTION_FILES:
@@ -103,7 +110,10 @@ def install_dbus_and_polkit_files(entry_point: str):
         else:
             escalate_root(entry_point)
             makedirs(polkit_action_paths[0], exist_ok=True)
-            copy2(
-                join(POLKIT_ACTIONS_DIR, file_name),
-                polkit_action_paths[0],
-            )
+            copy2(join(POLKIT_ACTIONS_DIR, file_name), polkit_action_paths[0])
+
+            if which('restorecon'):
+                try:
+                    run(['restorecon', polkit_action_paths[0]])
+                except OSError:
+                    pass
