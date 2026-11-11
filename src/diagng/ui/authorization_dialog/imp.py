@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from diagng.utils.spawn_diagmond import spawn_diagmond_as_outer_process
+from diagng.utils.spawn_diagmond_trampoline import (
+    spawn_diagmond_as_outer_process,
+)
 
 # Register resources
 import diagng.utils.gresources

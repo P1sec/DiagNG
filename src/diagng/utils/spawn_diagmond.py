@@ -1,22 +1,44 @@
 #!/usr/bin/env python3
-from os import (
-    execlp,
-    getenv,
-    chdir,
-    geteuid,
-)
+# WIP 2026-06-21
+
+# Use pkexec to create privileged dirs like /etc/dbus-1
+# when needed
+
+# See: https://dbus.freedesktop.org/doc/dbus-daemon.1.html +
+# https://github.com/P1sec/DiagNG/issues/1 for
+# standard DBus directories reference
+
+# => Launch the privileged subprocess directly
+# if the service is not installed/running/
+# launchable
+
+#  => Install the DBus policy file in a stub
+#     after running pkexec
+
+#    => Display a status banner about the
+#       privileged subprocess in the main UI
+
+from os import makedirs, getenv, chdir, geteuid, execlp
 from os.path import dirname, realpath, join, exists
-from gi.repository import Gio, GLib
-from logging import debug, info
-from typing import Callable
+from shutil import which, copy2
+from typing import Optional
 from subprocess import run
-from shutil import which
-from io import StringIO
-from csv import reader
-import sys
+from re import search
+from sys import argv
 
 UTILS_DIR = dirname(realpath(__file__))
 MODULE_DIR = dirname(realpath(UTILS_DIR))
+
+# Polkit and D-Bus related paths:
+UI_DIR = realpath(join(MODULE_DIR, 'ui'))
+ASSETS_DIR = realpath(join(UI_DIR, 'assets'))
+SHARE_DIR = realpath(join(ASSETS_DIR, 'share'))
+DBUS_DIR = realpath(join(SHARE_DIR, 'dbus-1'))
+POLKIT_DIR = realpath(join(SHARE_DIR, 'polkit-1'))
+
+DBUS_SYSTEM_D_FILE = 'com.p1security.diagmond.conf'
+DBUS_SYSTEM_D_DIR = realpath(join(DBUS_DIR, 'system-d'))
+DBUS_SYSTEM_D_PATHS = ['/etc/dbus-1/system.d', '/usr/share/dbus-1/system.d']
 
 # Exists in Git tree setup only:
 SRC_DIR = dirname(realpath(MODULE_DIR))
@@ -31,108 +53,90 @@ IS_GIT_TREE = exists(DIAGMOND_DIR)
 # To use in the context of a system-wide install:
 DIAGMOND_PATH = which('diagmond-bin')
 
-# To use inside a Flatpak sandbox:
-IS_FLATPAK = getenv('container') and which('flatpak-spawn')
 
-# To use in Flatpak setup when going out of sandbox:
-sys.path.insert(0, SRC_DIR)
+POLKIT_ACTION_FILES = [
+    'com.p1security.diagmond.policy',
+    'com.p1security.diagmond.capture-serial-port.policy',
+    'com.p1security.diagmond.open-usb-interface.policy',
+]
+POLKIT_ACTIONS_DIR = realpath(join(POLKIT_DIR, 'actions'))
+POLKIT_ACTION_PATHS = [
+    '/etc/polkit-1/actions/',
+    '/usr/local/share/polkit-1/actions/',
+    '/usr/share/polkit-1/actions/',
+]
 
-from diagng.utils.dbus_service_installer import install_dbus_and_polkit_files
+# Polkit only reads actions from /etc/polkit-1/actions since version 126,
+# older versions (e.g. 124 on Ubuntu 24.04) only read /usr/share
+POLKIT_LEGACY_ACTION_PATHS = ['/usr/share/polkit-1/actions/']
+POLKIT_ETC_ACTIONS_MIN_VERSION = 126
 
 
-def get_flatpak_bin_dir(
-    callback: Callable[[bool, str, str], []], is_debug: bool
-):
-    # See https://github.com/flathub/io.github.Archeb.opentrace/blob/master/nexttrace.sh
+def get_polkit_version() -> Optional[int]:
+    try:
+        output = run(
+            ['pkaction', '--version'], capture_output=True, text=True
+        ).stdout
+    except OSError:
+        return None
 
-    proc = Gio.Subprocess.new(
-        [
-            'flatpak-spawn',
-            '--host',
-            'flatpak',
-            'list',
-            '--app',
-            '--columns=application,arch,branch',
-        ],
-        Gio.SubprocessFlags.STDOUT_PIPE,
-    )
+    match = search(r'(\d+)', output)
+    return int(match.group(1)) if match else None
 
-    def on_complete(proc: Gio.Subprocess, res: Gio.AsyncResult):
-        _, stdout, __ = proc.communicate_utf8_finish(res)
 
-        for row in reader(StringIO(stdout), delimiter='\t'):
-            if row[0] == 'com.p1security.diagng':
-                container_id = '/'.join(row)
+def get_polkit_action_paths() -> list[str]:
+    version = get_polkit_version()
+
+    if version is not None and version < POLKIT_ETC_ACTIONS_MIN_VERSION:
+        return POLKIT_LEGACY_ACTION_PATHS
+    return POLKIT_ACTION_PATHS
+
+
+def escalate_root(entry_point: str):
+    if geteuid() != 0:
+        execlp('pkexec', 'pkexec', 'env', 'python3', entry_point, *argv[1:])
+        exit(1)
+
+
+def install_dbus_and_polkit_files(entry_point: str):
+
+    for path in DBUS_SYSTEM_D_PATHS:
+        if exists(join(path, DBUS_SYSTEM_D_FILE)):
+            break
+    else:
+        escalate_root(entry_point)
+        makedirs(DBUS_SYSTEM_D_PATHS[0], exist_ok=True)
+        copy2(
+            join(DBUS_SYSTEM_D_DIR, DBUS_SYSTEM_D_FILE), DBUS_SYSTEM_D_PATHS[0]
+        )
+
+        if which('restorecon'):
+            try:
+                run(['restorecon', DBUS_SYSTEM_D_PATHS[0]])
+            except OSError:
+                pass
+
+    polkit_action_paths = get_polkit_action_paths()
+
+    for file_name in POLKIT_ACTION_FILES:
+        for path in polkit_action_paths:
+            if exists(join(path, file_name)):
                 break
         else:
-            raise ValueError('Flatpak container could not be found')
+            escalate_root(entry_point)
+            makedirs(polkit_action_paths[0], exist_ok=True)
+            copy2(join(POLKIT_ACTIONS_DIR, file_name), polkit_action_paths[0])
 
-        proc_2 = Gio.Subprocess.new(
-            [
-                'flatpak-spawn',
-                '--host',
-                'flatpak',
-                'info',
-                '--show-location',
-                container_id,
-            ],
-            Gio.SubprocessFlags.STDOUT_PIPE,
-        )
-
-        def on_complete_2(proc_2: Gio.Subprocess, res_2: Gio.AsyncResult):
-            _, stdout, __ = proc_2.communicate_utf8_finish(res_2)
-
-            info('Flatpak base path is: ' + stdout.strip())
-            script_path = join(
-                stdout.strip(), 'files', __file__.replace('/app/', '', 1)
-            )
-            bin_path = join(stdout.strip(), 'files', 'bin', 'diagmond-bin')
-
-            callback(is_debug, script_path, bin_path)
-
-        proc_2.communicate_utf8_async(None, None, on_complete_2)
-
-    proc.communicate_utf8_async(None, None, on_complete)
-
-
-def spawn_diagmond_as_outer_process(
-    is_debug: bool, script_path: str = None, bin_path: str = None
-):
-    extra_args = []
-    if is_debug:
-        extra_args.append('--debug')
-
-    if IS_FLATPAK:
-        if not script_path:
-            get_flatpak_bin_dir(spawn_diagmond_as_outer_process, is_debug)
-            return
-
-        debug('Trying to launch from inside Flatpak: ' + script_path)
-        debug('Which will launch in turn: ' + bin_path)
-        GLib.spawn_async(
-            [
-                'flatpak-spawn',
-                '--host',
-                'env',
-                'python3',
-                script_path,
-                *extra_args,
-                bin_path,
-            ],
-            flags=GLib.SpawnFlags.SEARCH_PATH,
-        )
-
-    else:
-        debug('Trying to launch: ' + __file__)
-        GLib.spawn_async(
-            ['env', 'python3', __file__, *extra_args],
-            flags=GLib.SpawnFlags.SEARCH_PATH,
-        )
+            if which('restorecon'):
+                try:
+                    run(['restorecon', polkit_action_paths[0]])
+                except OSError:
+                    pass
 
 
 def main():
 
-    input_args = list(sys.argv)
+    input_args = list(argv)
     debug_mode = False
 
     if '--debug' in input_args:
