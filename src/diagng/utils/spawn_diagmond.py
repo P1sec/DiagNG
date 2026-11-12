@@ -121,6 +121,35 @@ def install_dbus_and_polkit_files(privesc_mode: bool):
             except OSError:
                 pass
 
+        if which('busctl'):
+            try:
+                run(
+                    [
+                        'busctl',
+                        'call',
+                        'org.freedesktop.DBus',
+                        '/org/freedesktop/DBus',
+                        'org.freedesktop.DBus',
+                        'ReloadConfig',
+                    ]
+                )
+            except OSError:
+                pass
+
+        elif which('dbus-send'):
+            try:
+                run(
+                    [
+                        'dbus-send',
+                        '--system',
+                        '--dest=org.freedesktop.DBus',
+                        '/org/freedesktop/DBus',
+                        'org.freedesktop.DBus.ReloadConfig',
+                    ]
+                )
+            except OSError:
+                pass
+
     polkit_action_paths = get_polkit_action_paths()
 
     for file_name in POLKIT_ACTION_FILES:

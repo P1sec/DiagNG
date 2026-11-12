@@ -88,7 +88,7 @@ class DiagmondLaunchTrampoline:
                         self.try_spawn_outer_process(script_path, bin_path)
 
                     dialog = Adw.AlertDialog.new(
-                        'System restart will be needed',
+                        'System restart may be needed',
                         'As this operation will add a D-Bus '
                         + 'system service and Polkit rules to '
                         + 'your system, restarting your system '
