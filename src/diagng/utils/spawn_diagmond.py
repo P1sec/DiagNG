@@ -142,6 +142,7 @@ def install_dbus_and_polkit_files(privesc_mode: bool):
                     [
                         'dbus-send',
                         '--system',
+                        '--type=method_call',
                         '--dest=org.freedesktop.DBus',
                         '/org/freedesktop/DBus',
                         'org.freedesktop.DBus.ReloadConfig',
