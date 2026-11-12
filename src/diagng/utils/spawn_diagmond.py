@@ -71,6 +71,9 @@ POLKIT_ACTION_PATHS = [
 POLKIT_LEGACY_ACTION_PATHS = ['/usr/share/polkit-1/actions/']
 POLKIT_ETC_ACTIONS_MIN_VERSION = 126
 
+# Magic exit code to be passed to parent process when needed
+WILL_NEED_PRIVESC_EXIT = 42
+
 
 def get_polkit_version() -> Optional[int]:
     try:
@@ -92,19 +95,21 @@ def get_polkit_action_paths() -> list[str]:
     return POLKIT_ACTION_PATHS
 
 
-def escalate_root(entry_point: str):
+def escalate_root(privesc_mode: bool):
     if geteuid() != 0:
-        execlp('pkexec', 'pkexec', 'env', 'python3', entry_point, *argv[1:])
+        if not privesc_mode:
+            exit(WILL_NEED_PRIVESC_EXIT)
+        execlp('pkexec', 'pkexec', 'env', 'python3', __file__, *argv[1:])
         exit(1)
 
 
-def install_dbus_and_polkit_files(entry_point: str):
+def install_dbus_and_polkit_files(privesc_mode: bool):
 
     for path in DBUS_SYSTEM_D_PATHS:
         if exists(join(path, DBUS_SYSTEM_D_FILE)):
             break
     else:
-        escalate_root(entry_point)
+        escalate_root(privesc_mode)
         makedirs(DBUS_SYSTEM_D_PATHS[0], exist_ok=True)
         copy2(
             join(DBUS_SYSTEM_D_DIR, DBUS_SYSTEM_D_FILE), DBUS_SYSTEM_D_PATHS[0]
@@ -123,7 +128,7 @@ def install_dbus_and_polkit_files(entry_point: str):
             if exists(join(path, file_name)):
                 break
         else:
-            escalate_root(entry_point)
+            escalate_root(privesc_mode)
             makedirs(polkit_action_paths[0], exist_ok=True)
             copy2(join(POLKIT_ACTIONS_DIR, file_name), polkit_action_paths[0])
 
@@ -138,10 +143,15 @@ def main():
 
     input_args = list(argv)
     debug_mode = False
+    privesc_mode = False
 
     if '--debug' in input_args:
         input_args.remove('--debug')
         debug_mode = True
+
+    if '--privesc' in input_args:
+        input_args.remove('--privesc')
+        privesc_mode = True
 
     if (
         len(input_args) == 1
@@ -156,7 +166,7 @@ def main():
             check=True,
         )
 
-    install_dbus_and_polkit_files(__file__)
+    install_dbus_and_polkit_files(privesc_mode)
 
     if len(input_args) > 1:
         execlp(input_args[1], input_args[1])

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-from diagng.utils.spawn_diagmond_trampoline import (
-    spawn_diagmond_as_outer_process,
-)
+from diagng.utils.spawn_diagmond_trampoline import DiagmondLaunchTrampoline
 
 # Register resources
 import diagng.utils.gresources
@@ -30,7 +28,7 @@ class AuthorizationDialog(Adw.Window):
     continue_button: Gtk.Button = Gtk.Template.Child()
     decline_button: Gtk.Button = Gtk.Template.Child()
 
-    def __init__(self, parent: 'MainWindox'):
+    def __init__(self, parent: 'MainWindow'):
         super().__init__()
 
         self.continue_button.grab_focus()
@@ -44,5 +42,5 @@ class AuthorizationDialog(Adw.Window):
     @Gtk.Template.Callback()
     def on_continue(self, *args):
         self.do_launch = True
-        spawn_diagmond_as_outer_process(self.parent.app.is_debug)
+        DiagmondLaunchTrampoline(self.parent, self.parent.app.is_debug)
         self.close()
