@@ -80,12 +80,7 @@ class DiagmondLaunchTrampoline:
                 if exit_code == WILL_NEED_PRIVESC_EXIT:
                     self.needs_privesc = True
 
-                    def on_agree(
-                        alert_dialog: Adw.AlertDialog, result: Gio.AsyncResult
-                    ):
-                        alert_dialog.choose_finish(result)
-
-                        self.try_spawn_outer_process(script_path, bin_path)
+                    self.try_spawn_outer_process(script_path, bin_path)
 
                     dialog = Adw.AlertDialog.new(
                         'System restart may be needed',
@@ -98,7 +93,7 @@ class DiagmondLaunchTrampoline:
                     dialog.add_response('continue', 'Continue')
                     dialog.set_default_response('continue')
                     dialog.set_close_response('continue')
-                    dialog.choose(self.parent_window, None, on_agree)
+                    dialog.choose(self.parent_window, None, None)
 
                 else:
                     info(
